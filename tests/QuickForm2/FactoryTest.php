@@ -134,18 +134,31 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit2_Framework_TestCase
     public function testUniqueIdsGenerated()
     {
         $names = array(
-            '', 'value', 'array[]', 'array[8]', 'array[60000]', 'array[20]',
-            'array[name][]', 'bigger[name][5]', 'bigger[name][]', 'bigger[name][6]'
+            'qfauto-0' => '',
+            'qfauto-1' => '',
+            'value-0' => 'value',
+            'value-1' => 'value',
+            'value-name-0' => 'value[name]',
+            'value-name-1' => 'value[name]',
+            'array-0-0' => 'array[]',
+            'array-1-0' => 'array[]',
+            'array-8-0' => 'array[8]',
+            'array-8-1' => 'array[8]',
+            'array-60000-0' => 'array[60000]',
+            'array-60001-0' => 'array[]',
+            'array-20-0' => 'array[20]',
+            'array-name-0-0' => 'array[name][]',
+            'array-name-1-0' => 'array[name][]',
+            'bigger-name-5-0' => 'bigger[name][5]',
+            'bigger-name-6-0' => 'bigger[name][]',
+            'bigger-name-6-1' => 'bigger[name][6]'
         );
         $usedIds = array();
-        foreach ($names as $name) {
+        foreach ($names as $expect => $name) {
             $id = HTML_QuickForm2_Factory::generateId($name);
             $this->assertNotContains($id, $usedIds);
             $usedIds[] = $id;
-            // Duplicate name...
-            $id = HTML_QuickForm2_Factory::generateId($name);
-            $this->assertNotContains($id, $usedIds);
-            $usedIds[] = $id;
+            $this->assertEquals($id, $expect);
         }
     }
 
