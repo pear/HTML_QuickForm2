@@ -98,12 +98,8 @@ abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
     public function __construct($name = null, $options = null, $label = null, $attributes = null)
     {
         parent::__construct($attributes);
-        if (null !== $name) {
-            $this->setName($name);
-        }
-        if (null !== $label) {
-            $this->setLabel($label);
-        }
+        $this->setName($name);
+        $this->setLabel($label);
         // Autogenerating the id if not set on previous steps
         if ('' == $this->getId()) {
             $this->setId();
