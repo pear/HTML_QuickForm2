@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Base class for simple HTML_QuickForm2 elements (not Containers)
  *
  * PHP version 5
  *
@@ -43,38 +43,73 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_AllTests::main');
-}
+/**
+ * Base class for all HTML_QuickForm2 elements 
+ */
+require_once 'HTML/QuickForm2/AbstractElement.php';
 
-
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/AbstractElementTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-
-class QuickForm2_AllTests
+/**
+ * Abstract base class for simple QuickForm2 elements (not Containers) 
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
 {
-    public static function main()
+   /**
+    * 'name' and 'id' attributes should be always present and their setting 
+    * should go through setName() and setId(). 
+    * @var array
+    */
+    protected $watchedAttributes = array('id', 'name');
+
+    protected function onAttributeChange($name, $value = null)
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        if ('name' == $name) {
+            if (null === $value) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "Required attribute 'name' can not be removed"
+                );
+            } else {
+                $this->setName($value);
+            }
+        } elseif ('id' == $name) {
+            if (null === $value) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "Required attribute 'id' can not be removed"
+                );
+            } else {
+                $this->setId($value);
+            }
+        }
     }
 
-    public static function suite()
+    public function getName()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
-
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_AbstractElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-
-        return $suite;
+        return $this->attributes['name'];
     }
-}
 
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+    public function setName($name)
+    {
+        $this->attributes['name'] = (string)$name;
+    }
+
+    public function getId()
+    {
+        return isset($this->attributes['id'])? $this->attributes['id']: null;
+    }
+
+    public function setId($id = null)
+    {
+        if (is_null($id)) {
+            $id = HTML_QuickForm2_Factory::generateId($this->getName());
+        } else {
+            HTML_QuickForm2_Factory::storeId($id);
+        }
+        $this->attributes['id'] = (string)$id;
+    }
 }
 ?>
