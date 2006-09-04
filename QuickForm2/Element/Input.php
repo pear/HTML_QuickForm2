@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Base class for <input> elements
  *
  * PHP version 5
  *
@@ -43,40 +43,60 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_AllTests::main');
-}
+/**
+ * Base class for simple HTML_QuickForm2 elements (not Containers)
+ */
+require_once 'HTML/QuickForm2/Element.php';
 
-
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/AbstractElementTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-
-class QuickForm2_AllTests
+/**
+ * Base class for <input> elements
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
 {
-    public static function main()
+   /**
+    * 'type' attribute should not be changeable
+    * @var array
+    */
+    protected $watchedAttributes = array('id', 'name', 'type');
+
+    protected function onAttributeChange($name, $value = null)
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        if ('type' == $name) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Attribute 'type' is read-only"
+            );
+        }
+        parent::onAttributeChange($name, $value);
     }
 
-    public static function suite()
+    public function getType()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
-
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_AbstractElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-
-        return $suite;
+        return $this->attributes['type'];
     }
-}
 
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+    public function setValue($value)
+    {
+        $this->setAttribute('value', $value);
+    }
+
+    public function getValue()
+    {
+        return $this->getAttribute('value');
+    }
+    
+    public function toHtml()
+    {
+        if ($this->frozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return '<input' . $this->getAttributes(true) . ' />';
+        }
+    }
 }
 ?>

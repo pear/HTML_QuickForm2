@@ -44,19 +44,15 @@
  */
 
 if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_AllTests::main');
+    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
 }
-
 
 require_once 'PHPUnit2/Framework/TestSuite.php';
 require_once 'PHPUnit2/TextUI/TestRunner.php';
 
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/AbstractElementTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
+require_once dirname(__FILE__) . '/InputTest.php';
 
-class QuickForm2_AllTests
+class QuickForm2_Element_AllTests
 {
     public static function main()
     {
@@ -65,18 +61,16 @@ class QuickForm2_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
+        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
 
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_AbstractElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
+        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
+    QuickForm2_Element_AllTests::main();
 }
+
 ?>

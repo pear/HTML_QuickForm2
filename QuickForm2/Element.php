@@ -111,5 +111,37 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
         }
         $this->attributes['id'] = (string)$id;
     }
+
+   /**
+    * Generates hidden form field containing the element's value
+    *
+    * This is used to pass the frozen element's value if 'persistent freeze'
+    * feature is on
+    *
+    * @return string
+    */
+    protected function getPersistentData()
+    {
+        if (!$this->persistent) {
+            return '';
+        }
+        return '<input' . self::getAttributesString(array(
+            'type'  => 'hidden',
+            'name'  => $this->getName(),
+            'value' => $this->getValue(),
+            'id'    => $this->getId()
+        )) . ' />';
+    }
+
+   /**
+    * Returns the field's value without HTML tags
+    * @return string
+    */
+    protected function getFrozenHtml()
+    {
+        $value = $this->getValue();
+        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('encoding')): '') .
+               $this->getPersistentData();
+    }
 }
 ?>
