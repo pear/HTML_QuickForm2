@@ -87,6 +87,12 @@ abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
     protected $persistent = false;
 
    /**
+    * Element containing current 
+    * @var HTML_QuickForm2_Container
+    */
+    protected $container = null;
+
+   /**
     * Class constructor
     *
     * @param    string  Element name
@@ -227,6 +233,45 @@ abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
             $this->persistent = (bool)$persistent;
         }
         return $old;
+    }
+
+
+   /**
+    * Adds the link to the element containing current
+    * 
+    * @param    HTML_QuickForm2_Container  Element containing the current one,
+    *                                      null if the link should really be 
+    *                                      removed (if removing from container)
+    * @throws   HTML_QuickForm2_InvalidArgumentException   If trying to set a 
+    *                               child of an element as its container
+    */
+    protected function setContainer(HTML_QuickForm2_Container $container = null)
+    {
+        if (null !== $container) {
+            $check = $container;
+            do {
+                if ($this === $check) {
+                    throw new HTML_QuickForm2_InvalidArgumentException(
+                        'Cannot set an element or its child as its own container'
+                    );
+                }
+            } while ($check = $check->getContainer());
+            if (null !== $this->container && $container !== $this->container) {
+                $this->container->removeChild($this);
+            }
+        }
+        $this->container = $container;
+    }
+
+
+   /**
+    * Returns the element containing current 
+    *
+    * @return   HTML_QuickForm2_Container|null
+    */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
 ?>
