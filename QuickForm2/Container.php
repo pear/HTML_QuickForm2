@@ -68,6 +68,71 @@ abstract class HTML_QuickForm2_Container
     protected $elements = array();
 
    /**
+    * Array of contained ids
+	* Format: element_id => key of child container
+    * @var array
+    */
+    public $idIndex = array();
+
+
+   /**
+    * 'name' and 'id' attributes should be always present and their setting 
+    * should go through setName() and setId(). 
+    * @var array
+    */
+    protected $watchedAttributes = array('id', 'name');
+
+    protected function onAttributeChange($name, $value = null)
+    {
+        if ('name' == $name) {
+            if (null === $value) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "Required attribute 'name' can not be removed"
+                );
+            } else {
+                $this->setName($value);
+            }
+        } elseif ('id' == $name) {
+            if (null === $value) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "Required attribute 'id' can not be removed"
+                );
+            } else {
+                $this->setId($value);
+            }
+        }
+    }
+
+    public function getName()
+    {
+        return $this->attributes['name'];
+    }
+
+    public function setName($name)
+    {
+        $this->attributes['name'] = (string)$name;
+    }
+
+    public function getId()
+    {
+        return isset($this->attributes['id'])? $this->attributes['id']: null;
+    }
+
+    public function setId($id = null)
+    {
+        if (is_null($id)) {
+            $id = HTML_QuickForm2_Factory::generateId($this->getName());
+        } else {
+            HTML_QuickForm2_Factory::storeId($id);
+        }
+        $this->attributes['id'] = (string)$id;
+    }
+
+
+
+
+
+   /**
     * Returns an array of this container's elements
     * 
     * @return   array 	Container elements
@@ -91,10 +156,67 @@ abstract class HTML_QuickForm2_Container
 		if (null !== ($container = $element->getContainer())) {
         	$container->removeChild($element);
 		}
-        $this->elements[$element->getId()] = $element;
 		$element->setContainer($this);
+
+        $this->elements[] = $element;
+		end($this->elements);
+		$current = key($this->elements);
+		$this->setChildIndex($element->getId(), $current);
+
+		if ($element instanceof HTML_QuickForm2_Container &&
+			count($element) > 0) {
+			foreach ($element->idIndex as $k => $v) {
+				$this->setChildIndex($k, $current);
+			}
+		}
+
 		return $element;
     }
+
+   /**
+    * Removes the element from this container
+	* 
+	* If the reference object is not given, the element will be appended.
+    * 
+    * @param    HTML_QuickForm2_AbstractElement 	Element to remove
+    */
+    public function removeChild(HTML_QuickForm2_AbstractElement $element)
+    {
+		$container = $element->getContainer();
+		if ($container) {
+			$index = $container->getChildIndex($element->getId());
+			unset($container->elements[$index]);
+			$container->removeChildIndex($element->getId());	
+		}
+		$element->setContainer(null);
+    }
+
+	protected function setChildIndex($id, $index)
+	{
+		$this->idIndex[$id] = $index;
+
+		if (null != ($parent = $this->getContainer())) {
+			$indexInParent = $parent->idIndex[$this->getId()];
+			$parent->setChildIndex($id, $indexInParent);
+		}
+
+	}
+
+	protected function getChildIndex($id)
+	{
+		if (isset($this->idIndex[$id])) {
+			return $this->idIndex[$id];
+		}
+		return null;
+	}
+
+	protected function removeChildIndex($id)
+	{
+		unset($this->idIndex[$id]);
+		if (null != ($parent = $this->getContainer())) {
+			$parent->removeChildIndex($id);
+		}
+	}
 
    /**
     * Returns an element if its id is found
@@ -104,10 +226,14 @@ abstract class HTML_QuickForm2_Container
     */
     public function getElementById($id)
     {
-        if (!isset($this->elements[$id])) {
-            return null;
-        }
-        return $this->elements[$id];
+		if (isset($this->idIndex[$id])) {
+			$element = $this->elements[$this->idIndex[$id]];
+			if ($element->getId() != $id) {
+				return $element->getElementById($id);
+			}
+			return $element;
+		}
+		return null;
     }
 
    /**
@@ -158,21 +284,6 @@ abstract class HTML_QuickForm2_Container
             $this->addElement($element);
         }
         return $element;
-    }
-
-   /**
-    * Removes the element from this container
-	* 
-	* If the reference object is not given, the element will be appended.
-    * 
-    * @param    HTML_QuickForm2_AbstractElement 	Element to remove
-    */
-    public function removeChild(HTML_QuickForm2_AbstractElement $element)
-    {
-		if (isset($this->elements[$element->getId()])) {
-			$element->setContainer(null);
-		}
-        unset($this->elements[$element->getId()]);
     }
 
    /**
