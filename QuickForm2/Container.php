@@ -121,9 +121,9 @@ abstract class HTML_QuickForm2_Container
     public function setId($id = null)
     {
         if (is_null($id)) {
-            $id = HTML_QuickForm2_Factory::generateId($this->getName());
+            $id = self::generateId($this->getName());
         } else {
-            HTML_QuickForm2_Factory::storeId($id);
+            self::storeId($id);
         }
         $this->attributes['id'] = (string)$id;
     }

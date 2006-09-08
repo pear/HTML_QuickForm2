@@ -99,16 +99,6 @@ class HTML_QuickForm2_ElementTest extends PHPUnit2_Framework_TestCase
     }
 
 
-    public function testAutogenerateId()
-    {
-        $obj = new HTML_QuickForm2_ElementImpl('somename');
-        $this->assertNotEquals('', $obj->getId(), 'Should have an auto-generated \'id\' attribute');
-
-        $obj2 = new HTML_QuickForm2_ElementImpl('somename');
-        $this->assertNotEquals($obj2->getId(), $obj->getId(), 'Auto-generated \'id\' attributes should be unique');
-    }
-
-
     public function testCanNotRemoveNameOrId()
     {
         $obj = new HTML_QuickForm2_ElementImpl('somename', null, null, array('id' => 'someid'));
@@ -124,6 +114,49 @@ class HTML_QuickForm2_ElementTest extends PHPUnit2_Framework_TestCase
             }
         }
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+    }
+
+
+    public function testUniqueIdsGenerated()
+    {
+        $names = array(
+            '', 'value', 'array[]', 'array[8]', 'array[60000]', 'array[20]',
+            'array[name][]', 'bigger[name][5]', 'bigger[name][]', 'bigger[name][6]'
+        );
+        $usedIds = array();
+        foreach ($names as $name) {
+            $el = new HTML_QuickForm2_ElementImpl($name);
+            $this->assertNotEquals('', $el->getId(), 'Should have an auto-generated \'id\' attribute');
+            $this->assertNotContains($el->getId(), $usedIds);
+            $usedIds[] = $el->getId();
+            // Duplicate name...
+            $el2 = new HTML_QuickForm2_ElementImpl($name);
+            $this->assertNotContains($el2->getId(), $usedIds);
+            $usedIds[] = $el2->getId();
+        }
+    }
+
+
+    public function testManualIdsNotReused()
+    {
+        $usedIds = array(
+            'foo-0', 'foo-2', 'foo-bar-0', 'foo-bar-2', 'foo-baz-0-0'
+        );
+        $names = array(
+            'foo', 'foo[bar]', 'foo[baz][]'
+        );
+        foreach ($usedIds as $id) {
+            $elManual = new HTML_QuickForm2_ElementImpl('foo', null, null, array('id' => $id));
+        }
+        foreach ($names as $name) {
+            $el = new HTML_QuickForm2_ElementImpl($name);
+            $this->assertNotContains($el->getId(), $usedIds);
+            $usedIds[] = $el->getId();
+            // Duplicate name...
+            $el2 = new HTML_QuickForm2_ElementImpl($name);
+            $this->assertNotContains($el2->getId(), $usedIds);
+            $usedIds[] = $el2->getId();
+        }
     }
 }
 ?>

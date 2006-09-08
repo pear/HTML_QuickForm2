@@ -64,12 +64,6 @@ require_once 'HTML/QuickForm2/Exception.php';
 class HTML_QuickForm2_Factory
 {
    /**
-    * Array containing the parts of element ids
-    * @var array
-    */
-    protected static $ids = array();
-
-   /**
     * List of element types known to Factory  
     * @var array
     */
@@ -91,74 +85,6 @@ class HTML_QuickForm2_Factory
             return true;
         }
         return false;
-    }
-
-   /**
-    * Generates an id for the element
-    *
-    * Called when an element is created without explicitly given id
-    *
-    * @param  string   Element name
-    * @return string   The generated element id
-    */
-    public static function generateId($elementName)
-    {
-        $tokens    =  strlen($elementName)? 
-                      explode('[', str_replace(']', '', $elementName)):
-                      array('qfauto');
-        $container =& self::$ids;
-        $id        =  '';
-
-        do {
-            $token = array_shift($tokens);
-            // Handle the 'array[]' names
-            if ('' === $token) {
-                if (empty($container)) {
-                    $token = 0;
-                } else {
-                    $keys  = array_keys($container);
-                    $token = end($keys); 
-                    while (isset($container[$token])) {
-                        $token++;
-                    }
-                }
-            }
-            $id .= '-' . $token;
-            if (!isset($container[$token])) {
-                $container[$token] = array();
-            }
-            $container =& $container[$token];
-        } while (!empty($tokens));
-
-        // Append the final index
-        $index = count($keys = array_keys($container))? end($keys): 0;
-        while (isset($container[$index])) {
-            $index++;
-        }
-        $container[$index] = array();
-        $id .= '-' . $index;
-
-        return substr($id, 1);
-    }
-
-
-   /**
-    * Stores the explicitly given id to prevent duplicate id generation
-    *
-    * @param    string  Element id
-    */
-    public static function storeId($id)
-    {
-        $tokens    =  explode('-', $id);
-        $container =& self::$ids;
-
-        do {
-            $token = array_shift($tokens);
-            if (!isset($container[$token])) {
-                $container[$token] = array();
-            }
-            $container =& $container[$token];
-        } while (!empty($tokens));
     }
 
 

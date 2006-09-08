@@ -49,12 +49,6 @@
 require_once 'HTML/Common2.php';
 
 /**
- * Factory class, needed for generateId() / storeId() methods  
- * Perhaps refactoring is in order?
- */
-require_once 'HTML/QuickForm2/Factory.php';
-
-/**
  * Abstract base class for all QuickForm2 Elements and Containers
  *
  * This class is mostly here to define the interface that should be implemented
@@ -68,6 +62,12 @@ require_once 'HTML/QuickForm2/Factory.php';
  */
 abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
 {
+   /**
+    * Array containing the parts of element ids
+    * @var array
+    */
+    protected static $ids = array();
+
    /**
     * Label(s) for the element 
     * @var string|array
@@ -91,6 +91,76 @@ abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
     * @var HTML_QuickForm2_Container
     */
     protected $container = null;
+
+
+   /**
+    * Generates an id for the element
+    *
+    * Called when an element is created without explicitly given id
+    *
+    * @param  string   Element name
+    * @return string   The generated element id
+    */
+    protected static function generateId($elementName)
+    {
+        $tokens    =  strlen($elementName)? 
+                      explode('[', str_replace(']', '', $elementName)):
+                      array('qfauto');
+        $container =& self::$ids;
+        $id        =  '';
+
+        do {
+            $token = array_shift($tokens);
+            // Handle the 'array[]' names
+            if ('' === $token) {
+                if (empty($container)) {
+                    $token = 0;
+                } else {
+                    $keys  = array_keys($container);
+                    $token = end($keys); 
+                    while (isset($container[$token])) {
+                        $token++;
+                    }
+                }
+            }
+            $id .= '-' . $token;
+            if (!isset($container[$token])) {
+                $container[$token] = array();
+            }
+            $container =& $container[$token];
+        } while (!empty($tokens));
+
+        // Append the final index
+        $index = count($keys = array_keys($container))? end($keys): 0;
+        while (isset($container[$index])) {
+            $index++;
+        }
+        $container[$index] = array();
+        $id .= '-' . $index;
+
+        return substr($id, 1);
+    }
+
+
+   /**
+    * Stores the explicitly given id to prevent duplicate id generation
+    *
+    * @param    string  Element id
+    */
+    protected static function storeId($id)
+    {
+        $tokens    =  explode('-', $id);
+        $container =& self::$ids;
+
+        do {
+            $token = array_shift($tokens);
+            if (!isset($container[$token])) {
+                $container[$token] = array();
+            }
+            $container =& $container[$token];
+        } while (!empty($tokens));
+    }
+
 
    /**
     * Class constructor
