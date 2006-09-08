@@ -72,7 +72,7 @@ abstract class HTML_QuickForm2_Container
     * Format: element_id => key of child container
     * @var array
     */
-    public $idIndex = array();
+    protected $idIndex = array();
 
 
    /**
