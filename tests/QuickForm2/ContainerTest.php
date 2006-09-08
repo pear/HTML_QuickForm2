@@ -281,6 +281,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		$e5 = new HTML_QuickForm2_ElementImpl2('k5');
 		$e6 = new HTML_QuickForm2_ElementImpl2('k6');
 		$e7 = new HTML_QuickForm2_ElementImpl2('k7');
+		$e8 = new HTML_QuickForm2_ElementImpl2('k8');
 
 		$c1 = new HTML_QuickForm2_ContainerImpl('l1');
 		$c1->addElement($e1);
@@ -299,11 +300,31 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		$this->assertEquals(array('k6-0'=>0), $c2->idIndex);
 		$c2->insertBefore($c1, $e6);
 		$this->assertEquals(array('l1-0'=>0,'k1-0'=>0,'k2-0'=>0,'k3-0'=>0,'k4-0'=>0,'k5-0'=>0,'k6-0'=>1), $c2->idIndex);
-
-
 	}
 
+	public function testInsertBeforeNonExistingElement()
+	{
+		$e1 = new HTML_QuickForm2_ElementImpl2('m1');
+		$e2 = new HTML_QuickForm2_ElementImpl2('m2');
+		$e3 = new HTML_QuickForm2_ElementImpl2('m3');
 
+		$c1 = new HTML_QuickForm2_ContainerImpl('n1');
+		$c1->addElement($e1);
+		$c2 = new HTML_QuickForm2_ContainerImpl('n2');
+		$c2->addElement($c1);
+		try {
+			$c1->insertBefore($e2, $e3);
+		} catch (HTML_QuickForm2_NotFoundException $e) {
+			$this->assertEquals("Reference element with name '".$e3->getName()."' was not found", $e->getMessage());
+			try {
+				$c2->insertBefore($e2, $e1);
+			} catch (HTML_QuickForm2_NotFoundException $e) {
+				$this->assertEquals("Reference element with name '".$e1->getName()."' was not found", $e->getMessage());
+				return;
+			}
+		}
+        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+	}
 
 
 }
