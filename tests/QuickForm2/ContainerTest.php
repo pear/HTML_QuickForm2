@@ -84,8 +84,7 @@ class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
 /**
  * Unit test for HTML_QuickForm2_Container class
  */
-//class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
-class ContainerTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 {
     public function testCanSetName()
     {
