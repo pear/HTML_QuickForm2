@@ -55,6 +55,7 @@ require_once dirname(__FILE__) . '/FactoryTest.php';
 require_once dirname(__FILE__) . '/AbstractElementTest.php';
 require_once dirname(__FILE__) . '/ElementTest.php';
 require_once dirname(__FILE__) . '/Element/AllTests.php';
+require_once dirname(__FILE__) . '/ContainerTest.php';
 
 class QuickForm2_AllTests
 {
@@ -70,6 +71,7 @@ class QuickForm2_AllTests
         $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
         $suite->addTestSuite('HTML_QuickForm2_AbstractElementTest');
         $suite->addTestSuite('HTML_QuickForm2_ElementTest');
+        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
         $suite->addTest(QuickForm2_Element_AllTests::suite());
 
         return $suite;
