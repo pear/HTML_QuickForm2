@@ -282,8 +282,8 @@ abstract class HTML_QuickForm2_Container
                         }
                     }
                     $this->idIndex = array_merge($this->idIndex, $new);
-                    
-                    $head = array_slice($this->elements, 0, $index-1, true);
+
+                    $head = array_slice($this->elements, 0, $index, true);
                     $tail = array_slice($this->elements, $index, -1, true);
                     $this->elements = $head;
                     $this->addElement($element);
