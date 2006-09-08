@@ -152,10 +152,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		$c1->addElement($e1);
 		$c1->addElement($e2);
 		$this->assertEquals(2, count($c1), 'Element count is incorrect');
-		$e1b = $c1->getElementById('e1-0');
-		$this->assertEquals($e1b->getId(), $e1->getId(), 'First element id differs');
-		$e2b = $c1->getElementById('e2-0');
-		$this->assertEquals($e2b->getId(), $e2->getId(), 'Second element id differs');
+        $this->assertSame($e1, $c1->getElementById($e1->getId()));
+        $this->assertSame($e2, $c1->getElementById($e2->getId()));
 	}
 
 
@@ -175,10 +173,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		$c2->addElement($c1);
 
 		$this->assertEquals(3, count($c2), 'Element count is incorrect');
-		$e1b = $c2->getElementById('a1-0');
-		$this->assertEquals($e1b->getId(), $e1->getId(), 'First element id differs');
-		$e2b = $c2->getElementById('a2-0');
-		$this->assertEquals($e2b->getId(), $e2->getId(), 'Second element id differs');
+        $this->assertSame($e1, $c2->getElementById($e1->getId()));
+        $this->assertSame($e2, $c2->getElementById($e2->getId()));
 	}
 
 
@@ -216,61 +212,66 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		$c1->addElement($e1);
 
 		$this->assertEquals(2, count($c1), 'Element count is incorrect');
-		$e1b = $c1->getElementById('g1-0');
-		$this->assertEquals($e1b->getId(), $e1->getId(), 'First element id differs');
-		$e2b = $c1->getElementById('g2-0');
-		$this->assertEquals($e2b->getId(), $e2->getId(), 'Second element id differs');
-
+        $this->assertSame($e1, $c1->getElementById($e1->getId()));
+        $this->assertSame($e2, $c1->getElementById($e2->getId()));
 	}	
 
-	public function testMoveAndRemove()
-	{
+    public function testMoveElement()
+    {
+		$e1 = new HTML_QuickForm2_ElementImpl2('move1');
+
+        $c1 = new HTML_QuickForm2_ContainerImpl('cmove1');
+        $c2 = new HTML_QuickForm2_ContainerImpl('cmove2');
+
+        $c1->addElement($e1);
+        $this->assertSame($e1, $c1->getElementById($e1->getId()));
+        $this->assertNull($c2->getElementById($e1->getId()), 'Element should not be found in container');
+
+        $c2->addElement($e1);
+        $this->assertNull($c1->getElementById($e1->getId()), 'Element should be removed from container');
+        $this->assertSame($e1, $c2->getElementById($e1->getId()));
+    }
+
+    public function testRemoveElement()
+    {
 		$e1 = new HTML_QuickForm2_ElementImpl2('i1');
 		$e2 = new HTML_QuickForm2_ElementImpl2('i2');
-		$e3 = new HTML_QuickForm2_ElementImpl2('i3');
-		$e4 = new HTML_QuickForm2_ElementImpl2('i4');
-		$e5 = new HTML_QuickForm2_ElementImpl2('i5');
 
 		$c1 = new HTML_QuickForm2_ContainerImpl('j1');
-		$c1->addElement($e1);
-		$c1->addElement($e2);
-		$c1->addElement($e3);
-		$c1->addElement($e4);
-		$c1->addElement($e5);
 
-		$c2 = new HTML_QuickForm2_ContainerImpl('j2');
-		$c2->addElement($c1);
+        $c1->addElement($e1);
+        $c1->addElement($e2);
 
-		$g1 = $c1->getElementById('i3-0');
-		$this->assertEquals($e3->getId(), $g1->getId(), 'Element should be found in container');
+        $removed = $c1->removeChild($e1);
+        $this->assertEquals(1, count($c1), 'Element count is incorrect');
+        $this->assertNull($c1->getElementById($e1->getId()), 'Element should be removed from container');
+        $this->assertSame($e1, $removed, 'removeChild() should return the old child');
+    }
 
-		$c2->addElement($e3);
+    public function testCannotRemoveNonExisting()
+    {
+		$e1 = new HTML_QuickForm2_ElementImpl2('remove1');
+		$e2 = new HTML_QuickForm2_ElementImpl2('remove2');
 
-		$g1 = $c1->getElementById('i3-0');
-		$this->assertEquals(null, $g1, 'Element should not be a child of this container');
-		$g1 = $c2->getElementById('i3-0');
-		$this->assertEquals($e3->getId(), $g1->getId(), 'Element should be found in container');
+        $c1 = new HTML_QuickForm2_ContainerImpl('cremove1');
+        $c2 = new HTML_QuickForm2_ContainerImpl('cremove2');
 
-		$c1->removeChild($e3);
-		$g1 = $c2->getElementById('i3-0');
-		$this->assertNotEquals(null, $g1, 'Element should still be found in container');
-		$this->assertEquals($e3->getId(), $g1->getId(), 'Element should be found in container');
+        $c1->addElement($c2);
+        $c2->addElement($e1);
 
-		$c2->removeChild($e3);
-		$g1 = $c2->getElementById('i3-0');
-		$this->assertEquals(null, $g1, 'Element should have been removed');
-
-		$this->assertEquals(4, count($c1), 'Element count is incorrect');
-		$this->assertEquals(1, count($c2), 'Element count is incorrect');
-
-		$g2 = $c2->getElementById('i4-0');
-		$this->assertEquals($e4->getId(), $g2->getId(), 'Element should have been found');
-
-		$c2->removeChild($e4);
-		$this->assertEquals(3, count($c1), 'Element count is incorrect');
-		$g2 = $c2->getElementById('i4-0');
-		$this->assertEquals(null, $g2, 'Element should have been removed');
-	}
+        try {
+            $c1->removeChild($e1);
+        } catch (HTML_QuickForm2_NotFoundException $e) {
+            $this->assertRegExp('/Element(.*)was not found/', $e->getMessage());
+            try {
+                $c1->removeChild($e2);
+            } catch (HTML_QuickForm2_NotFoundException $e) {
+                $this->assertRegExp('/Element(.*)was not found/', $e->getMessage());
+                return;
+            }
+        }
+        $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
+    }
 
 	public function testInsertBefore()
 	{
@@ -325,7 +326,5 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
 		}
         $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
 	}
-
-
 }
 ?>
