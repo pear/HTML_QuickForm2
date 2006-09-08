@@ -58,8 +58,8 @@ require_once 'HTML/QuickForm2/AbstractElement.php';
  * @version    Release: @package_version@
  */
 abstract class HTML_QuickForm2_Container
-	extends HTML_QuickForm2_AbstractElement
-	implements IteratorAggregate, Countable
+    extends HTML_QuickForm2_AbstractElement
+    implements IteratorAggregate, Countable
 {
    /**
     * Array of elements contained in this container
@@ -69,7 +69,7 @@ abstract class HTML_QuickForm2_Container
 
    /**
     * Array of contained ids
-	* Format: element_id => key of child container
+    * Format: element_id => key of child container
     * @var array
     */
     public $idIndex = array();
@@ -135,7 +135,7 @@ abstract class HTML_QuickForm2_Container
    /**
     * Returns an array of this container's elements
     * 
-    * @return   array 	Container elements
+    * @return   array   Container elements
     */
     public function getElements()
     {
@@ -144,108 +144,108 @@ abstract class HTML_QuickForm2_Container
 
    /**
     * Appends an element to the container
-	*
-	* If the element was previously added to the container or to another
-	* container, it is first removed there.
+    *
+    * If the element was previously added to the container or to another
+    * container, it is first removed there.
     * 
-    * @param    HTML_QuickForm2_AbstractElement 	Element to add
-	* @return 	HTML_QuickForm2_AbstractElement		Added element
+    * @param    HTML_QuickForm2_AbstractElement     Element to add
+    * @return   HTML_QuickForm2_AbstractElement     Added element
     */
     public function addElement(HTML_QuickForm2_AbstractElement $element)
     {
-		if (null !== ($container = $element->getContainer())) {
-        	$container->removeChild($element);
-		}
-		$element->setContainer($this);
+        if (null !== ($container = $element->getContainer())) {
+            $container->removeChild($element);
+        }
+        $element->setContainer($this);
 
         $this->elements[] = $element;
-		end($this->elements);
-		$current = key($this->elements);
-		$this->setChildIndex($element->getId(), $current);
+        end($this->elements);
+        $current = key($this->elements);
+        $this->setChildIndex($element->getId(), $current);
 
-		if ($element instanceof HTML_QuickForm2_Container &&
-			count($element) > 0) {
-			while (list($k) = each($element->idIndex)) {
-				$this->setChildIndex($k, $current);
-			}
-		}
+        if ($element instanceof HTML_QuickForm2_Container &&
+            count($element) > 0) {
+            while (list($k) = each($element->idIndex)) {
+                $this->setChildIndex($k, $current);
+            }
+        }
 
-		return $element;
+        return $element;
     }
 
    /**
     * Removes the element from this container
-	* 
-	* If the reference object is not given, the element will be appended.
     * 
-    * @param    HTML_QuickForm2_AbstractElement 	Element to remove
+    * If the reference object is not given, the element will be appended.
+    * 
+    * @param    HTML_QuickForm2_AbstractElement     Element to remove
     */
     public function removeChild(HTML_QuickForm2_AbstractElement $element)
     {
-		$id = $element->getId();
-		$index = $this->getChildIndex($id);
-		if (null !== $index) {
-			$this->removeChildIndex($id);
-			if ($element->getContainer() !== $this) {
-				$next = $this->elements[$index];
-				$next->removeChild($element);
-			} else {
-				unset($this->elements[$index]);
-				$element->setContainer(null);	
-			}
-		}
+        $id = $element->getId();
+        $index = $this->getChildIndex($id);
+        if (null !== $index) {
+            $this->removeChildIndex($id);
+            if ($element->getContainer() !== $this) {
+                $next = $this->elements[$index];
+                $next->removeChild($element);
+            } else {
+                unset($this->elements[$index]);
+                $element->setContainer(null);   
+            }
+        }
     }
 
-	protected function setChildIndex($id, $index)
-	{
-		$this->idIndex[$id] = $index;
+    protected function setChildIndex($id, $index)
+    {
+        $this->idIndex[$id] = $index;
 
-		if (null != ($parent = $this->getContainer())) {
-			$indexInParent = $parent->idIndex[$this->getId()];
-			$parent->setChildIndex($id, $indexInParent);
-		}
+        if (null != ($parent = $this->getContainer())) {
+            $indexInParent = $parent->idIndex[$this->getId()];
+            $parent->setChildIndex($id, $indexInParent);
+        }
 
-	}
+    }
 
-	protected function getChildIndex($id)
-	{
-		if (isset($this->idIndex[$id])) {
-			return $this->idIndex[$id];
-		}
-		return null;
-	}
+    protected function getChildIndex($id)
+    {
+        if (isset($this->idIndex[$id])) {
+            return $this->idIndex[$id];
+        }
+        return null;
+    }
 
-	protected function removeChildIndex($id)
-	{
-		unset($this->idIndex[$id]);
-		if (null != ($parent = $this->getContainer())) {
-			$parent->removeChildIndex($id);
-		}
-	}
+    protected function removeChildIndex($id)
+    {
+        unset($this->idIndex[$id]);
+        if (null != ($parent = $this->getContainer())) {
+            $parent->removeChildIndex($id);
+        }
+    }
 
    /**
     * Returns an element if its id is found
     * 
-    * @param    string 	Element id to find
-	* @return 	HTML_QuickForm2_AbstractElement|null
+    * @param    string  Element id to find
+    * @return   HTML_QuickForm2_AbstractElement|null
     */
     public function getElementById($id)
     {
-		if (isset($this->idIndex[$id])) {
-			$element = $this->elements[$this->idIndex[$id]];
-			if ($element->getId() != $id) {
-				return $element->getElementById($id);
-			}
-			return $element;
-		}
-		return null;
+        if (isset($this->idIndex[$id])) {
+            $element = $this->elements[$this->idIndex[$id]];
+            if ($element->getId() != $id) {
+                return $element->getElementById($id);
+            }
+            return $element;
+        }
+        return null;
     }
 
    /**
     * Returns an array of elements which name corresponds to element
     * 
-    * @param    string 	Elements name to find
-	* @return 	array
+    * @param    string  Elements name to find
+    * @return   array
     */
     public function getElementsByName($name)
     {
@@ -260,44 +260,44 @@ abstract class HTML_QuickForm2_Container
 
    /**
     * Inserts an element in the container
-	* 
-	* If the reference object is not given, the element will be appended.
     * 
-    * @param    HTML_QuickForm2_AbstractElement 	Element to insert
-    * @param    HTML_QuickForm2_AbstractElement 	Reference to insert before
-	* @return 	HTML_QuickForm2_AbstractElement		Inserted element
+    * If the reference object is not given, the element will be appended.
+    * 
+    * @param    HTML_QuickForm2_AbstractElement     Element to insert
+    * @param    HTML_QuickForm2_AbstractElement     Reference to insert before
+    * @return   HTML_QuickForm2_AbstractElement     Inserted element
     */
     public function insertBefore(HTML_QuickForm2_AbstractElement $element, HTML_QuickForm2_AbstractElement $reference = null)
     {
         if (isset($reference)) {
-			$index = $this->getChildIndex($reference->getId());
-			if (null !== $index) {
-				if (isset($this->elements[$index]) &&
-					$this->elements[$index] === $reference) {
+            $index = $this->getChildIndex($reference->getId());
+            if (null !== $index) {
+                if (isset($this->elements[$index]) &&
+                    $this->elements[$index] === $reference) {
 
-					$newIdx = array();
-					foreach ($this->idIndex as $id => $idx) {
-						if ($idx >= $index) {
-							$new[$id] = $idx+1;
-						}
-					}
-					$this->idIndex = array_merge($this->idIndex, $new);
-					
-					$head = array_slice($this->elements, 0, $index-1, true);
-					$tail = array_slice($this->elements, $index, -1, true);
-					$this->elements = $head;
-					$this->addElement($element);
-					foreach ($tail as $k => $v) {
-						$this->elements[$k+1] = $v;
-					}
-					return $element;
-				}
-			}
-			throw new HTML_QuickForm2_NotFoundException(
-				"Reference element with name '".$reference->getName()."' was not found"
-			);
+                    $newIdx = array();
+                    foreach ($this->idIndex as $id => $idx) {
+                        if ($idx >= $index) {
+                            $new[$id] = $idx+1;
+                        }
+                    }
+                    $this->idIndex = array_merge($this->idIndex, $new);
+                    
+                    $head = array_slice($this->elements, 0, $index-1, true);
+                    $tail = array_slice($this->elements, $index, -1, true);
+                    $this->elements = $head;
+                    $this->addElement($element);
+                    foreach ($tail as $k => $v) {
+                        $this->elements[$k+1] = $v;
+                    }
+                    return $element;
+                }
+            }
+            throw new HTML_QuickForm2_NotFoundException(
+                "Reference element with name '".$reference->getName()."' was not found"
+            );
         }
-		return $this->addElement($element);
+        return $this->addElement($element);
     }
 
    /**
