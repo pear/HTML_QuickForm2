@@ -179,21 +179,21 @@ abstract class HTML_QuickForm2_Container
     * If the reference object is not given, the element will be appended.
     * 
     * @param    HTML_QuickForm2_AbstractElement     Element to remove
+    * @return   HTML_QuickForm2_AbstractElement     Removed object
     */
     public function removeChild(HTML_QuickForm2_AbstractElement $element)
     {
-        $id = $element->getId();
-        $index = $this->getChildIndex($id);
-        if (null !== $index) {
+        if ($element->getContainer() === $this) {
+            $id = $element->getId();
+            $index = $this->getChildIndex($id);
             $this->removeChildIndex($id);
-            if ($element->getContainer() !== $this) {
-                $next = $this->elements[$index];
-                $next->removeChild($element);
-            } else {
-                unset($this->elements[$index]);
-                $element->setContainer(null);   
-            }
+            unset($this->elements[$index]);
+            $element->setContainer(null);
+            return $element;
         }
+        throw new HTML_QuickForm2_NotFoundException(
+            "Element with name '".$element->getName()."' was not found"
+        );
     }
 
     protected function setChildIndex($id, $index)
@@ -250,7 +250,7 @@ abstract class HTML_QuickForm2_Container
     public function getElementsByName($name)
     {
         $found = array();
-        foreach ($this->elements as $id => $element) {
+        foreach ($this->getRecursiveIterator() as $element) {
             if ($element->getName() == $name) {
                 $found[] = $element;
             }
