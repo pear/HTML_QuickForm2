@@ -367,5 +367,33 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals(1, count($c2), 'Element count is incorrect');
         $this->assertSame($e1, $c2->getElementById('dup'));
     }
+
+    public function testFrozenStatusPropagates()
+    {
+        $cFreeze = new HTML_QuickForm2_ContainerImpl('cFreeze');
+        $elFreeze = $cFreeze->addElement(new HTML_QuickForm2_ElementImpl2('elFreeze'));
+
+        $cFreeze->toggleFrozen(true);
+        $this->assertTrue($cFreeze->toggleFrozen(), 'Container should be frozen');
+        $this->assertTrue($elFreeze->toggleFrozen(), 'Contained element should be frozen');
+
+        $cFreeze->toggleFrozen(false);
+        $this->assertFalse($cFreeze->toggleFrozen(), 'Container should not be frozen');
+        $this->assertFalse($elFreeze->toggleFrozen(), 'Contained element should not be frozen');
+    }
+
+    public function testPersistentFreezePropagates()
+    {
+        $cPers = new HTML_QuickForm2_ContainerImpl('cPersistent');
+        $elPers = $cPers->addElement(new HTML_QuickForm2_ElementImpl2('elPersistent'));
+
+        $cPers->persistentFreeze(true);
+        $this->assertTrue($cPers->persistentFreeze(), 'Container should have persistent freeze behaviour');
+        $this->assertTrue($elPers->persistentFreeze(), 'Contained element should have persistent freeze behaviour');
+
+        $cPers->persistentFreeze(false);
+        $this->assertFalse($cPers->persistentFreeze(), 'Container should not have persistent freeze behaviour');
+        $this->assertFalse($elPers->persistentFreeze(), 'Contained element should not have persistent freeze behaviour');
+    }
 }
 ?>
