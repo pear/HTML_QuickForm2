@@ -101,7 +101,7 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
     public function testHtmlGeneration()
     {
         $obj = new HTML_QuickForm2_Element_InputImpl();
-        $this->assertRegExp('!<input[^>]*type="concrete"[^>]*/>!', $obj->toHtml());
+        $this->assertRegExp('!<input[^>]*type="concrete"[^>]*/>!', $obj->__toString());
     }
 
     public function testFrozenHtmlGeneration()
@@ -111,11 +111,11 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
         $obj->toggleFrozen(true);
 
         $obj->persistentFreeze(false);
-        $this->assertNotRegExp('/[<>]/', $obj->toHtml());
-        $this->assertRegExp('/bar/', $obj->toHtml());
+        $this->assertNotRegExp('/[<>]/', $obj->__toString());
+        $this->assertRegExp('/bar/', $obj->__toString());
 
         $obj->persistentFreeze(true);
-        $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->toHtml());
+        $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
     }
 }
 ?>

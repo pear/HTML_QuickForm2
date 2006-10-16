@@ -63,7 +63,7 @@ class HTML_QuickForm2_AbstractElementImpl extends HTML_QuickForm2_AbstractElemen
     public function getType() { return 'concrete'; }
     public function getValue() { return ''; }
     public function setValue($value) { return ''; }
-    public function toHtml() { return ''; }
+    public function __toString() { return ''; }
 
     public function getName() { return ''; }
     public function setName($name) { }

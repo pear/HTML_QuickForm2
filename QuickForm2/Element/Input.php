@@ -90,7 +90,7 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
         return $this->getAttribute('value');
     }
     
-    public function toHtml()
+    public function __toString()
     {
         if ($this->frozen) {
             return $this->getFrozenHtml();

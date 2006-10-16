@@ -49,6 +49,11 @@
 require_once 'HTML/Common2.php';
 
 /**
+ * Exception classes for HTML_QuickForm2  
+ */
+require_once 'HTML/QuickForm2/Exception.php';
+
+/**
  * Abstract base class for all QuickForm2 Elements and Containers
  *
  * This class is mostly here to define the interface that should be implemented

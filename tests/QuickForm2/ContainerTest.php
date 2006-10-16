@@ -63,7 +63,7 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
     public function getType() { return 'concrete'; }
     public function getValue() { return ''; }
     public function setValue($value) { return ''; }
-    public function toHtml() { return ''; }
+    public function __toString() { return ''; }
 }
 
 /**
@@ -76,7 +76,7 @@ class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
     public function getType() { return 'concrete'; }
     public function getValue() { return ''; }
     public function setValue($value) { return ''; }
-    public function toHtml() { return ''; }
+    public function __toString() { return ''; }
 }
 
 /**
