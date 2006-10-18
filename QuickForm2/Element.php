@@ -125,8 +125,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
         if (!$this->persistent) {
             return '';
         }
-        return '<input' . self::getAttributesString(array(
-            'type'  => 'hidden',
+        return '<input type="hidden"' . self::getAttributesString(array(
             'name'  => $this->getName(),
             'value' => $this->getValue(),
             'id'    => $this->getId()
@@ -140,7 +139,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
     protected function getFrozenHtml()
     {
         $value = $this->getValue();
-        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('encoding')): '') .
+        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('charset')): '') .
                $this->getPersistentData();
     }
 }
