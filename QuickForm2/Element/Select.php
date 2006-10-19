@@ -80,15 +80,23 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     */
     protected $values;
 
+   /**
+    * Reference to parent <select>'s possible values   
+    * @var array
+    */
+    protected $possibleValues;
+
 
    /**
     * Class constructor  
     *
     * @param    array   Reference to values of parent <select> element
+    * @param    array   Reference to possible values of parent <select> element
     */
-    public function __construct(&$values)
+    public function __construct(&$values, &$possibleValues)
     {
-        $this->values =& $values;
+        $this->values         =& $values;
+        $this->possibleValues =& $possibleValues;
     }
 
    /**
@@ -117,6 +125,9 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
             }
             $attributes['value'] = (string)$value;
         }
+        if (!isset($attributes['disabled'])) {
+            $this->possibleValues[(string)$value] = true;
+        }
         $this->options[] = array('text' => $text, 'attr' => $attributes);
     }
 
@@ -131,7 +142,8 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     public function addOptgroup($label, $attributes = null)
     {
         $optgroup = new HTML_QuickForm2_Element_Select_Optgroup(
-                            $this->values, $label, $attributes
+                            $this->values, $this->possibleValues, 
+                            $label, $attributes
                         );
         $this->options[] = $optgroup;
         return $optgroup;
@@ -223,13 +235,14 @@ class HTML_QuickForm2_Element_Select_Optgroup
     * Class constructor
     *
     * @param    array   Reference to values of parent <select> element
+    * @param    array   Reference to possible values of parent <select> element
     * @param    string  'label' attribute for optgroup tag
     * @param    mixed   Additional attributes for <optgroup> tag (either as a
     *                   string or as an associative array)
     */
-    public function __construct(&$values, $label, $attributes = null)
+    public function __construct(&$values, &$possibleValues, $label, $attributes = null)
     {
-        parent::__construct($values);
+        parent::__construct($values, $possibleValues);
         $this->setAttributes($attributes);
         $this->attributes['label'] = (string)$label;
     }
@@ -280,6 +293,7 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
+ * @todo       Unit tests and better PHPDoc for loadOptions()
  */
 class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     implements IteratorAggregate, Countable
@@ -293,6 +307,16 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     protected $values = array();
 
    /**
+    * Possible values for select elements
+    *
+    * A value is considered possible if it is present as a value attribute of
+    * some option and that option is not disabled.
+    * @var array
+    */
+    protected $possibleValues = array();
+
+
+   /**
     * Object containing options for the <select> element
     * @var  HTML_QuickForm2_Element_Select_OptionContainer
     */
@@ -303,17 +327,15 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * @param    string  Element name
     * @param    mixed   Data used to populate the element's options, passed to
-    *                   {@link load()} method
+    *                   {@link loadOptions()} method
     * @param    mixed   Label for the element (may be an array of labels)
     * @param    mixed   Attributes (either a string or an array)
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
     public function __construct($name = null, $options = null, $label = null, $attributes = null)
     {
         parent::__construct($name, $options, $label, $attributes);
-        if (null !== $options) {
-            $this->load($options);
-        }
-        $this->optionContainer = new HTML_QuickForm2_Element_Select_OptionContainer($this->values);
+        $this->loadOptions($options);
     }
 
     public function getType()
@@ -343,34 +365,82 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
     protected function getFrozenHtml()
     {
-        $value = array();
-        foreach ($this->values as $key => $val) {
-            foreach ($this->getRecursiveIterator() as $child) {
-                if (is_array($child) && (string)$val == $child['attr']['value']) {
-                    $value[$key] = $child['text'];
-                }
+        if (null === ($value = $this->getValue())) {
+            return '&nbsp;';
+        }
+        $valueHash = is_array($value)? array_flip($value): array($value => true);
+        $options   = array();
+        foreach ($this->getRecursiveIterator() as $child) {
+            if (is_array($child) && isset($valueHash[$child['attr']['value']]) &&
+                empty($child['attr']['disabled'])) 
+            {
+                $options[] = $child['text'];
             }
         }
 
-        $html = empty($value)? '&nbsp;': implode('<br />', $value);
+        $html = implode('<br />', $options);
         if ($this->persistent) {
             $name = $this->attributes['name'] . 
                     (empty($this->attributes['multiple'])? '': '[]');
             // Only use id attribute if doing single hidden input
-            $idAttr = (1 == count($value))? array('id' => $this->getId()): array(); 
-            foreach ($value as $key => $item) {
+            $idAttr = (1 == count($valueHash))? array('id' => $this->getId()): array(); 
+            foreach ($valueHash as $key => $item) {
                 $html .= '<input type="hidden"' . self::getAttributesString(array(
                              'name'  => $name,
-                             'value' => $this->values[$key]
+                             'value' => $key
                          ) + $idAttr) . ' />';
             }
         }
         return $html;
     }
 
+   /**
+    * Returns the value of the <select> element
+    *
+    * Please note that the returned value may not necessarily be equal to that
+    * passed to {@link setValue()}. It passes "intrinsic validation" confirming
+    * that such value could possibly be submitted by this <select> element.   
+    * Specifically, this method will return null if the elements "disabled"
+    * attribute is set, it will not return values if there are no options having
+    * such a "value" attribute or if such options' "disabled" attribute is set.
+    * It will also only return a scalar value for single selects, mimicking
+    * the common browsers' behaviour. 
+    *
+    * @return   mixed   "value" attribute of selected option in case of single
+    *                   select, array of selected options' "value" attributes in
+    *                   case of multiple selects, null if no options selected  
+    */
     public function getValue()
     {
-        return $this->values;
+        if (0 == count($this) || !empty($this->attributes['disabled']) ||
+            0 == count($this->values) || 0 == count($this->possibleValues))
+        {
+            return null;
+        }
+
+        $values = array();
+        foreach ($this->values as $value) {
+            if (!empty($this->possibleValues[$value])) {
+                $values[] = $value;
+            }
+        }
+        if (0 == count($values)) {
+            return null;
+        } elseif (!empty($this->attributes['multiple'])) {
+            return $values;
+        } elseif (1 == count($values)) {
+            return $values[0];
+        } else {
+            // The <select> is not multiple, but several options are to be 
+            // selected. At least IE and Mozilla select the last selected 
+            // option in this case, we should do the same
+            foreach ($this->getRecursiveIterator() as $child) {
+                if (is_array($child) && in_array($child['attr']['value'], $values)) {
+                    $lastValue = $child['attr']['value'];
+                }
+            }
+            return $lastValue;
+        }
     }
 
     public function setValue($value)
@@ -383,12 +453,51 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     }
 
    /**
-    * To be written  
+    * Loads <option>s (and <optgroup>s) for select element
+    *
+    * @param    array
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
-    public function load($options)
+    public function loadOptions($options)
     {
-        throw new HTML_QuickForm2_Exception('Not implemented yet');
+        $this->values          = array();
+        $this->possibleValues  = array();
+        $this->optionContainer = new HTML_QuickForm2_Element_Select_OptionContainer(
+                                     $this->values, $this->possibleValues
+                                 );
+        if (null === $options) {
+            return;
+        } elseif (is_array($options)) {
+            $this->loadOptionsFromArray($this->optionContainer, $options);
+        } else {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'loadOptions() expects an array'
+            );
+        }
     }
+
+
+   /**
+    * Adds options from given array into given container 
+    *
+    * @param    HTML_QuickForm2_Element_Select_OptionContainer  options will be
+    *           added to this container
+    * @param    array   options array
+    */
+    protected function loadOptionsFromArray(
+        HTML_QuickForm2_Element_Select_OptionContainer $container, $options
+    )
+    {
+        foreach ($options as $key => $value) {
+            if (is_array($value)) {
+                $optgroup = $container->addOptgroup($key);
+                $this->loadOptionsFromArray($optgroup, $value);
+            } else {
+                $container->addOption($value, $key);
+            }
+        }
+    }
+
 
     //
     // The following methods decorate those of OptionContainer

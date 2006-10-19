@@ -72,12 +72,67 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit2_Framework_TestCase
     {
         $sel = new HTML_QuickForm2_Element_Select();
         $this->assertEquals(0, count($sel));
-        $this->assertEquals(0, count($sel->getValue()));
+        $this->assertNull($sel->getValue());
         $this->assertRegExp(
             '!^<select[^>]*>\\s*</select>$!',
             $sel->__toString()
         );
     }
+
+    public function testSelectSingleValueIsScalar()
+    {
+        $sel = new HTML_QuickForm2_Element_Select();
+        $sel->addOption('Text', 'Value');
+        $sel->setValue('Value');
+        $this->assertEquals('Value', $sel->getValue());
+
+        $sel->setValue('Nonextistent');
+        $this->assertNull($sel->getValue());
+
+        $sel2 = new HTML_QuickForm2_Element_Select();
+        $sel2->addOption('Text', 'Value');
+        $sel2->addOption('Other Text', 'Other Value');
+        $sel2->addOption('Different Text', 'Different Value');
+
+        $sel2->setValue(array('Different value', 'Value'));
+        $this->assertEquals('Value', $sel2->getValue());
+    }
+
+    public function testSelectMultipleValueIsArray()
+    {
+        $sel = new HTML_QuickForm2_Element_Select('mult', null, null, array('multiple'));
+        $sel->addOption('Text', 'Value');
+        $sel->addOption('Other Text', 'Other Value');
+        $sel->addOption('Different Text', 'Different Value');
+
+        $sel->setValue('Other Value');
+        $this->assertEquals(array('Other Value'), $sel->getValue());
+
+        $sel->setValue('Nonexistent');
+        $this->assertNull($sel->getValue());
+
+        $sel->setValue(array('Value', 'Different Value', 'Nonexistent'));
+        $this->assertEquals(array('Value', 'Different Value'), $sel->getValue());
+    }
+
+    public function testDisabledSelectHasNoValue()
+    {
+        $sel = new HTML_QuickForm2_Element_Select('disableMe', null, null, array('disabled'));
+        $sel->addOption('Text', 'Value');
+        $sel->setValue('Value');
+
+        $this->assertNull($sel->getValue());
+    }
+
+    public function testDisabledOptionsDoNotProduceValues()
+    {
+        $sel = new HTML_QuickForm2_Element_Select();
+        $sel->addOption('Disabled Text', 'Disabled Value', array('disabled'));
+        $sel->setValue('Disabled Value');
+
+        $this->assertNull($sel->getValue());
+    }
+
 
     public function testAddOption()
     {
@@ -97,7 +152,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit2_Framework_TestCase
 
         $sel3 = new HTML_QuickForm2_Element_Select();
         $sel3->addOption('Text', 'Value', array('selected'));
-        $this->assertContains('Value', $sel3->getValue());
+        $this->assertEquals('Value', $sel3->getValue());
         $this->assertRegExp(
             '!<option[^>]+selected="selected"[^>]*>Text</option>!', 
             $sel3->__toString()
@@ -144,7 +199,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit2_Framework_TestCase
         $sel3 = new HTML_QuickForm2_Element_Select();
         $optgroup3 = $sel3->addOptgroup('Label');
         $optgroup3->addOption('Text', 'Value', array('selected'));
-        $this->assertContains('Value', $sel3->getValue());
+        $this->assertEquals('Value', $sel3->getValue());
         $this->assertRegExp(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+selected="selected"[^>]*>Text</option>\\s*</optgroup>!', 
             $sel3->__toString()
