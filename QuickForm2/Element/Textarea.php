@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Class for <textarea> elements
  *
  * PHP version 5
  *
@@ -43,38 +43,67 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
-}
+/**
+ * Base class for simple HTML_QuickForm2 elements  
+ */
+require_once 'HTML/QuickForm2/Element.php';
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-
-class QuickForm2_Element_AllTests
+/**
+ * Class for <textarea> elements
+ *  
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
 {
-    public static function main()
+    protected $persistent = true;
+
+   /**
+    * Value for textarea field
+    * @var  string
+    */
+    protected $value = null;
+
+    public function getType()
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        return 'textarea';
+    } 
+
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
 
-    public static function suite()
+    public function getValue()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
+        return empty($this->attributes['disabled'])? $this->value: null;
+    }
 
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
+    public function __toString()
+    {
+        if ($this->frozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return $this->getIndent() . '<textarea' . $this->getAttributes(true) .
+                   '>' . preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars(
+                        $this->value, ENT_QUOTES, self::getOption('charset')
+                   )) . '</textarea>';
+        }
+    }
 
-        return $suite;
+    public function getFrozenHtml()
+    {
+        $value = htmlspecialchars($this->value, ENT_QUOTES, self::getOption('charset'));
+        if ('off' == $this->getAttribute('wrap')) {
+            $html = $this->getIndent() . '<pre>' . $value . 
+                    '</pre>' . self::getOption('linebreak');
+        } else {
+            $html = nl2br($value) . self::getOption('linbebreak');
+        }
+        return $html . $this->getPersistentData();
     }
 }
-
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
-}
-
 ?>

@@ -68,7 +68,9 @@ class HTML_QuickForm2_Factory
     */
     protected static $elementTypes = array(
         'select'    => array('HTML_QuickForm2_Element_Select',
-                             'HTML/QuickForm2/Element/Select.php')
+                             'HTML/QuickForm2/Element/Select.php'),
+        'textarea'  => array('HTML_QuickForm2_Element_Textarea',
+                             'HTML/QuickForm2/Element/Textarea.php'),
     );
 
 

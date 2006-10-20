@@ -122,12 +122,12 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
     */
     protected function getPersistentData()
     {
-        if (!$this->persistent) {
+        if (!$this->persistent || null === ($value = $this->getValue())) {
             return '';
         }
         return '<input type="hidden"' . self::getAttributesString(array(
             'name'  => $this->getName(),
-            'value' => $this->getValue(),
+            'value' => $value,
             'id'    => $this->getId()
         )) . ' />';
     }
