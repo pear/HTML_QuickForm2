@@ -285,9 +285,6 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
 /**
  * Class representing a <select> element
  *
- * Implementation-wise, this class is a Decorator around 
- * {@see HTML_QuickForm2_Element_Select_OptionContainer}
- *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -296,7 +293,6 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
  * @todo       Unit tests and better PHPDoc for loadOptions()
  */
 class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
-    implements IteratorAggregate, Countable
 {
     protected $persistent = true;
 
@@ -370,7 +366,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         }
         $valueHash = is_array($value)? array_flip($value): array($value => true);
         $options   = array();
-        foreach ($this->getRecursiveIterator() as $child) {
+        foreach ($this->optionContainer->getRecursiveIterator() as $child) {
             if (is_array($child) && isset($valueHash[$child['attr']['value']]) &&
                 empty($child['attr']['disabled'])) 
             {
@@ -412,8 +408,8 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function getValue()
     {
-        if (0 == count($this) || !empty($this->attributes['disabled']) ||
-            0 == count($this->values) || 0 == count($this->possibleValues))
+        if (0 == count($this->optionContainer) || 0 == count($this->values) ||
+            0 == count($this->possibleValues) || !empty($this->attributes['disabled']))
         {
             return null;
         }
@@ -434,7 +430,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             // The <select> is not multiple, but several options are to be 
             // selected. At least IE and Mozilla select the last selected 
             // option in this case, we should do the same
-            foreach ($this->getRecursiveIterator() as $child) {
+            foreach ($this->optionContainer->getRecursiveIterator() as $child) {
                 if (is_array($child) && in_array($child['attr']['value'], $values)) {
                     $lastValue = $child['attr']['value'];
                 }
@@ -499,10 +495,6 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     }
 
 
-    //
-    // The following methods decorate those of OptionContainer
-    //
-
    /**
     * Adds a new option  
     *
@@ -530,36 +522,6 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     public function addOptgroup($label, $attributes = null)
     {
         return $this->optionContainer->addOptgroup($label, $attributes);
-    }
-
-   /**
-    * Returns an iterator over contained elements
-    *
-    * @return   HTML_QuickForm2_Element_Select_OptionIterator
-    */
-    public function getIterator()
-    {
-        return $this->optionContainer->getIterator();
-    }
-
-   /**
-    * Returns a recursive iterator over contained elements  
-    *
-    * @return   RecursiveIteratorIterator
-    */
-    public function getRecursiveIterator()
-    {
-        return $this->optionContainer->getRecursiveIterator();
-    }
-
-   /**
-    * Returns the number of options in the container
-    *
-    * @return   int
-    */
-    public function count()
-    {
-        return $this->optionContainer->count();
     }
 }
 ?>

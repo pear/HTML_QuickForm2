@@ -71,7 +71,6 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit2_Framework_TestCase
     public function testSelectIsEmptyByDefault()
     {
         $sel = new HTML_QuickForm2_Element_Select();
-        $this->assertEquals(0, count($sel));
         $this->assertNull($sel->getValue());
         $this->assertRegExp(
             '!^<select[^>]*>\\s*</select>$!',
