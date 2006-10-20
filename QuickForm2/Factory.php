@@ -67,10 +67,14 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $elementTypes = array(
+        'checkbox'  => array('HTML_QuickForm2_Element_InputCheckbox',
+                             'HTML/QuickForm2/Element/InputCheckbox.php'),
+        'radio'     => array('HTML_QuickForm2_Element_InputRadio',
+                             'HTML/QuickForm2/Element/InputRadio.php'),
         'select'    => array('HTML_QuickForm2_Element_Select',
                              'HTML/QuickForm2/Element/Select.php'),
         'textarea'  => array('HTML_QuickForm2_Element_Textarea',
-                             'HTML/QuickForm2/Element/Textarea.php'),
+                             'HTML/QuickForm2/Element/Textarea.php')
     );
 
 

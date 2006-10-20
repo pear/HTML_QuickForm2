@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Class for <input type="checkbox" /> elements
  *
  * PHP version 5
  *
@@ -43,42 +43,35 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
-}
+/**
+ * Base class for checkboxes and radios
+ */
+require_once 'HTML/QuickForm2/Element/InputCheckable.php';
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-require_once dirname(__FILE__) . '/InputCheckableTest.php';
-require_once dirname(__FILE__) . '/InputCheckboxTest.php';
-
-class QuickForm2_Element_AllTests
+/**
+ * Class for <input type="checkbox" /> elements 
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_InputCheckable
 {
-    public static function main()
+    protected $attributes = array('type' => 'checkbox');
+
+    protected $frozenHtml = array(
+        'checked'   => '<tt>[x]</tt>',
+        'unchecked' => '<tt>[&nbsp;]</tt>'
+    );
+
+    public function __construct($name = null, $options = null, $label = null, $attributes = null)
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
-
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckableTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckboxTest');
-
-        return $suite;
+        parent::__construct($name, $options, $label, $attributes);
+        if (!$this->getAttribute('value')) {
+            $this->setAttribute('value', 1);
+        }
     }
 }
-
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
-}
-
 ?>

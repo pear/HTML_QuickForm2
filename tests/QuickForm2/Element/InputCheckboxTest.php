@@ -37,48 +37,30 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
-}
+/**
+ * Class for <input type="checkbox" /> elements
+ */
+require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
+/**
+ * PHPUnit2 Test Case
+ */
+require_once 'PHPUnit2/Framework/TestCase.php';
 
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-require_once dirname(__FILE__) . '/InputCheckableTest.php';
-require_once dirname(__FILE__) . '/InputCheckboxTest.php';
-
-class QuickForm2_Element_AllTests
+/**
+ * Unit test for HTML_QuickForm2_Element_InputCheckbox class
+ */
+class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit2_Framework_TestCase
 {
-    public static function main()
+    public function testDefaultValueAttributeIs1()
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
-
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckableTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckboxTest');
-
-        return $suite;
+        $box = new HTML_QuickForm2_Element_InputCheckbox();
+        $this->assertEquals('1', $box->getAttribute('value'));
     }
 }
-
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
-}
-
 ?>
