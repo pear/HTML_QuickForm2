@@ -52,8 +52,7 @@ require_once 'HTML/QuickForm2/Exception.php';
  * Static factory class
  *
  * The class handles instantiation of Element and Rule objects as well as
- * registering of new Element and Rule classes. It also handles generation
- * of unique ids for elements which do not have ids explicitly set.
+ * registering of new Element and Rule classes.
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -68,6 +67,8 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $elementTypes = array(
+        'select'    => array('HTML_QuickForm2_Element_Select',
+                             'HTML/QuickForm2/Element/Select.php')
     );
 
 
@@ -121,7 +122,7 @@ class HTML_QuickForm2_Factory
     * @param    mixed   Options for the element (passed to element's constructor)
     * @param    mixed   Element label (passed to element's constructor)
     * @param    mixed   Element attributes (passed to element's constructor)
-    * @return   HTML_QuickForm2_Element     A created element
+    * @return   HTML_QuickForm2_AbstractElement     A created element
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
     *           not be found and/or loaded from file 

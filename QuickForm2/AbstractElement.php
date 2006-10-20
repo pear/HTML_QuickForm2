@@ -57,7 +57,8 @@ require_once 'HTML/QuickForm2/Exception.php';
  * Abstract base class for all QuickForm2 Elements and Containers
  *
  * This class is mostly here to define the interface that should be implemented
- * by the subclasses.
+ * by the subclasses. It also contains static methods handling generation
+ * of unique ids for elements which do not have ids explicitly set.
  *
  * @category   HTML
  * @package    HTML_QuickForm2
