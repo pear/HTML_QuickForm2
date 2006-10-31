@@ -1,6 +1,6 @@
 <?php
 /**
- * Base class for <input> elements
+ * Unit tests for HTML_QuickForm2 package
  *
  * PHP version 5
  *
@@ -37,77 +37,36 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements (not Containers)
+ * Class for <input type="password" /> elements
  */
-require_once 'HTML/QuickForm2/Element.php';
+require_once 'HTML/QuickForm2/Element/InputPassword.php';
 
 /**
- * Base class for <input> elements
- *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * PHPUnit2 Test Case
  */
-class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
+require_once 'PHPUnit2/Framework/TestCase.php';
+
+/**
+ * Unit test for HTML_QuickForm2_Element_InputCheckbox class
+ */
+class HTML_QuickForm2_Element_InputPasswordTest extends PHPUnit2_Framework_TestCase
 {
-   /**
-    * 'type' attribute should not be changeable
-    * @var array
-    */
-    protected $watchedAttributes = array('id', 'name', 'type');
+    public function testFrozenOutputIsMasked()
+    {
+        $input = new HTML_QuickForm2_Element_InputPassword('foo');
+        $input->setValue('bar');
+        $input->toggleFrozen(true);
+        // wow, never used lookbehind assertions before
+        $this->assertNotRegExp('/(?<!value=")bar/', $input->__toString());
 
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('type' == $name) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "Attribute 'type' is read-only"
-            );
-        }
-        parent::onAttributeChange($name, $value);
-    }
-
-    public function getType()
-    {
-        return $this->attributes['type'];
-    }
-
-    public function setValue($value)
-    {
-        $this->setAttribute('value', $value);
-    }
-
-    public function getValue()
-    {
-        return $this->getAttribute('disabled')? null: $this->getAttribute('value');
-    }
-    
-    public function __toString()
-    {
-        if ($this->frozen) {
-            return $this->getFrozenHtml();
-        } else {
-            return '<input' . $this->getAttributes(true) . ' />';
-        }
-    }
-
-   /**
-    * Returns the field's value without HTML tags
-    * @return string
-    */
-    protected function getFrozenHtml()
-    {
-        $value = $this->getAttribute('value');
-        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('charset')): '&nbsp;') .
-               $this->getPersistentData();
+        $input->persistentFreeze(false);
+        $this->assertNotRegexp('/bar/', $input->__toString());
     }
 }
 ?>

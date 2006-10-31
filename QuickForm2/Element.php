@@ -131,16 +131,5 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
             'id'    => $this->getId()
         )) . ' />';
     }
-
-   /**
-    * Returns the field's value without HTML tags
-    * @return string
-    */
-    protected function getFrozenHtml()
-    {
-        $value = $this->getValue();
-        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('charset')): '') .
-               $this->getPersistentData();
-    }
 }
 ?>

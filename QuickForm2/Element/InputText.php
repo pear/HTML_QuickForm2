@@ -1,6 +1,6 @@
 <?php
 /**
- * Base class for <input> elements
+ * Class for <input type="text" /> elements
  *
  * PHP version 5
  *
@@ -44,12 +44,12 @@
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements (not Containers)
+ * Base class for <input> elements
  */
-require_once 'HTML/QuickForm2/Element.php';
+require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
- * Base class for <input> elements
+ * Class for <input type="text" /> elements 
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -57,57 +57,8 @@ require_once 'HTML/QuickForm2/Element.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
+class HTML_QuickForm2_Element_InputText extends HTML_QuickForm2_Element_Input
 {
-   /**
-    * 'type' attribute should not be changeable
-    * @var array
-    */
-    protected $watchedAttributes = array('id', 'name', 'type');
-
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('type' == $name) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "Attribute 'type' is read-only"
-            );
-        }
-        parent::onAttributeChange($name, $value);
-    }
-
-    public function getType()
-    {
-        return $this->attributes['type'];
-    }
-
-    public function setValue($value)
-    {
-        $this->setAttribute('value', $value);
-    }
-
-    public function getValue()
-    {
-        return $this->getAttribute('disabled')? null: $this->getAttribute('value');
-    }
-    
-    public function __toString()
-    {
-        if ($this->frozen) {
-            return $this->getFrozenHtml();
-        } else {
-            return '<input' . $this->getAttributes(true) . ' />';
-        }
-    }
-
-   /**
-    * Returns the field's value without HTML tags
-    * @return string
-    */
-    protected function getFrozenHtml()
-    {
-        $value = $this->getAttribute('value');
-        return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('charset')): '&nbsp;') .
-               $this->getPersistentData();
-    }
+    protected $attributes = array('type' => 'text');
 }
 ?>

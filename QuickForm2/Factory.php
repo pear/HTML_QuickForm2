@@ -71,8 +71,12 @@ class HTML_QuickForm2_Factory
                              'HTML/QuickForm2/Element/InputCheckbox.php'),
         'radio'     => array('HTML_QuickForm2_Element_InputRadio',
                              'HTML/QuickForm2/Element/InputRadio.php'),
+        'password'  => array('HTML_QuickForm2_Element_InputPassword',
+                             'HTML/QuickForm2/Element/InputPassword.php'),
         'select'    => array('HTML_QuickForm2_Element_Select',
                              'HTML/QuickForm2/Element/Select.php'),
+        'text'      => array('HTML_QuickForm2_Element_InputText',
+                             'HTML/QuickForm2/Element/InputText.php'),
         'textarea'  => array('HTML_QuickForm2_Element_Textarea',
                              'HTML/QuickForm2/Element/Textarea.php')
     );

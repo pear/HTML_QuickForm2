@@ -55,6 +55,7 @@ require_once dirname(__FILE__) . '/SelectTest.php';
 require_once dirname(__FILE__) . '/TextareaTest.php';
 require_once dirname(__FILE__) . '/InputCheckableTest.php';
 require_once dirname(__FILE__) . '/InputCheckboxTest.php';
+require_once dirname(__FILE__) . '/InputPasswordTest.php';
 
 class QuickForm2_Element_AllTests
 {
@@ -72,6 +73,7 @@ class QuickForm2_Element_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckableTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckboxTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_InputPasswordTest');
 
         return $suite;
     }

@@ -87,7 +87,7 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
     }
 
-    public function testCanSetValue()
+    public function testCanSetAndGetValue()
     {
         $obj = new HTML_QuickForm2_Element_InputImpl();
 
@@ -96,6 +96,9 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
 
         $obj->setAttribute('value', 'bar');
         $this->assertEquals($obj->getValue(), 'bar');
+
+        $obj->setAttribute('disabled');
+        $this->assertNull($obj->getValue());
     }
 
     public function testHtmlGeneration()
@@ -116,6 +119,10 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
 
         $obj->persistentFreeze(true);
         $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
+
+        $obj->setAttribute('disabled');
+        $this->assertRegExp('/bar/', $obj->__toString());
+        $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
     }
 }
 ?>
