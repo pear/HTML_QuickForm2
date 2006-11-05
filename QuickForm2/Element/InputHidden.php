@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Class for <input type="hidden" /> elements
  *
  * PHP version 5
  *
@@ -43,50 +43,34 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
-}
+/**
+ * Base class for <input> elements
+ */
+require_once 'HTML/QuickForm2/Element/Input.php';
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-require_once dirname(__FILE__) . '/InputCheckableTest.php';
-require_once dirname(__FILE__) . '/InputCheckboxTest.php';
-require_once dirname(__FILE__) . '/InputPasswordTest.php';
-require_once dirname(__FILE__) . '/InputImageTest.php';
-require_once dirname(__FILE__) . '/InputHiddenTest.php';
-require_once dirname(__FILE__) . '/InputSubmitTest.php';
-
-class QuickForm2_Element_AllTests
+/**
+ * Class for <input type="hidden" /> elements 
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
 {
-    public static function main()
+    protected $attributes = array('type' => 'hidden');
+
+   /**
+    * Hidden elements can not be frozen
+    *
+    * @param    bool    Whether element should be frozen or editable. This 
+    *                   parameter is ignored in case of hidden elements
+    * @return   bool    Always returns false
+    */  
+    public function toggleFrozen($freeze = null)
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
-
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckableTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckboxTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputPasswordTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputImageTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputHiddenTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputSubmitTest');
-
-        return $suite;
+        return false;
     }
 }
-
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
-}
-
 ?>

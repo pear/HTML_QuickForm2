@@ -37,56 +37,43 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
-}
+/**
+ * Class for <input type="submit" /> elements
+ */
+require_once 'HTML/QuickForm2/Element/InputSubmit.php';
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
+/**
+ * PHPUnit2 Test Case
+ */
+require_once 'PHPUnit2/Framework/TestCase.php';
 
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-require_once dirname(__FILE__) . '/InputCheckableTest.php';
-require_once dirname(__FILE__) . '/InputCheckboxTest.php';
-require_once dirname(__FILE__) . '/InputPasswordTest.php';
-require_once dirname(__FILE__) . '/InputImageTest.php';
-require_once dirname(__FILE__) . '/InputHiddenTest.php';
-require_once dirname(__FILE__) . '/InputSubmitTest.php';
-
-class QuickForm2_Element_AllTests
+/**
+ * Unit test for HTML_QuickForm2_Element_InputSubmit class
+ */
+class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit2_Framework_TestCase
 {
-    public static function main()
+    public function testConstructorSetsValue()
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        $submit = new HTML_QuickForm2_Element_InputSubmit('foo', 'Click me');
+        $this->assertRegExp('/value="Click me"/', $submit->__toString());
+
+        $submit2 = new HTML_QuickForm2_Element_InputSubmit('bar', null, null, array('value' => 'Click me now'));
+        $this->assertRegExp('/value="Click me now"/', $submit2->__toString());
+
+        $submit3 = new HTML_QuickForm2_Element_InputSubmit('bar', 'Click me', null, array('value' => 'Click me now'));
+        $this->assertRegExp('/value="Click me"/', $submit3->__toString());
     }
 
-    public static function suite()
+    public function testCannotBeFrozen()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
-
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_TextareaTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckableTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputCheckboxTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputPasswordTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputImageTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputHiddenTest');
-        $suite->addTestSuite('HTML_QuickForm2_Element_InputSubmitTest');
-
-        return $suite;
+        $submit = new HTML_QuickForm2_Element_InputSubmit('foo');
+        $this->assertFalse($submit->toggleFrozen(true));
+        $this->assertFalse($submit->toggleFrozen());
     }
 }
-
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
-}
-
 ?>
