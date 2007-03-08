@@ -50,12 +50,12 @@ require_once 'HTML/QuickForm2/Element/InputHidden.php';
 /**
  * PHPUnit2 Test Case
  */
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * Unit test for HTML_QuickForm2_Element_InputHidden class
  */
-class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit_Framework_TestCase
 {
     public function testCannotBeFrozen()
     {

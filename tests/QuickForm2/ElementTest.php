@@ -50,7 +50,7 @@ require_once 'HTML/QuickForm2/Element.php';
 /**
  * PHPUnit2 Test Case
  */
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * A non-abstract subclass of Element 
@@ -68,7 +68,7 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
 /**
  * Unit test for HTML_QuickForm2_Element class, 
  */
-class HTML_QuickForm2_ElementTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 {
     public function testCanSetName()
     {

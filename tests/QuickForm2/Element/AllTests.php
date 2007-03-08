@@ -43,12 +43,12 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Element_AllTests::main');
 }
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once dirname(__FILE__) . '/InputTest.php';
 require_once dirname(__FILE__) . '/SelectTest.php';
@@ -64,12 +64,12 @@ class QuickForm2_Element_AllTests
 {
     public static function main()
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 
     public static function suite()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
+        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Element');
 
         $suite->addTestSuite('HTML_QuickForm2_Element_InputTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_SelectTest');
@@ -85,7 +85,7 @@ class QuickForm2_Element_AllTests
     }
 }
 
-if (PHPUnit2_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
+if (PHPUnit_MAIN_METHOD == 'QuickForm2_Element_AllTests::main') {
     QuickForm2_Element_AllTests::main();
 }
 

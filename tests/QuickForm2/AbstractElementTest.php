@@ -50,7 +50,7 @@ require_once 'HTML/QuickForm2/AbstractElement.php';
 /**
  * PHPUnit2 Test Case
  */
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * A non-abstract subclass of AbstractElement 
@@ -74,7 +74,7 @@ class HTML_QuickForm2_AbstractElementImpl extends HTML_QuickForm2_AbstractElemen
 /**
  * Unit test for HTML_QuickForm2_AbstractElement class, 
  */
-class HTML_QuickForm2_AbstractElementTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_AbstractElementTest extends PHPUnit_Framework_TestCase
 {
     public function testCanSetLabel()
     {

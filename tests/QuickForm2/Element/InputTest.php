@@ -50,7 +50,7 @@ require_once 'HTML/QuickForm2/Element/Input.php';
 /**
  * PHPUnit2 Test Case
  */
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * We need to set the element's type
@@ -68,7 +68,7 @@ class HTML_QuickForm2_Element_InputImpl extends HTML_QuickForm2_Element_Input
 /**
  * Unit test for HTML_QuickForm2_Element_Input class
  */
-class HTML_QuickForm2_Element_InputTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_Element_InputTest extends PHPUnit_Framework_TestCase
 {
     public function testTypeAttributeIsReadonly()
     {

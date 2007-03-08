@@ -43,12 +43,12 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit2_MAIN_METHOD')) {
-    define('PHPUnit2_MAIN_METHOD', 'AllTests::main');
+if (!defined('PHPUnit_MAIN_METHOD')) {
+    define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
 
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/TestRunner.php';
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once 'QuickForm2/AllTests.php';
 
@@ -56,12 +56,12 @@ class AllTests
 {
     public static function main()
     {
-        PHPUnit2_TextUI_TestRunner::run(self::suite());
+        PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 
     public static function suite()
     {
-        $suite = new PHPUnit2_Framework_TestSuite('HTML_QuickForm2 package');
+        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package');
 
         $suite->addTest(QuickForm2_AllTests::suite());
 
@@ -69,7 +69,7 @@ class AllTests
     }
 }
 
-if (PHPUnit2_MAIN_METHOD == 'AllTests::main') {
+if (PHPUnit_MAIN_METHOD == 'AllTests::main') {
     AllTests::main();
 }
 ?>

@@ -50,7 +50,7 @@ require_once 'HTML/QuickForm2/Element/Select.php';
 /**
  * PHPUnit2 Test Case
  */
-require_once 'PHPUnit2/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * Let's just make parseAttributes() public rather than copy and paste regex   
@@ -66,7 +66,7 @@ abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_C
 /**
  * Unit test for HTML_QuickForm2_Element_Select class
  */
-class HTML_QuickForm2_Element_SelectTest extends PHPUnit2_Framework_TestCase
+class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 {
     public function testSelectIsEmptyByDefault()
     {
