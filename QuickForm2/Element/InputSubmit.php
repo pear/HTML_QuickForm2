@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, Alexey Borzov <avb@php.net>, 
- *                     Bertrand Mansion <golgote@mamasam.com> 
+ * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
+ *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -112,7 +112,7 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
     * The value is only returned if the form was actually submitted and this
     * submit button was clicked. Returns null in all other cases
     *
-    * return    string|null
+    * @return    string|null
     */ 
     public function getValue()
     {

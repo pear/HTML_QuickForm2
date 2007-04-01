@@ -43,9 +43,9 @@
  */
 
 /**
- * Class for <input type="submit" /> elements
+ * Class for <button> elements
  */
-require_once 'HTML/QuickForm2/Element/InputSubmit.php';
+require_once 'HTML/QuickForm2/Element/Button.php';
 
 /**
  * PHPUnit2 Test Case
@@ -53,27 +53,21 @@ require_once 'HTML/QuickForm2/Element/InputSubmit.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * Unit test for HTML_QuickForm2_Element_InputSubmit class
+ * Unit test for HTML_QuickForm2_Element_Button class
  */
-class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorSetsValue()
+    public function testConstructorSetsContent()
     {
-        $submit = new HTML_QuickForm2_Element_InputSubmit('foo', 'Click me');
-        $this->assertRegExp('/value="Click me"/', $submit->__toString());
-
-        $submit2 = new HTML_QuickForm2_Element_InputSubmit('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $submit2->__toString());
-
-        $submit3 = new HTML_QuickForm2_Element_InputSubmit('bar', 'Click me', null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me"/', $submit3->__toString());
+        $button = new HTML_QuickForm2_Element_Button('foo', 'Some string');
+        $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
     }
 
     public function testCannotBeFrozen()
     {
-        $submit = new HTML_QuickForm2_Element_InputSubmit('foo');
-        $this->assertFalse($submit->toggleFrozen(true));
-        $this->assertFalse($submit->toggleFrozen());
+        $button = new HTML_QuickForm2_Element_InputButton('foo');
+        $this->assertFalse($button->toggleFrozen(true));
+        $this->assertFalse($button->toggleFrozen());
     }
 }
 ?>

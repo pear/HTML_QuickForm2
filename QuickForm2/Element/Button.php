@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for <input type="image" /> elements
+ * Class for <button> elements
  *
  * PHP version 5
  *
@@ -44,12 +44,15 @@
  */
 
 /**
- * Base class for <input> elements
+ * Base class for simple HTML_QuickForm2 elements  
  */
-require_once 'HTML/QuickForm2/Element/Input.php';
+require_once 'HTML/QuickForm2/Element.php';
 
 /**
- * Class for <input type="image" /> elements
+ * Class for <button> elements
+ * 
+ * Note that this element was named 'xbutton' in previous version of QuickForm,
+ * the name 'button' being used for current 'inputbutton' element.   
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -57,38 +60,45 @@ require_once 'HTML/QuickForm2/Element/Input.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
+class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
 {
-    protected $attributes = array('type' => 'image');
+   /**
+    * Content to be displayed between <button></button> tags
+    * @var  string
+    */
+    protected $content = null;
 
    /**
-    * Coordinates of user click within the image, array contains keys 'x' and 'y'
-    * @todo This value should be set from submit Datasource
-    * @var  array
+    * Element's submit value 
+    * @todo This value should be set from the submit Datasource
+    * @var  string
     */
-    protected $coordinates = null;
+    protected $submitValue = null;
 
    /**
     * Class constructor
     *
     * @param    string  Element name
-    * @param    string  Image source   
+    * @param    sting   Content to put between <button></button> tags
     * @param    mixed   Label for the element (may be an array of labels)
     * @param    mixed   Attributes (either a string or an array)
     */
-    public function __construct($name = null, $src = null, $label = null, $attributes = null)
+    public function __construct($name = null, $content = null, $label = null, $attributes = null)
     {
-        parent::__construct($name, $src, $label, $attributes);
-        if (!empty($src)) {
-            $this->setAttribute('src', $src);
-        }
+        parent::__construct($name, $content, $label, $attributes);
+        $this->setContent($content);
+    }
+
+    public function getType()
+    {
+        return 'button';
     }
 
    /**
-    * Image buttons can not be frozen
+    * Buttons can not be frozen
     *
     * @param    bool    Whether element should be frozen or editable. This 
-    *                   parameter is ignored in case of image elements
+    *                   parameter is ignored in case of buttons
     * @return   bool    Always returns false
     */  
     public function toggleFrozen($freeze = null)
@@ -97,7 +107,17 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     }
 
    /**
-    * Image button's value cannot be set via this method
+    * Sets the contents of the button element
+    *
+    * @param    string  Button content (HTML to add between <button></button> tags)
+    */
+    function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+   /**
+    * Button's value cannot be set via this method
     *
     * @param    mixed   Element's value, this parameter is ignored
     */
@@ -109,39 +129,24 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
    /**
     * Returns the element's value
     *
-    * The value is only returned if the form was actually submitted and this
-    * image button was clicked. Returns null in all other cases.
+    * The value is only returned if the following is true
+    *  - button has 'type' attribute set to 'submit' (or no 'type' attribute)
+    *  - the form was submitted by clicking on this button
+    * 
+    * This method returns the actual value submitted by the browser. Note that 
+    * different browsers submit different values!
     *
-    * @return   array|null  An array with keys 'x' and 'y' containing the 
-    *                       coordinates of user click if the image was clicked, 
-    *                       null otherwise 
+    * @return    string|null
     */ 
     public function getValue()
     {
-        return $this->coordinates;
+        return $this->submitValue;
     }
 
-   /**
-    * Returns the HTML representation of the element
-    *
-    * The method changes the element's name to foo[bar][] if it was foo[bar]
-    * originally. If it is not done, then one of the click coordinates will be
-    * lost, see {@link http://bugs.php.net/bug.php?id=745}  
-    * 
-    * @return   string
-    */
     public function __toString()
     {
-        if (false === strpos($this->attributes['name'], '[') ||
-            '[]' == substr($this->attributes['name'], -2))
-        {
-            return parent::__toString();
-        } else {
-            $this->attributes['name'] .= '[]';
-            $html = parent::__toString();
-            $this->attributes['name']  = substr($this->attributes['name'], 0, -2);
-            return $html;
-        }
+        return $this->getIndent() . '<button' . $this->getAttributes(true) .
+               '>' . $this->content . '</button>';
     }
 }
 ?>

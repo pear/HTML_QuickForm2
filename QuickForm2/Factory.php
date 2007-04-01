@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, Alexey Borzov <avb@php.net>, 
- *                     Bertrand Mansion <golgote@mamasam.com> 
+ * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
+ *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,23 +67,29 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $elementTypes = array(
-        'checkbox'  => array('HTML_QuickForm2_Element_InputCheckbox',
+        'button'        => array('HTML_QuickForm2_Element_Button',
+                             'HTML/QuickForm2/Element/Button.php'),
+        'checkbox'      => array('HTML_QuickForm2_Element_InputCheckbox',
                              'HTML/QuickForm2/Element/InputCheckbox.php'),
-        'hidden'    => array('HTML_QuickForm2_Element_InputHidden',
+        'hidden'        => array('HTML_QuickForm2_Element_InputHidden',
                              'HTML/QuickForm2/Element/InputHidden.php'),
-        'image'     => array('HTML_QuickForm2_Element_InputImage',
+        'image'         => array('HTML_QuickForm2_Element_InputImage',
                              'HTML/QuickForm2/Element/InputImage.php'),
-        'radio'     => array('HTML_QuickForm2_Element_InputRadio',
+        'inputbutton'   => array('HTML_QuickForm2_Element_InputButton',
+                             'HTML/QuickForm2/Element/InputButton.php'),
+        'radio'         => array('HTML_QuickForm2_Element_InputRadio',
                              'HTML/QuickForm2/Element/InputRadio.php'),
-        'password'  => array('HTML_QuickForm2_Element_InputPassword',
+        'password'      => array('HTML_QuickForm2_Element_InputPassword',
                              'HTML/QuickForm2/Element/InputPassword.php'),
-        'select'    => array('HTML_QuickForm2_Element_Select',
+        'reset'         => array('HTML_QuickForm2_Element_InputReset',
+                             'HTML/QuickForm2/Element/InputReset.php'),
+        'select'        => array('HTML_QuickForm2_Element_Select',
                              'HTML/QuickForm2/Element/Select.php'),
-        'submit'    => array('HTML_QuickForm2_Element_InputSubmit',
+        'submit'        => array('HTML_QuickForm2_Element_InputSubmit',
                              'HTML/QuickForm2/Element/InputSubmit.php'),
-        'text'      => array('HTML_QuickForm2_Element_InputText',
+        'text'          => array('HTML_QuickForm2_Element_InputText',
                              'HTML/QuickForm2/Element/InputText.php'),
-        'textarea'  => array('HTML_QuickForm2_Element_Textarea',
+        'textarea'      => array('HTML_QuickForm2_Element_Textarea',
                              'HTML/QuickForm2/Element/Textarea.php')
     );
 

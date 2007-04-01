@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Class for <input type="button" /> elements
  *
  * PHP version 5
  *
@@ -37,43 +37,78 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Class for <input type="submit" /> elements
+ * Base class for <input> elements
  */
-require_once 'HTML/QuickForm2/Element/InputSubmit.php';
+require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
- * PHPUnit2 Test Case
+ * Class for <input type="button" /> elements   
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
  */
-require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
- * Unit test for HTML_QuickForm2_Element_InputSubmit class
- */
-class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
 {
-    public function testConstructorSetsValue()
+    protected $attributes = array('type' => 'button');
+
+   /**
+    * Class constructor
+    *
+    * @param    string  Element name
+    * @param    string  "value" attribute for button   
+    * @param    mixed   Label for the element (may be an array of labels)
+    * @param    mixed   Attributes (either a string or an array)
+    */
+    public function __construct($name = null, $value = null, $label = null, $attributes = null)
     {
-        $submit = new HTML_QuickForm2_Element_InputSubmit('foo', 'Click me');
-        $this->assertRegExp('/value="Click me"/', $submit->__toString());
-
-        $submit2 = new HTML_QuickForm2_Element_InputSubmit('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $submit2->__toString());
-
-        $submit3 = new HTML_QuickForm2_Element_InputSubmit('bar', 'Click me', null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me"/', $submit3->__toString());
+        parent::__construct($name, $value, $label, $attributes);
+        if (!empty($value)) {
+            $this->setAttribute('value', $value);
+        }
     }
 
-    public function testCannotBeFrozen()
+   /**
+    * Buttons can not be frozen
+    *
+    * @param    bool    Whether element should be frozen or editable. This 
+    *                   parameter is ignored in case of buttons
+    * @return   bool    Always returns false
+    */  
+    public function toggleFrozen($freeze = null)
     {
-        $submit = new HTML_QuickForm2_Element_InputSubmit('foo');
-        $this->assertFalse($submit->toggleFrozen(true));
-        $this->assertFalse($submit->toggleFrozen());
+        return false;
+    }
+
+   /**
+    * Button elements cannot have any submit values
+    *
+    * @param    mixed   Element's value, this parameter is ignored
+    */
+    public function setValue($value)
+    {
+        return null;
+    }
+
+   /**
+    * Button elements cannot have any submit values
+    *
+    * This method always returns null
+    *
+    * return    string|null
+    */ 
+    public function getValue()
+    {
+        return null;
     }
 }
 ?>

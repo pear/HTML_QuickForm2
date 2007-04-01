@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, Alexey Borzov <avb@php.net>, 
- *                     Bertrand Mansion <golgote@mamasam.com> 
+ * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
+ *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,6 +59,9 @@ require_once dirname(__FILE__) . '/InputPasswordTest.php';
 require_once dirname(__FILE__) . '/InputImageTest.php';
 require_once dirname(__FILE__) . '/InputHiddenTest.php';
 require_once dirname(__FILE__) . '/InputSubmitTest.php';
+require_once dirname(__FILE__) . '/InputButtonTest.php';
+require_once dirname(__FILE__) . '/InputResetTest.php';
+require_once dirname(__FILE__) . '/ButtonTest.php';
 
 class QuickForm2_Element_AllTests
 {
@@ -80,6 +83,9 @@ class QuickForm2_Element_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Element_InputImageTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_InputHiddenTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_InputSubmitTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_InputButtonTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_InputResetTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_ButtonTest');
 
         return $suite;
     }
