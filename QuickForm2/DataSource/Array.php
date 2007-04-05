@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Array-based data source for HTML_QuickForm2 objects
  *
  * PHP version 5
  *
@@ -43,44 +43,56 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_AllTests::main');
-}
+/**
+ * Interface for data sources used by HTML_QuickForm2 objects
+ */
+require_once 'HTML/QuickForm2/DataSource.php';
 
-
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-
-class QuickForm2_AllTests
+/**
+ * Array-based data source for HTML_QuickForm2 objects
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource
 {
-    public static function main()
+   /**
+    * Array containing elements' values
+    * @var array
+    */
+    protected $values;
+
+   /**
+    * Class constructor, initializes the values array
+    *
+    * @param    array   Array containing the elements' values
+    */
+    public function __construct($values = array())
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        $this->values = $values;
     }
 
-    public static function suite()
+    public function getValue($name)
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
-
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-        $suite->addTest(QuickForm2_DataSource_AllTests::suite());
-
-        return $suite;
+        if (empty($this->values)) {
+            return null;
+        }
+        if (strpos($name, '[')) {
+            $myVar = "['" . str_replace(
+                         array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"), 
+                         $name
+                     ) . "']";
+            return eval(
+                "return (isset(\$this->values$myVar)) ? \$this->values$myVar : null;"
+            );
+        } elseif (isset($this->values[$name])) {
+            return $this->values[$name];
+        } else {
+            return null;
+        }
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
 }
 ?>

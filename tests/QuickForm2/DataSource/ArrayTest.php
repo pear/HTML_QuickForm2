@@ -37,50 +37,75 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_AllTests::main');
-}
+/**
+ * Array-based data source for HTML_QuickForm2 objects
+ */
+require_once 'HTML/QuickForm2/DataSource/Array.php';
 
+/**
+ * PHPUnit2 Test Case
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-
-class QuickForm2_AllTests
+/**
+ * Unit test for array-based data source
+ */
+class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
 {
-    public static function main()
+   /**
+    * data source being tested
+    * @var  HTML_QuickForm2_DataSource_Array
+    */
+    protected $ds;
+
+    public function setUp()
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        $this->ds = new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => 'some value',
+            'bar' => array(
+                'key' => 'some other value'
+            ),
+            'baz' => array(
+                'key1' => array(
+                    'key2' => 'yet another value'
+                )
+            ),
+            'escape' => array(
+                'o\'really' => 'yes',
+                'oh\\no' => 'no'
+            )
+        ));
     }
 
-    public static function suite()
+    public function testReturnsNullForAbsentValue()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
-
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-        $suite->addTest(QuickForm2_DataSource_AllTests::suite());
-
-        return $suite;
+        $this->assertNull($this->ds->getValue('something'));
+        $this->assertNull($this->ds->getValue('bar[missing]'));
     }
-}
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+    public function testGetValue()
+    {
+        $this->assertEquals('some value', $this->ds->getValue('foo'));
+        $this->assertEquals(
+            array('key' => 'some other value'),
+            $this->ds->getValue('bar') 
+        );
+        $this->assertEquals('some other value', $this->ds->getValue('bar[key]'));
+        $this->assertEquals('yet another value', $this->ds->getValue('baz[key1][key2]'));
+    }
+
+   /**
+    * See PEAR bugs #8414 and #8123
+    */
+    public function testQuotesAndBackslashesEscaped()
+    {
+        $this->assertEquals('yes', $this->ds->getValue('escape[o\'really]'));
+        $this->assertEquals('no', $this->ds->getValue('escape[oh\\no]'));
+    }
 }
 ?>
