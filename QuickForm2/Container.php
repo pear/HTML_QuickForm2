@@ -46,7 +46,7 @@
 /**
  * Base class for all HTML_QuickForm2 elements 
  */
-require_once 'HTML/QuickForm2/AbstractElement.php';
+require_once 'HTML/QuickForm2/Node.php';
 
 /**
  * Abstract base class for simple QuickForm2 containers
@@ -57,8 +57,7 @@ require_once 'HTML/QuickForm2/AbstractElement.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_Container
-    extends HTML_QuickForm2_AbstractElement
+abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
 {
    /**
@@ -159,11 +158,11 @@ abstract class HTML_QuickForm2_Container
     * If the element was previously added to the container or to another
     * container, it is first removed there.
     * 
-    * @param    HTML_QuickForm2_AbstractElement     Element to add
-    * @return   HTML_QuickForm2_AbstractElement     Added element
+    * @param    HTML_QuickForm2_Node     Element to add
+    * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     */
-    public function addElement(HTML_QuickForm2_AbstractElement $element)
+    public function addElement(HTML_QuickForm2_Node $element)
     {
         if ($this === $element->getContainer()) {
             $this->removeChild($element);
@@ -178,10 +177,10 @@ abstract class HTML_QuickForm2_Container
     * 
     * If the reference object is not given, the element will be appended.
     * 
-    * @param    HTML_QuickForm2_AbstractElement     Element to remove
-    * @return   HTML_QuickForm2_AbstractElement     Removed object
+    * @param    HTML_QuickForm2_Node     Element to remove
+    * @return   HTML_QuickForm2_Node     Removed object
     */
-    public function removeChild(HTML_QuickForm2_AbstractElement $element)
+    public function removeChild(HTML_QuickForm2_Node $element)
     {
 
         if ($element->getContainer() !== $this) {
@@ -204,7 +203,7 @@ abstract class HTML_QuickForm2_Container
     * Returns an element if its id is found
     * 
     * @param    string  Element id to find
-    * @return   HTML_QuickForm2_AbstractElement|null
+    * @return   HTML_QuickForm2_Node|null
     */
     public function getElementById($id)
     {
@@ -238,11 +237,11 @@ abstract class HTML_QuickForm2_Container
     * 
     * If the reference object is not given, the element will be appended.
     * 
-    * @param    HTML_QuickForm2_AbstractElement     Element to insert
-    * @param    HTML_QuickForm2_AbstractElement     Reference to insert before
-    * @return   HTML_QuickForm2_AbstractElement     Inserted element
+    * @param    HTML_QuickForm2_Node     Element to insert
+    * @param    HTML_QuickForm2_Node     Reference to insert before
+    * @return   HTML_QuickForm2_Node     Inserted element
     */
-    public function insertBefore(HTML_QuickForm2_AbstractElement $element, HTML_QuickForm2_AbstractElement $reference = null)
+    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
             return $this->addElement($element);

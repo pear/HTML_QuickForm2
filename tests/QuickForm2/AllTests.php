@@ -52,7 +52,7 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/AbstractElementTest.php';
+require_once dirname(__FILE__) . '/NodeTest.php';
 require_once dirname(__FILE__) . '/ElementTest.php';
 require_once dirname(__FILE__) . '/Element/AllTests.php';
 require_once dirname(__FILE__) . '/ContainerTest.php';
@@ -69,7 +69,7 @@ class QuickForm2_AllTests
         $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
 
         $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_AbstractElementTest');
+        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
         $suite->addTestSuite('HTML_QuickForm2_ElementTest');
         $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
         $suite->addTest(QuickForm2_Element_AllTests::suite());

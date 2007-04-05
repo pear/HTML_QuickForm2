@@ -66,7 +66,7 @@ require_once 'HTML/QuickForm2/Exception.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_AbstractElement extends HTML_Common2
+abstract class HTML_QuickForm2_Node extends HTML_Common2
 {
    /**
     * Array containing the parts of element ids

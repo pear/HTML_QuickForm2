@@ -46,7 +46,7 @@
 /**
  * Base class for all HTML_QuickForm2 elements 
  */
-require_once 'HTML/QuickForm2/AbstractElement.php';
+require_once 'HTML/QuickForm2/Node.php';
 
 /**
  * Abstract base class for simple QuickForm2 elements (not Containers) 
@@ -57,7 +57,7 @@ require_once 'HTML/QuickForm2/AbstractElement.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_AbstractElement
+abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
 {
    /**
     * 'name' and 'id' attributes should be always present and their setting 

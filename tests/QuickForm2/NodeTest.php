@@ -45,7 +45,7 @@
 /**
  * Element class
  */
-require_once 'HTML/QuickForm2/AbstractElement.php';
+require_once 'HTML/QuickForm2/Node.php';
 
 /**
  * PHPUnit2 Test Case
@@ -53,12 +53,12 @@ require_once 'HTML/QuickForm2/AbstractElement.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * A non-abstract subclass of AbstractElement 
+ * A non-abstract subclass of Node
  *
  * We can't instantiate the class directly and thus need to "implement" its
  * abstract methods
  */
-class HTML_QuickForm2_AbstractElementImpl extends HTML_QuickForm2_AbstractElement
+class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 {
     public function getType() { return 'concrete'; }
     public function getValue() { return ''; }
@@ -72,16 +72,16 @@ class HTML_QuickForm2_AbstractElementImpl extends HTML_QuickForm2_AbstractElemen
 }
 
 /**
- * Unit test for HTML_QuickForm2_AbstractElement class, 
+ * Unit test for HTML_QuickForm2_Node class, 
  */
-class HTML_QuickForm2_AbstractElementTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
 {
     public function testCanSetLabel()
     {
-        $obj = new HTML_QuickForm2_AbstractElementImpl();
+        $obj = new HTML_QuickForm2_NodeImpl();
         $this->assertNull($obj->getLabel());
 
-        $obj2 = new HTML_QuickForm2_AbstractElementImpl(null, null, 'a label');
+        $obj2 = new HTML_QuickForm2_NodeImpl(null, null, 'a label');
         $this->assertEquals('a label', $obj2->getLabel());
 
         $obj2->setLabel('another label');
@@ -90,7 +90,7 @@ class HTML_QuickForm2_AbstractElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanFreezeAndUnfreeze()
     {
-        $obj = new HTML_QuickForm2_AbstractElementImpl();
+        $obj = new HTML_QuickForm2_NodeImpl();
         $this->assertFalse($obj->toggleFrozen(), 'Elements should NOT be frozen by default');
 
         $oldFrozen = $obj->toggleFrozen(true);
@@ -103,7 +103,7 @@ class HTML_QuickForm2_AbstractElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetPersistentFreeze()
     {
-        $obj = new HTML_QuickForm2_AbstractElementImpl();
+        $obj = new HTML_QuickForm2_NodeImpl();
         $this->assertFalse($obj->persistentFreeze(), 'Frozen element\'s data should NOT persist by default');
 
         $oldPersistent = $obj->persistentFreeze(true);

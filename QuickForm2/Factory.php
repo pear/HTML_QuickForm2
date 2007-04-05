@@ -144,7 +144,7 @@ class HTML_QuickForm2_Factory
     * @param    mixed   Options for the element (passed to element's constructor)
     * @param    mixed   Element label (passed to element's constructor)
     * @param    mixed   Element attributes (passed to element's constructor)
-    * @return   HTML_QuickForm2_AbstractElement     A created element
+    * @return   HTML_QuickForm2_Node     A created element
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
     *           not be found and/or loaded from file 
