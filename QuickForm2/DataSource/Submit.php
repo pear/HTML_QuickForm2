@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Interface for data sources containing submitted values
  *
  * PHP version 5
  *
@@ -43,36 +43,35 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_DataSource_AllTests::main');
-}
+/**
+ * Interface for data sources used by HTML_QuickForm2 objects
+ */
+require_once 'HTML/QuickForm2/DataSource.php';
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/ArrayTest.php';
-require_once dirname(__FILE__) . '/SuperGlobalTest.php';
-
-class QuickForm2_DataSource_AllTests
+/**
+ * Interface for data sources containing submitted values
+ *
+ * This interface provides method for getting information on uploaded files.
+ * Additionally some elements will only consider getting their values from data
+ * sources implementing this interface.
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ * @todo       Add filters handling
+ */
+interface HTML_QuickForm2_DataSource_Submit extends HTML_QuickForm2_DataSource
 {
-    public static function main()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - DataSource');
-
-        $suite->addTestSuite('HTML_QuickForm2_DataSource_ArrayTest');
-        $suite->addTestSuite('HTML_QuickForm2_DataSource_SuperGlobalTest');
-
-        return $suite;
-    }
+   /**
+    * Returns the information about uploaded file
+    *
+    * If data source doesn't such information it should return null 
+    *
+    * @param    string      Name of file upload field 
+    * @return   array|null  Information on uploaded file, from $_FILES array
+    */
+    public function getUpload($name);
 }
-
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_DataSource_AllTests::main') {
-    QuickForm2_DataSource_AllTests::main();
-}
-
 ?>
