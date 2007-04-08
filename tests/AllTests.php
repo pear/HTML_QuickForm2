@@ -50,7 +50,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-require_once 'QuickForm2/AllTests.php';
+require_once dirname(__FILE__) . '/QuickForm2/AllTests.php';
+require_once dirname(__FILE__) . '/QuickForm2Test.php';
 
 class AllTests
 {
@@ -64,6 +65,7 @@ class AllTests
         $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package');
 
         $suite->addTest(QuickForm2_AllTests::suite());
+        $suite->addTestSuite('HTML_QuickForm2Test');
 
         return $suite;
     }
