@@ -90,7 +90,9 @@ class HTML_QuickForm2_Factory
         'text'          => array('HTML_QuickForm2_Element_InputText',
                              'HTML/QuickForm2/Element/InputText.php'),
         'textarea'      => array('HTML_QuickForm2_Element_Textarea',
-                             'HTML/QuickForm2/Element/Textarea.php')
+                             'HTML/QuickForm2/Element/Textarea.php'),
+        'fieldset'      => array('HTML_QuickForm2_Container_Fieldset',
+                             'HTML/QuickForm2/Container/Fieldset.php')
     );
 
 
