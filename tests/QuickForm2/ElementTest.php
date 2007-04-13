@@ -53,16 +53,33 @@ require_once 'HTML/QuickForm2/Element.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * A non-abstract subclass of Element 
  *
- * Element class is still abstract, we should "implement" the remaining methods
+ * Element class is still abstract, we should "implement" the remaining methods.
+ * Note the default implementation of setValue() / getValue(), needed to test
+ * setting the value from Data Source
  */
 class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
 {
+    protected $value;
+
     public function getType() { return 'concrete'; }
-    public function getValue() { return ''; }
-    public function setValue($value) { return ''; }
     public function __toString() { return ''; }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 }
 
 /**
@@ -70,6 +87,29 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
  */
 class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 {
+    protected $post;
+    protected $request;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+        $this->request = $_REQUEST;
+
+        $_REQUEST = array(
+            '_qf__form1' => ''
+        );
+
+        $_POST = array(
+            'foo' => 'a value'
+        );
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+        $_REQUEST = $this->request;
+    }
+
     public function testCanSetName()
     {
         $obj = new HTML_QuickForm2_ElementImpl();
@@ -157,6 +197,42 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             $this->assertNotContains($el2->getId(), $usedIds);
             $usedIds[] = $el2->getId();
         }
+    }
+
+    public function testSetValueFromSubmitDatasource()
+    {
+        $form = new HTML_QuickForm2('form1');
+        $elFoo = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
+        $elBar = $form->addElement(new HTML_QuickForm2_ElementImpl('bar'));
+
+        $this->assertEquals('a value', $elFoo->getValue());
+        $this->assertNull($elBar->getValue());
+    }
+
+    public function testDataSourcePriority()
+    {
+        $form = new HTML_QuickForm2('form1');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => 'new value',
+            'bar' => 'default value'
+        )));
+        $elFoo = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
+        $elBar = $form->addElement(new HTML_QuickForm2_ElementImpl('bar'));
+
+        $this->assertEquals('a value', $elFoo->getValue());
+        $this->assertEquals('default value', $elBar->getValue());
+    }
+
+    public function testUpdateValueFromNewDataSource()
+    {
+        $form = new HTML_QuickForm2('form2');
+        $el = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
+        $this->assertNull($el->getValue());
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => 'updated value'
+        )));
+        $this->assertEquals('updated value', $el->getValue());
     }
 }
 ?>

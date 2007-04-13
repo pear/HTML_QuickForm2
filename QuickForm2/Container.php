@@ -56,6 +56,8 @@ require_once 'HTML/QuickForm2/Node.php';
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
+ * @todo       Implement the getValue() method that'll return associative
+ *             array similar to what exportValues() did in old QF
  */
 abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
@@ -296,6 +298,18 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         return count($this->elements);
     }
 
+   /**
+    * Called when the element needs to update its value from form's data sources
+    *
+    * The default behaviour is just to call the updateValue() methods of 
+    * contained elements, since default Container doesn't have any value itself
+    */
+    protected function updateValue()
+    {
+        foreach ($this as $child) {
+            $child->updateValue();
+        }
+    }
 }
 
 /**

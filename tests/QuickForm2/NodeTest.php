@@ -69,6 +69,8 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
     public function setName($name) { }
     public function getId() { return ''; }
     public function setId($id = null) { }
+
+    protected function updateValue() { }
 }
 
 /**

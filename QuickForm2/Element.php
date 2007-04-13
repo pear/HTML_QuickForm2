@@ -131,5 +131,22 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
             'id'    => $this->getId()
         )) . ' />';
     }
+
+   /**
+    * Called when the element needs to update its value from form's data sources
+    *
+    * The default behaviour is to go through the complete list of the data 
+    * sources until the non-null value is found.
+    */
+    protected function updateValue()
+    {
+        $name = $this->getName();
+        foreach ($this->getDataSources() as $ds) {
+            if (null !== ($value = $ds->getValue($name))) {
+                $this->setValue($value);
+                return;
+            }
+        }
+    }
 }
 ?>

@@ -149,6 +149,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     public function addDataSource(HTML_QuickForm2_DataSource $datasource)
     {
         $this->datasources[] = $datasource;
+        $this->updateValue();
     }
 
    /**
@@ -171,6 +172,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             }
         }
         $this->datasources = $datasources;
+        $this->updateValue();
     }
 
    /**

@@ -337,6 +337,9 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             }
         }
         $this->container = $container;
+        if (null !== $container) {
+            $this->updateValue();
+        }
     }
 
 
@@ -349,5 +352,24 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     {
         return $this->container;
     }
+
+   /**
+    * Returns the data sources for this element
+    *
+    * @return   array
+    */
+    protected function getDataSources()
+    {
+        if (empty($this->container)) {
+            return array();
+        } else {
+            return $this->container->getDataSources();
+        }
+    }
+
+   /**
+    * Called when the element needs to update its value from form's data sources
+    */
+    abstract protected function updateValue();
 }
 ?>

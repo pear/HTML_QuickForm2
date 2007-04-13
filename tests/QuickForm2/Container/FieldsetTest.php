@@ -66,7 +66,7 @@ class HTML_QuickForm2_Element_FieldsetTest extends PHPUnit_Framework_TestCase
     public function testLegend()
     {
         $fs = new HTML_QuickForm2_Container_Fieldset(null, null, "legend");
-        $this->assertRegExp('!\s*<fieldset[^>]+>\s*<legend>legend</legend>\s*</fieldset>\s*!', $fs->__toString());
+        $this->assertRegExp('!\s*<fieldset[^>]*>\s*<legend[^>]*>legend</legend>\s*</fieldset>\s*!', $fs->__toString());
     }
 }
 ?>
