@@ -81,13 +81,16 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource
             return null;
         }
         if (strpos($name, '[')) {
-            $myVar = "['" . str_replace(
-                         array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"), 
-                         $name
-                     ) . "']";
-            return eval(
-                "return (isset(\$this->values$myVar)) ? \$this->values$myVar : null;"
-            );
+            $tokens = explode('[', str_replace(']', '', $name));
+		    $value = $this->values;
+        	do {
+            	$token = array_shift($tokens);
+		        if (!isset($value[$token])) {
+				    return null;
+            	}
+		        $value = $value[$token];
+	        } while (!empty($tokens));
+		    return $value;
         } elseif (isset($this->values[$name])) {
             return $this->values[$name];
         } else {
