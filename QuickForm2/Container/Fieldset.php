@@ -59,10 +59,6 @@ require_once 'HTML/QuickForm2/Container.php';
  */
 class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
 {
-
-
-
-
     public function __toString()
     {
         $html = $this->getIndent() . '<fieldset' . $this->getAttributes(true) . '>';
@@ -80,7 +76,7 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
         $html .= $lf . $this->getIndent() . '</fieldset>';
         return $html;
     }
-    
+
     public function getType()
     {
         return 'fieldset';
