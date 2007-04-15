@@ -49,11 +49,6 @@
 require_once 'HTML/QuickForm2/Container.php';
 
 /**
- * Static factory class for QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Factory.php';
-
-/**
  * Data source for HTML_QuickForm2 objects based on superglobal arrays
  */
 require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
@@ -115,7 +110,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             ));
         }
         if ($trackSubmit) {
-            $this->addElement(HTML_QuickForm2_Factory::createElement(
+            $this->appendChild(HTML_QuickForm2_Factory::createElement(
                 'hidden', '_qf__' . $id
             ));
         }
@@ -188,11 +183,6 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     public function getType()
     {
         return 'form';
-    }
-
-    public function getValue()
-    {
-        throw new HTML_QuickForm2_Exception('Not implemented');
     }
  
     public function setValue($value)
