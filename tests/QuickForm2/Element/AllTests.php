@@ -62,6 +62,7 @@ require_once dirname(__FILE__) . '/InputSubmitTest.php';
 require_once dirname(__FILE__) . '/InputButtonTest.php';
 require_once dirname(__FILE__) . '/InputResetTest.php';
 require_once dirname(__FILE__) . '/ButtonTest.php';
+require_once dirname(__FILE__) . '/InputFileTest.php';
 
 class QuickForm2_Element_AllTests
 {
@@ -86,6 +87,7 @@ class QuickForm2_Element_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Element_InputButtonTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_InputResetTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_ButtonTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_InputFileTest');
 
         return $suite;
     }
