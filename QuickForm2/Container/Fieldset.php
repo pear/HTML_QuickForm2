@@ -106,11 +106,6 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
         // Fieldsets do not have a name attribute
     }
 
-    public function getValue()
-    {
-        throw new HTML_QuickForm2_Exception('Not implemented');
-    }
-
     public function setValue($value)
     {
         throw new HTML_QuickForm2_Exception('Not implemented');

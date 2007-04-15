@@ -49,6 +49,11 @@
 require_once 'HTML/QuickForm2/Node.php';
 
 /**
+ * Static factory class for QuickForm2 elements
+ */
+require_once 'HTML/QuickForm2/Factory.php';
+
+/**
  * Abstract base class for simple QuickForm2 containers
  *
  * @category   HTML
@@ -56,8 +61,6 @@ require_once 'HTML/QuickForm2/Node.php';
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
- * @todo       Implement the getValue() method that'll return associative
- *             array similar to what exportValues() did in old QF
  */
 abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
@@ -141,8 +144,66 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         return parent::persistentFreeze($persistent);
     }
 
+   /**
+    * Returns the element's value
+    *
+    * The default implementation for Containers is to return an array with
+    * contained elements' values. The array is indexed the same way $_GET and
+    * $_POST arrays would be for these elements. 
+    *
+    * @return   array|null
+    */
+    public function getValue()
+    {
+        $values = array();
+        foreach ($this as $child) {
+            $value = $child->getValue();
+            if (null !== $value) {
+                if ($child instanceof HTML_QuickForm2_Container) {
+                    $values = self::arrayMerge($values, $value);
+                } else {
+                    $name = $child->getName();
+                    if (!strpos($name, '[')) {
+                        $values[$name] = $value;
+                    } else {
+                        $tokens   =  explode('[', str_replace(']', '', $name));
+                        $valueAry =& $values;
+                        do {
+                            $token = array_shift($tokens);
+                            if (!isset($valueAry[$token])) {
+                                $valueAry[$token] = array();
+                            }
+                            $valueAry =& $valueAry[$token];
+                        } while (count($tokens) > 1);
+                        $valueAry[$tokens[0]] = $value;
+                    }
+                }
+            }
+        }
+        return empty($values)? null: $values;
+    }
 
-
+   /**
+    * Merges two arrays
+    *
+    * Merges two arrays like the PHP function array_merge_recursive does,
+    * the difference being that existing integer keys will not be renumbered.
+    *
+    * @param    array
+    * @param    array
+    * @return   array   resulting array
+    */
+    protected static function arrayMerge($a, $b)
+    {
+        foreach ($b as $k => $v) {
+            if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {
+                $a[$k] = $v;
+            } else {
+                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: array(), $v);
+            }
+        }
+        return $a;
+    }
 
    /**
     * Returns an array of this container's elements
@@ -164,7 +225,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     */
-    public function addElement(HTML_QuickForm2_Node $element)
+    public function appendChild(HTML_QuickForm2_Node $element)
     {
         if ($this === $element->getContainer()) {
             $this->removeChild($element);
@@ -172,6 +233,38 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         $element->setContainer($this);
         $this->elements[] = $element;
         return $element;
+    }
+
+   /**
+    * Appends an element to the container (possibly creating it first)
+    *
+    * If the first parameter is an instance of HTML_QuickForm2_Node then all
+    * other parameters are ignored and the method just calls {@link appendChild()}.
+    * In the other case the element is first created via
+    * {@link HTML_QuickForm2_Factory::createElement()} and then added via the
+    * same method. This is a convenience method to reduce typing and ease 
+    * porting from HTML_QuickForm.
+    *
+    * @param    string|HTML_QuickForm2_Node  Either type name (treated 
+    *               case-insensitively) or an element instance
+    * @param    mixed   Element name
+    * @param    mixed   Element-specific data
+    * @param    mixed   Element label
+    * @param    mixed   Element attributes
+    * @return   HTML_QuickForm2_Node     Added element
+    * @throws   HTML_QuickForm2_InvalidArgumentException
+    * @throws   HTML_QuickForm2_NotFoundException 
+    */
+    public function addElement($elementOrType, $name = null, $data = null, 
+                               $label = null, $attributes = null)
+    {
+        if ($elementOrType instanceof HTML_QuickForm2_Node) {
+            return $this->appendChild($elementOrType);
+        } else {
+            return $this->appendChild(HTML_QuickForm2_Factory::createElement(
+                $elementOrType, $name, $data, $label, $attributes
+            ));
+        }
     }
 
    /**
@@ -246,7 +339,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
-            return $this->addElement($element);
+            return $this->appendChild($element);
         }
         $offset = 0;
         foreach ($this as $child) {

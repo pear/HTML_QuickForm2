@@ -145,7 +145,7 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $form2 = new HTML_QuickForm2('form2');
 
         try {
-            $form1->addElement($form2);
+            $form1->appendChild($form2);
         } catch (HTML_QuickForm2_Exception $e) {
             return;
         }

@@ -143,7 +143,7 @@ class HTML_QuickForm2_Factory
     *
     * @param    string  Type name (treated case-insensitively)
     * @param    mixed   Element name (passed to element's constructor)
-    * @param    mixed   Options for the element (passed to element's constructor)
+    * @param    mixed   Element-specific data (passed to element's constructor)
     * @param    mixed   Element label (passed to element's constructor)
     * @param    mixed   Element attributes (passed to element's constructor)
     * @return   HTML_QuickForm2_Node     A created element
@@ -151,7 +151,7 @@ class HTML_QuickForm2_Factory
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
     *           not be found and/or loaded from file 
     */
-    public static function createElement($type, $name = null, $options = null, 
+    public static function createElement($type, $name = null, $data = null, 
                                          $label = null, $attributes = null)
     {
         $type = strtolower($type);
@@ -176,7 +176,7 @@ class HTML_QuickForm2_Factory
                 );
             }
         }
-        return new $className($name, $options, $label, $attributes);
+        return new $className($name, $data, $label, $attributes);
     }
 }
 ?>

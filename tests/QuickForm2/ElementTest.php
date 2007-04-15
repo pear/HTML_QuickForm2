@@ -202,8 +202,8 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
     public function testSetValueFromSubmitDatasource()
     {
         $form = new HTML_QuickForm2('form1');
-        $elFoo = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
-        $elBar = $form->addElement(new HTML_QuickForm2_ElementImpl('bar'));
+        $elFoo = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
+        $elBar = $form->appendChild(new HTML_QuickForm2_ElementImpl('bar'));
 
         $this->assertEquals('a value', $elFoo->getValue());
         $this->assertNull($elBar->getValue());
@@ -216,8 +216,8 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             'foo' => 'new value',
             'bar' => 'default value'
         )));
-        $elFoo = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
-        $elBar = $form->addElement(new HTML_QuickForm2_ElementImpl('bar'));
+        $elFoo = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
+        $elBar = $form->appendChild(new HTML_QuickForm2_ElementImpl('bar'));
 
         $this->assertEquals('a value', $elFoo->getValue());
         $this->assertEquals('default value', $elBar->getValue());
@@ -226,7 +226,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
     public function testUpdateValueFromNewDataSource()
     {
         $form = new HTML_QuickForm2('form2');
-        $el = $form->addElement(new HTML_QuickForm2_ElementImpl('foo'));
+        $el = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
         $this->assertNull($el->getValue());
 
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(

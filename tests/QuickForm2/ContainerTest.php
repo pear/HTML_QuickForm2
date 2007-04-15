@@ -56,14 +56,25 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * A non-abstract subclass of Element 
  *
- * Element class is still abstract, we should "implement" the remaining methods
+ * Element class is still abstract, we should "implement" the remaining methods.
+ * We need working setValue() / getValue() to test getValue() of Container
  */
 class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
 {
+    protected $value;
+
     public function getType() { return 'concrete'; }
-    public function getValue() { return ''; }
-    public function setValue($value) { return ''; }
     public function __toString() { return ''; }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 }
 
 /**
@@ -74,7 +85,6 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
 class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
 {
     public function getType() { return 'concrete'; }
-    public function getValue() { return ''; }
     public function setValue($value) { return ''; }
     public function __toString() { return ''; }
 }
@@ -147,8 +157,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $e1 = new HTML_QuickForm2_ElementImpl2('e1');
         $e2 = new HTML_QuickForm2_ElementImpl2('e2');
         $c1 = new HTML_QuickForm2_ContainerImpl('c1');
-        $c1->addElement($e1);
-        $c1->addElement($e2);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
         $this->assertEquals(2, count($c1), 'Element count is incorrect');
         $this->assertSame($e1, $c1->getElementById($e1->getId()));
         $this->assertSame($e2, $c1->getElementById($e2->getId()));
@@ -160,15 +170,15 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $e1 = new HTML_QuickForm2_ElementImpl2('a1');
         $e2 = new HTML_QuickForm2_ElementImpl2('a2');
         $c1 = new HTML_QuickForm2_ContainerImpl('b1');
-        $c1->addElement($e1);
-        $c1->addElement($e2);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
 
         $e3 = new HTML_QuickForm2_ElementImpl2('a3');
         $e4 = new HTML_QuickForm2_ElementImpl2('a4');
         $c2 = new HTML_QuickForm2_ContainerImpl('b2');
-        $c2->addElement($e3);
-        $c2->addElement($e4);
-        $c2->addElement($c1);
+        $c2->appendChild($e3);
+        $c2->appendChild($e4);
+        $c2->appendChild($c1);
 
         $this->assertEquals(3, count($c2), 'Element count is incorrect');
         $this->assertSame($e1, $c2->getElementById($e1->getId()));
@@ -181,16 +191,16 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $e1 = new HTML_QuickForm2_ElementImpl2('d1');
         $e2 = new HTML_QuickForm2_ElementImpl2('d2');
         $c1 = new HTML_QuickForm2_ContainerImpl('f1');
-        $c1->addElement($e1);
-        $c1->addElement($e2);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
         try {
-            $c1->addElement($c1);
+            $c1->appendChild($c1);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertEquals('Cannot set an element or its child as its own container', $e->getMessage());
             $c2 = new HTML_QuickForm2_ContainerImpl('f2');
-            $c2->addElement($c1);
+            $c2->appendChild($c1);
             try {
-                $c1->addElement($c2);
+                $c1->appendChild($c2);
             } catch (HTML_QuickForm2_InvalidArgumentException $e) {
                 $this->assertEquals('Cannot set an element or its child as its own container', $e->getMessage());
                 return;
@@ -205,9 +215,9 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $e1 = new HTML_QuickForm2_ElementImpl2('g1');
         $e2 = new HTML_QuickForm2_ElementImpl2('g2');
         $c1 = new HTML_QuickForm2_ContainerImpl('h1');
-        $c1->addElement($e1);
-        $c1->addElement($e2);
-        $c1->addElement($e1);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
+        $c1->appendChild($e1);
 
         $this->assertEquals(2, count($c1), 'Element count is incorrect');
         $this->assertSame($e1, $c1->getElementById($e1->getId()));
@@ -221,11 +231,11 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('cmove1');
         $c2 = new HTML_QuickForm2_ContainerImpl('cmove2');
 
-        $c1->addElement($e1);
+        $c1->appendChild($e1);
         $this->assertSame($e1, $c1->getElementById($e1->getId()));
         $this->assertNull($c2->getElementById($e1->getId()), 'Element should not be found in container');
 
-        $c2->addElement($e1);
+        $c2->appendChild($e1);
         $this->assertNull($c1->getElementById($e1->getId()), 'Element should be removed from container');
         $this->assertSame($e1, $c2->getElementById($e1->getId()));
     }
@@ -237,8 +247,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
         $c1 = new HTML_QuickForm2_ContainerImpl('j1');
 
-        $c1->addElement($e1);
-        $c1->addElement($e2);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
 
         $removed = $c1->removeChild($e1);
         $this->assertEquals(1, count($c1), 'Element count is incorrect');
@@ -254,8 +264,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('cremove1');
         $c2 = new HTML_QuickForm2_ContainerImpl('cremove2');
 
-        $c1->addElement($c2);
-        $c2->addElement($e1);
+        $c1->appendChild($c2);
+        $c2->appendChild($e1);
 
         try {
             $c1->removeChild($e1);
@@ -281,9 +291,9 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('l1');
         $c2 = new HTML_QuickForm2_ContainerImpl('l2');
 
-        $c1->addElement($e1);
-        $c1->addElement($e2);
-        $c2->addElement($e4);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
+        $c2->appendChild($e4);
 
         $e3Insert = $c1->insertBefore($e3, $e1);
         $c1->insertBefore($e4, $e1);
@@ -306,9 +316,9 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $e3 = new HTML_QuickForm2_ElementImpl2('m3');
 
         $c1 = new HTML_QuickForm2_ContainerImpl('n1');
-        $c1->addElement($e1);
+        $c1->appendChild($e1);
         $c2 = new HTML_QuickForm2_ContainerImpl('n2');
-        $c2->addElement($c1);
+        $c2->appendChild($c1);
         try {
             $c1->insertBefore($e2, $e3);
         } catch (HTML_QuickForm2_NotFoundException $e) {
@@ -334,13 +344,13 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('fooContainer1');
         $c2 = new HTML_QuickForm2_ContainerImpl('fooContainer2');
 
-        $c1->addElement($e1);
-        $c1->addElement($e2);
-        $c1->addElement($e3);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
+        $c1->appendChild($e3);
 
-        $c2->addElement($e4);
-        $c2->addElement($e5);
-        $c2->addElement($c1);
+        $c2->appendChild($e4);
+        $c2->appendChild($e5);
+        $c2->appendChild($c1);
 
         $this->assertEquals(array($e1, $e3), $c1->getElementsByName('foo'));
         $this->assertEquals(array($e5, $e1, $e3), $c2->getElementsByName('foo'));
@@ -354,15 +364,15 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c1 = new HTML_QuickForm2_ContainerImpl('dupContainer1');
         $c2 = new HTML_QuickForm2_ContainerImpl('dupContainer2');
 
-        $c1->addElement($e1);
-        $c1->addElement($e2);
+        $c1->appendChild($e1);
+        $c1->appendChild($e2);
         $this->assertEquals(2, count($c1), 'Element count is incorrect');
         $c1->removeChild($e1);
         $this->assertEquals(1, count($c1), 'Element count is incorrect');
         $this->assertSame($e2, $c1->getElementById('dup'));
 
-        $c2->addElement($e1);
-        $c2->addElement($e2);
+        $c2->appendChild($e1);
+        $c2->appendChild($e2);
         $c2->removeChild($e2);
         $this->assertEquals(1, count($c2), 'Element count is incorrect');
         $this->assertSame($e1, $c2->getElementById('dup'));
@@ -371,7 +381,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
     public function testFrozenStatusPropagates()
     {
         $cFreeze = new HTML_QuickForm2_ContainerImpl('cFreeze');
-        $elFreeze = $cFreeze->addElement(new HTML_QuickForm2_ElementImpl2('elFreeze'));
+        $elFreeze = $cFreeze->appendChild(new HTML_QuickForm2_ElementImpl2('elFreeze'));
 
         $cFreeze->toggleFrozen(true);
         $this->assertTrue($cFreeze->toggleFrozen(), 'Container should be frozen');
@@ -385,7 +395,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
     public function testPersistentFreezePropagates()
     {
         $cPers = new HTML_QuickForm2_ContainerImpl('cPersistent');
-        $elPers = $cPers->addElement(new HTML_QuickForm2_ElementImpl2('elPersistent'));
+        $elPers = $cPers->appendChild(new HTML_QuickForm2_ElementImpl2('elPersistent'));
 
         $cPers->persistentFreeze(true);
         $this->assertTrue($cPers->persistentFreeze(), 'Container should have persistent freeze behaviour');
@@ -394,6 +404,29 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $cPers->persistentFreeze(false);
         $this->assertFalse($cPers->persistentFreeze(), 'Container should not have persistent freeze behaviour');
         $this->assertFalse($elPers->persistentFreeze(), 'Contained element should not have persistent freeze behaviour');
+    }
+
+    public function testGetValue()
+    {
+        $c1 = new HTML_QuickForm2_ContainerImpl('hasValues');
+        $this->assertNull($c1->getValue());
+
+        $c2 = $c1->appendChild(new HTML_QuickForm2_ContainerImpl('sub'));
+        $this->assertNull($c1->getValue());
+
+        $el1 = $c1->appendChild(new HTML_QuickForm2_ElementImpl2('foo[idx]'));
+        $el2 = $c1->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
+        $el3 = $c2->appendChild(new HTML_QuickForm2_ElementImpl2('baz'));
+        $this->assertNull($c1->getValue());
+
+        $el1->setValue('a value');
+        $el2->setValue('other value');
+        $el3->setValue('yet another value');
+        $this->assertEquals(array(
+            'foo' => array('idx' => 'a value'),
+            'bar' => 'other value',
+            'baz' => 'yet another value'
+        ), $c1->getValue());
     }
 }
 ?>
