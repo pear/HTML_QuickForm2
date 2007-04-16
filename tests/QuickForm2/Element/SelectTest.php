@@ -68,6 +68,26 @@ abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_C
  */
 class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 {
+    protected $post;
+    protected $get;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+        $this->get  = $_GET;
+
+        $_POST = array(
+            'single1' => '1'
+        );
+        $_GET = array();
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+        $_GET  = $this->get;
+    }
+
     public function testSelectIsEmptyByDefault()
     {
         $sel = new HTML_QuickForm2_Element_Select();
@@ -257,6 +277,37 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
             array('name' => 'foo[]', 'value' => 'SecondValue', 'type' => 'hidden'),
             HTML_QuickForm2_Element_SelectTest_AttributeParser::parseAttributes($matches[1][1])
         );
+    }
+
+    public function testSelectMultipleNoOptionsSelectedOnSubmit()
+    {
+        $options = array('1' => 'Option 1', '2' => 'Option 2');
+
+        $formPost = new HTML_QuickForm2('multiple', 'post', null, false);
+        $single1  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single1', $options));
+        $single2  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single2', $options));
+        $multiple = $formPost->appendChild(new HTML_QuickForm2_Element_Select('mult', $options, null, array('multiple')));
+        $this->assertEquals('1', $single1->getValue());
+        $this->assertNull($single2->getValue());
+        $this->assertNull($multiple->getValue());
+
+        $formPost->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'single1' => '2',
+            'single2' => '2',
+            'mult' => array('1', '2')
+        )));
+        $this->assertEquals('1', $single1->getValue());
+        $this->assertEquals('2', $single2->getValue());
+        $this->assertNull($multiple->getValue());
+
+        $formGet   = new HTML_QuickForm2('multiple2', 'get', null, false);
+        $multiple2 = $formGet->appendChild(new HTML_QuickForm2_Element_Select('mult2', $options, null, array('multiple')));
+        $this->assertNull($multiple2->getValue());
+
+        $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'mult2' => array('1', '2')
+        )));
+        $this->assertEquals(array('1', '2'), $multiple2->getValue());
     }
 }
 ?>

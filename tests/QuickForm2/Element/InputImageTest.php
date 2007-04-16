@@ -48,6 +48,11 @@
 require_once 'HTML/QuickForm2/Element/InputImage.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * PHPUnit2 Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -57,6 +62,26 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
 {
+    protected $post;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+
+        $_POST = array(
+            'foo_x' => '12',
+            'foo_y' => '34',
+            'bar' => array(
+                'idx' => array('56', '78')
+            )
+        );
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+    }
+
     public function testConstructorSetsSrc()
     {
         $image = new HTML_QuickForm2_Element_InputImage('foo', 'button.jpeg');
@@ -88,6 +113,26 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
         $image3 = new HTML_QuickForm2_Element_InputImage('foo[bar][]');
         $this->assertRegExp('/name="foo\\[bar\\]\\[\\]"/', $image3->__toString());
         $this->assertEquals('foo[bar][]', $image3->getName());
+    }
+
+    public function testSetValueFromSubmitDataSource()
+    {
+        $form = new HTML_QuickForm2('image', 'post', null, false);
+        $foo = $form->appendChild(new HTML_QuickForm2_Element_InputImage('foo'));
+        $bar = $form->appendChild(new HTML_QuickForm2_Element_InputImage('bar[idx]'));
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo_x' => '1234',
+            'foo_y' => '5678',
+            'bar' => array(
+                'idx' => array('98', '76')
+            )
+        )));
+        $this->assertEquals(array('x' => '12', 'y' => '34'), $foo->getValue());
+        $this->assertEquals(array('x' => '56', 'y' => '78'), $bar->getValue());
+
+        $foo->setAttribute('disabled');
+        $this->assertNull($foo->getValue());
     }
 }
 ?>

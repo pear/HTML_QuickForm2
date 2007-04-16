@@ -100,7 +100,8 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         );
 
         $_POST = array(
-            'foo' => 'a value'
+            'foo' => 'a value',
+            'fooReborn' => 'another value'
         );
     }
 
@@ -233,6 +234,14 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             'foo' => 'updated value'
         )));
         $this->assertEquals('updated value', $el->getValue());
+    }
+
+    public function testUpdateValueOnNameChange()
+    {
+        $form = new HTML_QuickForm2('form1');
+        $elFoo = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
+        $elFoo->setName('fooReborn');
+        $this->assertEquals('another value', $elFoo->getValue());
     }
 }
 ?>

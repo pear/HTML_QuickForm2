@@ -70,7 +70,6 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
 
    /**
     * Element's submit value 
-    * @todo This value should be set from the submit Datasource
     * @var  string
     */
     protected $submitValue = null;
@@ -140,13 +139,32 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     */ 
     public function getValue()
     {
-        return $this->submitValue;
+        if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type']) &&
+            !$this->getAttribute('disabled'))
+        {
+            return $this->submitValue;
+        } else {
+            return null;
+        }
     }
 
     public function __toString()
     {
         return $this->getIndent() . '<button' . $this->getAttributes(true) .
                '>' . $this->content . '</button>';
+    }
+
+    protected function updateValue()
+    {
+        foreach ($this->getDataSources() as $ds) {
+            if ($ds instanceof HTML_QuickForm2_DataSource_Submit &&
+                null !== ($value = $ds->getValue($this->getName())))
+            {
+                $this->submitValue = $value;
+                return;
+            }
+        }
+        $this->submitValue = null;
     }
 }
 ?>

@@ -48,6 +48,11 @@
 require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * PHPUnit2 Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -57,10 +62,54 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCase
 {
+    protected $post;
+    protected $get;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+        $this->get  = $_GET;
+
+        $_POST = array(
+            'box1' => '1'
+        );
+        $_GET = array();
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+        $_GET  = $this->get;
+    }
+
     public function testDefaultValueAttributeIs1()
     {
         $box = new HTML_QuickForm2_Element_InputCheckbox();
         $this->assertEquals('1', $box->getAttribute('value'));
+    }
+
+    public function testCheckboxUncheckedOnSubmit()
+    {
+        $formPost = new HTML_QuickForm2('boxed', 'post', null, false);
+        $box1 = $formPost->appendChild(new HTML_QuickForm2_Element_InputCheckbox('box1'));
+        $box2 = $formPost->appendChild(new HTML_QuickForm2_Element_InputCheckbox('box2'));
+        $this->assertEquals('1', $box1->getValue());
+        $this->assertNull($box2->getValue());
+
+        $formPost->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'box2' => '1'
+        )));
+        $this->assertEquals('1', $box1->getValue());
+        $this->assertNull($box2->getValue());
+
+        $formGet = new HTML_QuickForm2('boxed2', 'get', null, false);
+        $box3 = $formGet->appendChild(new HTML_QuickForm2_Element_InputCheckbox('box3'));
+        $this->assertNull($box3->getValue());
+
+        $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'box3' => '1'
+        )));
+        $this->assertEquals('1', $box3->getValue());
     }
 }
 ?>

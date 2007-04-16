@@ -48,6 +48,11 @@
 require_once 'HTML/QuickForm2/Element/Button.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * PHPUnit2 Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -57,6 +62,23 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
 {
+    protected $post;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+
+        $_POST = array(
+            'foo' => 'A button clicked',
+            'bar' => 'Another button clicked'
+        );
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+    }
+
     public function testConstructorSetsContent()
     {
         $button = new HTML_QuickForm2_Element_Button('foo', 'Some string');
@@ -65,9 +87,29 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
 
     public function testCannotBeFrozen()
     {
-        $button = new HTML_QuickForm2_Element_InputButton('foo');
+        $button = new HTML_QuickForm2_Element_Button('foo');
         $this->assertFalse($button->toggleFrozen(true));
         $this->assertFalse($button->toggleFrozen());
+    }
+
+    public function testSetValueFromSubmitDataSource()
+    {
+        $form = new HTML_QuickForm2('buttons', 'post', null, false);
+        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', null, null, array('type' => 'submit')));
+        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', null, null, array('type' => 'button')));
+        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', null, null, array('type' => 'submit')));
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => 'Default for foo',
+            'bar' => 'Default for bar',
+            'baz' => 'Default for baz'
+        )));
+        $this->assertEquals('A button clicked', $foo->getValue());
+        $this->assertNull($bar->getValue());
+        $this->assertNull($baz->getValue());
+
+        $foo->setAttribute('disabled');
+        $this->assertNull($foo->getValue());
     }
 }
 ?>

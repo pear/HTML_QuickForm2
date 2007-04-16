@@ -73,5 +73,18 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
             $this->setAttribute('value', 1);
         }
     }
+
+    protected function updateValue()
+    {
+        $name = $this->getName();
+        foreach ($this->getDataSources() as $ds) {
+            if (null !== ($value = $ds->getValue($name)) ||
+                $ds instanceof HTML_QuickForm2_DataSource_Submit)
+            {
+                $this->setValue($value);
+                return;
+            }
+        }
+    }
 }
 ?>

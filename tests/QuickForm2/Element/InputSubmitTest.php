@@ -48,6 +48,11 @@
 require_once 'HTML/QuickForm2/Element/InputSubmit.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * PHPUnit2 Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -57,7 +62,23 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorSetsValue()
+    protected $post;
+
+    public function setUp()
+    {
+        $this->post = $_POST;
+
+        $_POST = array(
+            'foo' => 'A button clicked'
+        );
+    }
+
+    public function tearDown()
+    {
+        $_POST = $this->post;
+    }
+
+    public function testConstructorSetsValueAttribute()
     {
         $submit = new HTML_QuickForm2_Element_InputSubmit('foo', 'Click me');
         $this->assertRegExp('/value="Click me"/', $submit->__toString());
@@ -74,6 +95,23 @@ class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
         $submit = new HTML_QuickForm2_Element_InputSubmit('foo');
         $this->assertFalse($submit->toggleFrozen(true));
         $this->assertFalse($submit->toggleFrozen());
+    }
+
+    public function testSetValueFromSubmitDataSource()
+    {
+        $form = new HTML_QuickForm2('submit', 'post', null, false);
+        $foo = $form->appendChild(new HTML_QuickForm2_Element_InputSubmit('foo'));
+        $bar = $form->appendChild(new HTML_QuickForm2_Element_InputSubmit('bar'));
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => 'Default for foo',
+            'bar' => 'Default for bar'
+        )));
+        $this->assertEquals('A button clicked', $foo->getValue());
+        $this->assertNull($bar->getValue());
+
+        $foo->setAttribute('disabled');
+        $this->assertNull($foo->getValue());
     }
 }
 ?>

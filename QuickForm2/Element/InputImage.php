@@ -63,7 +63,6 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
 
    /**
     * Coordinates of user click within the image, array contains keys 'x' and 'y'
-    * @todo This value should be set from submit Datasource
     * @var  array
     */
     protected $coordinates = null;
@@ -118,7 +117,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     */ 
     public function getValue()
     {
-        return $this->coordinates;
+        return $this->getAttribute('disabled')? null: $this->coordinates;
     }
 
    /**
@@ -142,6 +141,37 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
             $this->attributes['name']  = substr($this->attributes['name'], 0, -2);
             return $html;
         }
+    }
+
+    protected function updateValue()
+    {
+        foreach ($this->getDataSources() as $ds) {
+            if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
+                $name = $this->getName();
+                if (false === strpos($name, '[') &&
+                    null !== ($value = $ds->getValue($name . '_x')))
+                {
+                    $this->coordinates = array(
+                        'x' => $value,
+                        'y' => $ds->getValue($name . '_y')
+                    );
+                    return;
+
+                } elseif (false !== strpos($name, '[')) {
+                    if ('[]' == substr($name, -2)) {
+                        $name = substr($name, 0, -2);
+                    }
+                    if (null !== ($value = $ds->getValue($name))) {
+                        $this->coordinates = array(
+                            'x' => $value[0],
+                            'y' => $value[1]
+                        );
+                        return;
+                    }
+                }
+            }
+        }
+        $this->coordinates = null;
     }
 }
 ?>

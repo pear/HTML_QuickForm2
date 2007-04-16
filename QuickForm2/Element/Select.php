@@ -523,5 +523,22 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     {
         return $this->optionContainer->addOptgroup($label, $attributes);
     }
+
+    protected function updateValue()
+    {
+        if (!$this->getAttribute('multiple')) {
+            parent::updateValue();
+        } else {
+            $name = $this->getName();
+            foreach ($this->getDataSources() as $ds) {
+                if (null !== ($value = $ds->getValue($name)) ||
+                    $ds instanceof HTML_QuickForm2_DataSource_Submit)
+                {
+                    $this->setValue(null === $value? array(): $value);
+                    return;
+                }
+            }
+        }
+    }
 }
 ?>
