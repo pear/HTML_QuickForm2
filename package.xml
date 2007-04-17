@@ -40,7 +40,7 @@ Available functionality in this release:
 
 Changes to observe for those familiar with HTML_QuickForm:
  * DOM-inspired API for working with element hierarchy
- * Streamlined API for processing the elements&apos; values
+ * Streamlined API for processing the elements' values
 
 The following feature requests were addressed in this release:
  * Request #1283: Optgroup support
@@ -48,7 +48,7 @@ The following feature requests were addressed in this release:
  * Request #4137: Form-wide functions for unfreezing and setting persistent freeze 
    (also in request #6421)
  * Request #4564: Checkboxes can be created with arbitrary value
- * Request #4793: Fixed the misspelled &quot;persistent&quot; word in method names
+ * Request #4793: Fixed the misspelled 'persistent' word in method names
 
 Other resources to consider:
  * QF2 development wiki: http://quickform.mamasam.com/wiki/home
