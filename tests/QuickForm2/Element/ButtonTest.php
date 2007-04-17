@@ -81,7 +81,7 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorSetsContent()
     {
-        $button = new HTML_QuickForm2_Element_Button('foo', 'Some string');
+        $button = new HTML_QuickForm2_Element_Button('foo', array('content' => 'Some string'));
         $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
     }
 

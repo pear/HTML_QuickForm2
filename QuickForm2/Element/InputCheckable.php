@@ -74,24 +74,12 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     );
 
    /**
-    * Label to render glued to a checkbox or a radio  
-    * @var  string
+    * Contains options and data used for the element creation
+    * - content: Label "glued" to a checkbox or radio
+    * @var  array
     */
-    protected $gluedLabel;
+    protected $data = array('content' => '');
 
-   /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    string  Label "glued" to a checkbox or radio 
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $options = null, $label = null, $attributes = null)
-    {
-        parent::__construct($name, $options, $label, $attributes);
-        $this->setGluedLabel($options);
-    }
 
    /**
     * Sets the label to be rendered glued to the element
@@ -101,9 +89,9 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     *
     * @param    string
     */
-    public function setGluedLabel($label)
+    public function setContent($content)
     {
-        $this->gluedLabel = $label;
+        $this->data['content'] = $content;
     }
 
    /**
@@ -111,9 +99,9 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     *
     * @return   string
     */
-    public function getGluedLabel()
+    public function getContent()
     {
-        return $this->gluedLabel;
+        return $this->data['content'];
     }
 
 
@@ -137,14 +125,14 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
 
     public function __toString()
     {
-        if (0 == strlen($this->gluedLabel)) {
+        if (0 == strlen($this->data['content'])) {
             $label = '';
         } elseif ($this->frozen) {
-            $label = $this->gluedLabel;
+            $label = $this->data['content'];
         } else {
             $label = '<label for="' . htmlspecialchars(
                          $this->getId(), ENT_QUOTES, self::getOption('charset')
-                     ) . '">' . $this->gluedLabel . '</label>';
+                     ) . '">' . $this->data['content'] . '</label>';
         }
         return parent::__toString() . $label;
     }
@@ -152,7 +140,7 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     public function getFrozenHtml()
     {
         if ($this->getAttribute('checked')) {
-            return $this->frozenHtml['checked'] . $this->getPersistentData();
+            return $this->frozenHtml['checked'] . $this->getPersistentContent();
         } else {
             return $this->frozenHtml['unchecked'];
         }

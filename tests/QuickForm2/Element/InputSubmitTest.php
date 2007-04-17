@@ -80,14 +80,8 @@ class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorSetsValueAttribute()
     {
-        $submit = new HTML_QuickForm2_Element_InputSubmit('foo', 'Click me');
-        $this->assertRegExp('/value="Click me"/', $submit->__toString());
-
-        $submit2 = new HTML_QuickForm2_Element_InputSubmit('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $submit2->__toString());
-
-        $submit3 = new HTML_QuickForm2_Element_InputSubmit('bar', 'Click me', null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me"/', $submit3->__toString());
+        $submit = new HTML_QuickForm2_Element_InputSubmit('bar', null, null, array('value' => 'Click me now'));
+        $this->assertRegExp('/value="Click me now"/', $submit->__toString());
     }
 
     public function testCannotBeFrozen()

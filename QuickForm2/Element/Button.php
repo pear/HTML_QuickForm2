@@ -63,10 +63,11 @@ require_once 'HTML/QuickForm2/Element.php';
 class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
 {
    /**
-    * Content to be displayed between <button></button> tags
-    * @var  string
+    * Contains options and data used for the element creation
+    * - content: Content to be displayed between <button></button> tags
+    * @var  array
     */
-    protected $content = null;
+    protected $data = array('content' => '');
 
    /**
     * Element's submit value 
@@ -74,19 +75,6 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     */
     protected $submitValue = null;
 
-   /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    sting   Content to put between <button></button> tags
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $content = null, $label = null, $attributes = null)
-    {
-        parent::__construct($name, $content, $label, $attributes);
-        $this->setContent($content);
-    }
 
     public function getType()
     {
@@ -112,7 +100,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     */
     function setContent($content)
     {
-        $this->content = $content;
+        $this->data['content'] = $content;
     }
 
    /**
@@ -151,7 +139,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     public function __toString()
     {
         return $this->getIndent() . '<button' . $this->getAttributes(true) .
-               '>' . $this->content . '</button>';
+               '>' . $this->data['content'] . '</button>';
     }
 
     protected function updateValue()

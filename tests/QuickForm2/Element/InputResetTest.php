@@ -59,14 +59,8 @@ class HTML_QuickForm2_Element_InputResetTest extends PHPUnit_Framework_TestCase
 {
     public function testConstructorSetsValue()
     {
-        $reset = new HTML_QuickForm2_Element_InputReset('foo', 'Click me');
-        $this->assertRegExp('/value="Click me"/', $reset->__toString());
-
-        $reset2 = new HTML_QuickForm2_Element_InputReset('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $reset2->__toString());
-
-        $reset3 = new HTML_QuickForm2_Element_InputReset('bar', 'Click me', null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me"/', $reset3->__toString());
+        $reset = new HTML_QuickForm2_Element_InputReset('bar', null, null, array('value' => 'Click me now'));
+        $this->assertRegExp('/value="Click me now"/', $reset->__toString());
     }
 
     public function testCannotBeFrozen()

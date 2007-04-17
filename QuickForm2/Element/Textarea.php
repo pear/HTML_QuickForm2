@@ -103,7 +103,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
         } else {
             $html = nl2br($value) . self::getOption('linbebreak');
         }
-        return $html . $this->getPersistentData();
+        return $html . $this->getPersistentContent();
     }
 }
 ?>

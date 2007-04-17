@@ -98,6 +98,39 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     protected $container = null;
 
+   /**
+    * Contains options and data used for the element creation
+    * @var  array
+    */
+    protected $data = null;
+
+
+   /**
+    * Class constructor
+    *
+    * @param    string  Element name
+    * @param    array   Element data (options and data useful for the element creation)
+    * @param    mixed   Label for the element (may be an array of labels)
+    * @param    mixed   Attributes (either a string or an array)
+    */
+    public function __construct($name = null, $data = null, $label = null, $attributes = null)
+    {
+        parent::__construct($attributes);
+        $this->setName($name);
+        $this->setLabel($label);
+        // Autogenerating the id if not set on previous steps
+        if ('' == $this->getId()) {
+            $this->setId();
+        }
+        if (!is_null($data)) {
+            if (!is_array($data)) {
+                throw new HTML_QuickForm2_InvalidArgumentException("Element data must be an array");
+            } else {
+                $this->data = $data;
+            }
+        }
+    }
+
 
    /**
     * Generates an id for the element
@@ -165,29 +198,6 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             }
             $container =& $container[$token];
         } while (!empty($tokens));
-    }
-
-
-   /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    mixed   Element options (actual meaning of this parameter 
-    *                   depends on the element type)
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $options = null, $label = null, $attributes = null)
-    {
-        parent::__construct($attributes);
-        $this->setName($name);
-        $this->setLabel($label);
-        // Autogenerating the id if not set on previous steps
-        if ('' == $this->getId()) {
-            $this->setId();
-        }
-        // Note that $options parameter is not handled in any way. It is the
-        // job of the subclasses to handle it properly
     }
 
 

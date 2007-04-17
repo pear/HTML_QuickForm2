@@ -84,14 +84,8 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorSetsSrc()
     {
-        $image = new HTML_QuickForm2_Element_InputImage('foo', 'button.jpeg');
+        $image = new HTML_QuickForm2_Element_InputImage('bar', null, null, array('src' => 'button.jpeg'));
         $this->assertRegExp('/src="button\\.jpeg"/', $image->__toString());
-
-        $image2 = new HTML_QuickForm2_Element_InputImage('bar', null, null, array('src' => 'button2.jpeg'));
-        $this->assertRegExp('/src="button2\\.jpeg"/', $image2->__toString());
-
-        $image3 = new HTML_QuickForm2_Element_InputImage('bar', 'button3.jpeg', null, array('src' => 'button2.jpeg'));
-        $this->assertRegExp('/src="button3\\.jpeg"/', $image3->__toString());
     }
 
     public function testCannotBeFrozen()

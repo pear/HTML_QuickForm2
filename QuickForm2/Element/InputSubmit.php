@@ -67,21 +67,6 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
     */
     protected $submitValue = null;
 
-   /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    string  "value" attribute for submit button   
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $value = null, $label = null, $attributes = null)
-    {
-        parent::__construct($name, $value, $label, $attributes);
-        if (!empty($value)) {
-            $this->setAttribute('value', $value);
-        }
-    }
 
    /**
     * Submit buttons can not be frozen

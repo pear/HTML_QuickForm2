@@ -122,12 +122,24 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
     {
         HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', dirname(__FILE__) . '/_files/FakeElement.php');
         $el = HTML_QuickForm2_Factory::createElement('fakeelement', 
-                'fake', 'options', 'fake label', 'attributes');
+                'fake', array('options' => ''), 'fake label', 'attributes');
         $this->assertType('FakeElement', $el);
         $this->assertEquals('fake', $el->name);
-        $this->assertEquals('options', $el->options);
+        $this->assertEquals(array('options' => ''), $el->data);
         $this->assertEquals('fake label', $el->label);
         $this->assertEquals('attributes', $el->attributes);
+    }
+
+    public function testCreateElementInvalidData()
+    {
+        HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', dirname(__FILE__) . '/_files/FakeElement.php');
+        try {
+            $el = $el = HTML_QuickForm2_Factory::createElement('fakeelement', 
+                'fake', 'options');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertEquals("Element data must be an array", $e->getMessage());
+            return;
+        }
     }
 }
 ?>

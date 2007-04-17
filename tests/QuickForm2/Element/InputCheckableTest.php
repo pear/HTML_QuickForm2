@@ -57,16 +57,16 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorSetsGluedLabel()
+    public function testConstructorSetsContent()
     {
-        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', 'I am foo');
-        $this->assertEquals('I am foo', $checkable->getGluedLabel());
+        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', array('content' => 'I am foo'));
+        $this->assertEquals('I am foo', $checkable->getContent());
     }
 
-    public function testGluedLabelRendering()
+    public function testContentRendering()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'foo', 'I am foo', null, array('id' => 'checkableFoo')
+            'foo', array('content' => 'I am foo'), null, array('id' => 'checkableFoo')
         );
         $this->assertRegExp(
             '!<label\\s+for="checkableFoo">I am foo</label>!',
@@ -77,7 +77,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
         $this->assertNotRegExp('!<label!', $checkable->__toString());
 
         $checkable->toggleFrozen(false);
-        $checkable->setGluedLabel('');
+        $checkable->setContent('');
         $this->assertNotRegExp('!<label!', $checkable->__toString());
     }
 
@@ -114,7 +114,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
     public function testFrozenHtmlGeneration()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'checkableFreeze', 'freeze me', null, array('value' => 'my value')
+            'checkableFreeze', array('content' => 'freeze me'), null, array('value' => 'my value')
         );
         $checkable->setAttribute('checked');
 

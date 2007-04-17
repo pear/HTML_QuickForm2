@@ -68,22 +68,6 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     protected $coordinates = null;
 
    /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    string  Image source   
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $src = null, $label = null, $attributes = null)
-    {
-        parent::__construct($name, $src, $label, $attributes);
-        if (!empty($src)) {
-            $this->setAttribute('src', $src);
-        }
-    }
-
-   /**
     * Image buttons can not be frozen
     *
     * @param    bool    Whether element should be frozen or editable. This 

@@ -62,22 +62,6 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
     protected $attributes = array('type' => 'button');
 
    /**
-    * Class constructor
-    *
-    * @param    string  Element name
-    * @param    string  "value" attribute for button   
-    * @param    mixed   Label for the element (may be an array of labels)
-    * @param    mixed   Attributes (either a string or an array)
-    */
-    public function __construct($name = null, $value = null, $label = null, $attributes = null)
-    {
-        parent::__construct($name, $value, $label, $attributes);
-        if (!empty($value)) {
-            $this->setAttribute('value', $value);
-        }
-    }
-
-   /**
     * Buttons can not be frozen
     *
     * @param    bool    Whether element should be frozen or editable. This 

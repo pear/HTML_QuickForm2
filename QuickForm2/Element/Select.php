@@ -297,6 +297,13 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     protected $persistent = true;
 
    /**
+    * Contains options and data used for the element creation
+    * - options: Array of key-value pairs used for <option>s and <optgroup>s
+    * @var  array
+    */
+    protected $data = array('options' => null);
+
+   /**
     * Values for the select element (i.e. values of the selected options)  
     * @var  array
     */
@@ -322,16 +329,16 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * Class constructor
     *
     * @param    string  Element name
-    * @param    mixed   Data used to populate the element's options, passed to
+    * @param    array   Data used to populate the element's options, passed to
     *                   {@link loadOptions()} method
     * @param    mixed   Label for the element (may be an array of labels)
     * @param    mixed   Attributes (either a string or an array)
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
-    public function __construct($name = null, $options = null, $label = null, $attributes = null)
+    public function __construct($name = null, $data = null, $label = null, $attributes = null)
     {
-        parent::__construct($name, $options, $label, $attributes);
-        $this->loadOptions($options);
+        parent::__construct($name, $data, $label, $attributes);
+        $this->loadOptions($this->data['options']);
     }
 
     public function getType()

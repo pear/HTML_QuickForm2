@@ -59,14 +59,8 @@ class HTML_QuickForm2_Element_InputButtonTest extends PHPUnit_Framework_TestCase
 {
     public function testConstructorSetsValue()
     {
-        $button = new HTML_QuickForm2_Element_InputButton('foo', 'Click me');
-        $this->assertRegExp('/value="Click me"/', $button->__toString());
-
-        $button2 = new HTML_QuickForm2_Element_InputButton('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $button2->__toString());
-
-        $button3 = new HTML_QuickForm2_Element_InputButton('bar', 'Click me', null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me"/', $button3->__toString());
+        $button = new HTML_QuickForm2_Element_InputButton('bar', null, null, array('value' => 'Click me now'));
+        $this->assertRegExp('/value="Click me now"/', $button->__toString());
     }
 
     public function testCannotBeFrozen()

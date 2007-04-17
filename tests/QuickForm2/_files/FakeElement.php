@@ -5,14 +5,14 @@
 class FakeElement
 {
     public $name;
-    public $options;
+    public $data;
     public $label;
     public $attributes;
 
-    public function __construct($name = null, $options = null, $label = null, $attributes = null)
+    public function __construct($name = null, $data = null, $label = null, $attributes = null)
     {
         $this->name         = $name;
-        $this->options      = $options;
+        $this->data         = $data;
         $this->label        = $label;
         $this->attributes   = $attributes;
     }

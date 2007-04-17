@@ -65,7 +65,7 @@ class HTML_QuickForm2_Element_InputPassword extends HTML_QuickForm2_Element_Inpu
     {
         $value = $this->getValue();
         return (('' != $value)? '**********': '&nbsp;') .
-               $this->getPersistentData();
+               $this->getPersistentContent();
     }
 }
 ?>

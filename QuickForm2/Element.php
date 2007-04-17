@@ -121,7 +121,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     *
     * @return string
     */
-    protected function getPersistentData()
+    protected function getPersistentContent()
     {
         if (!$this->persistent || null === ($value = $this->getValue())) {
             return '';

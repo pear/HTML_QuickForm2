@@ -284,9 +284,9 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $options = array('1' => 'Option 1', '2' => 'Option 2');
 
         $formPost = new HTML_QuickForm2('multiple', 'post', null, false);
-        $single1  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single1', $options));
-        $single2  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single2', $options));
-        $multiple = $formPost->appendChild(new HTML_QuickForm2_Element_Select('mult', $options, null, array('multiple')));
+        $single1  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single1', array('options' => $options)));
+        $single2  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single2', array('options' => $options)));
+        $multiple = $formPost->appendChild(new HTML_QuickForm2_Element_Select('mult', array('options' => $options), null, array('multiple')));
         $this->assertEquals('1', $single1->getValue());
         $this->assertNull($single2->getValue());
         $this->assertNull($multiple->getValue());
@@ -301,7 +301,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $this->assertNull($multiple->getValue());
 
         $formGet   = new HTML_QuickForm2('multiple2', 'get', null, false);
-        $multiple2 = $formGet->appendChild(new HTML_QuickForm2_Element_Select('mult2', $options, null, array('multiple')));
+        $multiple2 = $formGet->appendChild(new HTML_QuickForm2_Element_Select('mult2', array('options' => $options), null, array('multiple')));
         $this->assertNull($multiple2->getValue());
 
         $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array(array(

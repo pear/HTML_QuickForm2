@@ -107,7 +107,7 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
     {
         $value = $this->getAttribute('value');
         return (('' != $value)? htmlspecialchars($value, ENT_QUOTES, self::getOption('charset')): '&nbsp;') .
-               $this->getPersistentData();
+               $this->getPersistentContent();
     }
 }
 ?>
