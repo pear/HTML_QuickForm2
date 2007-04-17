@@ -10,7 +10,8 @@
 <html>
   <head>
     <style type="text/css">
-/* styles borrowed from Tableless Renderer for QF example */
+/* styles borrowed from an older release of Tableless Renderer for QF. 
+   Newer styles work worse with nested fieldsets */
 body {
     margin-left: 10px;
     font-family: Arial,sans-serif;
