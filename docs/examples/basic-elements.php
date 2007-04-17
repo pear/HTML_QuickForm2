@@ -154,10 +154,10 @@ $fsSelect = $form->addElement(
     'fieldset', null, null, 'Selects'
 );
 $fsSelect->addElement(
-    'select', 'selSingleTest', $options, 'Single select:'
+    'select', 'selSingleTest', array('options' => $options), 'Single select:'
 );
 $fsSelect->addElement(
-    'select', 'selMultipleTest', $options, 'Multiple select:',
+    'select', 'selMultipleTest', array('options' => $options), 'Multiple select:',
     array('multiple' => 'multiple', 'size' => 4)
 );
 
@@ -166,13 +166,13 @@ $fsCheck = $form->addElement(
     'fieldset', null, null, 'Checkboxes and radios'
 );
 $fsCheck->addElement(
-    'checkbox', 'boxTest', 'check me', 'Test Checkbox:'
+    'checkbox', 'boxTest', array('content' => 'check me'), 'Test Checkbox:'
 );
 $fsCheck->addElement(
-    'radio', 'radioTest', 'select radio #1', 'Test radio:', array('value' => 1)
+    'radio', 'radioTest', array('content' => 'select radio #1'), 'Test radio:', array('value' => 1)
 );
 $fsCheck->addElement(
-    'radio', 'radioTest', 'select radio #2', '(continued)', array('value' => 2)
+    'radio', 'radioTest', array('content' => 'select radio #2'), '(continued)', array('value' => 2)
 );
 
 // buttons
@@ -180,15 +180,15 @@ $fsButton = $form->addElement(
     'fieldset', null, null, 'Buttons'
 );
 $testReset = $fsButton->addElement(
-    'reset', 'testReset', 'This is a reset button'
+    'reset', 'testReset', null, null, array('value' => 'This is a reset button')
 );
 $fsButton->addElement(
-    'inputbutton', 'testInputButton', 'Click this button', null,
-    array('onclick' => "alert('This is a test.');")
+    'inputbutton', 'testInputButton', null, null,
+    array('value' => 'Click this button', 'onclick' => "alert('This is a test.');")
 );
 $fsButton->addElement(
-    'button', 'testButton', '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
-        'width="32" height="32" alt="pear" />This button does almost nothing',
+    'button', 'testButton', array('content' => '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
+        'width="32" height="32" alt="pear" />This button does almost nothing'),
     null, array('onclick' => "alert('Almost nothing');", 'type' => 'button')
 );
 // submit buttons in nested fieldset
@@ -196,15 +196,15 @@ $fsSubmit = $fsButton->addElement(
     'fieldset', null, null, 'These buttons can submit the form'
 );
 $fsSubmit->addElement(
-    'submit', 'testSubmit', 'Test Submit'
+    'submit', 'testSubmit', null, null, array('value' => 'Test Submit')
 );
 $fsSubmit->addElement(
-    'button', 'testSubmitButton', '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
-        'width="32" height="32" alt="pear" />This button submits',
+    'button', 'testSubmitButton', array('content' => '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
+        'width="32" height="32" alt="pear" />This button submits'),
     null, array('type' => 'submit')
 );
 $fsSubmit->addElement(
-    'image', 'testImage', 'http://pear.php.net/gifs/pear-icon.gif'
+    'image', 'testImage', null, null, array('src' => 'http://pear.php.net/gifs/pear-icon.gif')
 );
 
 // outputting form values
