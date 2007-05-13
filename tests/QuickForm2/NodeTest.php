@@ -53,10 +53,15 @@ require_once 'HTML/QuickForm2/Node.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * Base class for HTML_QuickForm2 rules
+ */
+require_once 'HTML/QuickForm2/Rule.php';
+
+/**
  * A non-abstract subclass of Node
  *
  * We can't instantiate the class directly and thus need to "implement" its
- * abstract methods
+ * abstract methods. And also make validate() public to be able to test.
  */
 class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 {
@@ -71,6 +76,8 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
     public function setId($id = null) { }
 
     protected function updateValue() { }
+
+    public function validate() { return parent::validate(); }
 }
 
 /**
@@ -86,7 +93,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $obj2 = new HTML_QuickForm2_NodeImpl(null, null, 'a label');
         $this->assertEquals('a label', $obj2->getLabel());
 
-        $obj2->setLabel('another label');
+        $this->assertSame($obj2, $obj2->setLabel('another label'));
         $this->assertEquals('another label', $obj2->getLabel());
     }
 
@@ -114,6 +121,84 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($obj->persistentFreeze(false), 'persistentFreeze() should return previous persistence status');
         $this->assertFalse($obj->persistentFreeze());
+    }
+
+    public function testCanSetAndGetError()
+    {
+        $obj = new HTML_QuickForm2_NodeImpl();
+        $this->assertEquals('', $obj->getError(), 'Elements shouldn\'t have a error message by default');
+
+        $this->assertSame($obj, $obj->setError('An error message'));
+        $this->assertEquals('An error message', $obj->getError());
+    }
+
+    public function testValidate()
+    {
+        $valid = new HTML_QuickForm2_NodeImpl();
+        $ruleTrue = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($valid, 'A message')
+        );
+        $ruleTrue->expects($this->once())->method('checkValue')
+                 ->will($this->returnValue(true));
+        $valid->addRule($ruleTrue);
+        $this->assertTrue($valid->validate());
+        $this->assertEquals('', $valid->getError());
+
+        $invalid = new HTML_QuickForm2_NodeImpl();
+        $ruleFalse = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($invalid, 'An error message')
+        );
+        $ruleFalse->expects($this->once())->method('checkValue')
+                  ->will($this->returnValue(false));
+        $invalid->addRule($ruleFalse);
+        $this->assertFalse($invalid->validate());
+        $this->assertEquals('An error message', $invalid->getError());
+    }
+
+    public function testValidateUntilErrorMessage()
+    {
+        $preError = new HTML_QuickForm2_NodeImpl();
+        $preError->setError('some message');
+        $ruleIrrelevant = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            array($preError)
+        );
+        $ruleIrrelevant->expects($this->never())->method('validate');
+        $preError->addRule($ruleIrrelevant);
+        $this->assertFalse($preError->validate());
+
+        $manyRules = new HTML_QuickForm2_NodeImpl();
+        $ruleTrue = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($manyRules, 'irrelevant message')
+        );
+        $ruleTrue->expects($this->once())->method('checkValue')
+                 ->will($this->returnValue(true));
+        $ruleFalseNoMessage = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($manyRules, '')
+        );
+        $ruleFalseNoMessage->expects($this->once())->method('checkValue')
+                           ->will($this->returnValue(false));
+        $ruleFalseWithMessage = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($manyRules, 'some error')
+        );
+        $ruleFalseWithMessage->expects($this->once())->method('checkValue')
+                           ->will($this->returnValue(false));
+        $ruleStillIrrelevant = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($manyRules, '...')
+        );
+        $ruleStillIrrelevant->expects($this->never())->method('checkValue');
+        $manyRules->addRule($ruleTrue);
+        $manyRules->addRule($ruleFalseNoMessage);
+        $manyRules->addRule($ruleFalseWithMessage);
+        $manyRules->addRule($ruleStillIrrelevant);
+        $this->assertFalse($manyRules->validate());
+        $this->assertEquals('some error', $manyRules->getError());
     }
 }
 ?>

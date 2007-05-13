@@ -104,6 +104,17 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     protected $data = null;
 
+   /**
+    * Validation rules for element
+    * @var  array
+    */
+    protected $rules = array();
+
+   /**
+    * Error message (usually set via Rule if validation fails)
+    * @var  string
+    */
+    protected $error = null;
 
    /**
     * Class constructor
@@ -276,10 +287,12 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Sets the element's label(s)
     *
     * @param    string|array    Label for the element (may be an array of labels)
+    * @return   HTML_QuickForm2_Node
     */
     public function setLabel($label)
     {
         $this->label = $label;
+        return $this;
     }
 
 
@@ -381,5 +394,55 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Called when the element needs to update its value from form's data sources
     */
     abstract protected function updateValue();
+
+   /**
+    * Adds a validation rule
+    *
+    * @param    HTML_QuickForm2_Rule    Validation rule
+    * @return   HTML_QuickForm2_Rule    The added rule
+    */
+    public function addRule(HTML_QuickForm2_Rule $rule)
+    {
+        $this->rules[] = $rule;
+        return $rule;
+    }
+
+   /**
+    * Performs the server-side validation
+    *
+    * @return   boolean     Whether the element is valid
+    */
+    protected function validate()
+    {
+        foreach ($this->rules as $rule) {
+            if (strlen($this->error)) {
+                break;
+            }
+            $rule->validate();
+        }
+        return !strlen($this->error);
+    }
+
+   /**
+    * Sets the error message to the element
+    *
+    * @param    string
+    * @return   HTML_QuickForm2_Node
+    */
+    public function setError($error = null)
+    {
+        $this->error = (string)$error;
+        return $this;
+    }
+
+   /**
+    * Returns the error message for the element
+    *
+    * @return   string
+    */
+    public function getError()
+    {
+        return $this->error;
+    }
 }
 ?>
