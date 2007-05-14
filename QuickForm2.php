@@ -194,5 +194,22 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     {
         throw new HTML_QuickForm2_Exception('Not implemented');
     }
+
+   /**
+    * Performs the server-side validation
+    *
+    * @return   boolean Whether all form's elements are valid
+    */
+    public function validate()
+    {
+        $isSubmitted = false;
+        foreach ($this->datasources as $ds) {
+            if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
+                $isSubmitted = true;
+                break;
+            }
+        }
+        return $isSubmitted? parent::validate(): false;
+    }
 }
 ?>

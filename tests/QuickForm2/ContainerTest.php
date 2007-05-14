@@ -46,10 +46,19 @@
  * Container class
  */
 require_once 'HTML/QuickForm2/Container.php';
+
+/**
+ * Base class for "scalar" elements
+ */
 require_once 'HTML/QuickForm2/Element.php';
 
 /**
- * PHPUnit2 Test Case
+ * Base class for HTML_QuickForm2 rules
+ */
+require_once 'HTML/QuickForm2/Rule.php';
+
+/**
+ * PHPUnit Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 
@@ -81,12 +90,15 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
  * A non-abstract subclass of Container 
  *
  * Container class is still abstract, we should "implement" the remaining methods
+ * and also make validate() public to be able to test it.
  */
 class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
 {
     public function getType() { return 'concrete'; }
     public function setValue($value) { return ''; }
     public function __toString() { return ''; }
+
+    public function validate() { return parent::validate(); }
 }
 
 /**
@@ -427,6 +439,38 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
             'bar' => 'other value',
             'baz' => 'yet another value'
         ), $c1->getValue());
+    }
+
+    public function testValidate()
+    {
+        $cValidate = new HTML_QuickForm2_ContainerImpl('validate');
+        $el1 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
+        $el2 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
+
+        $ruleTrue1 = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($cValidate, 'irrelevant message')
+        );
+        $ruleTrue1->expects($this->once())->method('checkValue')
+                  ->will($this->returnValue(true));
+        $ruleFalse = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($el1, 'some error')
+        );
+        $ruleFalse->expects($this->once())->method('checkValue')
+                  ->will($this->returnValue(false));
+        $ruleTrue2 = $this->getMock(
+            'HTML_QuickForm2_Rule', array('checkValue'),
+            array($el2, 'irrelevant message')
+        );
+        $ruleTrue2->expects($this->once())->method('checkValue')
+                  ->will($this->returnValue(true));
+
+        $cValidate->addRule($ruleTrue1);
+        $el1->addRule($ruleFalse);
+        $el2->addRule($ruleTrue2);
+        $this->assertFalse($cValidate->validate());
+        $this->assertEquals('', $cValidate->getError());
     }
 }
 ?>

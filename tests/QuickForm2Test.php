@@ -173,6 +173,15 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
     }
 
+    public function testValidateChecksWhetherFormIsSubmitted()
+    {
+        $form1 = new HTML_QuickForm2('notrack', 'post');
+        $this->assertFalse($form1->validate());
+
+        $form2 = new HTML_QuickForm2('track', 'post');
+        $this->assertTrue($form2->validate());
+    }
+
     public function tearDown()
     {
         $_REQUEST = $this->request;

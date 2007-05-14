@@ -403,6 +403,23 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             $child->updateValue();
         }
     }
+
+
+   /**
+    * Performs the server-side validation
+    *
+    * This method also calls validate() on all contained elements.
+    * 
+    * @return   boolean Whether the container and all contained elements are valid
+    */
+    protected function validate()
+    {
+        $valid = parent::validate();
+        foreach ($this as $child) {
+            $valid = $child->validate() && $valid;
+        }
+        return $valid;
+    }
 }
 
 /**
