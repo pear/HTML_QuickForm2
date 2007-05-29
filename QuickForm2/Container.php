@@ -248,14 +248,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param    string|HTML_QuickForm2_Node  Either type name (treated 
     *               case-insensitively) or an element instance
     * @param    mixed   Element name
-    * @param    mixed   Element-specific data
+    * @param    array   Element-specific data
     * @param    mixed   Element label
     * @param    mixed   Element attributes
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException 
     */
-    public function addElement($elementOrType, $name = null, $data = null, 
+    public function addElement($elementOrType, $name = null, array $data = array(), 
                                $label = null, $attributes = null)
     {
         if ($elementOrType instanceof HTML_QuickForm2_Node) {

@@ -123,27 +123,27 @@ $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
 
 // text input elements
 $fsText = $form->addElement(
-    'fieldset', null, null, 'Text boxes'
+    'fieldset', null, array(), 'Text boxes'
 );
 $fsText->addElement(
-    'text', 'textTest', null, 'Test Text:', array('style' => 'width: 300px;')
+    'text', 'textTest', array(), 'Test Text:', array('style' => 'width: 300px;')
 );
 $fsText->addElement(
-    'password', 'pwdTest', null, 'Test Password:', array('style' => 'width: 300px;')
+    'password', 'pwdTest', array(), 'Test Password:', array('style' => 'width: 300px;')
 );
 $area = $fsText->addElement(
-    'textarea', 'areaTest', null, 'Test Textarea:',
+    'textarea', 'areaTest', array(), 'Test Textarea:',
     array('style' => 'width: 300px;', 'cols' => 50, 'rows' => 7)
 );
 
 $fsNested = $form->addElement(
-    'fieldset', null, null, 'Nested fieldset'
+    'fieldset', null, array(), 'Nested fieldset'
 );
 $fsNested->addElement(
-    'text', 'userTest', null, 'Username:', array('style' => 'width: 200px')
+    'text', 'userTest', array(), 'Username:', array('style' => 'width: 200px')
 );
 $fsNested->addElement(
-    'password', 'passTest', null, 'Password:', array('style' => 'width: 200px')
+    'password', 'passTest', array(), 'Password:', array('style' => 'width: 200px')
 );
 // Now we move the fieldset into another fieldset!
 $fsText->insertBefore($fsNested, $area);
@@ -151,7 +151,7 @@ $fsText->insertBefore($fsNested, $area);
 
 // selects
 $fsSelect = $form->addElement(
-    'fieldset', null, null, 'Selects'
+    'fieldset', null, array(), 'Selects'
 );
 $fsSelect->addElement(
     'select', 'selSingleTest', array('options' => $options), 'Single select:'
@@ -163,7 +163,7 @@ $fsSelect->addElement(
 
 // checkboxes and radios
 $fsCheck = $form->addElement(
-    'fieldset', null, null, 'Checkboxes and radios'
+    'fieldset', null, array(), 'Checkboxes and radios'
 );
 $fsCheck->addElement(
     'checkbox', 'boxTest', array('content' => 'check me'), 'Test Checkbox:'
@@ -177,13 +177,13 @@ $fsCheck->addElement(
 
 // buttons
 $fsButton = $form->addElement(
-    'fieldset', null, null, 'Buttons'
+    'fieldset', null, array(), 'Buttons'
 );
 $testReset = $fsButton->addElement(
-    'reset', 'testReset', null, null, array('value' => 'This is a reset button')
+    'reset', 'testReset', array(), null, array('value' => 'This is a reset button')
 );
 $fsButton->addElement(
-    'inputbutton', 'testInputButton', null, null,
+    'inputbutton', 'testInputButton', array(), null,
     array('value' => 'Click this button', 'onclick' => "alert('This is a test.');")
 );
 $fsButton->addElement(
@@ -193,10 +193,10 @@ $fsButton->addElement(
 );
 // submit buttons in nested fieldset
 $fsSubmit = $fsButton->addElement(
-    'fieldset', null, null, 'These buttons can submit the form'
+    'fieldset', null, array(), 'These buttons can submit the form'
 );
 $fsSubmit->addElement(
-    'submit', 'testSubmit', null, null, array('value' => 'Test Submit')
+    'submit', 'testSubmit', array(), null, array('value' => 'Test Submit')
 );
 $fsSubmit->addElement(
     'button', 'testSubmitButton', array('content' => '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
@@ -204,7 +204,7 @@ $fsSubmit->addElement(
     null, array('type' => 'submit')
 );
 $fsSubmit->addElement(
-    'image', 'testImage', null, null, array('src' => 'http://pear.php.net/gifs/pear-icon.gif')
+    'image', 'testImage', array(), null, array('src' => 'http://pear.php.net/gifs/pear-icon.gif')
 );
 
 // outputting form values
