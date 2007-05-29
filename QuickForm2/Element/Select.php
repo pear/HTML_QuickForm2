@@ -335,10 +335,11 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * @param    mixed   Attributes (either a string or an array)
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
-    public function __construct($name = null, $data = null, $label = null, $attributes = null)
+    public function __construct($name = null, array $data = array(),
+                                $label = null, $attributes = null)
     {
         parent::__construct($name, $data, $label, $attributes);
-        $this->loadOptions($this->data['options']);
+        $this->loadOptions(isset($this->data['options'])? $this->data['options']: array());
     }
 
     public function getType()

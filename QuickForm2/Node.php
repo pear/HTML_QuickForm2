@@ -124,7 +124,8 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @param    mixed   Label for the element (may be an array of labels)
     * @param    mixed   Attributes (either a string or an array)
     */
-    public function __construct($name = null, $data = null, $label = null, $attributes = null)
+    public function __construct($name = null, array $data = array(),
+                                $label = null, $attributes = null)
     {
         parent::__construct($attributes);
         $this->setName($name);
@@ -133,13 +134,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         if ('' == $this->getId()) {
             $this->setId();
         }
-        if (!is_null($data)) {
-            if (!is_array($data)) {
-                throw new HTML_QuickForm2_InvalidArgumentException("Element data must be an array");
-            } else {
-                $this->data = $data;
-            }
-        }
+        $this->data = $data;
     }
 
 

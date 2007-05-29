@@ -125,7 +125,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ContainerImpl(null, null, null, array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ContainerImpl(null, array(), null, array('id' => 'manual'));
         $this->assertEquals('manual', $obj->getId());
 
         $obj->setId('another');
@@ -148,7 +148,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testCanNotRemoveNameOrId()
     {
-        $obj = new HTML_QuickForm2_ContainerImpl('somename', null, null, array('id' => 'someid'));
+        $obj = new HTML_QuickForm2_ContainerImpl('somename', array(), null, array('id' => 'someid'));
         try {
             $obj->removeAttribute('name');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -370,8 +370,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testDuplicateIdHandling()
     {
-        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', null, null, array('id' => 'dup'));
-        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', null, null, array('id' => 'dup'));
+        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', array(), null, array('id' => 'dup'));
+        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', array(), null, array('id' => 'dup'));
 
         $c1 = new HTML_QuickForm2_ContainerImpl('dupContainer1');
         $c2 = new HTML_QuickForm2_ContainerImpl('dupContainer2');

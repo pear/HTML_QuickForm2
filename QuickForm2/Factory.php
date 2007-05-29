@@ -153,7 +153,7 @@ class HTML_QuickForm2_Factory
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
     *           not be found and/or loaded from file 
     */
-    public static function createElement($type, $name = null, $data = null, 
+    public static function createElement($type, $name = null, array $data = array(), 
                                          $label = null, $attributes = null)
     {
         $type = strtolower($type);

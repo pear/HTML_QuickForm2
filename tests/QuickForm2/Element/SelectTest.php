@@ -119,7 +119,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleValueIsArray()
     {
-        $sel = new HTML_QuickForm2_Element_Select('mult', null, null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('mult', array(), null, array('multiple'));
         $sel->addOption('Text', 'Value');
         $sel->addOption('Other Text', 'Other Value');
         $sel->addOption('Different Text', 'Different Value');
@@ -136,7 +136,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testDisabledSelectHasNoValue()
     {
-        $sel = new HTML_QuickForm2_Element_Select('disableMe', null, null, array('disabled'));
+        $sel = new HTML_QuickForm2_Element_Select('disableMe', array(), null, array('disabled'));
         $sel->addOption('Text', 'Value');
         $sel->setValue('Value');
 
@@ -227,7 +227,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleName()
     {
-        $sel = new HTML_QuickForm2_Element_Select('foo', null, null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('foo', array(), null, array('multiple'));
         $this->assertRegExp('/name="foo\\[\\]"/', $sel->__toString());
     }
 
@@ -259,7 +259,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleFrozenHtmlGeneration()
     {
-        $sel = new HTML_QuickForm2_Element_Select('foo', null, null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('foo', array(), null, array('multiple'));
         $sel->addOption('FirstText', 'FirstValue');
         $sel->addOption('SecondText', 'SecondValue');
         $sel->setValue(array('FirstValue', 'SecondValue'));

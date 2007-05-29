@@ -129,7 +129,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ElementImpl(null, null, null, array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ElementImpl(null, array(), null, array('id' => 'manual'));
         $this->assertEquals('manual', $obj->getId());
 
         $obj->setId('another');
@@ -142,7 +142,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanNotRemoveNameOrId()
     {
-        $obj = new HTML_QuickForm2_ElementImpl('somename', null, null, array('id' => 'someid'));
+        $obj = new HTML_QuickForm2_ElementImpl('somename', array(), null, array('id' => 'someid'));
         try {
             $obj->removeAttribute('name');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -187,7 +187,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             'foo', 'foo[bar]', 'foo[baz][]'
         );
         foreach ($usedIds as $id) {
-            $elManual = new HTML_QuickForm2_ElementImpl('foo', null, null, array('id' => $id));
+            $elManual = new HTML_QuickForm2_ElementImpl('foo', array(), null, array('id' => $id));
         }
         foreach ($names as $name) {
             $el = new HTML_QuickForm2_ElementImpl($name);

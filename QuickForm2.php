@@ -154,11 +154,8 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     * @throws   HTML_QuickForm2_InvalidArgumentException    if given array 
     *               contains something that is not a valid data source
     */
-    public function setDataSources($datasources)
+    public function setDataSources(array $datasources)
     {
-        if (!is_array($datasources)) {
-            $datasources = array($datasources);
-        }
         foreach ($datasources as $ds) {
             if (!$ds instanceof HTML_QuickForm2_DataSource) {
                 throw new HTML_QuickForm2_InvalidArgumentException(

@@ -90,7 +90,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $obj = new HTML_QuickForm2_NodeImpl();
         $this->assertNull($obj->getLabel());
 
-        $obj2 = new HTML_QuickForm2_NodeImpl(null, null, 'a label');
+        $obj2 = new HTML_QuickForm2_NodeImpl(null, array(), 'a label');
         $this->assertEquals('a label', $obj2->getLabel());
 
         $this->assertSame($obj2, $obj2->setLabel('another label'));

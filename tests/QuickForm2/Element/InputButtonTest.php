@@ -57,12 +57,6 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputButtonTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorSetsValue()
-    {
-        $button = new HTML_QuickForm2_Element_InputButton('bar', null, null, array('value' => 'Click me now'));
-        $this->assertRegExp('/value="Click me now"/', $button->__toString());
-    }
-
     public function testCannotBeFrozen()
     {
         $button = new HTML_QuickForm2_Element_InputButton('foo');
