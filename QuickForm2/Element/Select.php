@@ -165,9 +165,10 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
         $indent    = $this->getIndent() . self::getOption('indent');
         $linebreak = self::getOption('linebreak');
         $html      = '';
+        $strValues = array_map('strval', $this->values);
         foreach ($this->options as $option) {
             if (is_array($option)) {
-                if (in_array($option['attr']['value'], $this->values)) {
+                if (in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
                 $html .= $indent . '<option' . 

@@ -309,5 +309,29 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         )));
         $this->assertEquals(array('1', '2'), $multiple2->getValue());
     }
+
+    public function testBug11138()
+    {
+        $options = array('2' => 'TwoWithoutZero', '02' => 'TwoWithZero');
+
+        $sel = new HTML_QuickForm2_Element_Select('bug11138');
+        $sel->loadOptions($options);
+        $sel->setValue('02');
+
+        $selHtml = $sel->__toString();
+        $this->assertRegExp(
+            '!selected="selected"[^>]*>TwoWithZero!', $selHtml
+        );
+        $this->assertNotRegExp(
+            '!selected="selected"[^>]*>TwoWithoutZero!', $selHtml
+        );
+
+        $sel->toggleFrozen(true);
+        $selFrozen = $sel->__toString();
+        $this->assertContains('TwoWithZero', $selFrozen);
+        $this->assertContains('value="02"', $selFrozen);
+        $this->assertNotContains('TwoWithoutZero', $selFrozen);
+        $this->assertNotContains('value="2"', $selFrozen);
+    }
 }
 ?>
