@@ -95,9 +95,9 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
     public function testSetValueFromSubmitDataSource()
     {
         $form = new HTML_QuickForm2('buttons', 'post', null, false);
-        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array(), null, array('type' => 'submit')));
-        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', array(), null, array('type' => 'button')));
-        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', array(), null, array('type' => 'submit')));
+        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array(), array('type' => 'submit')));
+        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', array(), array('type' => 'button')));
+        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', array(), array('type' => 'submit')));
 
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
             'foo' => 'Default for foo',

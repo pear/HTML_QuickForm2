@@ -134,16 +134,16 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
    /**
     * Adds a new optgroup  
     *
-    * @param    string  'label' attribute for optgroup tag
-    * @param    mixed   Additional attributes for <optgroup> tag (either as a
-    *                   string or as an associative array)
+    * @param    mixed   Attributes for <optgroup> tag (either as a
+    *                   string or as an associative array) including
+    *                   optgroup label
     * @return   HTML_QuickForm2_Element_Select_Optgroup
     */
-    public function addOptgroup($label, $attributes = null)
+    public function addOptgroup($attributes = null)
     {
         $optgroup = new HTML_QuickForm2_Element_Select_Optgroup(
                             $this->values, $this->possibleValues, 
-                            $label, $attributes
+                            $attributes
                         );
         $this->options[] = $optgroup;
         return $optgroup;
@@ -237,15 +237,13 @@ class HTML_QuickForm2_Element_Select_Optgroup
     *
     * @param    array   Reference to values of parent <select> element
     * @param    array   Reference to possible values of parent <select> element
-    * @param    string  'label' attribute for optgroup tag
     * @param    mixed   Additional attributes for <optgroup> tag (either as a
     *                   string or as an associative array)
     */
-    public function __construct(&$values, &$possibleValues, $label, $attributes = null)
+    public function __construct(&$values, &$possibleValues, $attributes = null)
     {
         parent::__construct($values, $possibleValues);
         $this->setAttributes($attributes);
-        $this->attributes['label'] = (string)$label;
     }
 
     public function __toString()
@@ -331,15 +329,17 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * @param    string  Element name
     * @param    array   Data used to populate the element's options, passed to
-    *                   {@link loadOptions()} method
-    * @param    mixed   Label for the element (may be an array of labels)
+    *                   {@link loadOptions()} method. Format:
+    *                   <code>
+    *                   $data = array('options' => array('option1', 'option2'));
+    *                   </code>
     * @param    mixed   Attributes (either a string or an array)
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
     public function __construct($name = null, array $data = array(),
-                                $label = null, $attributes = null)
+                                $attributes = null)
     {
-        parent::__construct($name, $data, $label, $attributes);
+        parent::__construct($name, $data, $attributes);
         $this->loadOptions(isset($this->data['options'])? $this->data['options']: array());
     }
 
@@ -495,7 +495,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     {
         foreach ($options as $key => $value) {
             if (is_array($value)) {
-                $optgroup = $container->addOptgroup($key);
+                $optgroup = $container->addOptgroup(array('label' => $key));
                 $this->loadOptionsFromArray($optgroup, $value);
             } else {
                 $container->addOption($value, $key);
@@ -523,14 +523,14 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
    /**
     * Adds a new optgroup  
     *
-    * @param    string  'label' attribute for optgroup tag
-    * @param    mixed   Additional attributes for <optgroup> tag (either as a
-    *                   string or as an associative array)
+    * @param    mixed   Attributes for <optgroup> tag (either as a
+    *                   string or as an associative array) including 
+    *                   optgroup label
     * @return   HTML_QuickForm2_Element_Select_Optgroup
     */
-    public function addOptgroup($label, $attributes = null)
+    public function addOptgroup($attributes = null)
     {
-        return $this->optionContainer->addOptgroup($label, $attributes);
+        return $this->optionContainer->addOptgroup($attributes);
     }
 
     protected function updateValue()

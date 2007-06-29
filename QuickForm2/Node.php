@@ -75,12 +75,6 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected static $ids = array();
 
    /**
-    * Label(s) for the element 
-    * @var string|array
-    */
-    protected $label = null;
-
-   /**
     * Element's "frozen" status
     * @var boolean
     */
@@ -120,16 +114,13 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Class constructor
     *
     * @param    string  Element name
-    * @param    array   Element data (options and data useful for the element creation)
-    * @param    mixed   Label for the element (may be an array of labels)
+    * @param    array   Element data (label, options and data used for element creation)
     * @param    mixed   Attributes (either a string or an array)
     */
-    public function __construct($name = null, array $data = array(),
-                                $label = null, $attributes = null)
+    public function __construct($name = null, array $data = array(), $attributes = null)
     {
         parent::__construct($attributes);
         $this->setName($name);
-        $this->setLabel($label);
         // Autogenerating the id if not set on previous steps
         if ('' == $this->getId()) {
             $this->setId();
@@ -274,7 +265,10 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     public function getLabel()
     {
-        return $this->label;
+        if (isset($this->data['label'])) {
+            return $this->data['label'];
+        }
+        return null;
     }
 
 
@@ -286,7 +280,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     public function setLabel($label)
     {
-        $this->label = $label;
+        $this->data['label'] = $label;
         return $this;
     }
 

@@ -249,20 +249,19 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *               case-insensitively) or an element instance
     * @param    mixed   Element name
     * @param    array   Element-specific data
-    * @param    mixed   Element label
     * @param    mixed   Element attributes
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException 
     */
     public function addElement($elementOrType, $name = null, array $data = array(), 
-                               $label = null, $attributes = null)
+                               $attributes = null)
     {
         if ($elementOrType instanceof HTML_QuickForm2_Node) {
             return $this->appendChild($elementOrType);
         } else {
             return $this->appendChild(HTML_QuickForm2_Factory::createElement(
-                $elementOrType, $name, $data, $label, $attributes
+                $elementOrType, $name, $data, $attributes
             ));
         }
     }

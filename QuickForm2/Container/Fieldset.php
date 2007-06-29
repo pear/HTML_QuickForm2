@@ -65,7 +65,7 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
         $this->setIndentLevel($this->getIndentLevel() + 1);
         $lf = self::getOption('linebreak');
 
-        if (!is_null($this->label)) {
+        if ($this->getLabel()) {
             $legendId = $this->getId() . '-legend';
             $html .= $lf . $this->getIndent() . '<legend id="'.$legendId.'">' . $this->getLabel() . '</legend>';
         }

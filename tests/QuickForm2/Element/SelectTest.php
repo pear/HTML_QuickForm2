@@ -119,7 +119,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleValueIsArray()
     {
-        $sel = new HTML_QuickForm2_Element_Select('mult', array(), null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('mult', array(), array('multiple'));
         $sel->addOption('Text', 'Value');
         $sel->addOption('Other Text', 'Other Value');
         $sel->addOption('Different Text', 'Different Value');
@@ -136,7 +136,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testDisabledSelectHasNoValue()
     {
-        $sel = new HTML_QuickForm2_Element_Select('disableMe', array(), null, array('disabled'));
+        $sel = new HTML_QuickForm2_Element_Select('disableMe', array(), array('disabled'));
         $sel->addOption('Text', 'Value');
         $sel->setValue('Value');
 
@@ -181,7 +181,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
     public function testAddOptgroup()
     {
         $sel = new HTML_QuickForm2_Element_Select();
-        $optgroup = $sel->addOptgroup('Label');
+        $optgroup = $sel->addOptgroup(array('label' => 'Label'));
         $this->assertType('HTML_QuickForm2_Element_Select_Optgroup', $optgroup);
         $this->assertRegExp(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*</optgroup>\\s*</select>!',
@@ -189,7 +189,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
-        $optgroup2 = $sel2->addOptgroup('Label', array('class' => 'bar'));
+        $optgroup2 = $sel2->addOptgroup(array('label' => 'Label', 'class' => 'bar'));
         $this->assertRegExp(
             '!<optgroup[^>]+class="bar"[^>]*>\\s*</optgroup>!',
             $sel2->__toString() 
@@ -199,7 +199,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
     public function testAddOptionToOptgroup()
     {
         $sel = new HTML_QuickForm2_Element_Select();
-        $optgroup = $sel->addOptgroup('Label');
+        $optgroup = $sel->addOptgroup(array('label' => 'Label'));
         $optgroup->addOption('Text', 'Value');
         $this->assertRegExp(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*' .
@@ -208,7 +208,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
-        $optgroup2 = $sel2->addOptgroup('Label');
+        $optgroup2 = $sel2->addOptgroup(array('label' => 'Label'));
         $optgroup2->addOption('Text', 'Value', array('class' => 'bar'));
         $this->assertRegExp(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+class="bar"[^>]*>Text</option>\\s*</optgroup>!',
@@ -216,7 +216,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         );
 
         $sel3 = new HTML_QuickForm2_Element_Select();
-        $optgroup3 = $sel3->addOptgroup('Label');
+        $optgroup3 = $sel3->addOptgroup(array('label' => 'Label'));
         $optgroup3->addOption('Text', 'Value', array('selected'));
         $this->assertEquals('Value', $sel3->getValue());
         $this->assertRegExp(
@@ -227,7 +227,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleName()
     {
-        $sel = new HTML_QuickForm2_Element_Select('foo', array(), null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('foo', array(), array('multiple'));
         $this->assertRegExp('/name="foo\\[\\]"/', $sel->__toString());
     }
 
@@ -259,7 +259,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 
     public function testSelectMultipleFrozenHtmlGeneration()
     {
-        $sel = new HTML_QuickForm2_Element_Select('foo', array(), null, array('multiple'));
+        $sel = new HTML_QuickForm2_Element_Select('foo', array(), array('multiple'));
         $sel->addOption('FirstText', 'FirstValue');
         $sel->addOption('SecondText', 'SecondValue');
         $sel->setValue(array('FirstValue', 'SecondValue'));
@@ -286,7 +286,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $formPost = new HTML_QuickForm2('multiple', 'post', null, false);
         $single1  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single1', array('options' => $options)));
         $single2  = $formPost->appendChild(new HTML_QuickForm2_Element_Select('single2', array('options' => $options)));
-        $multiple = $formPost->appendChild(new HTML_QuickForm2_Element_Select('mult', array('options' => $options), null, array('multiple')));
+        $multiple = $formPost->appendChild(new HTML_QuickForm2_Element_Select('mult', array('options' => $options), array('multiple')));
         $this->assertEquals('1', $single1->getValue());
         $this->assertNull($single2->getValue());
         $this->assertNull($multiple->getValue());
@@ -301,7 +301,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $this->assertNull($multiple->getValue());
 
         $formGet   = new HTML_QuickForm2('multiple2', 'get', null, false);
-        $multiple2 = $formGet->appendChild(new HTML_QuickForm2_Element_Select('mult2', array('options' => $options), null, array('multiple')));
+        $multiple2 = $formGet->appendChild(new HTML_QuickForm2_Element_Select('mult2', array('options' => $options), array('multiple')));
         $this->assertNull($multiple2->getValue());
 
         $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array(array(

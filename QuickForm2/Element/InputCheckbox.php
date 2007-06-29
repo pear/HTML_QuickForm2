@@ -67,9 +67,9 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
     );
 
     public function __construct($name = null, array $data = array(), 
-                                $label = null, $attributes = null)
+                                $attributes = null)
     {
-        parent::__construct($name, $data, $label, $attributes);
+        parent::__construct($name, $data, $attributes);
         if (!$this->getAttribute('value')) {
             $this->setAttribute('value', 1);
         }

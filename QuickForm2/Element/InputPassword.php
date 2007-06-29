@@ -64,7 +64,7 @@ class HTML_QuickForm2_Element_InputPassword extends HTML_QuickForm2_Element_Inpu
     protected function getFrozenHtml()
     {
         $value = $this->getValue();
-        return (('' != $value)? '**********': '&nbsp;') .
+        return (('' != $value)? '********': '&nbsp;') .
                $this->getPersistentContent();
     }
 }
