@@ -419,6 +419,37 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         }
         return $valid;
     }
+
+   /**
+    * Appends an element to the container, creating it first
+    *
+    * The element will be created via {@link HTML_QuickForm2_Factory::createElement()}
+    * and then added via the {@link appendChild()} method.
+    * The element type is deduced from the method name. Camelcases will be
+    * converted to underscores and lowercased.
+    * This is a convenience method to reduce typing.
+    *
+    * @param    mixed   Element name
+    * @param    array   Element-specific data
+    * @param    mixed   Element attributes
+    * @return   HTML_QuickForm2_Node     Added element
+    * @throws   HTML_QuickForm2_InvalidArgumentException
+    * @throws   HTML_QuickForm2_NotFoundException 
+    */
+    public function __call($m, $a)
+    {
+		if (preg_match('/^(add)([A-Z0-9][a-zA-Z0-9]+)$/', $m, $match)) {
+			if ($match[1] == 'add') {
+                $type = strtolower(preg_replace('/([a-z])([A-Z])/','\1_\2',
+                    preg_replace('/([A-Z]+)([A-Z])/','\1_\2', $match[2])));
+                $name = isset($a[0]) ? $a[0] : null;
+                $data = isset($a[1]) ? $a[1] : array();
+                $attr = isset($a[2]) ? $a[2] : null;
+                return $this->addElement($type, $name, $data, $attr);
+            }
+        }
+		trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);
+    }
 }
 
 /**

@@ -43,50 +43,64 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_AllTests::main');
-}
+/**
+ * Container class
+ */
+require_once 'HTML/QuickForm2/Container.php';
+
+/**
+ * Base class for "scalar" elements
+ */
+require_once 'HTML/QuickForm2/Element.php';
+
+/**
+ * Base class for "checkbox" elements, used in tests
+ */
+require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
+
+/**
+ * PHPUnit2 Test Case
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
 
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/ContainerOverloadTest.php';
-require_once dirname(__FILE__) . '/Container/AllTests.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-require_once dirname(__FILE__) . '/RuleTest.php';
-
-class QuickForm2_AllTests
+/**
+ * Unit test for HTML_QuickForm2_Container overloaded methods
+ */
+class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit_Framework_TestCase
 {
-    public static function main()
+    public function testAddElements()
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        $c = new HTML_QuickForm2_ContainerImpl('cCOT1');
+        $el1 = $c->addText('eCOT1', array('label' => 'Label'), array('size' => 30));
+        $this->assertSame($el1, $c->getElementById('eCOT1-0'));
+
+        $f = $c->addFieldset('fCOT1', array('label' => 'Fieldset'));
+        $el2 = $f->addTextarea('eCOT2');
+        $this->assertSame($el2, $c->getElementById('eCOT2-0'));
     }
 
-    public static function suite()
+
+    public function testAddElementsWithBracketsInName()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
-
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerOverloadTest');
-        $suite->addTestSuite('HTML_QuickForm2_RuleTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-        $suite->addTest(QuickForm2_Container_AllTests::suite());
-        $suite->addTest(QuickForm2_DataSource_AllTests::suite());
-
-        return $suite;
+        $c = new HTML_QuickForm2_ContainerImpl('cCOT0');
+        $el1 = $c->addCheckbox('chCOT[]');
+        $el2 = $c->addCheckbox('chCOT[]');
+        $this->assertSame($el1, $c->getElementById('chCOT-0-0'));
+        $this->assertSame($el2, $c->getElementById('chCOT-1-0'));
     }
-}
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+
+    public function testAddUnknownType()
+    {
+        $c = new HTML_QuickForm2_ContainerImpl('cCOT2');
+        try {
+            $c->addUnknown('uCOT1');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertEquals("Element type 'unknown' is not known", $e->getMessage());
+            return;
+        }
+        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+    }
 }
 ?>
