@@ -97,10 +97,11 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * File upload's value cannot be set here
     * 
     * @param     mixed    Value for file element, this parameter is ignored
+    * @return    HTML_QuickForm2_Element_InputFile
     */
     public function setValue($value)
     {
-        return null;
+        return $this;
     }
 
     protected function updateValue()

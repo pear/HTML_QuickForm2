@@ -96,6 +96,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     {
         $this->attributes['name'] = (string)$name;
         $this->updateValue();
+        return $this;
     }
 
     public function getId()
@@ -111,6 +112,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
             self::storeId($id);
         }
         $this->attributes['id'] = (string)$id;
+        return $this;
     }
 
    /**

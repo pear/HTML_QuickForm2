@@ -77,7 +77,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
         $this->assertNotRegExp('!<label!', $checkable->__toString());
 
         $checkable->toggleFrozen(false);
-        $checkable->setContent('');
+        $this->assertSame($checkable, $checkable->setContent(''));
         $this->assertNotRegExp('!<label!', $checkable->__toString());
     }
 
@@ -88,11 +88,11 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
 
         $this->assertNull($checkable->getValue());
 
-        $checkable->setValue('my value');
+        $this->assertSame($checkable, $checkable->setValue('my value'));
         $this->assertEquals('checked', $checkable->getAttribute('checked'));
         $this->assertEquals('my value', $checkable->getValue());
 
-        $checkable->setValue('not my value!');
+        $this->assertSame($checkable, $checkable->setValue('not my value!'));
         $this->assertNull($checkable->getAttribute('checked'));
         $this->assertNull($checkable->getValue());
 

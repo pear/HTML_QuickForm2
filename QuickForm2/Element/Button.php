@@ -107,10 +107,11 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     * Button's value cannot be set via this method
     *
     * @param    mixed   Element's value, this parameter is ignored
+    * @return   HTML_QuickForm2_Element_Button
     */
     public function setValue($value)
     {
-        return null;
+        return $this;
     }
 
    /**

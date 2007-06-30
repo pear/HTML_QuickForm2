@@ -291,18 +291,10 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
- * @todo       Unit tests and better PHPDoc for loadOptions()
  */
 class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 {
     protected $persistent = true;
-
-   /**
-    * Contains options and data used for the element creation
-    * - options: Array of key-value pairs used for <option>s and <optgroup>s
-    * @var  array
-    */
-    protected $data = array('options' => null);
 
    /**
     * Values for the select element (i.e. values of the selected options)  
@@ -340,8 +332,10 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
+        $options = isset($data['options'])? $data['options']: array();
+        unset($data['options']);
         parent::__construct($name, $attributes, $data);
-        $this->loadOptions(isset($this->data['options'])? $this->data['options']: array());
+        $this->loadOptions($options);
     }
 
     public function getType()
@@ -456,30 +450,46 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         } else {
             $this->values = array($value);
         }
+        return $this;
     }
 
    /**
     * Loads <option>s (and <optgroup>s) for select element
     *
+    * The method expects a array of options and optgroups:
+    * <pre>
+    * array(
+    *     'option value 1' => 'option text 1',
+    *     ...
+    *     'option value N' => 'option text N',
+    *     'optgroup label 1' => array(
+    *         'option value' => 'option text',
+    *         ...
+    *     ),
+    *     ...
+    * )
+    * </pre>
+    * If value is a scalar, then array key is treated as "value" attribute of 
+    * <option> and value as this <option>'s text. If value is an array, then 
+    * key is treated as a "label" attribute of <optgroup> and value as an 
+    * array of <option>s for this <optgroup>.
+    * 
+    * If you need to specify additional attributes for <option> and <optgroup>
+    * tags, then you need to use {@link addOption()} and {@link addOptgroup()}
+    * methods instead of this one.
+    * 
     * @param    array
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
+    * @return   HTML_QuickForm2_Element_Select
     */
-    public function loadOptions($options)
+    public function loadOptions(array $options)
     {
-        $this->values          = array();
         $this->possibleValues  = array();
         $this->optionContainer = new HTML_QuickForm2_Element_Select_OptionContainer(
                                      $this->values, $this->possibleValues
                                  );
-        if (null === $options) {
-            return;
-        } elseif (is_array($options)) {
-            $this->loadOptionsFromArray($this->optionContainer, $options);
-        } else {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'loadOptions() expects an array'
-            );
-        }
+        $this->loadOptionsFromArray($this->optionContainer, $options);
+        return $this;
     }
 
 

@@ -104,6 +104,7 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
     public function setName($name)
     {
         // Fieldsets do not have a name attribute
+        return $this;
     }
 
     public function setValue($value)

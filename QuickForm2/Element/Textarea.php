@@ -75,6 +75,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
     public function setValue($value)
     {
         $this->value = $value;
+        return $this;
     }
 
     public function getValue()

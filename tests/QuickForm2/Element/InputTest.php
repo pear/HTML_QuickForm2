@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit_Framework_TestCase
     {
         $obj = new HTML_QuickForm2_Element_InputImpl();
 
-        $obj->setValue('foo');
+        $this->assertSame($obj, $obj->setValue('foo'));
         $this->assertEquals($obj->getValue(), 'foo');
 
         $obj->setAttribute('value', 'bar');

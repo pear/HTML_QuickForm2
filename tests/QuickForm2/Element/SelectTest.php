@@ -102,10 +102,10 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
     {
         $sel = new HTML_QuickForm2_Element_Select();
         $sel->addOption('Text', 'Value');
-        $sel->setValue('Value');
+        $this->assertSame($sel, $sel->setValue('Value'));
         $this->assertEquals('Value', $sel->getValue());
 
-        $sel->setValue('Nonextistent');
+        $this->assertSame($sel, $sel->setValue('Nonextistent'));
         $this->assertNull($sel->getValue());
 
         $sel2 = new HTML_QuickForm2_Element_Select();
@@ -124,13 +124,13 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $sel->addOption('Other Text', 'Other Value');
         $sel->addOption('Different Text', 'Different Value');
 
-        $sel->setValue('Other Value');
+        $this->assertSame($sel, $sel->setValue('Other Value'));
         $this->assertEquals(array('Other Value'), $sel->getValue());
 
-        $sel->setValue('Nonexistent');
+        $this->assertSame($sel, $sel->setValue('Nonexistent'));
         $this->assertNull($sel->getValue());
 
-        $sel->setValue(array('Value', 'Different Value', 'Nonexistent'));
+        $this->assertSame($sel, $sel->setValue(array('Value', 'Different Value', 'Nonexistent')));
         $this->assertEquals(array('Value', 'Different Value'), $sel->getValue());
     }
 
@@ -223,6 +223,30 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+selected="selected"[^>]*>Text</option>\\s*</optgroup>!', 
             $sel3->__toString()
         );
+    }
+
+    public function testLoadOptions()
+    {
+        $sel = new HTML_QuickForm2_Element_Select('loadOptions', array('multiple'));
+        $this->assertSame($sel, $sel->loadOptions(array('one' => 'First', 'two' => 'Second')));
+        $sel->setValue(array('one', 'two'));
+        $this->assertRegexp(
+            '!<option[^>]+value="one"[^>]*>First</option>\\s*<option[^>]+value="two"[^>]*>Second</option>!',
+            $sel->__toString()
+        );
+        $this->assertEquals(array('one', 'two'), $sel->getValue());
+
+        $sel->loadOptions(array('Label' => array('two' => 'Second', 'three' => 'Third')));
+        $this->assertRegexp(
+            '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+value="two"[^>]*>Second</option>\\s*' .
+            '<option[^>]+value="three"[^>]*>Third</option>\\s*</optgroup>!',
+            $sel->__toString()
+        );
+        $this->assertNotRegexp(
+            '!<option[^>]+value="one"[^>]*>First</option>!',
+            $sel->__toString()
+        );
+        $this->assertEquals(array('two'), $sel->getValue());
     }
 
     public function testSelectMultipleName()

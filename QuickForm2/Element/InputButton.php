@@ -77,10 +77,11 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
     * Button elements cannot have any submit values
     *
     * @param    mixed   Element's value, this parameter is ignored
+    * @return   HTML_QuickForm2_Element_InputButton
     */
     public function setValue($value)
     {
-        return null;
+        return $this;
     }
 
    /**

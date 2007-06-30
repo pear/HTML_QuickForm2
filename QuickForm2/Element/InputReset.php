@@ -77,10 +77,11 @@ class HTML_QuickForm2_Element_InputReset extends HTML_QuickForm2_Element_Input
     * Reset elements cannot have any submit values
     *
     * @param    mixed   Element's value, this parameter is ignored
+    * @return   HTML_QuickForm2_Element_InputReset
     */
     public function setValue($value)
     {
-        return null;
+        return $this;
     }
 
    /**

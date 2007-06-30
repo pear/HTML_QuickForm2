@@ -102,6 +102,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     public function setName($name)
     {
         $this->attributes['name'] = (string)$name;
+        return $this;
     }
 
     public function getId()
@@ -117,6 +118,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             self::storeId($id);
         }
         $this->attributes['id'] = (string)$id;
+        return $this;
     }
 
     public function toggleFrozen($freeze = null)

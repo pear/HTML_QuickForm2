@@ -67,7 +67,7 @@ class HTML_QuickForm2_Element_TextareaTest extends PHPUnit_Framework_TestCase
     public function testSetAndGetValue()
     {
         $area = new HTML_QuickForm2_Element_Textarea();
-        $area->setValue('Some string');
+        $this->assertSame($area, $area->setValue('Some string'));
         $this->assertEquals('Some string', $area->getValue());
         $this->assertRegExp('!\\s*<textarea[^>]*>Some string</textarea>\\s*!', $area->__toString());
 

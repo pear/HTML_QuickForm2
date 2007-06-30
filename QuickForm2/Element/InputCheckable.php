@@ -88,10 +88,12 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     * HTML. It is automatically wrapped into the <label> tag. 
     *
     * @param    string
+    * @return   HTML_QuickForm2_Element_InputCheckable
     */
     public function setContent($content)
     {
         $this->data['content'] = $content;
+        return $this;
     }
 
    /**
@@ -108,9 +110,9 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     public function setValue($value)
     {
         if ((string)$value == $this->getAttribute('value')) {
-            $this->setAttribute('checked');
+            return $this->setAttribute('checked');
         } else {
-            $this->removeAttribute('checked');
+            return $this->removeAttribute('checked');
         }
     }
 

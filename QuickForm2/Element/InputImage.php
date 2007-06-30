@@ -83,10 +83,11 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     * Image button's value cannot be set via this method
     *
     * @param    mixed   Element's value, this parameter is ignored
+    * @return   HTML_QuickForm2_Element_InputImage
     */
     public function setValue($value)
     {
-        return null;
+        return $this;
     }
 
    /**

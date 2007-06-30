@@ -119,7 +119,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $obj = new HTML_QuickForm2_ElementImpl('foo');
         $this->assertEquals('foo', $obj->getName());
 
-        $obj->setName('bar');
+        $this->assertSame($obj, $obj->setName('bar'));
         $this->assertEquals('bar', $obj->getName());
 
         $obj->setAttribute('name', 'baz');
@@ -132,7 +132,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $obj = new HTML_QuickForm2_ElementImpl(null, array('id' => 'manual'));
         $this->assertEquals('manual', $obj->getId());
 
-        $obj->setId('another');
+        $this->assertSame($obj, $obj->setId('another'));
         $this->assertEquals('another', $obj->getId());
 
         $obj->setAttribute('id', 'yet-another');
