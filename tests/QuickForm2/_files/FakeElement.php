@@ -8,7 +8,7 @@ class FakeElement
     public $data;
     public $attributes;
 
-    public function __construct($name = null, $data = null, $attributes = null)
+    public function __construct($name = null, $attributes = null, $data = null)
     {
         $this->name         = $name;
         $this->data         = $data;

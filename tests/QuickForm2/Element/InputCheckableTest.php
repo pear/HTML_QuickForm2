@@ -59,14 +59,14 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
 {
     public function testConstructorSetsContent()
     {
-        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', array('content' => 'I am foo'));
+        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', null, array('content' => 'I am foo'));
         $this->assertEquals('I am foo', $checkable->getContent());
     }
 
     public function testContentRendering()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'foo', array('content' => 'I am foo'), array('id' => 'checkableFoo')
+            'foo', array('id' => 'checkableFoo'), array('content' => 'I am foo')
         );
         $this->assertRegExp(
             '!<label\\s+for="checkableFoo">I am foo</label>!',
@@ -114,7 +114,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
     public function testFrozenHtmlGeneration()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'checkableFreeze', array('content' => 'freeze me'), array('value' => 'my value')
+            'checkableFreeze', array('value' => 'my value'), array('content' => 'freeze me')
         );
         $checkable->setAttribute('checked');
 

@@ -57,9 +57,9 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputImpl extends HTML_QuickForm2_Element_Input
 {
-    public function __construct($name = null, array $data = array(), $attributes = null)
+    public function __construct($name = null, $attributes = null, array $data = array())
     {
-        parent::__construct($name, $data, $attributes);
+        parent::__construct($name, $attributes, $data);
         $this->attributes['type'] = 'concrete';
     }
 }

@@ -129,7 +129,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ElementImpl(null, array(), array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ElementImpl(null, array('id' => 'manual'));
         $this->assertEquals('manual', $obj->getId());
 
         $obj->setId('another');
@@ -187,7 +187,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             'foo', 'foo[bar]', 'foo[baz][]'
         );
         foreach ($usedIds as $id) {
-            $elManual = new HTML_QuickForm2_ElementImpl('foo', array(), array('id' => $id));
+            $elManual = new HTML_QuickForm2_ElementImpl('foo', array('id' => $id));
         }
         foreach ($names as $name) {
             $el = new HTML_QuickForm2_ElementImpl($name);

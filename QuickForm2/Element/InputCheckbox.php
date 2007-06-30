@@ -66,10 +66,9 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
         'unchecked' => '<tt>[&nbsp;]</tt>'
     );
 
-    public function __construct($name = null, array $data = array(), 
-                                $attributes = null)
+    public function __construct($name = null, $attributes = null, array $data = array())
     {
-        parent::__construct($name, $data, $attributes);
+        parent::__construct($name, $attributes, $data);
         if (!$this->getAttribute('value')) {
             $this->setAttribute('value', 1);
         }

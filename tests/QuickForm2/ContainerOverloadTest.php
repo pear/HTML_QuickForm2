@@ -72,10 +72,10 @@ class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit_Framework_TestCase
     public function testAddElements()
     {
         $c = new HTML_QuickForm2_ContainerImpl('cCOT1');
-        $el1 = $c->addText('eCOT1', array('label' => 'Label'), array('size' => 30));
+        $el1 = $c->addText('eCOT1', array('size' => 30), array('label' => 'Label'));
         $this->assertSame($el1, $c->getElementById('eCOT1-0'));
 
-        $f = $c->addFieldset('fCOT1', array('label' => 'Fieldset'));
+        $f = $c->addFieldset('fCOT1', null, array('label' => 'Fieldset'));
         $el2 = $f->addTextarea('eCOT2');
         $this->assertSame($el2, $c->getElementById('eCOT2-0'));
     }

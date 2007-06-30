@@ -49,11 +49,6 @@
 require_once 'HTML/QuickForm2/Node.php';
 
 /**
- * Static factory class for QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Factory.php';
-
-/**
  * Abstract base class for simple QuickForm2 containers
  *
  * @category   HTML
@@ -248,20 +243,20 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @param    string|HTML_QuickForm2_Node  Either type name (treated 
     *               case-insensitively) or an element instance
     * @param    mixed   Element name
-    * @param    array   Element-specific data
     * @param    mixed   Element attributes
+    * @param    array   Element-specific data
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException 
     */
-    public function addElement($elementOrType, $name = null, array $data = array(), 
-                               $attributes = null)
+    public function addElement($elementOrType, $name = null, $attributes = null,
+                               array $data = array())
     {
         if ($elementOrType instanceof HTML_QuickForm2_Node) {
             return $this->appendChild($elementOrType);
         } else {
             return $this->appendChild(HTML_QuickForm2_Factory::createElement(
-                $elementOrType, $name, $data, $attributes
+                $elementOrType, $name, $attributes, $data 
             ));
         }
     }
@@ -430,8 +425,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * This is a convenience method to reduce typing.
     *
     * @param    mixed   Element name
-    * @param    array   Element-specific data
     * @param    mixed   Element attributes
+    * @param    array   Element-specific data
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException 
@@ -443,9 +438,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 $type = strtolower(preg_replace('/([a-z])([A-Z])/','\1_\2',
                     preg_replace('/([A-Z]+)([A-Z])/','\1_\2', $match[2])));
                 $name = isset($a[0]) ? $a[0] : null;
-                $data = isset($a[1]) ? $a[1] : array();
-                $attr = isset($a[2]) ? $a[2] : null;
-                return $this->addElement($type, $name, $data, $attr);
+                $attr = isset($a[1]) ? $a[1] : null;
+                $data = isset($a[2]) ? $a[2] : array();
+                return $this->addElement($type, $name, $attr, $data);
             }
         }
 		trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);

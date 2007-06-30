@@ -70,7 +70,7 @@ class QuickForm2_Container_AllTests
 }
 
 if (PHPUnit_MAIN_METHOD == 'QuickForm2_Container_AllTests::main') {
-    QuickForm2_Element_AllTests::main();
+    QuickForm2_Container_AllTests::main();
 }
 
 ?>

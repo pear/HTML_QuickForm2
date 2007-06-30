@@ -122,7 +122,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
     {
         HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', dirname(__FILE__) . '/_files/FakeElement.php');
         $el = HTML_QuickForm2_Factory::createElement('fakeelement', 
-                'fake', array('options' => '', 'label' => 'fake label'), 'attributes');
+                'fake', 'attributes', array('options' => '', 'label' => 'fake label'));
         $this->assertType('FakeElement', $el);
         $this->assertEquals('fake', $el->name);
         $this->assertEquals(array('options' => '', 'label' => 'fake label'), $el->data);

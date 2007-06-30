@@ -114,6 +114,24 @@ class HTML_QuickForm2_Factory
         return false;
     }
 
+    protected static function loadClass($className, $includeFile)
+    {
+        if (empty($includeFile)) {
+            throw new HTML_QuickForm2_NotFoundException(
+                "Class '$className' does not exist and no file to load"
+            );
+        } elseif (!self::fileExists($includeFile)) {
+            throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
+        }
+        // Do not silence the errors with @, parse errors will not be seen
+        include_once $includeFile; 
+        // Still no class?
+        if (!class_exists($className, false)) {
+            throw new HTML_QuickForm2_NotFoundException(
+                "Class '$className' was not found within file '$includeFile'"
+            );
+        }
+    }
 
    /**
     * Registers a new element type
@@ -145,15 +163,15 @@ class HTML_QuickForm2_Factory
     *
     * @param    string  Type name (treated case-insensitively)
     * @param    mixed   Element name (passed to element's constructor)
-    * @param    mixed   Element-specific data (passed to element's constructor)
     * @param    mixed   Element attributes (passed to element's constructor)
+    * @param    array   Element-specific data (passed to element's constructor)
     * @return   HTML_QuickForm2_Node     A created element
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
     *           not be found and/or loaded from file 
     */
-    public static function createElement($type, $name = null, array $data = array(), 
-                                         $attributes = null)
+    public static function createElement($type, $name = null, $attributes = null, 
+                                         array $data = array())
     {
         $type = strtolower($type);
         if (!isset(self::$elementTypes[$type])) {
@@ -161,23 +179,9 @@ class HTML_QuickForm2_Factory
         }
         list($className, $includeFile) = self::$elementTypes[$type];
         if (!class_exists($className, false)) {
-            if (empty($includeFile)) {
-                throw new HTML_QuickForm2_NotFoundException(
-                    "Class '$className' does not exist and no file to load"
-                );
-            } elseif (!self::fileExists($includeFile)) {
-                throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
-            }
-            // Do not silence the errors with @, parse errors will not be seen
-            include_once $includeFile; 
-            // Still no class?
-            if (!class_exists($className, false)) {
-                throw new HTML_QuickForm2_NotFoundException(
-                    "Class '$className' was not found within file '$includeFile'"
-                );
-            }
+            self::loadClass($className, $includeFile);
         }
-        return new $className($name, $data, $attributes);
+        return new $className($name, $attributes, $data);
     }
 }
 ?>

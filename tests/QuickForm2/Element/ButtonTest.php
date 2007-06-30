@@ -81,7 +81,7 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorSetsContent()
     {
-        $button = new HTML_QuickForm2_Element_Button('foo', array('content' => 'Some string'));
+        $button = new HTML_QuickForm2_Element_Button('foo', null, array('content' => 'Some string'));
         $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
     }
 
@@ -95,9 +95,9 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
     public function testSetValueFromSubmitDataSource()
     {
         $form = new HTML_QuickForm2('buttons', 'post', null, false);
-        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array(), array('type' => 'submit')));
-        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', array(), array('type' => 'button')));
-        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', array(), array('type' => 'submit')));
+        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array('type' => 'submit')));
+        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', array('type' => 'button')));
+        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', array('type' => 'submit')));
 
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
             'foo' => 'Default for foo',

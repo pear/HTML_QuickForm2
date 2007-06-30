@@ -125,7 +125,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ContainerImpl(null, array(), array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ContainerImpl(null, array('id' => 'manual'));
         $this->assertEquals('manual', $obj->getId());
 
         $obj->setId('another');
@@ -370,8 +370,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testDuplicateIdHandling()
     {
-        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', array(), array('id' => 'dup'));
-        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', array(), array('id' => 'dup'));
+        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', array('id' => 'dup'));
+        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', array('id' => 'dup'));
 
         $c1 = new HTML_QuickForm2_ContainerImpl('dupContainer1');
         $c2 = new HTML_QuickForm2_ContainerImpl('dupContainer2');
