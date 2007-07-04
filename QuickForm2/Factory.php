@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -44,7 +44,7 @@
  */
 
 /**
- * Exception classes for HTML_QuickForm2  
+ * Exception classes for HTML_QuickForm2
  */
 require_once 'HTML/QuickForm2/Exception.php';
 
@@ -63,7 +63,7 @@ require_once 'HTML/QuickForm2/Exception.php';
 class HTML_QuickForm2_Factory
 {
    /**
-    * List of element types known to Factory  
+    * List of element types known to Factory
     * @var array
     */
     protected static $elementTypes = array(
@@ -97,9 +97,16 @@ class HTML_QuickForm2_Factory
                                  'HTML/QuickForm2/Element/Textarea.php')
     );
 
+   /**
+    * List of registered rules
+    * @var array
+    */
+    protected static $registeredRules = array(
+    );
+
 
    /**
-    * Checks whether the file exists in the include path 
+    * Checks whether the file exists in the include path
     *
     * @param    string  file name
     * @return   bool
@@ -114,6 +121,14 @@ class HTML_QuickForm2_Factory
         return false;
     }
 
+   /**
+    * Tries to load a given class from a given file
+    *
+    * @param    string  Class name to load
+    * @param    string  Name of the file (supposedly) containing the given class
+    * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
+    *               loaded or doesn't contain the given class
+    */
     protected static function loadClass($className, $includeFile)
     {
         if (empty($includeFile)) {
@@ -124,7 +139,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
         }
         // Do not silence the errors with @, parse errors will not be seen
-        include_once $includeFile; 
+        include_once $includeFile;
         // Still no class?
         if (!class_exists($className, false)) {
             throw new HTML_QuickForm2_NotFoundException(
@@ -167,10 +182,10 @@ class HTML_QuickForm2_Factory
     * @param    array   Element-specific data (passed to element's constructor)
     * @return   HTML_QuickForm2_Node     A created element
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
-    * @throws   HTML_QuickForm2_NotFoundException If class for the element can 
-    *           not be found and/or loaded from file 
+    * @throws   HTML_QuickForm2_NotFoundException If class for the element can
+    *           not be found and/or loaded from file
     */
-    public static function createElement($type, $name = null, $attributes = null, 
+    public static function createElement($type, $name = null, $attributes = null,
                                          array $data = array())
     {
         $type = strtolower($type);
@@ -182,6 +197,78 @@ class HTML_QuickForm2_Factory
             self::loadClass($className, $includeFile);
         }
         return new $className($name, $attributes, $data);
+    }
+
+
+   /**
+    * Registers a new rule type
+    *
+    * @param    string  Rule type name (treated case-insensitively)
+    * @param    string  Class name
+    * @param    string  File containing the class, leave empty if class already loaded
+    * @param    mixed   Configuration data for rules of the given type
+    */
+    public static function registerRule($type, $className, $includeFile = null,
+                                        $config = null)
+    {
+        self::$registeredRules[strtolower($type)] = array($className, $includeFile, $config);
+    }
+
+
+   /**
+    * Returns configuration data for rules of the given type
+    *
+    * @param    string  Rule type name (treated case-insensitively)
+    * @return   mixed   Configuration data (set when registering the rule)
+    * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
+    */
+    public static function getRuleConfig($type)
+    {
+        $type = strtolower($type);
+        if (!isset(self::$registeredRules[$type])) {
+            throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
+        } else {
+            return self::$registeredRules[$type][2];
+        }
+    }
+
+
+   /**
+    * Checks whether a rule type is known to Factory
+    *
+    * @param    string  Rule type name (treated case-insensitively)
+    * @return   bool
+    */
+    public static function isRuleRegistered($type)
+    {
+        return isset(self::$registeredRules[strtolower($type)]);
+    }
+
+
+   /**
+    * Creates a new Rule of the given type
+    *
+    * @param    string                  Rule type name (treated case-insensitively)
+    * @param    HTML_QuickForm2_Node    Element to validate by the rule
+    * @param    string                  Message to display if validation fails
+    * @param    mixed                   Additional data for the rule
+    * @return   HTML_QuickForm2_Rule    A created Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
+    * @throws   HTML_QuickForm2_NotFoundException        If class for the rule
+    *           can't be found and/or loaded from file
+    */
+    public static function createRule($type, HTML_QuickForm2_Node $owner,
+                                      $message = '', $options = null)
+    {
+        $type = strtolower($type);
+        if (!isset(self::$registeredRules[$type])) {
+            throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
+        }
+        list($className, $includeFile) = self::$registeredRules[$type];
+        if (!class_exists($className, false)) {
+            self::loadClass($className, $includeFile);
+        }
+        return new $className($owner, $message, $options, $type);
     }
 }
 ?>

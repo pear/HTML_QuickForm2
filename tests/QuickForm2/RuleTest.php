@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -53,7 +53,7 @@ require_once 'HTML/QuickForm2/Rule.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * Class for <input type="text" /> elements 
+ * Class for <input type="text" /> elements
  *
  * We need a subclass of Node that can be instantiated
  */
@@ -66,8 +66,8 @@ class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
 {
     protected function checkValue($value)
     {
-        // It just returns whatever value was passed to setConfig()
-        return $this->config;
+        // It just returns whatever value was passed to setOptions()
+        return $this->options;
     }
 }
 
@@ -76,15 +76,15 @@ class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
  */
 class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
 {
-    public function testSetAndGetConfig()
+    public function testSetAndGetOptions()
     {
         $rule = new HTML_QuickForm2_Rule_ImplConst(
             new HTML_QuickForm2_Element_InputText('foo'), 'a message', 'bar'
         );
-        $this->assertEquals('bar', $rule->getConfig());
+        $this->assertEquals('bar', $rule->getOptions());
 
-        $this->assertSame($rule, $rule->setConfig('baz'));
-        $this->assertEquals('baz', $rule->getConfig());
+        $this->assertSame($rule, $rule->setOptions('baz'));
+        $this->assertEquals('baz', $rule->getOptions());
     }
 
     public function testSetAndGetMessage()
@@ -116,7 +116,7 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $elTest = new HTML_QuickForm2_Element_InputText('testAndOr');
         $ruleAnd = new HTML_QuickForm2_Rule_ImplConst($elTest, 'a message', true);
         $ruleAnd->and_(new HTML_QuickForm2_Rule_ImplConst($elTest, 'a message', false));
-        $this->assertFalse($ruleAnd->validate()); 
+        $this->assertFalse($ruleAnd->validate());
 
         $ruleOr = new HTML_QuickForm2_Rule_ImplConst($elTest, 'a message', false);
         $ruleOr->or_(new HTML_QuickForm2_Rule_ImplConst($elTest, 'a message', true));
@@ -178,6 +178,22 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $ruleOrFalse->expects($this->once())->method('validate');
         $ruleFalse->or_($ruleOrFalse);
         $ruleFalse->validate();
+    }
+
+    public function testSetErrorOnlyOnChainFailure()
+    {
+        $elTest = new HTML_QuickForm2_Element_InputText('valid');
+        $chain  = new HTML_QuickForm2_Rule_ImplConst($elTest, 'bogus error', false);
+        $chain->or_(new HTML_QuickForm2_Rule_ImplConst($elTest, '', true));
+
+        $this->assertTrue($chain->validate());
+        $this->assertEquals('', $elTest->getError());
+
+        $chain2 = new HTML_QuickForm2_Rule_ImplConst($elTest, 'genuine error', false);
+        $chain2->or_(new HTML_QuickForm2_Rule_ImplConst($elTest, '', false));
+
+        $this->assertFalse($chain2->validate());
+        $this->assertEquals('genuine error', $elTest->getError());
     }
 }
 ?>

@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -73,18 +73,28 @@ abstract class HTML_QuickForm2_Rule
     * Additional data for the rule
     * @var  mixed
     */
-    protected $config;
+    protected $options;
 
    /**
     * Rules chained to this via "and" and "or" operators
     *
     * The contents can be described as "disjunctive normal form", where an outer
     * array represents a disjunction of conjunctive clauses represented by inner
-    * arrays. 
+    * arrays.
     *
     * @var  array
     */
     protected $chainedRules = array(array());
+
+   /**
+    * Type that was provided to Factory when creating this Rule instance
+    *
+    * Used to get the common configuration data for the Rules of that type from
+    * Factory.
+    *
+    * @var  string
+    */
+    protected $registeredType = null;
 
 
    /**
@@ -93,23 +103,29 @@ abstract class HTML_QuickForm2_Rule
     * @param    HTML_QuickForm2_Node    Element to validate
     * @param    string                  Error message to display if validation fails
     * @param    mixed                   Additional data for the rule
+    * @param    string                  Type that was provided to Factory when
+    *                                   creating this Rule instance, shouldn't
+    *                                   be set if instantiating the Rule object
+    *                                   manually.
     */
-    public function __construct(HTML_QuickForm2_Node $owner, $message = '', $config = null)
+    public function __construct(HTML_QuickForm2_Node $owner, $message = '',
+                                $options = null, $registeredType = null)
     {
         $this->setOwner($owner);
         $this->setMessage($message);
-        $this->setConfig($config);
+        $this->setOptions($options);
+        $this->registeredType = $registeredType;
     }
 
    /**
-    * Sets the configuration data for the rule
+    * Sets additional configuration data for the rule
     *
     * @param    mixed                   Rule configuration data (rule-dependent)
     * @return   HTML_QuickForm2_Rule
     */
-    public function setConfig($config)
+    public function setOptions($options)
     {
-        $this->config = $config;
+        $this->options = $options;
         return $this;
     }
 
@@ -118,9 +134,9 @@ abstract class HTML_QuickForm2_Rule
     *
     * @return   mixed
     */
-    public function getConfig()
+    public function getOptions()
     {
-        return $this->config;
+        return $this->options;
     }
 
    /**
@@ -157,9 +173,9 @@ abstract class HTML_QuickForm2_Rule
     }
 
    /**
-    * Adds a rule to the chain with an "and" operator 
+    * Adds a rule to the chain with an "and" operator
     *
-    * Evaluation is short-circuited, next rule will not be evaluated if the 
+    * Evaluation is short-circuited, next rule will not be evaluated if the
     * previous one returns false. The method is named this way because "and" is
     * a reserved word in PHP.
     *
@@ -173,9 +189,9 @@ abstract class HTML_QuickForm2_Rule
     }
 
    /**
-    * Adds a rule to the chain with an "or" operator 
+    * Adds a rule to the chain with an "or" operator
     *
-    * Evaluation is short-circuited, next rule will not be evaluated if the 
+    * Evaluation is short-circuited, next rule will not be evaluated if the
     * previous one returns true. The method is named this way because "or" is
     * a reserved word in PHP.
     *
@@ -199,11 +215,7 @@ abstract class HTML_QuickForm2_Rule
     public function validate()
     {
         $globalValid = false;
-        if (!($localValid = $this->checkValue($this->owner->getValue())) && 
-            strlen($this->message) && !$this->owner->getError())
-        {
-            $this->owner->setError($this->message);
-        }
+        $localValid  = $this->checkValue($this->owner->getValue());
         foreach ($this->chainedRules as $item) {
             foreach ($item as $multiplier) {
                 if (!$localValid) {
@@ -216,6 +228,9 @@ abstract class HTML_QuickForm2_Rule
                 break;
             }
             $localValid = true;
+        }
+        if (!$globalValid && strlen($this->message) && !$this->owner->getError()) {
+            $this->owner->setError($this->message);
         }
         return $globalValid;
     }
