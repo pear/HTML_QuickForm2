@@ -181,9 +181,16 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param    HTML_QuickForm2_Rule
     * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
+    * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
+    *           a "required" rule to the chain
     */
     public function and_(HTML_QuickForm2_Rule $next)
     {
+        if ($next instanceof HTML_QuickForm2_Rule_Required) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'and_(): Cannot add a "required" rule'
+            );
+        }
         $this->chainedRules[count($this->chainedRules) - 1][] = $next;
         return $this;
     }
@@ -197,9 +204,16 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param    HTML_QuickForm2_Rule
     * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
+    * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
+    *           a "required" rule to the chain
     */
     public function or_(HTML_QuickForm2_Rule $next)
     {
+        if ($next instanceof HTML_QuickForm2_Rule_Required) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'or_(): Cannot add a "required" rule'
+            );
+        }
         $this->chainedRules[] = array($next);
         return $this;
     }

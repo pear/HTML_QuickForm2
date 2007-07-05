@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -44,25 +44,16 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Rule_AllTests::main');
 }
-
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/ContainerOverloadTest.php';
-require_once dirname(__FILE__) . '/Container/AllTests.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-require_once dirname(__FILE__) . '/RuleTest.php';
-require_once dirname(__FILE__) . '/Rule/AllTests.php';
+require_once dirname(__FILE__) . '/NonemptyTest.php';
+require_once dirname(__FILE__) . '/RequiredTest.php';
 
-class QuickForm2_AllTests
+class QuickForm2_Rule_AllTests
 {
     public static function main()
     {
@@ -71,24 +62,16 @@ class QuickForm2_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
+        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Rule');
 
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerOverloadTest');
-        $suite->addTestSuite('HTML_QuickForm2_RuleTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-        $suite->addTest(QuickForm2_Container_AllTests::suite());
-        $suite->addTest(QuickForm2_DataSource_AllTests::suite());
-        $suite->addTest(QuickForm2_Rule_AllTests::suite());
+        $suite->addTestSuite('HTML_QuickForm2_Rule_NonemptyTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_RequiredTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'QuickForm2_Rule_AllTests::main') {
+    QuickForm2_Rule_AllTests::main();
 }
 ?>

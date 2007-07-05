@@ -448,6 +448,22 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
 
    /**
+    * Checks whether an element is required
+    *
+    * @return   boolean
+    */
+    public function isRequired()
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof HTML_QuickForm2_Rule_Required) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+   /**
     * Performs the server-side validation
     *
     * @return   boolean     Whether the element is valid

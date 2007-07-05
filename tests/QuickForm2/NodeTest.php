@@ -200,5 +200,11 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($manyRules->validate());
         $this->assertEquals('some error', $manyRules->getError());
     }
+
+    public function testElementIsNotRequiredByDefault()
+    {
+        $node = new HTML_QuickForm2_NodeImpl();
+        $this->assertFalse($node->isRequired());
+    }
 }
 ?>

@@ -102,6 +102,10 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $registeredRules = array(
+        'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty',
+                                 'HTML/QuickForm2/Rule/Nonempty.php'),
+        'required'      => array('HTML_QuickForm2_Rule_Required',
+                                 'HTML/QuickForm2/Rule/Required.php')
     );
 
 
