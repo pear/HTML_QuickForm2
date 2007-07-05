@@ -44,16 +44,18 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'HTML_QuickForm2_AllTests::main');
 }
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
+chdir(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+
 require_once dirname(__FILE__) . '/QuickForm2/AllTests.php';
 require_once dirname(__FILE__) . '/QuickForm2Test.php';
 
-class AllTests
+class HTML_QuickForm2_AllTests
 {
     public static function main()
     {
@@ -71,7 +73,7 @@ class AllTests
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'AllTests::main') {
-    AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'HTML_QuickForm2_AllTests::main') {
+    HTML_QuickForm2_AllTests::main();
 }
 ?>
