@@ -105,7 +105,27 @@ class HTML_QuickForm2_Factory
         'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty',
                                  'HTML/QuickForm2/Rule/Nonempty.php'),
         'required'      => array('HTML_QuickForm2_Rule_Required',
-                                 'HTML/QuickForm2/Rule/Required.php')
+                                 'HTML/QuickForm2/Rule/Required.php'),
+        'compare'       => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php'),
+        'eq'            => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '===')),
+        'neq'           => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '!==')),
+        'lt'            => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '<')),
+        'lte'           => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '<=')),
+        'gt'            => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '>')),
+        'gte'           => array('HTML_QuickForm2_Rule_Compare',
+                                 'HTML/QuickForm2/Rule/Compare.php',
+                                 array('operator' => '>='))
     );
 
 
@@ -231,8 +251,10 @@ class HTML_QuickForm2_Factory
         $type = strtolower($type);
         if (!isset(self::$registeredRules[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
-        } else {
+        } elseif (isset(self::$registeredRules[$type][2])) {
             return self::$registeredRules[$type][2];
+        } else {
+            return null;
         }
     }
 

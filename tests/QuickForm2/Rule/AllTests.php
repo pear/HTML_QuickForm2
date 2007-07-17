@@ -52,6 +52,7 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once dirname(__FILE__) . '/NonemptyTest.php';
 require_once dirname(__FILE__) . '/RequiredTest.php';
+require_once dirname(__FILE__) . '/CompareTest.php';
 
 class QuickForm2_Rule_AllTests
 {
@@ -66,6 +67,7 @@ class QuickForm2_Rule_AllTests
 
         $suite->addTestSuite('HTML_QuickForm2_Rule_NonemptyTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_RequiredTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_CompareTest');
 
         return $suite;
     }
