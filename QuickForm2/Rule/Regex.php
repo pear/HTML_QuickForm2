@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Validates values using regular expressions
  *
  * PHP version 5
  *
@@ -43,41 +43,51 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Rule_AllTests::main');
-}
+/**
+ * Base class for HTML_QuickForm2 rules
+ */
+require_once 'HTML/QuickForm2/Rule.php';
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/NonemptyTest.php';
-require_once dirname(__FILE__) . '/RequiredTest.php';
-require_once dirname(__FILE__) . '/CompareTest.php';
-require_once dirname(__FILE__) . '/EmptyTest.php';
-require_once dirname(__FILE__) . '/RegexTest.php';
-
-class QuickForm2_Rule_AllTests
+/**
+ * Validates values using regular expressions
+ *
+ * The Rule needs one configuration parameter for its work: a Perl-compatible
+ * regular expression. This expression can be passed either to
+ * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
+ * {@link HTML_QuickForm2_Factory::registerRule()}. Regular expression
+ * registered with the Factory overrides one set for the particular Rule
+ * instance via setOptions().
+ *  
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
 {
-    public static function main()
+   /**
+    * Validates the element's value
+    * 
+    * @return   bool    whether element's value matches given regular expression
+    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
+    *           was passed to constructor
+    * @throws   HTML_QuickForm2_Exception if regular expression is missing
+    */
+    protected function checkValue($value)
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        if (!empty($this->registeredType)) {
+            $regex = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
+        } else {
+            $regex = null;
+        }
+        if (null === $regex) {
+            $regex = $this->getOptions();
+        }
+        if (!is_string($regex)) {
+            throw new HTML_Quickform2_Exception('Regex Rule needs a regular expression');
+        }
+        return preg_match($regex . 'D', $value);
     }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Rule');
-
-        $suite->addTestSuite('HTML_QuickForm2_Rule_NonemptyTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_RequiredTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_CompareTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_EmptyTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_RegexTest');
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_Rule_AllTests::main') {
-    QuickForm2_Rule_AllTests::main();
 }
 ?>

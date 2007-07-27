@@ -127,7 +127,9 @@ class HTML_QuickForm2_Factory
                                  array('operator' => '>')),
         'gte'           => array('HTML_QuickForm2_Rule_Compare',
                                  'HTML/QuickForm2/Rule/Compare.php',
-                                 array('operator' => '>='))
+                                 array('operator' => '>=')),
+        'regex'         => array('HTML_QuickForm2_Rule_Regex',
+                                 'HTML/QuickForm2/Rule/Regex.php')
     );
 
 

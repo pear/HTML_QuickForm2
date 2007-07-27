@@ -43,7 +43,7 @@
  */
 
 /**
- * PHPUnit2 Test Case
+ * PHPUnit Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 
