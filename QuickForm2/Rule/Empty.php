@@ -1,6 +1,6 @@
 <?php
 /**
- * Unit tests for HTML_QuickForm2 package
+ * Rule checking that the field is empty
  *
  * PHP version 5
  *
@@ -43,39 +43,41 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Rule_AllTests::main');
-}
+/**
+ * Base class for HTML_QuickForm2 rules
+ */
+require_once 'HTML/QuickForm2/Rule.php';
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-require_once dirname(__FILE__) . '/NonemptyTest.php';
-require_once dirname(__FILE__) . '/RequiredTest.php';
-require_once dirname(__FILE__) . '/CompareTest.php';
-require_once dirname(__FILE__) . '/EmptyTest.php';
-
-class QuickForm2_Rule_AllTests
+/**
+ * Rule checking that the field is empty
+ *
+ * Handles both simple form fields and file uploads, the latter are considered
+ * valid iff no file upload was attempted.
+ *
+ * The rule doesn't make much sense if used separately, but can be very helpful 
+ * if chained:
+ * <code>
+ * $spamCheck->addRule('empty')
+ *           ->or_($email->createRule('nonempty', 'Supply a valid email if you want to receive our spam')
+ *                       ->and_($email->createRule('email')));
+ * </code>
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ */
+class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
 {
-    public static function main()
+    protected function checkValue($value)
     {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        if (!$this->owner instanceof HTML_QuickForm2_Element_InputFile) {
+            return 0 == strlen($value);
+        } else {
+            return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
+        }
     }
+} 
 
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Rule');
-
-        $suite->addTestSuite('HTML_QuickForm2_Rule_NonemptyTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_RequiredTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_CompareTest');
-        $suite->addTestSuite('HTML_QuickForm2_Rule_EmptyTest');
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_Rule_AllTests::main') {
-    QuickForm2_Rule_AllTests::main();
-}
 ?>

@@ -104,6 +104,8 @@ class HTML_QuickForm2_Factory
     protected static $registeredRules = array(
         'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty',
                                  'HTML/QuickForm2/Rule/Nonempty.php'),
+        'empty'         => array('HTML_QuickForm2_Rule_Empty',
+                                 'HTML/QuickForm2/Rule/Empty.php'),
         'required'      => array('HTML_QuickForm2_Rule_Required',
                                  'HTML/QuickForm2/Rule/Required.php'),
         'compare'       => array('HTML_QuickForm2_Rule_Compare',
