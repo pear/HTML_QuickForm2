@@ -53,9 +53,9 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'HTML/QuickForm2/Rule/Regex.php';
 
 /**
- * Element class
+ * Class for <input type="file" /> elements
  */
-require_once 'HTML/QuickForm2/Element.php';
+require_once 'HTML/QuickForm2/Element/InputFile.php';
 
 /**
  * Unit test for HTML_QuickForm2_Rule_Regex class 
@@ -131,6 +131,55 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
         $ruleNumeric = new HTML_QuickForm2_Rule_Regex($mockInvalid, 'not valid',
                                                       '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/');
         $this->assertFalse($ruleNumeric->validate());
+    }
+
+    public function testCheckUploadFilename()
+    {
+        $mockValid = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockValid->expects($this->once())->method('getValue')
+                  ->will($this->returnValue(array(
+                    'name'     => 'pr0n.jpg',
+                    'type'     => 'image/jpeg',
+                    'tmp_name' => '/tmp/foobar',
+                    'error'    => UPLOAD_ERR_OK,
+                    'size'     => 123456
+                  )));
+        $rule = new HTML_QuickForm2_Rule_Regex($mockValid, 'an error', '/\\.(jpe?g|gif|png)$/i');
+        $this->assertTrue($rule->validate());
+
+        $mockInvalid = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockInvalid->expects($this->once())->method('getValue')
+                    ->will($this->returnValue(array(
+                      'name'     => 'trojan.exe',
+                      'type'     => 'application/octet-stream',
+                      'tmp_name' => '/tmp/quux',
+                      'error'    => UPLOAD_ERR_OK,
+                      'size'     => 98765
+                    )));
+        $rule = new HTML_QuickForm2_Rule_Regex($mockInvalid, 'an error', '/\\.(jpe?g|gif|png)$/i');
+        $this->assertFalse($rule->validate());
+    }
+
+    public function testEmptyFieldsAreSkipped()
+    {
+        $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+                                    'getValue', 'setValue', '__toString'));
+        $mockEmpty->expects($this->once())->method('getValue')
+                  ->will($this->returnValue(''));
+        $ruleSimple = new HTML_QuickForm2_Rule_Regex($mockEmpty, 'an error', '/^[a-zA-Z]+$/');
+        $this->assertTrue($ruleSimple->validate());
+
+        $mockNoUpload = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockNoUpload->expects($this->once())->method('getValue')
+                     ->will($this->returnValue(array(
+                        'name'     => '',
+                        'type'     => '',
+                        'tmp_name' => '',
+                        'error'    => UPLOAD_ERR_NO_FILE,
+                        'size'     => 0
+                     )));
+        $ruleFile = new HTML_QuickForm2_Rule_Regex($mockNoUpload, 'an error', '/\\.(jpe?g|gif|png)$/i');
+        $this->assertTrue($ruleFile->validate());
     }
 }
 ?>

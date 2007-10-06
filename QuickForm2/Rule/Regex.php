@@ -58,6 +58,12 @@ require_once 'HTML/QuickForm2/Rule.php';
  * registered with the Factory overrides one set for the particular Rule
  * instance via setOptions().
  *  
+ * The Rule can also validate file uploads, in this case the regular expression
+ * is applied to upload's 'name' field.
+ *
+ * The Rule considers empty fields (file upload fields with UPLOAD_ERR_NO_FILE)
+ * as valid and doesn't try to test them with the regular expression.
+ * 
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -85,7 +91,16 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
             $regex = $this->getOptions();
         }
         if (!is_string($regex)) {
-            throw new HTML_Quickform2_Exception('Regex Rule needs a regular expression');
+            throw new HTML_QuickForm2_Exception('Regex Rule needs a regular expression');
+        }
+
+        if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
+            if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
+                return true;
+            }
+            $value = $value['name'];
+        } elseif (!strlen($value)) {
+            return true;
         }
         return preg_match($regex . 'D', $value);
     }

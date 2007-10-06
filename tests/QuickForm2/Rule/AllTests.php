@@ -55,6 +55,7 @@ require_once dirname(__FILE__) . '/RequiredTest.php';
 require_once dirname(__FILE__) . '/CompareTest.php';
 require_once dirname(__FILE__) . '/EmptyTest.php';
 require_once dirname(__FILE__) . '/RegexTest.php';
+require_once dirname(__FILE__) . '/CallbackTest.php';
 
 class QuickForm2_Rule_AllTests
 {
@@ -72,6 +73,7 @@ class QuickForm2_Rule_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Rule_CompareTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_EmptyTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_RegexTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_CallbackTest');
 
         return $suite;
     }
