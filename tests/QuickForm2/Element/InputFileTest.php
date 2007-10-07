@@ -63,10 +63,12 @@ require_once 'HTML/QuickForm2.php';
 class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 {
     protected $files;
+    protected $post;
 
     public function setUp()
     {
         $this->files = $_FILES;
+        $this->post  = $_POST;
 
         $_FILES = array(
             'foo' => array(
@@ -75,13 +77,31 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
                 'type'      => 'text/plain',
                 'size'      => 1234,
                 'error'     => UPLOAD_ERR_OK
+            ),
+            'toobig' => array(
+                'name'      => 'ahugefile.zip',
+                'tmp_name'  => '',
+                'type'      => '',
+                'size'      => 0,
+                'error'     => UPLOAD_ERR_FORM_SIZE
+            ),
+            'local' => array(
+                'name'      => 'nasty-trojan.exe',
+                'tmp_name'  => '',
+                'type'      => '',
+                'size'      => 0,
+                'error'     => UPLOAD_ERR_CANT_WRITE
             )
+        );
+        $_POST = array(
+            'MAX_FILE_SIZE' => '987654'
         );
     }
 
     public function tearDown()
     {
         $_FILES = $this->files;
+        $_POST  = $this->post;
     }
 
     public function testCannotBeFrozen()
@@ -105,6 +125,30 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
             'size'      => 1234,
             'error'     => UPLOAD_ERR_OK
         ), $foo->getValue());
+    }
+
+    public function testBuiltinValidation()
+    {
+        $form = new HTML_QuickForm2('upload', 'post', null, false);
+        $foo  = $form->appendChild(new HTML_QuickForm2_Element_InputFile('foo'));
+        $this->assertTrue($form->validate());
+
+        $toobig = $form->appendChild(new HTML_QuickForm2_Element_InputFile('toobig'));
+        $this->assertFalse($form->validate());
+        $this->assertContains('987654', $toobig->getError());
+    }
+
+    public function testErrorMessageLocalization()
+    {
+        $form  = new HTML_QuickForm2('upload', 'post', null, false);
+        $local = $form->appendChild(new HTML_QuickForm2_Element_InputFile(
+            'local', array(), array('language'      => 'zz',
+                                    'errorMessages' => array(
+                                        'zz' => array(UPLOAD_ERR_CANT_WRITE => 'Blah-blah-blah')
+                                    ))
+        ));
+        $this->assertFalse($form->validate());
+        $this->assertEquals('Blah-blah-blah', $local->getError());
     }
 }
 ?>
