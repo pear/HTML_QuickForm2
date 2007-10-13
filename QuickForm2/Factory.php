@@ -129,7 +129,17 @@ class HTML_QuickForm2_Factory
                                  'HTML/QuickForm2/Rule/Compare.php',
                                  array('operator' => '>=')),
         'regex'         => array('HTML_QuickForm2_Rule_Regex',
-                                 'HTML/QuickForm2/Rule/Regex.php')
+                                 'HTML/QuickForm2/Rule/Regex.php'),
+        'callback'      => array('HTML_QuickForm2_Rule_Callback',
+                                 'HTML/QuickForm2/Rule/Callback.php'),
+        'length'        => array('HTML_QuickForm2_Rule_Length',
+                                 'HTML/QuickForm2/Rule/Length.php'),
+        'minlength'     => array('HTML_QuickForm2_Rule_Length',
+                                 'HTML/QuickForm2/Rule/Length.php',
+                                 array('max' => 0)),
+        'maxlength'     => array('HTML_QuickForm2_Rule_Length',
+                                 'HTML/QuickForm2/Rule/Length.php',
+                                 array('min' => 0))
     );
 
 

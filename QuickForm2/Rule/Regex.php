@@ -91,7 +91,10 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
             $regex = $this->getOptions();
         }
         if (!is_string($regex)) {
-            throw new HTML_QuickForm2_Exception('Regex Rule needs a regular expression');
+            throw new HTML_QuickForm2_Exception(
+                'Regex Rule requires a regular expression, ' .
+                preg_replace('/\s+/', ' ', var_export($regex, true)) . ' given'
+            );
         }
 
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {

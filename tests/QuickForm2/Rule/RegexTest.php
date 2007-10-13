@@ -70,7 +70,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
         try {
             $regex->validate();
         } catch (HTML_QuickForm2_Exception $e) {
-            $this->assertRegexp('/Regex Rule needs a regular expression/', $e->getMessage());
+            $this->assertRegexp('/Regex Rule requires a regular expression/', $e->getMessage());
             return;
         }
         $this->fail('Expected HTML_QuickForm2_Exception was not thrown');

@@ -61,7 +61,6 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 {
    /**
     * Default language for error messages
-    * @const    string
     */
     const DEFAULT_LANGUAGE = 'en';
 

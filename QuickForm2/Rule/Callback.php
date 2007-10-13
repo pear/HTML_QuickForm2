@@ -125,7 +125,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
         $arguments = $this->findArguments($config);
         if (!is_callable($callback, false, $callbackName)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                'Callback Rule expects a valid callback, \'' . $callbackName .
+                'Callback Rule requires a valid callback, \'' . $callbackName .
                 '\' was given'
             );
         }
@@ -160,7 +160,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
             return $this->options;
         } else {
             throw new HTML_QuickForm2_Exception(
-                'Callback Rule needs a callback to check value with'
+                'Callback Rule requires a callback to check value with'
             );
         }
     }

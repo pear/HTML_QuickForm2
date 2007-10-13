@@ -156,7 +156,8 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         }
         if (!in_array($operator, $this->operators)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                '"' . $operator . '" is not a valid comparison operator'
+                'Compare Rule requires a valid comparison operator, ' .
+                preg_replace('/\s+/', ' ', var_export($operator, true)) . ' given'
             );
         }
         if (in_array($operator, array('==', '!='))) {
@@ -185,7 +186,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         }
         if (0 == count($this->options)) {
             throw new HTML_QuickForm2_Exception(
-                'Compare Rule needs an argument to compare with'
+                'Compare Rule requires an argument to compare with'
             );
         } elseif (!is_array($this->options)) {
             return $this->options;
