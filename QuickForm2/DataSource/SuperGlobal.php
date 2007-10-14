@@ -73,6 +73,12 @@ class HTML_QuickForm2_DataSource_SuperGlobal
     protected $files = array();
 
    /**
+    * Keys present in the $_FILES array
+    * @var array
+    */
+    private static $_fileKeys = array('name', 'type', 'size', 'tmp_name', 'error');
+
+   /**
     * Class constructor, intializes the internal arrays from superglobals
     *
     * @param    string  Request method (GET or POST)
@@ -134,23 +140,26 @@ class HTML_QuickForm2_DataSource_SuperGlobal
             return null;
         }
         if (false !== ($pos = strpos($name, '['))) {
-            $base  = str_replace(
-                        array('\\', '\''), array('\\\\', '\\\''),
-                        substr($name, 0, $pos)
-                    ); 
-            $idx   = "['" . str_replace(
-                        array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                        substr($name, $pos + 1, -1)
-                     ) . "']";
-            $props = array('name', 'type', 'size', 'tmp_name', 'error');
-            $code  = "if (!isset(\$this->files['{$base}']['name']{$idx})) {\n" .
-                     "    return null;\n" .
-                     "} else {\n" .
-                     "    \$value = array();\n";
-            foreach ($props as $prop) {
-                $code .= "    \$value['{$prop}'] = \$this->files['{$base}']['{$prop}']{$idx};\n";
+            $tokens = explode('[', str_replace(']', '', $name));
+            $base   = array_shift($tokens);
+            $value  = array();
+            if (!isset($this->files[$base]['name'])) {
+                return null;
             }
-            return eval($code . "    return \$value;\n}\n");
+            foreach (self::$_fileKeys as $key) {
+                $value[$key] = $this->files[$base][$key];
+            }
+
+            do {
+                $token = array_shift($tokens);
+                if (!isset($value['name'][$token])) {
+                    return null;
+                }
+                foreach (self::$_fileKeys as $key) {
+                    $value[$key] = $value[$key][$token];
+                }
+            } while (!empty($tokens));
+            return $value;
         } elseif(isset($this->files[$name])) {
             return $this->files[$name];
         } else {
