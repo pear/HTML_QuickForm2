@@ -22,8 +22,8 @@
  <date>2007-04-17</date>
  <time>00:00:00</time>
  <version>
-  <release>0.1.0</release>
-  <api>0.1.0</api>
+  <release>0.2.0</release>
+  <api>0.2.0</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -31,28 +31,7 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 1
-
-Available functionality in this release:
- * Base classes
- * Standard HTML elements
- * Data sources
-
-Changes to observe for those familiar with HTML_QuickForm:
- * DOM-inspired API for working with element hierarchy
- * Streamlined API for processing the elements' values
-
-The following feature requests were addressed in this release:
- * Request #1283: Optgroup support
- * Request #1681: Better access to grouped elements
- * Request #4137: Form-wide functions for unfreezing and setting persistent freeze 
-   (also in request #6421)
- * Request #4564: Checkboxes can be created with arbitrary value
- * Request #4793: Fixed the misspelled 'persistent' word in method names
-
-Other resources to consider:
- * QF2 development wiki: http://quickform.mamasam.com/wiki/home
- * PHPUnit package from channel pear.phpunit.de is needed to run tests
+Milestone 2
  </notes>
  <contents>
   <dir baseinstalldir="HTML" name="/">
@@ -120,6 +99,35 @@ Other resources to consider:
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /QuickForm2/Element -->
+    <dir name="Rule">
+     <file name="Callback.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Compare.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Empty.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Length.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="MaxFileSize.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="MimeType.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Nonempty.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Regex.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Required.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /QuickForm2/Rule -->
     <file name="Container.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
@@ -136,6 +144,9 @@ Other resources to consider:
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="Node.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="Rule.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /QuickForm2 -->
@@ -204,14 +215,51 @@ Other resources to consider:
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/QuickForm2/Element -->
+    <dir name="Rule">
+      <file name="AllTests.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="CallbackTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="CompareTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="EmptyTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="LengthTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="MaxFileSizeTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="MimeTypeTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NonemptyTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="RegexTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="RequiredTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /QuickForm2/Rule -->
      <dir name="_files">
+      <file name="1024-bytes.upload" role="test" />
       <file name="FakeElement.php" role="test" />
+      <file name="FakeRule.php" role="test" />
       <file name="InvalidFile.php" role="test" />
      </dir> <!-- /tests/QuickForm2/_files -->
      <file name="AllTests.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="ContainerTest.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ContainerOverloadTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="ElementTest.php" role="test">
@@ -221,6 +269,9 @@ Other resources to consider:
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="NodeTest.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="RuleTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /tests/QuickForm2 -->
@@ -234,7 +285,7 @@ Other resources to consider:
    <dir name="docs">
     <dir name="examples">
      <file role="doc" name="basic-elements.php" />
-	</dir> <!-- /docs/examples -->
+    </dir> <!-- /docs/examples -->
    </dir> <!-- /docs -->
    <file name="QuickForm2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -257,4 +308,42 @@ Other resources to consider:
   </required>
  </dependencies>
  <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2007-04-17</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>
+Milestone 1
+
+Available functionality in this release:
+ * Base classes
+ * Standard HTML elements
+ * Data sources
+
+Changes to observe for those familiar with HTML_QuickForm:
+ * DOM-inspired API for working with element hierarchy
+ * Streamlined API for processing the elements' values
+
+The following feature requests were addressed in this release:
+ * Request #1283: Optgroup support
+ * Request #1681: Better access to grouped elements
+ * Request #4137: Form-wide functions for unfreezing and setting persistent freeze 
+   (also in request #6421)
+ * Request #4564: Checkboxes can be created with arbitrary value
+ * Request #4793: Fixed the misspelled 'persistent' word in method names
+
+Other resources to consider:
+ * QF2 development wiki: http://quickform.mamasam.com/wiki/home
+ * PHPUnit package from channel pear.phpunit.de is needed to run tests
+   </notes>
+  </release>
+ </changelog>
 </package>
