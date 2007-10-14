@@ -57,6 +57,7 @@ require_once dirname(__FILE__) . '/EmptyTest.php';
 require_once dirname(__FILE__) . '/RegexTest.php';
 require_once dirname(__FILE__) . '/CallbackTest.php';
 require_once dirname(__FILE__) . '/LengthTest.php';
+require_once dirname(__FILE__) . '/MaxFileSizeTest.php';
 
 class QuickForm2_Rule_AllTests
 {
@@ -76,6 +77,7 @@ class QuickForm2_Rule_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Rule_RegexTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_CallbackTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_LengthTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_MaxFileSizeTest');
 
         return $suite;
     }
