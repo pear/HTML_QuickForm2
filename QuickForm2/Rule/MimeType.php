@@ -1,6 +1,6 @@
 <?php
 /**
- * Rule checking that uploaded file size does not exceed the given limit
+ * Rule checking that uploaded file is of the correct MIME type
  *
  * PHP version 5
  *
@@ -44,17 +44,13 @@
  */
 
 /**
- * Rule checking that uploaded file size does not exceed the given limit
+ * Rule checking that uploaded file is of the correct MIME type
  *
- * The Rule needs one configuration parameter for its work: the size limit.
- * This limit can be passed either to
+ * The Rule needs one configuration parameter for its work: a string with a 
+ * desired MIME type or array of such strings. The parameter may be passed to
  * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Limit registered with the 
+ * {@link HTML_QuickForm2_Factory::registerRule()}. Parameter registered with the 
  * Factory overrides one set for the particular Rule instance via setOptions().
- *
- * Note that if file upload failed due to upload_max_filesize php.ini setting
- * or MAX_FILE_SIZE form field, then this rule won't even be called, due to
- * File element's built-in validation setting the error message.
  *
  * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
  *  
@@ -64,36 +60,37 @@
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
+class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
 {
    /**
     * Validates the element's value
     * 
-    * @return   bool    whether uploaded file's size is within given limit
+    * @return   bool    whether uploaded file's MIME type is correct
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or a bogus size limit was provided 
+    *           was passed to constructor or bogus MIME type(s) provided
     */
     protected function checkValue($value)
     {
         if (!empty($this->registeredType)) {
-            $limit = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
+            $mime = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
         } else {
-            $limit = null;
+            $mime = null;
         }
-        if (null === $limit) {
-            $limit = $this->getOptions();
+        if (null === $mime) {
+            $mime = $this->getOptions();
         }
-        if (0 >= $limit) {
+        if (0 == count($mime) || !is_string($mime) && !is_array($mime)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                'MaxFileSize Rule requires a positive size limit, ' .
-                preg_replace('/\s+/', ' ', var_export($limit, true)) . ' given'
+                'MimeType Rule requires MIME type(s), ' .
+                preg_replace('/\s+/', ' ', var_export($mime, true)) . ' given'
             );
         }
 
         if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
             return true;
         }
-        return ($limit >= @filesize($value['tmp_name']));
+        return is_array($mime)? in_array($value['type'], $mime): 
+                                $value['type'] == $mime;
     }
 
 
@@ -108,7 +105,7 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
     {
         if (!$owner instanceof HTML_QuickForm2_Element_InputFile) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                'MaxFileSize Rule can only validate file upload fields, '.
+                'MimeType Rule can only validate file upload fields, '.
                 get_class($owner) . ' given'
             );
         }

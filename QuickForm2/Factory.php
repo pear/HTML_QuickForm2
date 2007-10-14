@@ -141,7 +141,9 @@ class HTML_QuickForm2_Factory
                                  'HTML/QuickForm2/Rule/Length.php',
                                  array('min' => 0)),
         'maxfilesize'   => array('HTML_QuickForm2_Rule_MaxFileSize',
-                                 'HTML/QuickForm2/Rule/MaxFileSize.php')
+                                 'HTML/QuickForm2/Rule/MaxFileSize.php'),
+        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType',
+                                 'HTML/QuickForm2/Rule/MimeType.php')
     );
 
 
