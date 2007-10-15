@@ -32,6 +32,25 @@
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
 Milestone 2
+
+Major additions and changes:
+ * Server-side validation support added
+ * API break: changed number and order of parameters for element constructors
+ * Fluent interfaces: methods that previously returned nothing now return $this
+
+Feature requests addressed:
+ * Possibility to control validation of an element based on value of some
+   other element (request #4534)
+ * Rule comparing value of an element with numeric constants (request #4728)
+ * Possibility to toggle validation of empty elements (request #9097)
+
+Bug fixes (bugs submitted for HTML_QuickForm package):
+ * Wrong options could be selected in &lt;select&gt; elements if numeric strings
+   were used as options' values (bug #10837, bug #11138)
+
+Other resources to consider:
+ * QF2 development wiki: http://quickform.mamasam.com/wiki/home
+ * PHPUnit package from channel pear.phpunit.de is needed to run tests
  </notes>
  <contents>
   <dir baseinstalldir="HTML" name="/">
@@ -302,7 +321,7 @@ Milestone 2
    <package>
     <name>HTML_Common2</name>
     <channel>pear.php.net</channel>
-    <min>0.3.0</min>
+    <min>2.0.0beta1</min>
    </package>
   </required>
  </dependencies>
