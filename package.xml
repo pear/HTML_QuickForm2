@@ -282,11 +282,10 @@ Milestone 2
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /tests -->
-   <dir name="docs">
-    <dir name="examples">
-     <file role="doc" name="basic-elements.php" />
-    </dir> <!-- /docs/examples -->
-   </dir> <!-- /docs -->
+   <dir name="docs/examples">
+    <file role="doc" name="basic-elements.php" />
+    <file role="doc" name="builtin-rules.php" />
+   </dir> <!-- /docs/examples -->
    <file name="QuickForm2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
