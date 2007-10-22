@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -49,7 +49,7 @@
 require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
- * Class for <input type="file" /> elements   
+ * Class for <input type="file" /> elements
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -76,6 +76,14 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
             UPLOAD_ERR_NO_TMP_DIR => 'Server error: temporary directory is missing',
             UPLOAD_ERR_CANT_WRITE => 'Server error: failed to write the file to disk',
             UPLOAD_ERR_EXTENSION  => 'File upload was stopped by extension'
+        ),
+        'fr' => array(
+            UPLOAD_ERR_INI_SIZE   => 'Le fichier envoyé excède la taille autorisée par la configuration de PHP (%d octets)',
+            UPLOAD_ERR_FORM_SIZE  => 'Le fichier envoyé excède la taille de MAX_FILE_SIZE spécifiée dans le formulaire HTML (%d octets)',
+            UPLOAD_ERR_PARTIAL    => 'Le fichier n\'a été que partiellement téléchargé',
+            UPLOAD_ERR_NO_TMP_DIR => 'Erreur serveur: le répertoire temporaire est manquant',
+            UPLOAD_ERR_CANT_WRITE => 'Erreur serveur: échec de l\'écriture du fichier sur le disque',
+            UPLOAD_ERR_EXTENSION  => 'L\'envoi de fichier est arrêté par l\'extension'
         ),
         'ru' => array(
             UPLOAD_ERR_INI_SIZE   => '&#x420;&#x430;&#x437;&#x43c;&#x435;&#x440; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x435;&#x43d;&#x43d;&#x43e;&#x433;&#x43e; &#x444;&#x430;&#x439;&#x43b;&#x430; &#x43f;&#x440;&#x435;&#x432;&#x43e;&#x441;&#x445;&#x43e;&#x434;&#x438;&#x442; &#x43c;&#x430;&#x43a;&#x441;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x43e; &#x440;&#x430;&#x437;&#x440;&#x435;&#x448;&#x451;&#x43d;&#x43d;&#x44b;&#x439; &#x43d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x430;&#x43c;&#x438; PHP (%d &#x431;&#x430;&#x439;&#x442;)',
@@ -123,9 +131,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *    Note that error messages for UPLOAD_ERR_INI_SIZE and UPLOAD_ERR_FORM_SIZE
     *    may contain '%d' placeholders that will be automatically replaced by the
     *    appropriate size limits. Note also that you don't need to provide messages
-    *    for every possible error code in the arrays, you may e.g. override just 
-    *    one error message for a particular language.  
-    * 
+    *    for every possible error code in the arrays, you may e.g. override just
+    *    one error message for a particular language.
+    *
     * @param    string  Element name
     * @param    mixed   Attributes (either a string or an array)
     * @param    array   Data used to set up error messages for PHP's file
@@ -157,10 +165,10 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * File upload elements cannot be frozen
     *
     * To properly "freeze" a file upload element one has to store the uploaded
-    * file somewhere and store the file info in session. This is way outside 
+    * file somewhere and store the file info in session. This is way outside
     * the scope of this class.
     *
-    * @param    bool    Whether element should be frozen or editable. This 
+    * @param    bool    Whether element should be frozen or editable. This
     *                   parameter is ignored in case of file uploads
     * @return   bool    Always returns false
     */
@@ -181,7 +189,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
    /**
     * File upload's value cannot be set here
-    * 
+    *
     * @param     mixed    Value for file element, this parameter is ignored
     * @return    HTML_QuickForm2_Element_InputFile
     */
@@ -208,7 +216,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * Performs the server-side validation
     *
     * Before the Rules added to the element kick in, the element checks the
-    * error code added to the $_FILES array by PHP. If the code isn't 
+    * error code added to the $_FILES array by PHP. If the code isn't
     * UPLOAD_ERR_OK or UPLOAD_ERR_NO_FILE then a built-in error message will be
     * displayed and no further validation will take place.
     *
@@ -219,7 +227,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (strlen($this->error)) {
             return false;
         }
-        if (isset($this->value['error']) && 
+        if (isset($this->value['error']) &&
             !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE)))
         {
             if (isset($this->errorMessages[$this->language][$this->value['error']])) {
