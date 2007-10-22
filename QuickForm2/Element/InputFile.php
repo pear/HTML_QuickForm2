@@ -78,12 +78,12 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
             UPLOAD_ERR_EXTENSION  => 'File upload was stopped by extension'
         ),
         'fr' => array(
-            UPLOAD_ERR_INI_SIZE   => 'Le fichier envoyé excède la taille autorisée par la configuration de PHP (%d octets)',
-            UPLOAD_ERR_FORM_SIZE  => 'Le fichier envoyé excède la taille de MAX_FILE_SIZE spécifiée dans le formulaire HTML (%d octets)',
-            UPLOAD_ERR_PARTIAL    => 'Le fichier n\'a été que partiellement téléchargé',
-            UPLOAD_ERR_NO_TMP_DIR => 'Erreur serveur: le répertoire temporaire est manquant',
-            UPLOAD_ERR_CANT_WRITE => 'Erreur serveur: échec de l\'écriture du fichier sur le disque',
-            UPLOAD_ERR_EXTENSION  => 'L\'envoi de fichier est arrêté par l\'extension'
+            UPLOAD_ERR_INI_SIZE   => 'Le fichier envoy&eacute; exc&egrave;de la taille autoris&eacute;e par la configuration de PHP (%d octets)',
+            UPLOAD_ERR_FORM_SIZE  => 'Le fichier envoy&eacute; exc&egrave;de la taille de MAX_FILE_SIZE sp&eacute;cifi&eacute;e dans le formulaire HTML (%d octets)',
+            UPLOAD_ERR_PARTIAL    => 'Le fichier n\'a &eacute;t&eacute; que partiellement t&eacute;l&eacute;charg&eacute;',
+            UPLOAD_ERR_NO_TMP_DIR => 'Erreur serveur: le r&eacute;pertoire temporaire est manquant',
+            UPLOAD_ERR_CANT_WRITE => 'Erreur serveur: &eacute;chec de l\'&eacute;criture du fichier sur le disque',
+            UPLOAD_ERR_EXTENSION  => 'L\'envoi de fichier est arr&ecirc;t&eacute; par l\'extension'
         ),
         'ru' => array(
             UPLOAD_ERR_INI_SIZE   => '&#x420;&#x430;&#x437;&#x43c;&#x435;&#x440; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x435;&#x43d;&#x43d;&#x43e;&#x433;&#x43e; &#x444;&#x430;&#x439;&#x43b;&#x430; &#x43f;&#x440;&#x435;&#x432;&#x43e;&#x441;&#x445;&#x43e;&#x434;&#x438;&#x442; &#x43c;&#x430;&#x43a;&#x441;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x43e; &#x440;&#x430;&#x437;&#x440;&#x435;&#x448;&#x451;&#x43d;&#x43d;&#x44b;&#x439; &#x43d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x430;&#x43c;&#x438; PHP (%d &#x431;&#x430;&#x439;&#x442;)',
