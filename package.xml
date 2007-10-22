@@ -19,8 +19,7 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2007-04-17</date>
- <time>00:00:00</time>
+ <date>2007-10-22</date>
  <version>
   <release>0.2.0</release>
   <api>0.2.0</api>
@@ -31,12 +30,13 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 2
+Milestone 2: now with server-side validation support
 
 Major additions and changes:
  * Server-side validation support added
  * API break: changed number and order of parameters for element constructors
  * Fluent interfaces: methods that previously returned nothing now return $this
+ * Added method overloading to Container, allowing $form-&gt;addTextarea(...)
 
 Feature requests addressed:
  * Possibility to control validation of an element based on value of some
