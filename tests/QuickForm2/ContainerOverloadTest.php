@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -90,7 +90,6 @@ class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit_Framework_TestCase
         $this->assertSame($el2, $c->getElementById('chCOT-1-0'));
     }
 
-
     public function testAddUnknownType()
     {
         $c = new HTML_QuickForm2_ContainerImpl('cCOT2');
@@ -102,5 +101,29 @@ class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit_Framework_TestCase
         }
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
     }
+
+
+    public function testAddElementWithUnderscoreInType()
+    {
+        HTML_QuickForm2_Factory::registerElement('super_box', 'HTML_QuickForm2_Element_InputCheckbox');
+        $this->assertTrue(HTML_QuickForm2_Factory::isElementRegistered('super_box'));
+
+        $c = new HTML_QuickForm2_ContainerImpl('cCOT3');
+        $el1 = $c->addSuper_Box('sBox_1');
+        $el2 = $c->addsuper_box('sBox_2');
+        $el3 = $c->addSuper_box('sBox_3');
+        $this->assertSame($el1, $c->getElementById('sBox_1-0'));
+        $this->assertSame($el2, $c->getElementById('sBox_2-0'));
+        $this->assertSame($el3, $c->getElementById('sBox_3-0'));
+
+        try {
+            $c->addSuper_Select('sSel_1');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertEquals("Element type 'super_select' is not known", $e->getMessage());
+            return;
+        }
+        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+    }
+
 }
 ?>
