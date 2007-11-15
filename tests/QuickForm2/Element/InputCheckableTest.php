@@ -81,6 +81,14 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
         $this->assertNotRegExp('!<label!', $checkable->__toString());
     }
 
+    public function testEmptyContentRendering()
+    {
+        $checkable = new HTML_QuickForm2_Element_InputCheckable(
+            'foo1', array('id' => 'checkableFoo1')
+        );
+        $this->assertNotRegExp('!<label!', $checkable->__toString());
+    }
+
     public function testSetAndGetValue()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable();
