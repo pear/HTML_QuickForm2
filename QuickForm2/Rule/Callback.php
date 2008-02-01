@@ -112,7 +112,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     * @return   bool    the value returned by a callback function
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor or a bogus callback was provided
-    * @throws   HTML_QuickForm2_Exception if the callback is missing
+    * @throws   HTML_QuickForm2_NotFoundException if the callback is missing
     */
     protected function checkValue($value)
     {
@@ -138,7 +138,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
     *                   if applicable
     * @return   callback
-    * @throws   HTML_QuickForm2_Exception   if a callback wasn't found anywhere
+    * @throws   HTML_QuickForm2_NotFoundException   if a callback wasn't found anywhere
     */
     protected function findCallback($globalConfig)
     {
@@ -159,7 +159,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
         } elseif (!empty($this->options)) {
             return $this->options;
         } else {
-            throw new HTML_QuickForm2_Exception(
+            throw new HTML_QuickForm2_NotFoundException(
                 'Callback Rule requires a callback to check value with'
             );
         }
