@@ -96,7 +96,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function getName()
     {
-        return $this->attributes['name'];
+        return isset($this->attributes['name']) ? $this->attributes['name'] : null;
     }
 
     public function setName($name)
@@ -445,6 +445,33 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
         }
         trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);
+    }
+
+
+   /**
+    * Renders the container
+    *
+    * If a renderer is provided, it will be used to render the container
+    * which allows more complex rendering options.
+    *
+    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
+    * @return   string                     HTML output
+    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
+    *               but no render callback was defined in the renderer
+    */
+    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
+    {
+        $html = array();
+        if ($renderer) {
+            foreach ($this as $element) {
+                $html[] = $renderer->render($element);
+            }
+        } else {
+            foreach ($this as $element) {
+                $html[] = $$element;
+            }
+        }
+        return implode(self::getOption('linebreak'), $html);
     }
 }
 

@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
  *                           Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -59,28 +59,12 @@ require_once 'HTML/QuickForm2/Container.php';
  */
 class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
 {
-    public function __toString()
-    {
-        $html = $this->getIndent() . '<fieldset' . $this->getAttributes(true) . '>';
-        $this->setIndentLevel($this->getIndentLevel() + 1);
-        $lf = self::getOption('linebreak');
-
-        if ($this->getLabel()) {
-            $legendId = $this->getId() . '-legend';
-            $html .= $lf . $this->getIndent() . '<legend id="'.$legendId.'">' . $this->getLabel() . '</legend>';
-        }
-        foreach ($this->getRecursiveIterator() as $element) {
-            $html .= $lf . $element->__toString();
-        }
-        $this->setIndentLevel($this->getIndentLevel() - 1);
-        $html .= $lf . $this->getIndent() . '</fieldset>';
-        return $html;
-    }
 
     public function getType()
     {
         return 'fieldset';
     }
+
 
     protected function onAttributeChange($name, $value = null)
     {
@@ -96,10 +80,13 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
             }
         }
     }
+
+
     public function getName()
     {
         return null;
     }
+
 
     public function setName($name)
     {
@@ -107,9 +94,37 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
         return $this;
     }
 
+
     public function setValue($value)
     {
         throw new HTML_QuickForm2_Exception('Not implemented');
+    }
+
+
+   /**
+    * Renders the fieldset
+    *
+    * If a renderer is provided, it will be used to render the container
+    * which allows more complex rendering options.
+    *
+    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
+    * @return   string                     HTML output
+    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
+    *               but no render callback was defined in the renderer
+    */
+    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
+    {
+        $html = array(
+            '<fieldset' . $this->getAttributes(true) . '>'
+            );
+
+        if ($this->getLabel()) {
+            $legendId = $this->getId() . '-legend';
+            $html[] = '<legend id="'.$legendId.'">' . $this->getLabel() . '</legend>';
+        }
+        $html[] = parent::__toString($renderer);
+        $html[] = '</fieldset>';
+        return implode(self::getOption('linebreak'), $html);
     }
 }
 ?>
