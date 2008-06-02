@@ -72,5 +72,10 @@ class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
     {
         return false;
     }
+
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->renderHidden($this);
+    }
 }
 ?>

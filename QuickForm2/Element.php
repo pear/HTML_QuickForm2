@@ -151,5 +151,15 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
             }
         }
     }
+
+   /**
+    * Renders the element using the given renderer
+    *
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    */
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->renderElement($this);
+    }
 }
 ?>

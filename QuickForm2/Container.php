@@ -96,7 +96,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function getName()
     {
-        return $this->attributes['name'];
+        return isset($this->attributes['name'])? $this->attributes['name']: null;
     }
 
     public function setName($name)
@@ -445,6 +445,28 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
         }
         trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);
+    }
+
+   /**
+    * Renders the container using the given renderer
+    *
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    */
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->startContainer($this);
+        foreach ($this as $child) {
+            $child->render($renderer);
+        }
+        $renderer->finishContainer($this);
+    }
+
+    public function __toString()
+    {
+        require_once 'HTML/QuickForm2/Renderer/Default.php';
+        $renderer = new HTML_QuickForm2_Renderer_Default();
+        $this->render($renderer);
+        return $renderer->__toString();
     }
 }
 

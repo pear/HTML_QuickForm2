@@ -181,7 +181,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
         }
         // Do not silence the errors with @, parse errors will not be seen
-        include_once $includeFile;
+        include $includeFile;
         // Still no class?
         if (!class_exists($className, false)) {
             throw new HTML_QuickForm2_NotFoundException(

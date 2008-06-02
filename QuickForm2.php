@@ -187,11 +187,6 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         throw new HTML_QuickForm2_Exception('Not implemented');
     }
 
-    public function __toString()
-    {
-        throw new HTML_QuickForm2_Exception('Not implemented');
-    }
-
    /**
     * Performs the server-side validation
     *
@@ -207,6 +202,15 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             }
         }
         return $isSubmitted? parent::validate(): false;
+    }
+
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->startForm($this);
+        foreach ($this as $child) {
+            $child->render($renderer);
+        }
+        $renderer->finishForm($this);
     }
 }
 ?>

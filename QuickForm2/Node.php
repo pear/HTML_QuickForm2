@@ -122,7 +122,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @param    mixed   Attributes (either a string or an array)
     * @param    array   Element data (label, options and data used for element creation)
     */
-    public function __construct($name = null, $attributes = null, $data = null)
+    public function __construct($name = null, $attributes = null, array $data = array())
     {
         parent::__construct($attributes);
         $this->setName($name);
@@ -130,9 +130,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         if ('' == $this->getId()) {
             $this->setId();
         }
-        if (!is_null($data)) {
-            $this->data = $data;
-        }
+        $this->data = $data;
     }
 
 

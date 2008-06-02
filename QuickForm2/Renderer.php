@@ -1,13 +1,13 @@
 <?php
 /**
- * Base class for fieldsets
+ * Base class for HTML_QuickForm2 renderers
  *
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2008, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -44,54 +44,58 @@
  */
 
 /**
- * Base class for fieldsets
- */
-require_once 'HTML/QuickForm2/Container.php';
-
-/**
- * Concrete implementation of a container for fieldsets
+ * Abstract base class for QuickForm2 renderers
  *
+ * @todo       Should this rather be an interface?
+ * @todo       Maybe combine start*() and finish*() into render*()?
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
+abstract class HTML_Quickform2_Renderer
 {
-    public function getType()
-    {
-        return 'fieldset';
-    }
+   /**
+    * Renders a generic element
+    *
+    * @param    HTML_QuickForm2_Node    Element being rendered
+    */
+    abstract public function renderElement(HTML_QuickForm2_Node $element);
 
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('name' == $name) {
-            // Fieldsets do not have a name attribute
-        } elseif ('id' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'id' can not be removed"
-                );
-            } else {
-                $this->setId($value);
-            }
-        }
-    }
-    public function getName()
-    {
-        return null;
-    }
+   /**
+    * Renders a hidden element
+    *
+    * @param    HTML_QuickForm2_Node    Hidden element being rendered
+    */
+    abstract public function renderHidden(HTML_QuickForm2_Node $element);
 
-    public function setName($name)
-    {
-        // Fieldsets do not have a name attribute
-        return $this;
-    }
+   /**
+    * Starts rendering the form, called before processing elements
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    abstract public function startForm(HTML_QuickForm2_Node $form);
 
-    public function setValue($value)
-    {
-        throw new HTML_QuickForm2_Exception('Not implemented');
-    }
+   /**
+    * Finishes rendering the form, called after processing elements
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    abstract public function finishForm(HTML_QuickForm2_Node $form);
+
+   /**
+    * Starts rendering the container, called before processing elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    abstract public function startContainer(HTML_QuickForm2_Node $container);
+
+   /**
+    * Finishes rendering the container, called after processing elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    abstract public function finishContainer(HTML_QuickForm2_Node $container);
 }
 ?>
