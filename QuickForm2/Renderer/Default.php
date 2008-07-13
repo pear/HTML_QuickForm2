@@ -139,22 +139,23 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Element_InputCheckable  Element node to render
     * @return   string                                  HTML output
     */
-    public function renderCheckable(HTML_QuickForm2_Element_InputCheckable $checkable)
+    public function renderCheckable(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Element_InputCheckable $checkable)
     {
         $labelClass = 'qf-label';
         $errorClass = '';
         $errorMsg   = '';
 
         if ($checkable->isRequired()) {
-            $this->hasRequired = true;
+            $renderer->hasRequired = true;
             $labelClass .= ' qf-required';
         }
 
         $error = $checkable->getError();
         if ($error) {
             $errorClass = ' qf-error';
-            if ($this->options['group_errors']) {
-                $this->errors[] = $error;
+            if ($renderer->options['group_errors']) {
+                $renderer->errors[] = $error;
             } else {
                 $errorMsg = '<div class="qf-message">'.$error.'</div>';
             }
@@ -176,7 +177,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Element    Element node to render
     * @return   string                     HTML output
     */
-    public function renderElement(HTML_QuickForm2_Element $element)
+    public function renderElement(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Element $element)
     {
 
         $labelClass = 'qf-label';
@@ -184,15 +186,15 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         $errorMsg   = '';
 
         if ($element->isRequired()) {
-            $this->hasRequired = true;
+            $renderer->hasRequired = true;
             $labelClass .= ' qf-required';
         }
 
         $error = $element->getError();
         if ($error) {
             $errorClass = ' qf-error';
-            if ($this->options['group_errors']) {
-                $this->errors[] = $error;
+            if ($renderer->options['group_errors']) {
+                $renderer->errors[] = $error;
             } else {
                 $errorMsg = '<div class="qf-message">'.$error.'</div>';
             }
@@ -214,9 +216,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Container    Container node to render
     * @return   string                       HTML output
     */
-    public function renderContainer(HTML_QuickForm2_Container $container)
+    public function renderContainer(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Container $container)
     {
-        return $container->__toString($this);
+        return $container->__toString($renderer);
     }
 
 
@@ -231,10 +234,11 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Element_InputHidden    Hidden element to render
     * @return   string                                 HTML output
     */
-    public function renderHidden(HTML_QuickForm2_Element_InputHidden $hidden)
+    public function renderHidden(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Element_InputHidden $hidden)
     {
-        if ($this->options['group_hiddens']) {
-            $this->hiddens[] = $hidden->__toString($this);
+        if ($renderer->options['group_hiddens']) {
+            $renderer->hiddens[] = $hidden->__toString($renderer);
             return '';
         }
         return '<div style="display:none">'.$hidden->__toString().'</div>';
@@ -247,35 +251,36 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2    Form node to render
     * @return   string             HTML output
     */
-    public function renderForm(HTML_QuickForm2 $form)
+    public function renderForm(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2 $form)
     {
         $lf = HTML_Common2::getOption('linebreak');
 
-        $formHtml = $form->__toString($this);
+        $formHtml = $form->__toString($renderer);
         $html[] = '<div class="qf-form">';
 
         // Group errors
 
-        if (!empty($this->errors)) {
+        if (!empty($renderer->errors)) {
             $html[] = '<div class="qf-errors">';
-            if (!empty($this->options['errors_prefix'])) {
-                $html[] = '<p>' . $this->options['errors_prefix'] . '</p>';
+            if (!empty($renderer->options['errors_prefix'])) {
+                $html[] = '<p>' . $renderer->options['errors_prefix'] . '</p>';
             }
             $html[] = '<ul>';
-            foreach ($this->errors as $error) {
+            foreach ($renderer->errors as $error) {
                 $html[] = '<li>' . $error . '</li>';
             }
             $html[] = '</ul>';
-            if (!empty($this->options['errors_suffix'])) {
-                $html[] = '<p>' . $this->options['errors_suffix'] . '</p>';
+            if (!empty($renderer->options['errors_suffix'])) {
+                $html[] = '<p>' . $renderer->options['errors_suffix'] . '</p>';
             }
             $html[] = '</div>';
         }
 
         // Required note
 
-        if ($this->hasRequired && !empty($this->options['required_note'])) {
-            $html[] = '<div class="qf-note">' . $this->options['required_note']. '</div>';
+        if ($renderer->hasRequired && !empty($renderer->options['required_note'])) {
+            $html[] = '<div class="qf-note">' . $renderer->options['required_note']. '</div>';
         }
 
 
@@ -285,10 +290,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
         // Group hidden elements
 
-        if (!empty($this->hiddens)) {
+        if (!empty($renderer->hiddens)) {
             $hiddens[] = '<form$1>';
             $hiddens[] = '<div style="display:none">';
-            $hiddens[] = implode($lf, $this->hiddens);
+            $hiddens[] = implode($lf, $renderer->hiddens);
             $hiddens[] = '</div>';
 
             $html = preg_replace('/<form([^>]*)>/',

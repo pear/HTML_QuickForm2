@@ -86,7 +86,7 @@ abstract class HTML_QuickForm2_Renderer
     {
         if (!is_null($callback)) {
             if (is_callable($callback)) {
-                return call_user_func_array($callback, array(&$node));
+                return call_user_func_array($callback, array(&$this, &$node));
             } else {
                 throw new HTML_QuickForm2_InvalidArgumentException(
                     "Renderer callback is not valid"
@@ -95,15 +95,15 @@ abstract class HTML_QuickForm2_Renderer
         }
         $name = $node->getName();
         if ($name && isset($this->byName[$name])) {
-            return call_user_func_array($this->byName[$name], array(&$node));
+            return call_user_func_array($this->byName[$name], array(&$this, &$node));
         }
         $class = get_class($node);
         if (isset($this->byClass[$class])) {
-            return call_user_func_array($this->byClass[$class], array(&$node));
+            return call_user_func_array($this->byClass[$class], array(&$this, &$node));
         }
         while ($class = get_parent_class($class)) {
             if (isset($this->byClass[$class])) {
-                return call_user_func_array($this->byClass[$class], array(&$node));
+                return call_user_func_array($this->byClass[$class], array(&$this, &$node));
             }
         }
         throw new HTML_QuickForm2_NotFoundException(
