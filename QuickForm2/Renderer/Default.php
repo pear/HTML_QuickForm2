@@ -91,7 +91,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *
     * @var array
     */
-    protected $options = array(
+    public $options = array(
         'group_hiddens' => true,
         'required_note' => '<strong>Note:</strong> <em>*</em> denotes required fields.',
         'errors_prefix' => 'Invalid information entered:',
