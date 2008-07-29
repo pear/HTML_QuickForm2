@@ -63,21 +63,21 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * Whether the form contains required elements
     * @var bool
     */
-    protected $hasRequired = false;
+    public $hasRequired = false;
 
 
    /**
     * Array of hidden elements rendering in case they have to be grouped
     * @var array
     */
-    protected $hiddens = array();
+    public $hiddens = array();
 
 
    /**
     * Array of errors in case they have to be grouped
     * @var array
     */
-    protected $errors = array();
+    public $errors = array();
 
 
    /**
