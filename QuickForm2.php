@@ -204,7 +204,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         return $isSubmitted? parent::validate(): false;
     }
 
-    public function __toString(HTML_QuickForm2_Renderer $renderer)
+    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
     {
         $html[] = sprintf('<form%s>', 
             $this->getAttributes(true)
