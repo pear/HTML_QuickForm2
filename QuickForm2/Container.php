@@ -468,7 +468,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
         } else {
             foreach ($this as $element) {
-                $html[] = $$element;
+                $html[] = $element;
             }
         }
         return implode(self::getOption('linebreak'), $html);
