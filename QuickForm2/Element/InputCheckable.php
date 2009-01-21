@@ -80,6 +80,27 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     */
     protected $data = array('content' => '');
 
+    public function __construct($name = null, $attributes = null, $data = null)
+    {
+        parent::__construct($name, $attributes, $data);
+        // "checked" attribute should be updated on changes to "value" attribute
+        // see bug #15708
+        $this->watchedAttributes[] = 'value';
+    }
+
+    protected function onAttributeChange($name, $value = null)
+    {
+        if ('value' != $name) {
+            return parent::onAttributeChange($name, $value);
+        }
+        if (null === $value) {
+            unset($this->attributes['value'], $this->attributes['checked']);
+        } else {
+            $this->attributes['value'] = $value;
+            $this->updateValue();
+        }
+    }
+
 
    /**
     * Sets the label to be rendered glued to the element

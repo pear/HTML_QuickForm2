@@ -53,6 +53,16 @@ require_once 'HTML/QuickForm2/Element/InputCheckable.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * Array-based data source for HTML_QuickForm2 objects
+ */
+require_once 'HTML/QuickForm2/DataSource/Array.php';
+
+/**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * Unit test for HTML_QuickForm2_Element_InputCheckable class
  */
 class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestCase
@@ -131,6 +141,18 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
 
         $checkable->removeAttribute('checked');
         $this->assertNotRegExp('!<input!', $checkable->__toString());
+    }
+
+    public function testBug15708()
+    {
+        $form = new HTML_QuickForm2('bug15708');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'aRadio' => 1
+        )));
+        $aRadio = $form->appendChild(
+                            new HTML_QuickForm2_Element_InputCheckable('aRadio')
+                      )->setAttribute('value', 1);
+        $this->assertContains('checked', $aRadio->__toString());
     }
 }
 ?>
