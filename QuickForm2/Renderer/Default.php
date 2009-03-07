@@ -219,7 +219,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function renderContainer(HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Container $container)
     {
-        return $container->__toString($renderer);
+        return $container->render($renderer);
     }
 
 
@@ -238,10 +238,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Element_InputHidden $hidden)
     {
         if ($renderer->options['group_hiddens']) {
-            $renderer->hiddens[] = $hidden->__toString($renderer);
+            $renderer->hiddens[] = $hidden->render($renderer);
             return '';
         }
-        return '<div style="display:none">'.$hidden->__toString().'</div>';
+        return '<div style="display:none">' . $hidden . '</div>';
     }
 
 
@@ -256,7 +256,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     {
         $lf = HTML_Common2::getOption('linebreak');
 
-        $formHtml = $form->__toString($renderer);
+        $formHtml = $form->render($renderer);
         $html[] = '<div class="qf-form">';
 
         // Group errors

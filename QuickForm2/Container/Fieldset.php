@@ -102,27 +102,46 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
 
 
    /**
-    * Renders the fieldset
-    *
-    * If a renderer is provided, it will be used to render the container
-    * which allows more complex rendering options.
+    * Renders the fieldset using an HTML_QuickForm2_Renderer
     *
     * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
     * @return   string                     HTML output
     * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
     *               but no render callback was defined in the renderer
     */
-    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
+    public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $html = array(
             '<fieldset' . $this->getAttributes(true) . '>'
             );
-
         if ($this->getLabel()) {
             $legendId = $this->getId() . '-legend';
             $html[] = '<legend id="'.$legendId.'">' . $this->getLabel() . '</legend>';
         }
-        $html[] = parent::__toString($renderer);
+        foreach ($this as $element) {
+            $html[] = $renderer->render($element);
+        }
+        $html[] = '</fieldset>';
+        return implode(self::getOption('linebreak'), $html);
+    }
+
+   /**
+    * Default rendering for fieldsets
+    *
+    * @return   string  HTML output
+    */
+    public function __toString()
+    {
+        $html = array(
+            '<fieldset' . $this->getAttributes(true) . '>'
+            );
+        if ($this->getLabel()) {
+            $legendId = $this->getId() . '-legend';
+            $html[] = '<legend id="'.$legendId.'">' . $this->getLabel() . '</legend>';
+        }
+        foreach ($this as $element) {
+            $html[] = $element;
+        }
         $html[] = '</fieldset>';
         return implode(self::getOption('linebreak'), $html);
     }

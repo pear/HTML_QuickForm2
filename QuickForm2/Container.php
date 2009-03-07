@@ -422,8 +422,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * The element will be created via {@link HTML_QuickForm2_Factory::createElement()}
     * and then added via the {@link appendChild()} method.
-    * The element type is deduced from the method name. Camelcases will be
-    * converted to underscores and lowercased.
+    * The element type is deduced from the method name.
     * This is a convenience method to reduce typing.
     *
     * @param    mixed   Element name
@@ -449,27 +448,35 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
 
    /**
-    * Renders the container
+    * Renders the container using the provided Renderer
     *
-    * If a renderer is provided, it will be used to render the container
-    * which allows more complex rendering options.
+    * Using a renderer allows more complex rendering.
     *
     * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
     * @return   string                     HTML output
     * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
     *               but no render callback was defined in the renderer
     */
-    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
+    public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $html = array();
-        if ($renderer) {
-            foreach ($this as $element) {
-                $html[] = $renderer->render($element);
-            }
-        } else {
-            foreach ($this as $element) {
-                $html[] = $element;
-            }
+        foreach ($this as $element) {
+            $html[] = $renderer->render($element);
+        }
+        return implode(self::getOption('linebreak'), $html);
+    }
+
+
+   /**
+    * Default rendering
+    *
+    * @return   string  HTML output
+    */
+    public function __toString()
+    {
+        $html = array();
+        foreach ($this as $element) {
+            $html[] = $element;
         }
         return implode(self::getOption('linebreak'), $html);
     }

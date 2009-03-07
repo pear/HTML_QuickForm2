@@ -204,15 +204,42 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         return $isSubmitted? parent::validate(): false;
     }
 
-    public function __toString(HTML_QuickForm2_Renderer $renderer = null)
+
+   /**
+    * Renders the form using an HTML_QuickForm2_Renderer
+    *
+    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
+    * @return   string                     HTML output
+    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
+    *               but no render callback was defined in the renderer
+    */
+    public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $html[] = sprintf('<form%s>', 
             $this->getAttributes(true)
             );
-        $html[] = parent::__toString($renderer);
+        foreach ($this as $element) {
+            $html[] = $renderer->render($element);
+        }
         $html[] ='</form>';
         return implode(self::getOption('linebeak'), $html);
     }
 
+   /**
+    * Default rendering for forms
+    *
+    * @return   string  HTML output
+    */
+    public function __toString()
+    {
+        $html[] = sprintf('<form%s>', 
+            $this->getAttributes(true)
+            );
+        foreach ($this as $element) {
+            $html[] = $element;
+        }
+        $html[] ='</form>';
+        return implode(self::getOption('linebreak'), $html);
+    }
 }
 ?>

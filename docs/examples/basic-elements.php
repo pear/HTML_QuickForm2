@@ -88,11 +88,11 @@ function output_element($element)
     if ('fieldset' == $element->getType()) {
         output_fieldset($element);
     } elseif ('hidden' == $element->getType()) {
-        echo '<div style="display: none;">' . $element->__toString() . "</div>\n";
+        echo '<div style="display: none;">' . $element . "</div>\n";
     } else {
         echo '<div class="qfrow"><label class="qflabel" for="' . $element->getId() .
              '">' . $element->getLabel() . '</label> <div class="qfelement">' .
-             $element->__toString() . "</div></div><br />\n";
+             $element . "</div></div><br />\n";
     }
 }
 

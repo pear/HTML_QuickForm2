@@ -90,7 +90,7 @@ function output_element($element)
     if ('fieldset' == $element->getType()) {
         output_fieldset($element);
     } elseif ('hidden' == $element->getType()) {
-        echo '<div style="display: none;">' . $element->__toString() . "</div>\n";
+        echo '<div style="display: none;">' . $element . "</div>\n";
     } else {
         $required = $element->isRequired();
         $error    = $element->getError();
@@ -98,7 +98,7 @@ function output_element($element)
              '">' . ($required? '<span class="required">*</span>': '') . $element->getLabel() . 
              '</label> <div class="qfelement' . (strlen($error)? ' error': '') . '">' .
              (strlen($error)? '<span class="error">' . $error . '</span><br />': '') .
-             $element->__toString() . "</div></div><br />\n";
+             $element . "</div></div><br />\n";
     }
 }
 
