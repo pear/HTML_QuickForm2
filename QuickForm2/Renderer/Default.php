@@ -238,7 +238,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Element_InputHidden $hidden)
     {
         if ($renderer->options['group_hiddens']) {
-            $renderer->hiddens[] = $hidden->render($renderer);
+            $renderer->hiddens[] = $hidden;
             return '';
         }
         return '<div style="display:none">' . $hidden . '</div>';
