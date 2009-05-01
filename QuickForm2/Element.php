@@ -89,7 +89,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
 
     public function getName()
     {
-        return $this->attributes['name'];
+        return isset($this->attributes['name']) ? $this->attributes['name'] : null;
     }
 
     public function setName($name)

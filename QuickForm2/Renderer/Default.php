@@ -124,6 +124,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             array($this, 'renderContainer')
             );
         $this->setByClassRenderer(
+            'HTML_QuickForm2_Container_Group',
+            array($this, 'renderGroup')
+            );
+        $this->setByClassRenderer(
             'HTML_QuickForm2',
             array($this, 'renderForm')
             );
@@ -161,12 +165,11 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
         }
 
-        $html = '<div class="qf-checkable' . $errorClass . '">' .
-            $errorMsg .
-            '<span class="' . $labelClass . '">' . $checkable->getLabel() . '</span>' .
-            $checkable .
-            '</div>';
-
+        $html = '<div class="qf-checkable' . $errorClass . '">' . $errorMsg;
+        if (!empty($label)) {
+            $html .= '<span class="' . $labelClass . '">' . $checkable->getLabel() . '</span>';
+        }
+        $html .= $checkable.'</div>';
         return $html;
     }
 
@@ -180,7 +183,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function renderElement(HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Element $element)
     {
-
+        $label = $element->getLabel();
         $labelClass = 'qf-label';
         $errorClass = '';
         $errorMsg   = '';
@@ -199,13 +202,57 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
                 $errorMsg = '<div class="qf-message">'.$error.'</div>';
             }
         }
-        $html = '<div class="qf-element'.$errorClass.'">' .
-            $errorMsg .
-            '<label for="' . $element->getId() . '" class="' . $labelClass . '">' .
-            $element->getLabel() . '</label>' .
-            $element .
-            '</div>';
+        $html = '<div class="qf-element'.$errorClass.'">' . $errorMsg;
+        if (!empty($label)) {
+            $html .= '<label for="' . $element->getId() . '" class="' . $labelClass . '">' .
+                     $label . '</label>';
+        }
+        $html .= '<div class="qf-input">' . $element . '</div>' .
+                 '</div>';
+        return $html;
+    }
 
+
+   /**
+    * Renders a group container
+    *
+    * @param    HTML_QuickForm2_Container_Group Group container to render
+    * @return   string  HTML output
+    */
+    public function renderGroup(HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Container_Group $group)
+    {
+        $class = trim((string)($group->getAttribute('class')).' qf-group');
+        $label = $group->getLabel();
+        $labelClass = 'qf-label';
+        $errorMsg   = '';
+
+        if ($group->isRequired()) {
+            $renderer->hasRequired = true;
+            $labelClass .= ' qf-required';
+        }
+
+        $error = $group->getError();
+        if ($error) {
+            $class .= ' qf-error';
+            if ($renderer->options['group_errors']) {
+                $renderer->errors[] = $error;
+            } else {
+                $errorMsg = '<div class="qf-message">'.$error.'</div>';
+            }
+        }
+
+        $group->setAttribute('class', $class);
+        $html = '<div' . $group->getAttributes(true) . '>';
+        if (!empty($label)) {
+            $html .= '<div class="qf-label ' . $labelClass . '">' .
+                     $label . '</div>';
+        }        
+        $html .= $errorMsg .
+                 '<div class="qf-group-elements">' . 
+                 $group->render($renderer) . 
+                 '</div>' .
+                 '</div>';
         return $html;
     }
 

@@ -67,13 +67,20 @@ abstract class HTML_QuickForm2_Renderer
     protected $byName = array();
 
    /**
+    * Stores renderer callbacks by element id
+    * @var array
+    */
+    protected $byId = array();
+
+   /**
     * Renders a node
     *
     * The method will first check if a PHP callback was given as parameter
     * and then use it to render the node. Otherwise, it will look into
-    * the callbacks set by name, comparing them with the node name. Finally,
-    * it will try to find a callback using the node class. If no renderer
-    * callback is found it will throw an exception.
+    * the callbacks set by id, comparing them with the node id. If none is
+    * found, it will do the same with the node name.
+    * Finally, it will try to find a callback using the node class. 
+    * If no renderer callback is found it will throw an exception.
     *
     * @param    HTML_QuickForm2_Node     Node element to render
     * @param    mixed                    PHP callback used to render the node
@@ -93,6 +100,10 @@ abstract class HTML_QuickForm2_Renderer
                 );
             }
         }
+        $id = $node->getId();
+        if (isset($this->byId[$id])) {
+            return call_user_func_array($this->byId[$id], array(&$this, &$node));
+        }
         $name = $node->getName();
         if ($name && isset($this->byName[$name])) {
             return call_user_func_array($this->byName[$name], array(&$this, &$node));
@@ -111,6 +122,27 @@ abstract class HTML_QuickForm2_Renderer
             );
     }
 
+   /**
+    * Set a renderer callback using node name
+    *
+    * Nodes can be rendered either using their name or their class. Upon
+    * rendering, if a matching callback is found using the node's name,
+    * it will be used to render the node.
+    *
+    * @param    string                   Node id
+    * @param    mixed                    PHP callback used to render the node
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if the provided
+    *               callback is not callable
+    */
+    public function setById($id, $callback)
+    {
+        if (!is_callable($callback)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Renderer callback is not valid"
+            );
+        }
+        $this->byId[$id] = $callback;
+    }
 
    /**
     * Set a renderer callback using node name

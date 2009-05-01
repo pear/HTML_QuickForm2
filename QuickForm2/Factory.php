@@ -73,6 +73,8 @@ class HTML_QuickForm2_Factory
                                  'HTML/QuickForm2/Element/InputCheckbox.php'),
         'fieldset'      => array('HTML_QuickForm2_Container_Fieldset',
                                  'HTML/QuickForm2/Container/Fieldset.php'),
+        'group'         => array('HTML_QuickForm2_Container_Group',
+                                 'HTML/QuickForm2/Container/Group.php'),
         'file'          => array('HTML_QuickForm2_Element_InputFile',
                                  'HTML/QuickForm2/Element/InputFile.php'),
         'hidden'        => array('HTML_QuickForm2_Element_InputHidden',
