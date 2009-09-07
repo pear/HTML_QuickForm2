@@ -1,13 +1,13 @@
 <?php
 /**
- * Class for <input type="hidden" /> elements
+ * Interface for HTML_QuickForm2_Renderer plugin classes 
  *
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -44,12 +44,7 @@
  */
 
 /**
- * Base class for <input> elements
- */
-require_once 'HTML/QuickForm2/Element/Input.php';
-
-/**
- * Class for <input type="hidden" /> elements 
+ * Interface for HTML_QuickForm2_Renderer plugin classes 
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -57,26 +52,13 @@ require_once 'HTML/QuickForm2/Element/Input.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
+interface HTML_QuickForm2_Renderer_Plugin
 {
-    protected $attributes = array('type' => 'hidden');
-
    /**
-    * Hidden elements can not be frozen
+    * Sets the base renderer this plugin is enhancing
     *
-    * @param    bool    Whether element should be frozen or editable. This 
-    *                   parameter is ignored in case of hidden elements
-    * @return   bool    Always returns false
-    */  
-    public function toggleFrozen($freeze = null)
-    {
-        return false;
-    }
-
-    public function render(HTML_QuickForm2_Renderer $renderer)
-    {
-        $renderer->renderHidden($this);
-        return $renderer;
-    }
+    * @param    HTML_QuickForm2_Renderer    base renderer
+    */
+    public function setBase(HTML_QuickForm2_Renderer $base);
 }
 ?>

@@ -118,6 +118,14 @@ Other resources to consider:
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /QuickForm2/Element -->
+    <dir name="Renderer">
+     <file name="Default.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Plugin.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /QuickForm2/Renderer -->
     <dir name="Rule">
      <file name="Callback.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -163,6 +171,9 @@ Other resources to consider:
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="Node.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="Renderer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="Rule.php" role="php">

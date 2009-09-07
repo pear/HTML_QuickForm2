@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2008, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -130,7 +130,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
 
    /**
-    * Constructor, sets the renderer options
+    * Sets the renderer options
     *
     * @param    array   Options affecting renderer behaviour:
     * <ul>
@@ -140,14 +140,16 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *   <li>errors_suffix: suffix sentence for grouped errors</li>
     *   <li>required_note: note displayed if the form contains required elements</li>
     * </ul>
+    * @return   HTML_QuickForm2_Renderer_Default
     */
-    public function __construct(array $options = array())
+    public function setOptions(array $options = array())
     {
         foreach (array_keys($this->options) as $key) {
             if (isset($options[$key])) {
                 $this->options[$key] = $options[$key];
             }
         }
+        return $this;
     }
 
 
@@ -174,31 +176,32 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         }
     }
 
-    public function startContainer(HTML_QuickForm2_Node $container)
+    public function renderContainer(HTML_QuickForm2_Node $container)
     {
         $cTpl = $this->findTemplate($container);
         $this->html[] = str_replace(array('{attributes}', '{id}'),
                                     array($container->getAttributes(true), $container->getId()),
                                     $this->prepareTemplate($cTpl['prefix'], $container));
-    }
 
-    public function finishContainer(HTML_QuickForm2_Node $container)
-    {
+        foreach ($container as $element) {
+            $element->render($this);
+        }
+
         $cHtml = array_pop($this->html);
-        $cTpl  = $this->findTemplate($container);
         $this->html[count($this->html) - 1] .= $cHtml . $cTpl['suffix'];
     }
 
-    public function startForm(HTML_QuickForm2_Node $form)
+    public function renderForm(HTML_QuickForm2_Node $form)
     {
         $this->html        = array('');
         $this->hiddenHtml  = '';
         $this->errors      = array();
         $this->hasRequired = false;
-    }
 
-    public function finishForm(HTML_QuickForm2_Node $form)
-    {
+        foreach ($form as $element) {
+            $element->render($this);
+        }
+
         // grouped errors
         if (!empty($this->errors)) {
             if (!empty($this->options['errors_prefix'])) {

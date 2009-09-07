@@ -204,13 +204,16 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         return $isSubmitted? parent::validate(): false;
     }
 
+   /**
+    * Renders the form using the given renderer
+    *
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
+    */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $renderer->startForm($this);
-        foreach ($this as $child) {
-            $child->render($renderer);
-        }
-        $renderer->finishForm($this);
+        $renderer->renderForm($this);
+        return $renderer;
     }
 }
 ?>

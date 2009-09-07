@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -156,10 +156,12 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     * Renders the element using the given renderer
     *
     * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $renderer->renderElement($this);
+        return $renderer;
     }
 }
 ?>

@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -451,22 +451,20 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * Renders the container using the given renderer
     *
     * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $renderer->startContainer($this);
-        foreach ($this as $child) {
-            $child->render($renderer);
-        }
-        $renderer->finishContainer($this);
+        $renderer->renderContainer($this);
+        return $renderer;
     }
 
     public function __toString()
     {
-        require_once 'HTML/QuickForm2/Renderer/Default.php';
-        $renderer = new HTML_QuickForm2_Renderer_Default();
-        $this->render($renderer);
-        return $renderer->__toString();
+        require_once 'HTML/QuickForm2/Renderer.php';
+
+        return $this->render(HTML_QuickForm2_Renderer::getInstance('default'))
+                    ->__toString();
     }
 }
 
