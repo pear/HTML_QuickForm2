@@ -272,7 +272,7 @@ abstract class HTML_Quickform2_Renderer
             }
             $methods[$method] = $pluginsKey;
         }
-        $plugin->setBase($this);
+        $plugin->setRenderer($this);
         $this->_plugins[$pluginsKey]  = $plugin;
         $this->_pluginMethods        += $methods;
     }

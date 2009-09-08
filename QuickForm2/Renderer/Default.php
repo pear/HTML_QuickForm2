@@ -113,8 +113,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'prefix' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>',
             'suffix' => '</fieldset>'
         ),
-        'required_note' => '<div class="qf-note">{message}</div>',
-        'error' => array(
+        'special:required_note' => '<div class="qf-note">{message}</div>',
+        'special:error' => array(
             'prefix'    => '<div class="qf-errors"><qf:message><p>{message}</p></qf:message><ul><li>',
             'separator' => '</li><li>',
             'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message>'
@@ -123,10 +123,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     );
 
    /**
-    * Stores custom templates for elements with the given names
+    * Stores custom templates for elements with the given IDs
     * @var  array
     */
-    protected $templatesByName = array();
+    protected $templatesById = array();
 
 
    /**
@@ -150,6 +150,68 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
         }
         return $this;
+    }
+
+   /**
+    * Sets template for elements of the given class
+    *
+    * When searching for a template to use, renderer will check for templates
+    * set for element's class and its subclasses, until found. 
+    *
+    * @param    string  Class name
+    * @param    mixed   Template to use for elements of that class
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setTemplateByClass($className, $template)
+    {
+        $this->templatesByClass[strtolower($className)] = $template;
+        return $this;
+    }
+
+   /**
+    * Sets template for element with the given id
+    *
+    * If a template is set for an element via this method, it will be used.
+    * In the other case a generic template set by setTemplateByClass() will
+    * be used.
+    *
+    * @param    string  Element's id
+    * @param    mixed   Template to use for rendering of that element 
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setTemplateById($id, $template)
+    {
+        $this->templatesById[$id] = $template;
+        return $this;
+    }
+
+   /**
+    * Sets template for rendering validation errors
+    *
+    * This template will be used if 'group_errors' option is set to true. 
+    * The template array should contain 'prefix', 'suffix' and 'separator'
+    * keys.
+    *
+    * @param    array   Template for validation errors
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setErrorTemplate($template)
+    {
+        return $this->setTemplateByClass('special:error', $template);
+    }
+
+   /**
+    * Sets template for a 'required' note
+    *
+    * Template will be used to output a note describing the appearance of
+    * required elements, if the form contains some of these.
+    *
+    * @param    string  Template
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setRequiredNoteTemplate($template)
+    {
+        return $this->setTemplateByClass('special:required_note', $template);
     }
 
 
@@ -207,19 +269,19 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             if (!empty($this->options['errors_prefix'])) {
                 $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
                                          array('', '', $this->options['errors_prefix']),
-                                         $this->templatesByClass['error']['prefix']);
+                                         $this->templatesByClass['special:error']['prefix']);
             } else {
                 $errorHtml = preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                          $this->templatesByClass['error']['prefix']);
+                                          $this->templatesByClass['special:error']['prefix']);
             }
-            $errorHtml .= implode($this->templatesByClass['error']['separator'], $this->errors);
+            $errorHtml .= implode($this->templatesByClass['special:error']['separator'], $this->errors);
             if (!empty($this->options['errors_suffix'])) {
                 $errorHtml .= str_replace(array('<qf:message>', '</qf:message>', '{message}'),
                                           array('', '', $this->options['errors_suffix']),
-                                          $this->templatesByClass['error']['suffix']);
+                                          $this->templatesByClass['special:error']['suffix']);
             } else {
                 $errorHtml .= preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                          $this->templatesByClass['error']['suffix']);
+                                          $this->templatesByClass['special:error']['suffix']);
             }
             $this->html[0] = $errorHtml . $this->html[0];
         }
@@ -237,7 +299,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             !empty($this->options['required_note']))
         {
             $this->html[0] .= str_replace('{message}', $this->options['required_note'],
-                                          $this->templatesByClass['required_note']);
+                                          $this->templatesByClass['special:required_note']);
         }
 
         $formTpl = $this->findTemplate($form);
@@ -254,8 +316,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     protected function findTemplate(HTML_QuickForm2_Node $element)
     {
-        if (!empty($this->templatesByName[$element->getName()])) {
-            return $this->templatesByName[$element->getName()];
+        if (!empty($this->templatesById[$element->getId()])) {
+            return $this->templatesById[$element->getId()];
         }
         $class = get_class($element);
         do {

@@ -59,6 +59,6 @@ interface HTML_QuickForm2_Renderer_Plugin
     *
     * @param    HTML_QuickForm2_Renderer    base renderer
     */
-    public function setBase(HTML_QuickForm2_Renderer $base);
+    public function setRenderer(HTML_QuickForm2_Renderer $base);
 }
 ?>
