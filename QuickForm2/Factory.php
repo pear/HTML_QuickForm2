@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -183,7 +183,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
         }
         // Do not silence the errors with @, parse errors will not be seen
-        include_once $includeFile;
+        include $includeFile;
         // Still no class?
         if (!class_exists($className, false)) {
             throw new HTML_QuickForm2_NotFoundException(

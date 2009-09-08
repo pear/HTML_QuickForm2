@@ -51,6 +51,7 @@ require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once dirname(__FILE__) . '/FieldsetTest.php';
+require_once dirname(__FILE__) . '/GroupTest.php';
 
 class QuickForm2_Container_AllTests
 {
@@ -64,6 +65,7 @@ class QuickForm2_Container_AllTests
         $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Container');
 
         $suite->addTestSuite('HTML_QuickForm2_Element_FieldsetTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_GroupTest');
 
         return $suite;
     }

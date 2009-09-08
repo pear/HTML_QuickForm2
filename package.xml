@@ -19,10 +19,10 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2007-10-22</date>
+ <date>2009-12-31</date>
  <version>
-  <release>0.2.0</release>
-  <api>0.2.0</api>
+  <release>0.3.0</release>
+  <api>0.3.0</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -30,33 +30,21 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 2: now with server-side validation support
+Milestone 3: renderers and groups
 
-Major additions and changes:
- * Server-side validation support added
- * API break: changed number and order of parameters for element constructors
- * Fluent interfaces: methods that previously returned nothing now return $this
- * Added method overloading to Container, allowing $form-&gt;addTextarea(...)
-
-Feature requests addressed:
- * Possibility to control validation of an element based on value of some
-   other element (request #4534)
- * Rule comparing value of an element with numeric constants (request #4728)
- * Possibility to toggle validation of empty elements (request #9097)
-
-Bug fixes (bugs submitted for HTML_QuickForm package):
- * Wrong options could be selected in &lt;select&gt; elements if numeric strings
-   were used as options' values (bug #10837, bug #11138)
-
-Other resources to consider:
- * QF2 development wiki: http://quickform.mamasam.com/wiki/home
- * PHPUnit package from channel pear.phpunit.de is needed to run tests
+Bug fixes:
+  * Updated PHP dependency to 5.2.0 (bug #14110, PHP bug #37632)
+  * 'checked' attributed on checkboxes and radios was not updated after changing
+    'value' attribute (bug #15708)
  </notes>
  <contents>
   <dir baseinstalldir="HTML" name="/">
    <dir name="QuickForm2">
     <dir name="Container">
      <file name="Fieldset.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Group.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /QuickForm2/Container -->
@@ -118,6 +106,14 @@ Other resources to consider:
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /QuickForm2/Element -->
+    <dir name="Renderer">
+     <file name="Default.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Plugin.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /QuickForm2/Renderer -->
     <dir name="Rule">
      <file name="Callback.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -165,6 +161,9 @@ Other resources to consider:
     <file name="Node.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="Renderer.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="Rule.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
@@ -176,6 +175,9 @@ Other resources to consider:
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="FieldsetTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="GroupTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/QuickForm2/Container -->
@@ -304,6 +306,7 @@ Other resources to consider:
    <dir name="docs/examples">
     <file role="doc" name="basic-elements.php" />
     <file role="doc" name="builtin-rules.php" />
+    <!-- file role="doc" name="default-renderer.php" / -->
    </dir> <!-- /docs/examples -->
    <file name="QuickForm2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -313,7 +316,7 @@ Other resources to consider:
  <dependencies>
   <required>
    <php>
-    <min>5.1.4</min>
+    <min>5.2.0</min>
    </php>
    <pearinstaller>
     <min>1.4.3</min>
@@ -327,6 +330,41 @@ Other resources to consider:
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+  <version>
+   <release>0.2.0</release>
+   <api>0.2.0</api>
+  </version>
+  <stability>
+   <release>alpha</release>
+   <api>alpha</api>
+  </stability>
+  <date>2007-10-22</date>
+  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+  <notes>
+Milestone 2: now with server-side validation support
+
+Major additions and changes:
+ * Server-side validation support added
+ * API break: changed number and order of parameters for element constructors
+ * Fluent interfaces: methods that previously returned nothing now return $this
+ * Added method overloading to Container, allowing $form-&gt;addTextarea(...)
+
+Feature requests addressed:
+ * Possibility to control validation of an element based on value of some
+   other element (request #4534)
+ * Rule comparing value of an element with numeric constants (request #4728)
+ * Possibility to toggle validation of empty elements (request #9097)
+
+Bug fixes (bugs submitted for HTML_QuickForm package):
+ * Wrong options could be selected in &lt;select&gt; elements if numeric strings
+   were used as options' values (bug #10837, bug #11138)
+
+Other resources to consider:
+ * QF2 development wiki: http://quickform.mamasam.com/wiki/home
+ * PHPUnit package from channel pear.phpunit.de is needed to run tests
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.1.0</release>

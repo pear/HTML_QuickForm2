@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2008, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,12 +44,14 @@
  */
 
 /**
- * Base renderer class for QuickForm2
+ * Abstract base class for QuickForm2 renderers
  */
 require_once 'HTML/QuickForm2/Renderer.php';
 
 /**
  * Default renderer for QuickForm2
+ *
+ * Mostly a direct port of Default renderer from QuickForm 3.x package
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -61,293 +63,322 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 {
    /**
     * Whether the form contains required elements
-    * @var bool
+    * @var  bool
     */
-    public $hasRequired = false;
+    protected $hasRequired = false;
+
+   /**
+    * HTML generated for the form
+    * @var  array
+    */
+    protected $html = array('');
+
+   /**
+    * HTML for hidden elements if 'group_hiddens' option is on
+    * @var  string
+    */
+    protected $hiddenHtml = '';
 
 
    /**
-    * Array of hidden elements rendering in case they have to be grouped
-    * @var array
+    * Array of validation errors if 'group_errors' option is on
+    * @var  array
     */
-    public $hiddens = array();
-
-
-   /**
-    * Array of errors in case they have to be grouped
-    * @var array
-    */
-    public $errors = array();
+    protected $errors = array();
 
 
    /**
     * Renderer options
-    *
-    * - group_hiddens: will define if hidden elements are grouped in a div
-    * - required_note: displayed note if the form contains required elements
-    * - errors_prefix: prefix sentence if the form contains errors
-    * - errors_suffix: suffix sentence if the form contains errors
-    * - group_errors: group error messages on top of the form instead of inline
-    *
-    * @var array
+    * @var  array
     */
-    public $options = array(
+    protected $options = array(
         'group_hiddens' => true,
         'required_note' => '<strong>Note:</strong> <em>*</em> denotes required fields.',
         'errors_prefix' => 'Invalid information entered:',
         'errors_suffix' => 'Please correct these fields.',
         'group_errors'  => false
-        );
+    );
 
    /**
-    * Class constructor
-    *
-    * @param    array    Array of options
+    * Stores default templates for elements of the given class
+    * @var  array
     */
-    public function __construct($options = array())
+    protected $templatesByClass = array(
+        'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
+        'html_quickform2' => array(
+            'prefix' => '<form{attributes}><div class="qf-form">',
+            'suffix' => '</div></form>'
+        ),
+        'html_quickform2_container_fieldset' => array(
+            'prefix' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>',
+            'suffix' => '</fieldset>'
+        ),
+        'special:required_note' => '<div class="qf-note">{message}</div>',
+        'special:error' => array(
+            'prefix'    => '<div class="qf-errors"><qf:message><p>{message}</p></qf:message><ul><li>',
+            'separator' => '</li><li>',
+            'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message>'
+        ),
+        'html_quickform2_element' => '<div><label for="{id}" class="qf-label"><qf:required><span class="qf-required">* </span></qf:required>{label}</label><div class="qf-element<qf:error> qf-error</qf:error>"><qf:error><span class="qf-error">{error}</span><br /></qf:error>{element}</div></div>'
+    );
+
+   /**
+    * Stores custom templates for elements with the given IDs
+    * @var  array
+    */
+    protected $templatesById = array();
+
+
+   /**
+    * Sets the renderer options
+    *
+    * @param    array   Options affecting renderer behaviour:
+    * <ul>
+    *   <li>group_hiddens: whether to group hidden elements in a single div</li>
+    *   <li>group_errors: group error messages on top of the form instead of inline</li>
+    *   <li>errors_prefix: prefix sentence for grouped errors</li>
+    *   <li>errors_suffix: suffix sentence for grouped errors</li>
+    *   <li>required_note: note displayed if the form contains required elements</li>
+    * </ul>
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setOptions(array $options = array())
     {
-        while (list($k) = each($this->options)) {
-            if (isset($options[$k])) {
-                $this->options[$k] = $options[$k];
+        foreach (array_keys($this->options) as $key) {
+            if (isset($options[$key])) {
+                $this->options[$key] = $options[$key];
             }
         }
-        $this->setByClassRenderer(
-            'HTML_QuickForm2_Element_InputCheckable',
-            array($this, 'renderCheckable')
-            );
-        $this->setByClassRenderer(
-            'HTML_QuickForm2_Element',
-            array($this, 'renderElement')
-            );
-        $this->setByClassRenderer(
-            'HTML_QuickForm2_Container',
-            array($this, 'renderContainer')
-            );
-        $this->setByClassRenderer(
-            'HTML_QuickForm2_Container_Group',
-            array($this, 'renderGroup')
-            );
-        $this->setByClassRenderer(
-            'HTML_QuickForm2',
-            array($this, 'renderForm')
-            );
-        $this->setByClassRenderer(
-            'HTML_QuickForm2_Element_InputHidden',
-            array($this, 'renderHidden')
-            );
+        return $this;
     }
 
    /**
-    * Renders a checkable node
+    * Sets template for elements of the given class
     *
-    * @param    HTML_QuickForm2_Element_InputCheckable  Element node to render
-    * @return   string                                  HTML output
+    * When searching for a template to use, renderer will check for templates
+    * set for element's class and its subclasses, until found. 
+    *
+    * @param    string  Class name
+    * @param    mixed   Template to use for elements of that class
+    * @return   HTML_QuickForm2_Renderer_Default
     */
-    public function renderCheckable(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2_Element_InputCheckable $checkable)
+    public function setTemplateByClass($className, $template)
     {
-        $labelClass = 'qf-label';
-        $errorClass = '';
-        $errorMsg   = '';
+        $this->templatesByClass[strtolower($className)] = $template;
+        return $this;
+    }
 
-        if ($checkable->isRequired()) {
-            $renderer->hasRequired = true;
-            $labelClass .= ' qf-required';
+   /**
+    * Sets template for element with the given id
+    *
+    * If a template is set for an element via this method, it will be used.
+    * In the other case a generic template set by setTemplateByClass() will
+    * be used.
+    *
+    * @param    string  Element's id
+    * @param    mixed   Template to use for rendering of that element 
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setTemplateById($id, $template)
+    {
+        $this->templatesById[$id] = $template;
+        return $this;
+    }
+
+   /**
+    * Sets template for rendering validation errors
+    *
+    * This template will be used if 'group_errors' option is set to true. 
+    * The template array should contain 'prefix', 'suffix' and 'separator'
+    * keys.
+    *
+    * @param    array   Template for validation errors
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setErrorTemplate($template)
+    {
+        return $this->setTemplateByClass('special:error', $template);
+    }
+
+   /**
+    * Sets template for a 'required' note
+    *
+    * Template will be used to output a note describing the appearance of
+    * required elements, if the form contains some of these.
+    *
+    * @param    string  Template
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setRequiredNoteTemplate($template)
+    {
+        return $this->setTemplateByClass('special:required_note', $template);
+    }
+
+
+    public function __toString()
+    {
+        return $this->html[0] . $this->hiddenHtml;
+    }
+
+
+    public function renderElement(HTML_QuickForm2_Node $element)
+    {
+        $elTpl = $this->prepareTemplate($this->findTemplate($element), $element);
+        $this->html[count($this->html) - 1] .= str_replace(array('{element}', '{id}'),
+                                                           array($element, $element->getId()), $elTpl);
+    }
+
+    public function renderHidden(HTML_QuickForm2_Node $element)
+    {
+        if ($this->options['group_hiddens']) {
+            $this->hiddenHtml .= $element->__toString();
+        } else {
+            $this->html[count($this->html) - 1] .= str_replace('{element}', $element,
+                                                               $this->findTemplate($element));
+        }
+    }
+
+    public function renderContainer(HTML_QuickForm2_Node $container)
+    {
+        $cTpl = $this->findTemplate($container);
+        $this->html[] = str_replace(array('{attributes}', '{id}'),
+                                    array($container->getAttributes(true), $container->getId()),
+                                    $this->prepareTemplate($cTpl['prefix'], $container));
+
+        foreach ($container as $element) {
+            $element->render($this);
         }
 
-        $error = $checkable->getError();
-        if ($error) {
-            $errorClass = ' qf-error';
-            if ($renderer->options['group_errors']) {
-                $renderer->errors[] = $error;
+        $cHtml = array_pop($this->html);
+        $this->html[count($this->html) - 1] .= $cHtml . $cTpl['suffix'];
+    }
+
+    public function renderForm(HTML_QuickForm2_Node $form)
+    {
+        $this->html        = array('');
+        $this->hiddenHtml  = '';
+        $this->errors      = array();
+        $this->hasRequired = false;
+
+        foreach ($form as $element) {
+            $element->render($this);
+        }
+
+        // grouped errors
+        if (!empty($this->errors)) {
+            if (!empty($this->options['errors_prefix'])) {
+                $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
+                                         array('', '', $this->options['errors_prefix']),
+                                         $this->templatesByClass['special:error']['prefix']);
             } else {
-                $errorMsg = '<div class="qf-message">'.$error.'</div>';
+                $errorHtml = preg_replace('!<qf:message>.*</qf:message>!isU', '',
+                                          $this->templatesByClass['special:error']['prefix']);
             }
+            $errorHtml .= implode($this->templatesByClass['special:error']['separator'], $this->errors);
+            if (!empty($this->options['errors_suffix'])) {
+                $errorHtml .= str_replace(array('<qf:message>', '</qf:message>', '{message}'),
+                                          array('', '', $this->options['errors_suffix']),
+                                          $this->templatesByClass['special:error']['suffix']);
+            } else {
+                $errorHtml .= preg_replace('!<qf:message>.*</qf:message>!isU', '',
+                                          $this->templatesByClass['special:error']['suffix']);
+            }
+            $this->html[0] = $errorHtml . $this->html[0];
         }
 
-        $html = '<div class="qf-checkable' . $errorClass . '">' . $errorMsg;
-        if (!empty($label)) {
-            $html .= '<span class="' . $labelClass . '">' . $checkable->getLabel() . '</span>';
+        // grouped hidden stuff
+        if (!empty($this->hiddenHtml)) {
+            $this->html[0] = str_replace('{element}', $this->hiddenHtml,
+                                      $this->templatesByClass['html_quickform2_element_inputhidden']) .
+                          $this->html[0];
+            $this->hiddenHtml = '';
         }
-        $html .= $checkable.'</div>';
-        return $html;
+
+        // required note
+        if ($this->hasRequired && !$form->toggleFrozen() &&
+            !empty($this->options['required_note']))
+        {
+            $this->html[0] .= str_replace('{message}', $this->options['required_note'],
+                                          $this->templatesByClass['special:required_note']);
+        }
+
+        $formTpl = $this->findTemplate($form);
+        $this->html[0] = str_replace('{attributes}', $form->getAttributes(true),
+                                  $formTpl['prefix']) .
+                         $this->html[0] . $formTpl['suffix'];
     }
 
+   /**
+    * Finds a proper template for the element
+    *
+    * @param    HTML_QuickForm2_Node    Element being rendered
+    * @return   string  Template
+    */
+    protected function findTemplate(HTML_QuickForm2_Node $element)
+    {
+        if (!empty($this->templatesById[$element->getId()])) {
+            return $this->templatesById[$element->getId()];
+        }
+        $class = get_class($element);
+        do {
+            if (!empty($this->templatesByClass[strtolower($class)])) {
+                return $this->templatesByClass[strtolower($class)];
+            }
+        } while ($class = get_parent_class($class));
+        return '{element}';
+    }
 
    /**
-    * Renders an element node
+    * Processes the element's template, adding label(s), required note and error message
     *
-    * @param    HTML_QuickForm2_Element    Element node to render
-    * @return   string                     HTML output
+    * @param    string                  Element template
+    * @param    HTML_QuickForm2_Node    Element being rendered
+    * @return   string  Template with some substitutions done
     */
-    public function renderElement(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2_Element $element)
+    protected function prepareTemplate($elTpl, HTML_QuickForm2_Node $element)
     {
-        $label = $element->getLabel();
-        $labelClass = 'qf-label';
-        $errorClass = '';
-        $errorMsg   = '';
-
+        // if element is required
         if ($element->isRequired()) {
-            $renderer->hasRequired = true;
-            $labelClass .= ' qf-required';
+            $this->hasRequired = true;
+            $elTpl = str_replace(array('<qf:required>', '</qf:required>'),
+                                  array('', ''), $elTpl);
+        } else {
+            $elTpl = preg_replace('!<qf:required>.*</qf:required>!isU', '', $elTpl);
         }
-
+        // output element's error
         $error = $element->getError();
-        if ($error) {
-            $errorClass = ' qf-error';
-            if ($renderer->options['group_errors']) {
-                $renderer->errors[] = $error;
+        if ($error && !$this->options['group_errors']) {
+            $elTpl = str_replace(array('<qf:error>', '</qf:error>', '{error}'),
+                                  array('', '', $error), $elTpl);
+        } else {
+            if ($error && $this->options['group_errors']) {
+                $this->errors[] = $error;
+            }
+            $elTpl = preg_replace('!<qf:error>.*</qf:error>!isU', '', $elTpl);
+        }
+        // output labels
+        $label     = $element->getLabel();
+        $mainLabel = is_array($label)? array_shift($label): $label;
+        $elTpl     = str_replace('{label}', $mainLabel, $elTpl);
+        if (false !== strpos($elTpl, '<qf:label>')) {
+            if ($mainLabel) {
+                $elTpl = str_replace(array('<qf:label>', '</qf:label>'), array('', ''), $elTpl);
             } else {
-                $errorMsg = '<div class="qf-message">'.$error.'</div>';
+                $elTpl = preg_replace('!<qf:label>.*</qf:label>!isU', '', $elTpl);
             }
         }
-        $html = '<div class="qf-element'.$errorClass.'">' . $errorMsg;
-        if (!empty($label)) {
-            $html .= '<label for="' . $element->getId() . '" class="' . $labelClass . '">' .
-                     $label . '</label>';
-        }
-        $html .= '<div class="qf-input">' . $element . '</div>' .
-                 '</div>';
-        return $html;
-    }
-
-
-   /**
-    * Renders a group container
-    *
-    * @param    HTML_QuickForm2_Container_Group Group container to render
-    * @return   string  HTML output
-    */
-    public function renderGroup(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2_Container_Group $group)
-    {
-        $class = trim((string)($group->getAttribute('class')).' qf-group');
-        $label = $group->getLabel();
-        $labelClass = 'qf-label';
-        $errorMsg   = '';
-
-        if ($group->isRequired()) {
-            $renderer->hasRequired = true;
-            $labelClass .= ' qf-required';
-        }
-
-        $error = $group->getError();
-        if ($error) {
-            $class .= ' qf-error';
-            if ($renderer->options['group_errors']) {
-                $renderer->errors[] = $error;
-            } else {
-                $errorMsg = '<div class="qf-message">'.$error.'</div>';
+        if (is_array($label)) {
+            foreach($label as $key => $text) {
+                $key   = is_int($key)? $key + 2: $key;
+                $elTpl = str_replace(array('<qf:label_' . $key . '>', '</qf:label_' . $key . '>', '{label_' . $key . '}'),
+                                     array('', '', $text), $elTpl);
             }
         }
-
-        $group->setAttribute('class', $class);
-        $html = '<div' . $group->getAttributes(true) . '>';
-        if (!empty($label)) {
-            $html .= '<div class="qf-label ' . $labelClass . '">' .
-                     $label . '</div>';
-        }        
-        $html .= $errorMsg .
-                 '<div class="qf-group-elements">' . 
-                 $group->render($renderer) . 
-                 '</div>' .
-                 '</div>';
-        return $html;
-    }
-
-
-   /**
-    * Renders a container node
-    *
-    * @param    HTML_QuickForm2_Container    Container node to render
-    * @return   string                       HTML output
-    */
-    public function renderContainer(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2_Container $container)
-    {
-        return $container->render($renderer);
-    }
-
-
-   /**
-    * Renders hidden elements
-    *
-    * If the renderer option "group_hiddens" is true, hidden elements will
-    * be rendered after the form and placed in a common div at the top the
-    * the form HTML code. Otherwise, they will dispatched in the form where
-    * they were added.
-    *
-    * @param    HTML_QuickForm2_Element_InputHidden    Hidden element to render
-    * @return   string                                 HTML output
-    */
-    public function renderHidden(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2_Element_InputHidden $hidden)
-    {
-        if ($renderer->options['group_hiddens']) {
-            $renderer->hiddens[] = $hidden;
-            return '';
+        if (strpos($elTpl, '{label_')) {
+            $elTpl = preg_replace('!<qf:label_(\S+)>.*</qf:label_$1>!is', '', $elTpl);
         }
-        return '<div style="display:none">' . $hidden . '</div>';
-    }
-
-
-   /**
-    * Renders the form
-    *
-    * @param    HTML_QuickForm2    Form node to render
-    * @return   string             HTML output
-    */
-    public function renderForm(HTML_QuickForm2_Renderer $renderer,
-        HTML_QuickForm2 $form)
-    {
-        $lf = HTML_Common2::getOption('linebreak');
-
-        $formHtml = $form->render($renderer);
-        $html[] = '<div class="qf-form">';
-
-        // Group errors
-
-        if (!empty($renderer->errors)) {
-            $html[] = '<div class="qf-errors">';
-            if (!empty($renderer->options['errors_prefix'])) {
-                $html[] = '<p>' . $renderer->options['errors_prefix'] . '</p>';
-            }
-            $html[] = '<ul>';
-            foreach ($renderer->errors as $error) {
-                $html[] = '<li>' . $error . '</li>';
-            }
-            $html[] = '</ul>';
-            if (!empty($renderer->options['errors_suffix'])) {
-                $html[] = '<p>' . $renderer->options['errors_suffix'] . '</p>';
-            }
-            $html[] = '</div>';
-        }
-
-        // Required note
-
-        if ($renderer->hasRequired && !empty($renderer->options['required_note'])) {
-            $html[] = '<div class="qf-note">' . $renderer->options['required_note']. '</div>';
-        }
-
-
-        $html[] = $formHtml;
-        $html[] = '</div>';
-        $html = implode($lf, $html);
-
-        // Group hidden elements
-
-        if (!empty($renderer->hiddens)) {
-            $hiddens[] = '<form$1>';
-            $hiddens[] = '<div style="display:none">';
-            $hiddens[] = implode($lf, $renderer->hiddens);
-            $hiddens[] = '</div>';
-
-            $html = preg_replace('/<form([^>]*)>/',
-                    implode($lf, $hiddens),
-                    $html);
-        }
-
-        return $html;
+        return $elTpl;
     }
 }
+
+?>

@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -204,42 +204,16 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         return $isSubmitted? parent::validate(): false;
     }
 
-
    /**
-    * Renders the form using an HTML_QuickForm2_Renderer
+    * Renders the form using the given renderer
     *
-    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
-    * @return   string                     HTML output
-    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
-    *               but no render callback was defined in the renderer
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $html[] = sprintf('<form%s>', 
-            $this->getAttributes(true)
-            );
-        foreach ($this as $element) {
-            $html[] = $renderer->render($element);
-        }
-        $html[] ='</form>';
-        return implode(self::getOption('linebeak'), $html);
-    }
-
-   /**
-    * Default rendering for forms
-    *
-    * @return   string  HTML output
-    */
-    public function __toString()
-    {
-        $html[] = sprintf('<form%s>', 
-            $this->getAttributes(true)
-            );
-        foreach ($this as $element) {
-            $html[] = $element;
-        }
-        $html[] ='</form>';
-        return implode(self::getOption('linebreak'), $html);
+        $renderer->renderForm($this);
+        return $renderer;
     }
 }
 ?>

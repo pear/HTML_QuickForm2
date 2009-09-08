@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,6 +71,12 @@ class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
     public function toggleFrozen($freeze = null)
     {
         return false;
+    }
+
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->renderHidden($this);
+        return $renderer;
     }
 }
 ?>

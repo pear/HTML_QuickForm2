@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -131,28 +131,6 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         return $element;
     }
 
-
-
-    public function toggleFrozen($freeze = null)
-    {
-        if (null !== $freeze) {
-            foreach ($this as $child) {
-                $child->toggleFrozen($freeze);
-            }
-        }
-        return parent::toggleFrozen($freeze);
-    }
-
-    public function persistentFreeze($persistent = null)
-    {
-        if (null !== $persistent) {
-            foreach ($this as $child) {
-                $child->persistentFreeze($persistent);
-            }
-        }
-        return parent::persistentFreeze($persistent);
-    }
-
    /**
     * Appends an element to the container
     *
@@ -165,63 +143,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
-        if ($this === $element->getContainer()) {
-            $this->removeChild($element);
-        }
-        $this->renameChild($element);
-        $element->setContainer($this);
-        $this->elements[] = $element;
-        return $element;
-    }
-
-   /**
-    * Performs the server-side validation
-    *
-    * This method also calls validate() on all contained elements.
-    *
-    * @return   boolean Whether the container and all contained elements are valid
-    */
-    protected function validate()
-    {
-        $valid = parent::validate();
-        foreach ($this as $child) {
-            $valid = $child->validate() && $valid;
-        }
-        return $valid;
-    }
-
-
-   /**
-    * Renders the group using an HTML_QuickForm2_Renderer
-    *
-    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
-    * @return   string                     HTML output
-    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
-    *               but no render callback was defined in the renderer
-    */
-    public function render(HTML_QuickForm2_Renderer $renderer)
-    {
-        $html = array();
-        foreach ($this as $element) {
-            $html[] = $renderer->render($element);
-        }
-        return implode(self::getOption('linebreak'), $html);
-    }
-
-
-   /**
-    * Default rendering
-    *
-    * @return   string  HTML output
-    */
-    public function __toString()
-    {
-        $html = array();
-        foreach ($this as $element) {
-            $html[] = $element;
-        }
-        return implode(self::getOption('linebreak'), $html);
+        return parent::appendChild($this->renameChild($element));
     }
 }
-
 ?>

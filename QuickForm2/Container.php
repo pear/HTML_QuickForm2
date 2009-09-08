@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -96,7 +96,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function getName()
     {
-        return isset($this->attributes['name']) ? $this->attributes['name'] : null;
+        return isset($this->attributes['name'])? $this->attributes['name']: null;
     }
 
     public function setName($name)
@@ -446,39 +446,24 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         trigger_error("Fatal error: Call to undefined method ".get_class($this)."::".$m."()", E_USER_ERROR);
     }
 
-
    /**
-    * Renders the container using the provided Renderer
+    * Renders the container using the given renderer
     *
-    * Using a renderer allows more complex rendering.
-    *
-    * @param    HTML_QuickForm2_Renderer   QuickForm2 renderer
-    * @return   string                     HTML output
-    * @throws   HTML_QuickForm2_NotFoundException if the renderer is provided
-    *               but no render callback was defined in the renderer
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $html = array();
-        foreach ($this as $element) {
-            $html[] = $renderer->render($element);
-        }
-        return implode(self::getOption('linebreak'), $html);
+        $renderer->renderContainer($this);
+        return $renderer;
     }
 
-
-   /**
-    * Default rendering
-    *
-    * @return   string  HTML output
-    */
     public function __toString()
     {
-        $html = array();
-        foreach ($this as $element) {
-            $html[] = $element;
-        }
-        return implode(self::getOption('linebreak'), $html);
+        require_once 'HTML/QuickForm2/Renderer.php';
+
+        return $this->render(HTML_QuickForm2_Renderer::getInstance('default'))
+                    ->__toString();
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Base class for fieldsets
+ * Interface for HTML_QuickForm2_Renderer plugin classes 
  *
  * PHP version 5
  *
@@ -44,12 +44,7 @@
  */
 
 /**
- * Base class for fieldsets
- */
-require_once 'HTML/QuickForm2/Container.php';
-
-/**
- * Concrete implementation of a container for fieldsets
+ * Interface for HTML_QuickForm2_Renderer plugin classes 
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -57,46 +52,13 @@ require_once 'HTML/QuickForm2/Container.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
+interface HTML_QuickForm2_Renderer_Plugin
 {
-    public function getType()
-    {
-        return 'fieldset';
-    }
-
-
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('name' == $name) {
-            // Fieldsets do not have a name attribute
-        } elseif ('id' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'id' can not be removed"
-                );
-            } else {
-                $this->setId($value);
-            }
-        }
-    }
-
-
-    public function getName()
-    {
-        return null;
-    }
-
-
-    public function setName($name)
-    {
-        // Fieldsets do not have a name attribute
-        return $this;
-    }
-
-
-    public function setValue($value)
-    {
-        throw new HTML_QuickForm2_Exception('Not implemented');
-    }
+   /**
+    * Sets the base renderer this plugin is enhancing
+    *
+    * @param    HTML_QuickForm2_Renderer    base renderer
+    */
+    public function setRenderer(HTML_QuickForm2_Renderer $base);
 }
 ?>

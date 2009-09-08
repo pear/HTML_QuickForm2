@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2008, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,139 +52,277 @@
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_Renderer
+abstract class HTML_Quickform2_Renderer
 {
    /**
-    * Stores renderer callbacks by class name
+    * List of registered renderer types
     * @var array
     */
-    protected $byClass = array();
+    private static $_types = array(
+        'default' => array('HTML_QuickForm2_Renderer_Default',
+                           'HTML/QuickForm2/Renderer/Default.php')
+    );
 
    /**
-    * Stores renderer callbacks by element name
+    * List of registered renderer plugins
     * @var array
     */
-    protected $byName = array();
+    private static $_pluginClasses = array(
+        'default' => array()
+    );
 
    /**
-    * Stores renderer callbacks by element id
+    * Renderer instances
     * @var array
     */
-    protected $byId = array();
+    private static $_instances = array();
 
    /**
-    * Renders a node
+    * Plugins for this renderer instance
+    * @var array
+    */
+    private $_plugins = array();
+
+   /**
+    * Plugin methods to call via __call() magic method
     *
-    * The method will first check if a PHP callback was given as parameter
-    * and then use it to render the node. Otherwise, it will look into
-    * the callbacks set by id, comparing them with the node id. If none is
-    * found, it will do the same with the node name.
-    * Finally, it will try to find a callback using the node class. 
-    * If no renderer callback is found it will throw an exception.
+    * Array has the form ('lowercase method name' => 'index in _plugins array')
     *
-    * @param    HTML_QuickForm2_Node     Node element to render
-    * @param    mixed                    PHP callback used to render the node
-    * @return   mixed                    Result of the render operation
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if the provided
-    *               callback is not callable
-    * @throws   HTML_QuickForm2_NotFoundException if the callback is missing
+    * @var array
     */
-    public function render(HTML_QuickForm2_Node $node, $callback = null)
+    private $_pluginMethods = array();
+
+   /**
+    * Checks whether the file exists in the include path
+    *
+    * @param    string  file name
+    * @return   bool
+    */
+    private static function _fileExists($fileName)
     {
-        if (!is_null($callback)) {
-            if (is_callable($callback)) {
-                return call_user_func_array($callback, array(&$this, &$node));
-            } else {
+        $fp = @fopen($fileName, 'r', true);
+        if (is_resource($fp)) {
+            fclose($fp);
+            return true;
+        }
+        return false;
+    }
+
+   /**
+    * Tries to load a given class from a given file
+    *
+    * @param    string  Class name to load
+    * @param    string  Name of the file (supposedly) containing the given class
+    * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
+    *               loaded or doesn't contain the given class
+    */
+    private static function _loadClass($className, $includeFile)
+    {
+        if (empty($includeFile)) {
+            throw new HTML_QuickForm2_NotFoundException(
+                "Class '$className' does not exist and no file to load"
+            );
+        } elseif (!self::_fileExists($includeFile)) {
+            throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
+        }
+        // Do not silence the errors with @, parse errors will not be seen
+        include $includeFile;
+        // Still no class?
+        if (!class_exists($className, false)) {
+            throw new HTML_QuickForm2_NotFoundException(
+                "Class '$className' was not found within file '$includeFile'"
+            );
+        }
+    }
+
+   /**
+    * Returns the renderer instance of the given type
+    *
+    * Renderers are singletons, there can be only one renderer instance of
+    * each registered type. This instance will auto-magically contain all the
+    * plugins registered for this renderer type.
+    *
+    * @param    string  Type name (treated case-insensitively)
+    * @return   HTML_QuickForm2_Renderer    A renderer instance
+    * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
+    * @throws   HTML_QuickForm2_NotFoundException If class for the renderer can
+    *           not be found and/or loaded from file
+    */
+    final public static function getInstance($type)
+    {
+        $type = strtolower($type);
+        if (!isset(self::$_instances[$type])) {
+            if (!isset(self::$_types[$type])) {
                 throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Renderer callback is not valid"
+                    "Renderer type '$type' is not known"
                 );
             }
-        }
-        $id = $node->getId();
-        if (isset($this->byId[$id])) {
-            return call_user_func_array($this->byId[$id], array(&$this, &$node));
-        }
-        $name = $node->getName();
-        if ($name && isset($this->byName[$name])) {
-            return call_user_func_array($this->byName[$name], array(&$this, &$node));
-        }
-        $class = get_class($node);
-        if (isset($this->byClass[$class])) {
-            return call_user_func_array($this->byClass[$class], array(&$this, &$node));
-        }
-        while ($class = get_parent_class($class)) {
-            if (isset($this->byClass[$class])) {
-                return call_user_func_array($this->byClass[$class], array(&$this, &$node));
+            list ($className, $includeFile) = self::$_types[$type];
+            if (!class_exists($className, false)) {
+                self::_loadClass($className, $includeFile);
             }
+            $renderer = new $className;
+            foreach (self::$_pluginClasses[$type] as $plugin) {
+                if (!class_exists($plugin[0], false)) {
+                    self::_loadClass($plugin[0], $plugin[1]);
+                }
+                $renderer->addPlugin(new $plugin[0]);
+            }
+            self::$_instances[$type] = $renderer;
         }
-        throw new HTML_QuickForm2_NotFoundException(
-                "Renderer callback is missing"
-            );
+        return self::$_instances[$type];
     }
 
    /**
-    * Set a renderer callback using node name
+    * Registers a new renderer type
     *
-    * Nodes can be rendered either using their name or their class. Upon
-    * rendering, if a matching callback is found using the node's name,
-    * it will be used to render the node.
-    *
-    * @param    string                   Node id
-    * @param    mixed                    PHP callback used to render the node
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if the provided
-    *               callback is not callable
+    * @param    string  Type name (treated case-insensitively)
+    * @param    string  Class name
+    * @param    string  File containing the class, leave empty if class already loaded
+    * @throws   HTML_QuickForm2_InvalidArgumentException if type already registered
     */
-    public function setById($id, $callback)
+    final public static function register($type, $className, $includeFile = null)
     {
-        if (!is_callable($callback)) {
+        $type = strtolower($type);
+        if (!empty(self::$_types[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                "Renderer callback is not valid"
+                "Renderer type '$type' is already registered"
             );
         }
-        $this->byId[$id] = $callback;
+        self::$_types[$type] = array($className, $includeFile);
+        if (empty(self::$_pluginClasses[$type])) {
+            self::$_pluginClasses[$type] = array();
+        }
     }
 
    /**
-    * Set a renderer callback using node name
+    * Registers a plugin for a renderer type
     *
-    * Nodes can be rendered either using their name or their class. Upon
-    * rendering, if a matching callback is found using the node's name,
-    * it will be used to render the node.
-    *
-    * @param    string                   Node name
-    * @param    mixed                    PHP callback used to render the node
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if the provided
-    *               callback is not callable
+    * @param    string  Renderer type name (treated case-insensitively)
+    * @param    string  Plugin class name
+    * @param    string  File containing the plugin class, leave empty if class already loaded
+    * @throws   HTML_QuickForm2_InvalidArgumentException if plugin is already registered
     */
-    public function setByNameRenderer($name, $callback)
+    final public static function registerPlugin($type, $className, $includeFile = null)
     {
-        if (!is_callable($callback)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "Renderer callback is not valid"
-            );
+        $type = strtolower($type);
+        // We don't check self::$_types, since a plugin may be registered
+        // before renderer itself if it goes with some custom element
+        if (empty(self::$_pluginClasses[$type])) {
+            self::$_pluginClasses[$type] = array(array($className, $includeFile));
+        } else {
+            foreach (self::$_pluginClasses[$type] as $plugin) {
+                if (0 == strcasecmp($plugin[0], $className)) {
+                    throw new HTML_QuickForm2_InvalidArgumentException(
+                        "Plugin '$className' for renderer type '$type' is already registered"
+                    );
+                }
+            }
+            self::$_pluginClasses[$type][] = array($className, $includeFile);
         }
-        $this->byName[$name] = $callback;
+
+        // If there is already a renderer instance, add the plugin instance to it
+        if (isset(self::$_instances[$type])) {
+            if (!class_exists($className, false)) {
+                self::_loadClass($className, $includeFile);
+            }
+            self::$_instances[$type]->addPlugin(new $className);
+        }
     }
 
    /**
-    * Set a renderer callback using nodes class
+    * Constructor
     *
-    * Nodes can be rendered either using their name or their class. Upon
-    * rendering, if a matching callback is found using the node's class,
-    * it will be used to render the node.
-    *
-    * @param    string                   Node class
-    * @param    mixed                    PHP callback used to render the node
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if the provided
-    *               callback is not callable
+    * Renderers are singletons, instances should be created by 
+    * HTML_QuickForm_Renderer::getInstance()
     */
-    public function setByClassRenderer($class, $callback)
+    protected function __construct()
     {
-        if (!is_callable($callback)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "Renderer callback is not valid"
+    }
+
+   /**
+    * Disallow cloning to enforce singleton
+    */
+    private function __clone()
+    {
+    }
+
+   /**
+    * Adds a plugin to the current renderer instance
+    *
+    * Plugin's methods are imported and can be later called as this object's own
+    *
+    * @param    HTML_QuickForm2_Renderer_Plugin     a plugin instance
+    * @throws   HTML_QuickForm2_InvalidArgumentException if a plugin has already
+    *                   imported name
+    */
+    final protected function addPlugin(HTML_QuickForm2_Renderer_Plugin $plugin)
+    {
+        $pluginsKey = count($this->_plugins);
+        $methods    = array();
+        foreach (array_map('strtolower', get_class_methods($plugin)) as $method) {
+            if (method_exists($this, $method) ||
+                method_exists('HTML_QuickForm2_Renderer_Plugin', $method)
+            ) {
+                continue;
+            } elseif (isset($this->_pluginMethods[$method])) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    'Duplicate method name: ' . $method
+                );
+            }
+            $methods[$method] = $pluginsKey;
+        }
+        $plugin->setRenderer($this);
+        $this->_plugins[$pluginsKey]  = $plugin;
+        $this->_pluginMethods        += $methods;
+    }
+
+   /**
+    * Magic function; call an imported method of a plugin
+    *
+    * @param    string  method name
+    * @param    array   method arguments
+    * @return   mixed
+    */
+    final public function __call($name, $arguments)
+    {
+        $lower = strtolower($name);
+        if (isset($this->_pluginMethods[$lower])) {
+            return call_user_func_array(
+                array($this->_plugins[$this->_pluginMethods[$lower]], $name),
+                $arguments
             );
         }
-        $this->byClass[$class] = $callback;
+        trigger_error("Fatal error: Call to undefined method " .
+                      get_class($this) . "::" . $name . "()", E_USER_ERROR);
     }
+
+   /**
+    * Renders a generic element
+    *
+    * @param    HTML_QuickForm2_Node    Element being rendered
+    */
+    abstract public function renderElement(HTML_QuickForm2_Node $element);
+
+   /**
+    * Renders a hidden element
+    *
+    * @param    HTML_QuickForm2_Node    Hidden element being rendered
+    */
+    abstract public function renderHidden(HTML_QuickForm2_Node $element);
+
+   /**
+    * Renders a HTML_QuickForm2 object
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    abstract public function renderForm(HTML_QuickForm2_Node $form);
+
+   /**
+    * Renders a container
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    abstract public function renderContainer(HTML_QuickForm2_Node $container);
 }
+?>
