@@ -41,7 +41,7 @@
 <?php
 
 require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Renderer/Default.php';
+require_once 'HTML/QuickForm2/Renderer.php';
 
 $form = new HTML_QuickForm2('example');
 $fs = $form->addFieldset()->setLabel('Your information');
@@ -55,67 +55,27 @@ $password->addRule('required', 'Password is required');
 
 $form->addHidden('my_hidden1')->setValue('1');
 $form->addHidden('my_hidden2')->setValue('2');
-$form->addSubmit('submit', array('value' => 'Send'));
+$form->addSubmit('submit', array('value' => 'Send', 'id' => 'submit'));
 
 if ($form->validate()) {
     $form->toggleFrozen(true);
 }
 
 
-// This renderer callback adds a cancel link next to the the submit button
-function renderSubmitCancel(HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Element $element)
-{
-    return '<div class="qf-element">'.$element.' or <a href="/">Cancel</a></div>';
-}
+$renderer = HTML_QuickForm2_Renderer::getInstance('default')
+    ->setOptions(array(
+        'group_hiddens' => true,
+        'group_errors'  => true,
+        'required_note' => '<strong>Note:</strong> Required fields are marked with an asterisk (<em>*</em>).'
+    ))
+    ->setTemplateById('submit', '<div class="qf-element">{element} or <a href="/">Cancel</a></div>')
+    ->setTemplateByClass(
+        'HTML_QuickForm2_Element_InputPassword',
+        '<div class="qf-element<qf:error> qf-error</qf:error>"><qf:error>{error}</qf:error>' .
+        '<label for="{id}" class="qf-label<qf:required> qf-required</qf:required>">{label}</label>' .
+        '{element}' .
+        '<qf:label_2><div class="qf-label-1">{label_2}</div></qf:label_2></div>' 
+    );
 
-// This renderer callback deals with elements which have two labels
-function renderMultiLabel(HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Element $element)
-{
-    $labelClass = 'qf-label';
-    $errorClass = '';
-    $errorMsg   = '';
-
-    if ($element->isRequired()) {
-        $renderer->hasRequired = true;
-        $labelClass .= ' qf-required';
-    }
-
-    $error = $element->getError();
-    if ($error) {
-        $errorClass = ' qf-error';
-        if ($renderer->options['group_errors']) {
-            $renderer->errors[] = $error;
-        } else {
-            $errorMsg = '<div class="qf-message">'.$error.'</div>';
-        }
-    }
-    $label = $element->getLabel();
-    if (is_array($label)) {
-        $html = '<div class="qf-element'.$errorClass.'">' .
-            $errorMsg .
-            '<label for="' . $element->getId() . '" class="' . $labelClass . '">' .
-            $label[0] . '</label>' .
-            $element .
-            '<div class="qf-label-1">' . $label[1] . '</div>' .
-            '</div>';
-    } else {
-        $html = '<div class="qf-element'.$errorClass.'">' .
-            $errorMsg .
-            '<label for="' . $element->getId() . '" class="' . $labelClass . '">' .
-            $element->getLabel() . '</label>' .
-            $element .
-            '</div>';
-    }
-    return $html;
-}
-
-
-$options =  array(
-  'group_hiddens' => true,
-  'group_errors' => true,
-  'required_note' => '<strong>Note:</strong> Required fields are marked with an asterisk (<em>*</em>).'
-  );
-$renderer = new HTML_QuickForm2_Renderer_Default($options);
-$renderer->setByNameRenderer('submit', 'renderSubmitCancel');
-$renderer->setByClassRenderer('HTML_QuickForm2_Element_InputPassword', 'renderMultiLabel');
-echo $renderer->render($form);
+echo $form->render($renderer);
+?>

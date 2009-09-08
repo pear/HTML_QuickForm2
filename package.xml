@@ -306,7 +306,7 @@ Bug fixes:
    <dir name="docs/examples">
     <file role="doc" name="basic-elements.php" />
     <file role="doc" name="builtin-rules.php" />
-    <!-- file role="doc" name="default-renderer.php" / -->
+    <file role="doc" name="default-renderer.php" />
    </dir> <!-- /docs/examples -->
    <file name="QuickForm2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
