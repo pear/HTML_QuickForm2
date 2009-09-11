@@ -10,68 +10,29 @@
 <html>
   <head>
     <style type="text/css">
-/* styles borrowed from an older release of Tableless Renderer for QF. 
-   Newer styles work worse with nested fieldsets */
+/* Set up custom font and form width */
 body {
     margin-left: 10px;
     font-family: Arial,sans-serif;
     font-size: small;
 }
-form {
-    margin: 0;
-    padding: 0;
+
+.quickform {
     min-width: 500px;
     max-width: 600px;
     width: 560px;
 }
-form fieldset {
-    border: 1px solid black;
-    padding: 10px 5px;
-    margin: 0;
-    /*width: 560px;*/
+
+/* Use default styles included with the package */
+
+<?php
+if ('@data_dir@' != '@' . 'data_dir@') {
+    $filename = '@data_dir@/HTML_QuickForm2/data/quickform.css';
+} else {
+    $filename = dirname(dirname(dirname(__FILE__))) . '/data/quickform.css';
 }
-form fieldset.hidden {
-    border: 0;
-}
-form fieldset legend {
-    font-weight: bold;
-}
-form label {
-    margin: 0 0 0 5px;
-}
-form label.qflabel {
-    display: block;
-    float: left;
-    width: 150px;
-    padding: 0;
-    margin: 5px 0 0 0;
-    text-align: right;
-}
-form input, form textarea, form select {
-    width: auto;
-}
-form textarea {
-    overflow: auto;
-}
-form br {
-    clear: left;
-}
-form div.qfelement {
-    display: inline;
-    float: left;
-    margin: 5px 0 0 10px;
-    padding: 0;
-}
-form div.qfreqnote {
-    font-size: 80%; 
-}
-form span.error, form span.required {
-    color: red;
-}
-form div.error {
-    border: 1px solid red;
-    padding: 5px;
-}
+readfile($filename);
+?>
     </style>
     <title>HTML_QuickForm2 basic elements example</title>
   </head>
@@ -90,8 +51,8 @@ function output_element($element)
     } elseif ('hidden' == $element->getType()) {
         echo '<div style="display: none;">' . $element . "</div>\n";
     } else {
-        echo '<div class="qfrow"><label class="qflabel" for="' . $element->getId() .
-             '">' . $element->getLabel() . '</label> <div class="qfelement">' .
+        echo '<div class="row"><label class="element" for="' . $element->getId() .
+             '">' . $element->getLabel() . '</label> <div class="element">' .
              $element . "</div></div><br />\n";
     }
 }
@@ -205,11 +166,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     $form->toggleFrozen(true);
 }
 
-echo '<form' . $form->getAttributes(true) . ">\n";
+echo '<div class="quickform"><form' . $form->getAttributes(true) . ">\n";
 foreach ($form as $element) {
     output_element($element);
 }
 ?>
-</form>
+</form></div>
   </body>
 </html>

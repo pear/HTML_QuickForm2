@@ -292,6 +292,9 @@ Bug fixes:
      <file name="NodeTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="RendererTest.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="RuleTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -304,10 +307,17 @@ Bug fixes:
     </file>
    </dir> <!-- /tests -->
    <dir name="docs/examples">
-    <file role="doc" name="basic-elements.php" />
-    <file role="doc" name="builtin-rules.php" />
+    <file role="doc" name="basic-elements.php">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
+    <file role="doc" name="builtin-rules.php">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
     <file role="doc" name="default-renderer.php" />
    </dir> <!-- /docs/examples -->
+   <dir name="data">
+    <file name="quickform.css" role="data" />
+   </dir> <!-- /data -->
    <file name="QuickForm2.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
