@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,17 +57,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestCase
 {
-    protected $get;
-    protected $post;
-    protected $files;
-
     public function setUp()
     {
-        // backing up the superglobals
-        $this->get   = $_GET;
-        $this->post  = $_POST;
-        $this->files = $_FILES;
-
         $_GET = array(
             'foo' => 'some value',
             'bar' => 'o\\\'really',
@@ -208,14 +199,6 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
             'size'      => 5678,
             'error'     => UPLOAD_ERR_OK
         ), $ds->getUpload('baz[escape][o\'really]'));
-    }
-
-    public function tearDown()
-    {
-        // restoring the superglobals
-        $_GET   = $this->get;
-        $_POST  = $this->post;
-        $_FILES = $this->files;
     }
 }
 ?>

@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,14 +62,8 @@ require_once 'HTML/QuickForm2.php';
  */
 class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 {
-    protected $files;
-    protected $post;
-
     public function setUp()
     {
-        $this->files = $_FILES;
-        $this->post  = $_POST;
-
         $_FILES = array(
             'foo' => array(
                 'name'      => 'file.doc',
@@ -96,12 +90,6 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $_POST = array(
             'MAX_FILE_SIZE' => '987654'
         );
-    }
-
-    public function tearDown()
-    {
-        $_FILES = $this->files;
-        $_POST  = $this->post;
     }
 
     public function testCannotBeFrozen()

@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,12 +62,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
 {
-    protected $post;
-
     public function setUp()
     {
-        $this->post = $_POST;
-
         $_POST = array(
             'foo_x' => '12',
             'foo_y' => '34',
@@ -75,11 +71,6 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
                 'idx' => array('56', '78')
             )
         );
-    }
-
-    public function tearDown()
-    {
-        $_POST = $this->post;
     }
 
     public function testCannotBeFrozen()

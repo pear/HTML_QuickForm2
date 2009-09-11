@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -68,24 +68,12 @@ abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_C
  */
 class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
 {
-    protected $post;
-    protected $get;
-
     public function setUp()
     {
-        $this->post = $_POST;
-        $this->get  = $_GET;
-
         $_POST = array(
             'single1' => '1'
         );
         $_GET = array();
-    }
-
-    public function tearDown()
-    {
-        $_POST = $this->post;
-        $_GET  = $this->get;
     }
 
     public function testSelectIsEmptyByDefault()

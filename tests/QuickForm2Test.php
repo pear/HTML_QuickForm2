@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,16 +58,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
 {
-    protected $request;
-    protected $get;
-    protected $post;
-
     public function setUp()
     {
-        $this->request = $_REQUEST;
-        $this->get     = $_GET;
-        $this->post    = $_POST;
-
         $_REQUEST = array(
             '_qf__track' => ''
         );
@@ -180,13 +172,6 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
 
         $form2 = new HTML_QuickForm2('track', 'post');
         $this->assertTrue($form2->validate());
-    }
-
-    public function tearDown()
-    {
-        $_REQUEST = $this->request;
-        $_GET     = $this->get;
-        $_POST    = $this->post;
     }
 }
 ?>

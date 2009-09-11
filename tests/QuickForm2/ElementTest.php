@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -87,14 +87,8 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
  */
 class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 {
-    protected $post;
-    protected $request;
-
     public function setUp()
     {
-        $this->post = $_POST;
-        $this->request = $_REQUEST;
-
         $_REQUEST = array(
             '_qf__form1' => ''
         );
@@ -103,12 +97,6 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
             'foo' => 'a value',
             'fooReborn' => 'another value'
         );
-    }
-
-    public function tearDown()
-    {
-        $_POST = $this->post;
-        $_REQUEST = $this->request;
     }
 
     public function testCanSetName()
