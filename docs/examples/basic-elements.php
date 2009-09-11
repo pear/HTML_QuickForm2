@@ -44,29 +44,6 @@ $options = array(
     'd' => 'Letter D', 'e' => 'Letter E', 'f' => 'Letter F'
 );
 
-function output_element($element)
-{
-    if ('fieldset' == $element->getType()) {
-        output_fieldset($element);
-    } elseif ('hidden' == $element->getType()) {
-        echo '<div style="display: none;">' . $element . "</div>\n";
-    } else {
-        echo '<div class="row"><label class="element" for="' . $element->getId() .
-             '">' . $element->getLabel() . '</label> <div class="element">' .
-             $element . "</div></div><br />\n";
-    }
-}
-
-function output_fieldset($fieldset)
-{
-    echo '<fieldset' . $fieldset->getAttributes(true) . ">\n<legend>" .
-         $fieldset->getLabel() . "</legend>\n";
-    foreach ($fieldset as $element) {
-        output_element($element);
-    }
-    echo "</fieldset>\n";
-}
-
 require_once 'HTML/QuickForm2.php';
 
 $form = new HTML_QuickForm2('elements');
@@ -166,11 +143,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     $form->toggleFrozen(true);
 }
 
-echo '<div class="quickform"><form' . $form->getAttributes(true) . ">\n";
-foreach ($form as $element) {
-    output_element($element);
-}
+echo $form;
 ?>
-</form></div>
   </body>
 </html>

@@ -106,20 +106,20 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     protected $templatesByClass = array(
         'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
         'html_quickform2' => array(
-            'prefix' => '<form{attributes}><div class="qf-form">',
-            'suffix' => '</div></form>'
+            'prefix' => '<div class="quickform"><form{attributes}>',
+            'suffix' => '</form></div>'
         ),
         'html_quickform2_container_fieldset' => array(
             'prefix' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>',
             'suffix' => '</fieldset>'
         ),
-        'special:required_note' => '<div class="qf-note">{message}</div>',
+        'special:required_note' => '<div class="reqnote">{message}</div>',
         'special:error' => array(
-            'prefix'    => '<div class="qf-errors"><qf:message><p>{message}</p></qf:message><ul><li>',
+            'prefix'    => '<div class="errors"><qf:message><p>{message}</p></qf:message><ul><li>',
             'separator' => '</li><li>',
-            'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message>'
+            'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message></div>'
         ),
-        'html_quickform2_element' => '<div><label for="{id}" class="qf-label"><qf:required><span class="qf-required">* </span></qf:required>{label}</label><div class="qf-element<qf:error> qf-error</qf:error>"><qf:error><span class="qf-error">{error}</span><br /></qf:error>{element}</div></div>'
+        'html_quickform2_element' => '<div class="row"><label for="{id}" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}</div></div>'
     );
 
    /**
@@ -375,7 +375,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
         }
         if (strpos($elTpl, '{label_')) {
-            $elTpl = preg_replace('!<qf:label_(\S+)>.*</qf:label_$1>!is', '', $elTpl);
+            $elTpl = preg_replace('!<qf:label_([^>]+)>.*</qf:label_\1>!isU', '', $elTpl);
         }
         return $elTpl;
     }

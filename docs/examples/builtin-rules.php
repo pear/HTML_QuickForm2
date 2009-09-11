@@ -42,40 +42,6 @@ readfile($filename);
   <body>
 <?php
 
-//
-// Helper functions
-//
-
-function output_element($element)
-{
-    if ('fieldset' == $element->getType()) {
-        output_fieldset($element);
-    } elseif ('hidden' == $element->getType()) {
-        echo '<div style="display: none;">' . $element . "</div>\n";
-    } else {
-        $required = $element->isRequired();
-        $error    = $element->getError();
-        echo '<div class="row"><label class="element" for="' . $element->getId() .
-             '">' . ($required? '<span class="required">*</span>': '') . $element->getLabel() . 
-             '</label> <div class="element' . (strlen($error)? ' error': '') . '">' .
-             (strlen($error)? '<span class="error">' . $error . '</span><br />': '') .
-             $element . "</div></div><br />\n";
-        if ($required) {
-            $GLOBALS['has_required'] = true;
-        }
-    }
-}
-
-function output_fieldset($fieldset)
-{
-    echo '<fieldset' . $fieldset->getAttributes(true) . ">\n<legend>" .
-         $fieldset->getLabel() . "</legend>\n";
-    foreach ($fieldset as $element) {
-        output_element($element);
-    }
-    echo "</fieldset>\n";
-}
-
 // in real application the password check will a bit be different, of course
 function check_password($password)
 {
@@ -159,17 +125,7 @@ if ($form->validate()) {
     $form->toggleFrozen(true);
 }
 
-$GLOBALS['has_required'] = false;
-echo '<div class="quickform"><form' . $form->getAttributes(true) . ">\n";
-foreach ($form as $element) {
-    output_element($element);
-}
-if ($GLOBALS['has_required']) {
+echo $form;
 ?>
-<div class="reqnote"><span class="required">*</span> denotes required field</div>
-<?php
-}
-?>
-</form></div>
   </body>
 </html>
