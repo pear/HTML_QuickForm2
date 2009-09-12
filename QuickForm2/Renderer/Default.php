@@ -105,15 +105,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     protected $templatesByClass = array(
         'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
-        'html_quickform2' => array(
-            'prefix' => '<div class="quickform"><form{attributes}>',
-            'suffix' => '</form></div>'
-        ),
-        'html_quickform2_container_fieldset' => array(
-            'prefix' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>',
-            'suffix' => '</fieldset>'
-        ),
-        'special:required_note' => '<div class="reqnote">{message}</div>',
+        'html_quickform2' => '<div class="quickform">{errors}<form{attributes}>{hidden}{content}</form><qf:reqnote><div class="reqnote">{reqnote}</div></qf:reqnote></div>',
+        'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>',
         'special:error' => array(
             'prefix'    => '<div class="errors"><qf:message><p>{message}</p></qf:message><ul><li>',
             'separator' => '</li><li>',
@@ -201,26 +194,38 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Sets template for a 'required' note
+    * Resets the accumulated data
     *
-    * Template will be used to output a note describing the appearance of
-    * required elements, if the form contains some of these.
+    * This method is called automatically by renderForm() method, but should
+    * be called manually before calling other render*() methods separately.
     *
-    * @param    string  Template
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return HTML_QuickForm2_Renderer_Default
     */
-    public function setRequiredNoteTemplate($template)
+    public function reset()
     {
-        return $this->setTemplateByClass('special:required_note', $template);
+        $this->html        = array('');
+        $this->hiddenHtml  = '';
+        $this->errors      = array();
+        $this->hasRequired = false;
+
+        return $this;
     }
 
-
+   /**
+    * Returns generated HTML
+    *
+    * @return string
+    */
     public function __toString()
     {
         return $this->html[0] . $this->hiddenHtml;
     }
 
-
+   /**
+    * Renders a generic element
+    *
+    * @param    HTML_QuickForm2_Node    Element being rendered
+    */
     public function renderElement(HTML_QuickForm2_Node $element)
     {
         $elTpl = $this->prepareTemplate($this->findTemplate($element), $element);
@@ -228,6 +233,11 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
                                                            array($element, $element->getId()), $elTpl);
     }
 
+   /**
+    * Renders a hidden element
+    *
+    * @param    HTML_QuickForm2_Node    Hidden element being rendered
+    */
     public function renderHidden(HTML_QuickForm2_Node $element)
     {
         if ($this->options['group_hiddens']) {
@@ -238,74 +248,92 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         }
     }
 
+   /**
+    * Renders a container
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
     public function renderContainer(HTML_QuickForm2_Node $container)
     {
-        $cTpl = $this->findTemplate($container);
-        $this->html[] = str_replace(array('{attributes}', '{id}'),
-                                    array($container->getAttributes(true), $container->getId()),
-                                    $this->prepareTemplate($cTpl['prefix'], $container));
-
+        $this->html[] = '';
         foreach ($container as $element) {
             $element->render($this);
         }
 
+        $cTpl  = str_replace(
+            array('{attributes}', '{id}'),
+            array($container->getAttributes(true), $container->getId()),
+            $this->prepareTemplate($this->findTemplate($container), $container)
+        );
         $cHtml = array_pop($this->html);
-        $this->html[count($this->html) - 1] .= $cHtml . $cTpl['suffix'];
+        $this->html[count($this->html) - 1] .= str_replace('{content}', $cHtml, $cTpl);
     }
 
+   /**
+    * Renders a HTML_QuickForm2 object
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
     public function renderForm(HTML_QuickForm2_Node $form)
     {
-        $this->html        = array('');
-        $this->hiddenHtml  = '';
-        $this->errors      = array();
-        $this->hasRequired = false;
+        $this->reset();
 
         foreach ($form as $element) {
             $element->render($this);
         }
 
-        // grouped errors
-        if (!empty($this->errors)) {
-            if (!empty($this->options['errors_prefix'])) {
-                $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
-                                         array('', '', $this->options['errors_prefix']),
-                                         $this->templatesByClass['special:error']['prefix']);
-            } else {
-                $errorHtml = preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                          $this->templatesByClass['special:error']['prefix']);
-            }
-            $errorHtml .= implode($this->templatesByClass['special:error']['separator'], $this->errors);
-            if (!empty($this->options['errors_suffix'])) {
-                $errorHtml .= str_replace(array('<qf:message>', '</qf:message>', '{message}'),
-                                          array('', '', $this->options['errors_suffix']),
-                                          $this->templatesByClass['special:error']['suffix']);
-            } else {
-                $errorHtml .= preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                          $this->templatesByClass['special:error']['suffix']);
-            }
-            $this->html[0] = $errorHtml . $this->html[0];
-        }
-
-        // grouped hidden stuff
-        if (!empty($this->hiddenHtml)) {
-            $this->html[0] = str_replace('{element}', $this->hiddenHtml,
-                                      $this->templatesByClass['html_quickform2_element_inputhidden']) .
-                          $this->html[0];
-            $this->hiddenHtml = '';
-        }
+        $formTpl = str_replace(
+            array('{attributes}', '{hidden}', '{errors}'),
+            array($form->getAttributes(true), $this->hiddenHtml,
+                  $this->outputGroupedErrors()),
+            $this->findTemplate($form)
+        );
+        $this->hiddenHtml = '';
 
         // required note
-        if ($this->hasRequired && !$form->toggleFrozen() &&
-            !empty($this->options['required_note']))
+        if (!$this->hasRequired || $form->toggleFrozen() ||
+            empty($this->options['required_note']))
         {
-            $this->html[0] .= str_replace('{message}', $this->options['required_note'],
-                                          $this->templatesByClass['special:required_note']);
+            $formTpl = preg_replace('!<qf:reqnote>.*</qf:reqnote>!isU', '', $formTpl);
+        } else {
+            $formTpl = str_replace(
+                array('<qf:reqnote>', '</qf:reqnote>', '{reqnote}'),
+                array('', '', $this->options['required_note']), 
+                $formTpl
+            );
         }
 
-        $formTpl = $this->findTemplate($form);
-        $this->html[0] = str_replace('{attributes}', $form->getAttributes(true),
-                                  $formTpl['prefix']) .
-                         $this->html[0] . $formTpl['suffix'];
+        $this->html[0] = str_replace('{content}', $this->html[0], $formTpl);
+    }
+
+   /**
+    * Creates a error list if 'group_errors' option is true
+    *
+    * @return   string  HTML with a list of all validation errors
+    */
+    protected function outputGroupedErrors()
+    {
+        if (empty($this->errors)) {
+            return '';
+        } 
+        if (!empty($this->options['errors_prefix'])) {
+            $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
+                                     array('', '', $this->options['errors_prefix']),
+                                     $this->templatesByClass['special:error']['prefix']);
+        } else {
+            $errorHtml = preg_replace('!<qf:message>.*</qf:message>!isU', '',
+                                      $this->templatesByClass['special:error']['prefix']);
+        }
+        $errorHtml .= implode($this->templatesByClass['special:error']['separator'], $this->errors);
+        if (!empty($this->options['errors_suffix'])) {
+            $errorHtml .= str_replace(array('<qf:message>', '</qf:message>', '{message}'),
+                                      array('', '', $this->options['errors_suffix']),
+                                      $this->templatesByClass['special:error']['suffix']);
+        } else {
+            $errorHtml .= preg_replace('!<qf:message>.*</qf:message>!isU', '',
+                                      $this->templatesByClass['special:error']['suffix']);
+        }
+        return $errorHtml;
     }
 
    /**
@@ -338,15 +366,39 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     protected function prepareTemplate($elTpl, HTML_QuickForm2_Node $element)
     {
         // if element is required
-        if ($element->isRequired()) {
+        $elTpl = $this->markRequired($elTpl, $element->isRequired());
+        $elTpl = $this->outputError($elTpl, $element->getError());
+        return $this->outputLabel($elTpl, $element->getLabel());
+    }
+
+   /**
+    * Marks element required or removes "required" block
+    *
+    * @param    string  Element template
+    * @param    bool    Whether element is required
+    * @return   string  Template with processed "required" block
+    */
+    protected function markRequired($elTpl, $required)
+    {
+        if ($required) {
             $this->hasRequired = true;
             $elTpl = str_replace(array('<qf:required>', '</qf:required>'),
                                   array('', ''), $elTpl);
         } else {
             $elTpl = preg_replace('!<qf:required>.*</qf:required>!isU', '', $elTpl);
         }
-        // output element's error
-        $error = $element->getError();
+        return $elTpl;
+    }
+
+   /**
+    * Outputs element error, removes empty error blocks
+    *
+    * @param    string  Element template
+    * @param    string  Validation error for the element
+    * @return   string  Template with error substitutions done
+    */
+    protected function outputError($elTpl, $error)
+    {
         if ($error && !$this->options['group_errors']) {
             $elTpl = str_replace(array('<qf:error>', '</qf:error>', '{error}'),
                                   array('', '', $error), $elTpl);
@@ -356,8 +408,18 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
             $elTpl = preg_replace('!<qf:error>.*</qf:error>!isU', '', $elTpl);
         }
-        // output labels
-        $label     = $element->getLabel();
+        return $elTpl;
+    }
+
+   /**
+    * Outputs element's label(s), removes empty label blocks
+    *
+    * @param    string  Element template
+    * @param    mixed   Element label(s)
+    * @return   string  Template with label substitutions done
+    */
+    protected function outputLabel($elTpl, $label)
+    {
         $mainLabel = is_array($label)? array_shift($label): $label;
         $elTpl     = str_replace('{label}', $mainLabel, $elTpl);
         if (false !== strpos($elTpl, '<qf:label>')) {
@@ -380,5 +442,4 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         return $elTpl;
     }
 }
-
 ?>

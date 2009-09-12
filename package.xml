@@ -236,7 +236,15 @@ Bug fixes:
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/QuickForm2/Element -->
-    <dir name="Rule">
+     <dir name="Renderer">
+      <file name="AllTests.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="DefaultTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
+     <dir name="Rule">
       <file name="AllTests.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>

@@ -462,7 +462,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     {
         require_once 'HTML/QuickForm2/Renderer.php';
 
-        return $this->render(HTML_QuickForm2_Renderer::getInstance('default'))
+        return $this->render(HTML_QuickForm2_Renderer::getInstance('default')->reset())
                     ->__toString();
     }
 }
