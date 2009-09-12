@@ -169,5 +169,30 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('g4[g3][g1][][]', $e7->getName());
         $this->assertEquals('g4[g3][g1][]', $e8->getName());
     }
+
+    public function testInsertBefore()
+    {
+        $foo = new HTML_QuickForm2_Container_Group('foo');
+        $fooBar = $foo->insertBefore(
+            HTML_QuickForm2_Factory::createElement('text', 'bar')
+        );
+        $this->assertEquals('foo[bar]', $fooBar->getName());
+
+        $fooBaz = $foo->insertBefore(
+            HTML_QuickForm2_Factory::createElement('text', 'bar'), $fooBar
+        );
+        $this->assertEquals('foo[baz]', $fooBaz->getName());
+    }
+
+    public function testSetValue()
+    {
+        $foo    = new HTML_QuickForm2_Container_Group('foo');
+        $fooBar = $foo->addText('bar');
+        $fooBaz = $foo->addText('baz');
+
+        $foo->setValue(array('bar' => 'first value', 'baz' => 'second value'));
+        $this->assertEquals('first value', $fooBar->getValue());
+        $this->assertEquals('second value', $fooBaz->getValue());
+    }
 }
 ?>
