@@ -137,14 +137,14 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             'an error!' . $element->__toString() . 'some message',
             $element->render(
-                $renderer->reset()->setOptions(array('group_errors' => false))
+                $renderer->reset()->setOption('group_errors', false)
             )->__toString()
         );
 
         $this->assertEquals(
             $element->__toString(),
             $element->render(
-                $renderer->reset()->setOptions(array('group_errors' => true))
+                $renderer->reset()->setOption('group_errors', true)
             )->__toString()
         );
     }
@@ -201,7 +201,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element = $form->addText('testReqnote');
 
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setOptions(array('required_note' => 'This is requi-i-i-ired!'));
+            ->setOption('required_note', 'This is requi-i-i-ired!');
 
         $this->assertNotContains('<div class="reqnote">', $form->render($renderer)->__toString());
 
@@ -214,7 +214,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $form     = new HTML_QuickForm2('groupedErrors');
         $element  = $form->addText('testGroupedErrors')->setError('Some error');
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setOptions(array(
+            ->setOption(array(
                 'group_errors'  => true,
                 'errors_prefix' => 'Your errors:',
                 'errors_suffix' => ''
@@ -232,13 +232,13 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $hidden1  = $form->addHidden('hidden1');
         $hidden2  = $form->addHidden('hidden2');
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setOptions(array('group_hiddens' => false));
+            ->setOption('group_hiddens', false);
 
         $html = $form->render($renderer)->__toString();
         $this->assertContains('<div style="display: none;">' . $hidden1->__toString() . '</div>', $html);
         $this->assertContains('<div style="display: none;">' . $hidden2->__toString() . '</div>', $html);
 
-        $renderer->setOptions(array('group_hiddens' => true));
+        $renderer->setOption('group_hiddens', true);
         $html = $form->render($renderer)->__toString();
         $this->assertNotContains('<div style="display: none;">', $html);
         $this->assertContains($hidden1->__toString() . $hidden2->__toString(), $html);

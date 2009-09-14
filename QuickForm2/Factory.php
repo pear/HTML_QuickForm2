@@ -44,9 +44,9 @@
  */
 
 /**
- * Exception classes for HTML_QuickForm2
+ * Class with static methods for loading classes and files 
  */
-require_once 'HTML/QuickForm2/Exception.php';
+require_once 'HTML/QuickForm2/Loader.php';
 
 /**
  * Static factory class
@@ -67,36 +67,21 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $elementTypes = array(
-        'button'        => array('HTML_QuickForm2_Element_Button',
-                                 'HTML/QuickForm2/Element/Button.php'),
-        'checkbox'      => array('HTML_QuickForm2_Element_InputCheckbox',
-                                 'HTML/QuickForm2/Element/InputCheckbox.php'),
-        'fieldset'      => array('HTML_QuickForm2_Container_Fieldset',
-                                 'HTML/QuickForm2/Container/Fieldset.php'),
-        'group'         => array('HTML_QuickForm2_Container_Group',
-                                 'HTML/QuickForm2/Container/Group.php'),
-        'file'          => array('HTML_QuickForm2_Element_InputFile',
-                                 'HTML/QuickForm2/Element/InputFile.php'),
-        'hidden'        => array('HTML_QuickForm2_Element_InputHidden',
-                                 'HTML/QuickForm2/Element/InputHidden.php'),
-        'image'         => array('HTML_QuickForm2_Element_InputImage',
-                                 'HTML/QuickForm2/Element/InputImage.php'),
-        'inputbutton'   => array('HTML_QuickForm2_Element_InputButton',
-                                 'HTML/QuickForm2/Element/InputButton.php'),
-        'password'      => array('HTML_QuickForm2_Element_InputPassword',
-                                 'HTML/QuickForm2/Element/InputPassword.php'),
-        'radio'         => array('HTML_QuickForm2_Element_InputRadio',
-                                 'HTML/QuickForm2/Element/InputRadio.php'),
-        'reset'         => array('HTML_QuickForm2_Element_InputReset',
-                                 'HTML/QuickForm2/Element/InputReset.php'),
-        'select'        => array('HTML_QuickForm2_Element_Select',
-                                 'HTML/QuickForm2/Element/Select.php'),
-        'submit'        => array('HTML_QuickForm2_Element_InputSubmit',
-                                 'HTML/QuickForm2/Element/InputSubmit.php'),
-        'text'          => array('HTML_QuickForm2_Element_InputText',
-                                 'HTML/QuickForm2/Element/InputText.php'),
-        'textarea'      => array('HTML_QuickForm2_Element_Textarea',
-                                 'HTML/QuickForm2/Element/Textarea.php')
+        'button'        => array('HTML_QuickForm2_Element_Button', null),
+        'checkbox'      => array('HTML_QuickForm2_Element_InputCheckbox', null),
+        'fieldset'      => array('HTML_QuickForm2_Container_Fieldset', null),
+        'group'         => array('HTML_QuickForm2_Container_Group', null),
+        'file'          => array('HTML_QuickForm2_Element_InputFile', null),
+        'hidden'        => array('HTML_QuickForm2_Element_InputHidden', null),
+        'image'         => array('HTML_QuickForm2_Element_InputImage', null),
+        'inputbutton'   => array('HTML_QuickForm2_Element_InputButton', null),
+        'password'      => array('HTML_QuickForm2_Element_InputPassword', null),
+        'radio'         => array('HTML_QuickForm2_Element_InputRadio', null),
+        'reset'         => array('HTML_QuickForm2_Element_InputReset', null),
+        'select'        => array('HTML_QuickForm2_Element_Select', null),
+        'submit'        => array('HTML_QuickForm2_Element_InputSubmit', null),
+        'text'          => array('HTML_QuickForm2_Element_InputText', null),
+        'textarea'      => array('HTML_QuickForm2_Element_Textarea', null)
     );
 
    /**
@@ -104,93 +89,33 @@ class HTML_QuickForm2_Factory
     * @var array
     */
     protected static $registeredRules = array(
-        'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty',
-                                 'HTML/QuickForm2/Rule/Nonempty.php'),
-        'empty'         => array('HTML_QuickForm2_Rule_Empty',
-                                 'HTML/QuickForm2/Rule/Empty.php'),
-        'required'      => array('HTML_QuickForm2_Rule_Required',
-                                 'HTML/QuickForm2/Rule/Required.php'),
-        'compare'       => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php'),
-        'eq'            => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty', null),
+        'empty'         => array('HTML_QuickForm2_Rule_Empty', null),
+        'required'      => array('HTML_QuickForm2_Rule_Required', null),
+        'compare'       => array('HTML_QuickForm2_Rule_Compare', null),
+        'eq'            => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '===')),
-        'neq'           => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'neq'           => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '!==')),
-        'lt'            => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'lt'            => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '<')),
-        'lte'           => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'lte'           => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '<=')),
-        'gt'            => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'gt'            => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '>')),
-        'gte'           => array('HTML_QuickForm2_Rule_Compare',
-                                 'HTML/QuickForm2/Rule/Compare.php',
+        'gte'           => array('HTML_QuickForm2_Rule_Compare', null,
                                  array('operator' => '>=')),
-        'regex'         => array('HTML_QuickForm2_Rule_Regex',
-                                 'HTML/QuickForm2/Rule/Regex.php'),
-        'callback'      => array('HTML_QuickForm2_Rule_Callback',
-                                 'HTML/QuickForm2/Rule/Callback.php'),
-        'length'        => array('HTML_QuickForm2_Rule_Length',
-                                 'HTML/QuickForm2/Rule/Length.php'),
-        'minlength'     => array('HTML_QuickForm2_Rule_Length',
-                                 'HTML/QuickForm2/Rule/Length.php',
+        'regex'         => array('HTML_QuickForm2_Rule_Regex', null),
+        'callback'      => array('HTML_QuickForm2_Rule_Callback', null),
+        'length'        => array('HTML_QuickForm2_Rule_Length', null),
+        'minlength'     => array('HTML_QuickForm2_Rule_Length', null,
                                  array('max' => 0)),
-        'maxlength'     => array('HTML_QuickForm2_Rule_Length',
-                                 'HTML/QuickForm2/Rule/Length.php',
+        'maxlength'     => array('HTML_QuickForm2_Rule_Length', null,
                                  array('min' => 0)),
-        'maxfilesize'   => array('HTML_QuickForm2_Rule_MaxFileSize',
-                                 'HTML/QuickForm2/Rule/MaxFileSize.php'),
-        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType',
-                                 'HTML/QuickForm2/Rule/MimeType.php')
+        'maxfilesize'   => array('HTML_QuickForm2_Rule_MaxFileSize', null),
+        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType', null)
     );
 
-
-   /**
-    * Checks whether the file exists in the include path
-    *
-    * @param    string  file name
-    * @return   bool
-    */
-    protected static function fileExists($fileName)
-    {
-        $fp = @fopen($fileName, 'r', true);
-        if (is_resource($fp)) {
-            fclose($fp);
-            return true;
-        }
-        return false;
-    }
-
-   /**
-    * Tries to load a given class from a given file
-    *
-    * @param    string  Class name to load
-    * @param    string  Name of the file (supposedly) containing the given class
-    * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
-    *               loaded or doesn't contain the given class
-    */
-    protected static function loadClass($className, $includeFile)
-    {
-        if (empty($includeFile)) {
-            throw new HTML_QuickForm2_NotFoundException(
-                "Class '$className' does not exist and no file to load"
-            );
-        } elseif (!self::fileExists($includeFile)) {
-            throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
-        }
-        // Do not silence the errors with @, parse errors will not be seen
-        include $includeFile;
-        // Still no class?
-        if (!class_exists($className, false)) {
-            throw new HTML_QuickForm2_NotFoundException(
-                "Class '$className' was not found within file '$includeFile'"
-            );
-        }
-    }
 
    /**
     * Registers a new element type
@@ -237,9 +162,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_InvalidArgumentException("Element type '$type' is not known");
         }
         list($className, $includeFile) = self::$elementTypes[$type];
-        if (!class_exists($className, false)) {
-            self::loadClass($className, $includeFile);
-        }
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile);
         return new $className($name, $attributes, $data);
     }
 
@@ -311,9 +234,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
         }
         list($className, $includeFile) = self::$registeredRules[$type];
-        if (!class_exists($className, false)) {
-            self::loadClass($className, $includeFile);
-        }
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile);
         return new $className($owner, $message, $options, $type);
     }
 }

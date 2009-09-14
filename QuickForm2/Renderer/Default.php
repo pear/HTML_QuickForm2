@@ -86,19 +86,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     protected $errors = array();
 
-
-   /**
-    * Renderer options
-    * @var  array
-    */
-    protected $options = array(
-        'group_hiddens' => true,
-        'required_note' => '<strong>Note:</strong> <em>*</em> denotes required fields.',
-        'errors_prefix' => 'Invalid information entered:',
-        'errors_suffix' => 'Please correct these fields.',
-        'group_errors'  => false
-    );
-
    /**
     * Stores default templates for elements of the given class
     * @var  array
@@ -120,30 +107,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @var  array
     */
     protected $templatesById = array();
-
-
-   /**
-    * Sets the renderer options
-    *
-    * @param    array   Options affecting renderer behaviour:
-    * <ul>
-    *   <li>group_hiddens: whether to group hidden elements in a single div</li>
-    *   <li>group_errors: group error messages on top of the form instead of inline</li>
-    *   <li>errors_prefix: prefix sentence for grouped errors</li>
-    *   <li>errors_suffix: suffix sentence for grouped errors</li>
-    *   <li>required_note: note displayed if the form contains required elements</li>
-    * </ul>
-    * @return   HTML_QuickForm2_Renderer_Default
-    */
-    public function setOptions(array $options = array())
-    {
-        foreach (array_keys($this->options) as $key) {
-            if (isset($options[$key])) {
-                $this->options[$key] = $options[$key];
-            }
-        }
-        return $this;
-    }
 
    /**
     * Sets template for elements of the given class

@@ -63,7 +63,7 @@ if ($form->validate()) {
 
 
 $renderer = HTML_QuickForm2_Renderer::getInstance('default')
-    ->setOptions(array(
+    ->setOption(array(
         'group_hiddens' => true,
         'group_errors'  => true,
         'required_note' => '<strong>Note:</strong> Required fields are marked with an asterisk (<em>*</em>).'

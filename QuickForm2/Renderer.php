@@ -44,6 +44,11 @@
  */
 
 /**
+ * Class with static methods for loading classes and files 
+ */
+require_once 'HTML/QuickForm2/Loader.php';
+
+/**
  * Abstract base class for QuickForm2 renderers
  *
  * @category   HTML
@@ -52,15 +57,14 @@
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_Quickform2_Renderer
+abstract class HTML_QuickForm2_Renderer
 {
    /**
     * List of registered renderer types
     * @var array
     */
     private static $_types = array(
-        'default' => array('HTML_QuickForm2_Renderer_Default',
-                           'HTML/QuickForm2/Renderer/Default.php')
+        'default' => array('HTML_QuickForm2_Renderer_Default', null)
     );
 
    /**
@@ -93,47 +97,17 @@ abstract class HTML_Quickform2_Renderer
     private $_pluginMethods = array();
 
    /**
-    * Checks whether the file exists in the include path
-    *
-    * @param    string  file name
-    * @return   bool
+    * Renderer options
+    * @var  array
+    * @see  setOption()
     */
-    private static function _fileExists($fileName)
-    {
-        $fp = @fopen($fileName, 'r', true);
-        if (is_resource($fp)) {
-            fclose($fp);
-            return true;
-        }
-        return false;
-    }
-
-   /**
-    * Tries to load a given class from a given file
-    *
-    * @param    string  Class name to load
-    * @param    string  Name of the file (supposedly) containing the given class
-    * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
-    *               loaded or doesn't contain the given class
-    */
-    private static function _loadClass($className, $includeFile)
-    {
-        if (empty($includeFile)) {
-            throw new HTML_QuickForm2_NotFoundException(
-                "Class '$className' does not exist and no file to load"
-            );
-        } elseif (!self::_fileExists($includeFile)) {
-            throw new HTML_QuickForm2_NotFoundException("File '$includeFile' was not found");
-        }
-        // Do not silence the errors with @, parse errors will not be seen
-        include $includeFile;
-        // Still no class?
-        if (!class_exists($className, false)) {
-            throw new HTML_QuickForm2_NotFoundException(
-                "Class '$className' was not found within file '$includeFile'"
-            );
-        }
-    }
+    protected $options = array(
+        'group_hiddens' => true,
+        'required_note' => '<em>*</em> denotes required fields.',
+        'errors_prefix' => 'Invalid information entered:',
+        'errors_suffix' => 'Please correct these fields.',
+        'group_errors'  => false
+    );
 
    /**
     * Returns the renderer instance of the given type
@@ -158,14 +132,10 @@ abstract class HTML_Quickform2_Renderer
                 );
             }
             list ($className, $includeFile) = self::$_types[$type];
-            if (!class_exists($className, false)) {
-                self::_loadClass($className, $includeFile);
-            }
+            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
             $renderer = new $className;
             foreach (self::$_pluginClasses[$type] as $plugin) {
-                if (!class_exists($plugin[0], false)) {
-                    self::_loadClass($plugin[0], $plugin[1]);
-                }
+                HTML_QuickForm2_Loader::loadClass($plugin[0], $plugin[1]);
                 $renderer->addPlugin(new $plugin[0]);
             }
             self::$_instances[$type] = $renderer;
@@ -223,9 +193,7 @@ abstract class HTML_Quickform2_Renderer
 
         // If there is already a renderer instance, add the plugin instance to it
         if (isset(self::$_instances[$type])) {
-            if (!class_exists($className, false)) {
-                self::_loadClass($className, $includeFile);
-            }
+            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
             self::$_instances[$type]->addPlugin(new $className);
         }
     }
@@ -295,6 +263,65 @@ abstract class HTML_Quickform2_Renderer
         }
         trigger_error("Fatal error: Call to undefined method " .
                       get_class($this) . "::" . $name . "()", E_USER_ERROR);
+    }
+
+   /**
+    * Sets the option(s) affecting renderer behaviour 
+    *
+    * The following options are available: 
+    * <ul>
+    *   <li>'group_hiddens' - whether to group hidden elements together or
+    *                         render them where they were added (boolean)</li>
+    *   <li>'group_errors'  - whether to group error messages or render them
+    *                         alongside elements they apply to (boolean)</li>
+    *   <li>'errors_prefix' - leading message for grouped errors (string)</li>
+    *   <li>'errors_suffix' - trailing message for grouped errors (string)</li>
+    *   <li>'required_note' - note displayed if the form contains required 
+    *                         elements (string)</li>
+    * </ul>
+    *
+    * @param    string|array    option name or array ('option name' => 'option value')
+    * @param    mixed           parameter value if $nameOrConfig is not an array
+    * @return   HTML_QuickForm2_Renderer
+    * @throws   HTML_QuickForm2_NotFoundException in case of unknown option
+    */
+    public function setOption($nameOrOptions, $value = null)
+    {
+        if (is_array($nameOrOptions)) {
+            foreach ($nameOrOptions as $name => $value) {
+                $this->setOption($name, $value);
+            }
+
+        } else {
+            if (!array_key_exists($nameOrOptions, $this->options)) {
+                throw new HTML_QuickForm2_NotFoundException(
+                    "Unknown option '{$nameOrOptions}'"
+                );
+            }
+            $this->options[$nameOrOptions] = $value;
+        }
+
+        return $this;
+    }
+
+   /**
+    * Returns the value(s) of the renderer option(s)
+    *
+    * @param    string  parameter name
+    * @return   mixed   value of $name parameter, array of all configuration 
+    *                   parameters if $name is not given
+    * @throws   HTML_QuickForm2_NotFoundException in case of unknown option
+    */
+    public function getOption($name = null)
+    {
+        if (null === $name) {
+            return $this->options;
+        } elseif (!array_key_exists($name, $this->options)) {
+            throw new HTML_QuickForm2_NotFoundException(
+                "Unknown option '{$name}'"
+            );
+        }
+        return $this->options[$name];
     }
 
    /**

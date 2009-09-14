@@ -158,6 +158,9 @@ Bug fixes:
     <file name="Factory.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="Loader.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="Node.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
