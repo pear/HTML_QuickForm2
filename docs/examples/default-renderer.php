@@ -68,8 +68,8 @@ $renderer = HTML_QuickForm2_Renderer::getInstance('default')
         'group_errors'  => true,
         'required_note' => '<strong>Note:</strong> Required fields are marked with an asterisk (<em>*</em>).'
     ))
-    ->setTemplateById('submit', '<div class="element">{element} or <a href="/">Cancel</a></div>')
-    ->setTemplateByClass(
+    ->setTemplateForId('submit', '<div class="element">{element} or <a href="/">Cancel</a></div>')
+    ->setTemplateForClass(
         'HTML_QuickForm2_Element_Input',
         '<div class="element<qf:error> error</qf:error>"><qf:error>{error}</qf:error>' .
         '<label for="{id}" class="qf-label<qf:required> required</qf:required>">{label}</label>' .

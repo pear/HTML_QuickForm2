@@ -145,5 +145,51 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         return parent::appendChild($this->renameChild($element));
     }
+
+   /**
+    * Sets string(s) to separate grouped elements
+    *
+    * @param    string|array    Use a string for one separator, array for
+    *                           alternating separators
+    * @return   HTML_QuickForm2_Container_Group
+    */
+    public function setSeparator($separator)
+    {
+        $this->data['separator'] = $separator;
+        return $this;
+    }
+
+   /**
+    * Returns string(s) to separate grouped elements
+    *
+    * @return   string|array    Separator, null if not set
+    */
+    public function getSeparator()
+    {
+        return isset($this->data['separator'])? $this->data['separator']: null;
+    }
+
+   /**
+    * Renders the group using the given renderer
+    *
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
+    */
+    public function render(HTML_QuickForm2_Renderer $renderer)
+    {
+        $renderer->renderGroup($this);
+        return $renderer;
+    }
+
+    public function __toString()
+    {
+        require_once 'HTML/QuickForm2/Renderer.php';
+
+        $renderer    = HTML_QuickForm2_Renderer::getInstance('default')->reset();
+        $oldTemplate = $renderer->getTemplateForId($this->getId());
+
+        return $this->render($renderer->setTemplateForId($this->getId(), '{content}'))
+                    ->setTemplateForId($this->getId(), $oldTemplate)->__toString();
+    }
 }
 ?>

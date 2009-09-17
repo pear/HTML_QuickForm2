@@ -68,6 +68,7 @@ class HTML_QuickForm2_FakeRenderer extends HTML_QuickForm2_Renderer
     public function renderHidden(HTML_QuickForm2_Node $element) {}
     public function renderForm(HTML_QuickForm2_Node $form) {}
     public function renderContainer(HTML_QuickForm2_Node $container) {}
+    public function renderGroup(HTML_QuickForm2_Node $group) {}
 }
 
 /**

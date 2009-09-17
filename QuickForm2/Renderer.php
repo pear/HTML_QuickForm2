@@ -346,10 +346,17 @@ abstract class HTML_QuickForm2_Renderer
     abstract public function renderForm(HTML_QuickForm2_Node $form);
 
    /**
-    * Renders a container
+    * Renders a generic container
     *
     * @param    HTML_QuickForm2_Node    Container being rendered
     */
     abstract public function renderContainer(HTML_QuickForm2_Node $container);
+
+   /**
+    * Renders a group
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    abstract public function renderGroup(HTML_QuickForm2_Node $group);
 }
 ?>

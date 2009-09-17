@@ -68,11 +68,11 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             'text', 'foo', array('id' => 'testRenderElement')
         );
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setTemplateByClass(
+            ->setTemplateForClass(
                 'HTML_QuickForm2_Element_InputText', 'InputText;id={id},html={element}'
-            )->setTemplateByClass(
+            )->setTemplateForClass(
                 'HTML_QuickForm2_Element_Input', 'Input;id={id},html={element}'
-            )->setTemplateById(
+            )->setTemplateForId(
                 'testRenderElement', 'testRenderElement;id={id},html={element}'
             );
 
@@ -81,13 +81,13 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             $element->render($renderer->reset())->__toString()
         );
 
-        $renderer->setTemplateById('testRenderElement', null);
+        $renderer->setTemplateForId('testRenderElement', null);
         $this->assertEquals(
             'InputText;id=' . $element->getId() . ',html=' . $element->__toString(),
             $element->render($renderer->reset())->__toString()
         );
 
-        $renderer->setTemplateByClass('HTML_QuickForm2_Element_InputText', null);
+        $renderer->setTemplateForClass('HTML_QuickForm2_Element_InputText', null);
         $this->assertEquals(
             'Input;id=' . $element->getId() . ',html=' . $element->__toString(),
             $element->render($renderer->reset())->__toString()
@@ -101,7 +101,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         );
 
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setTemplateById(
+            ->setTemplateForId(
                 'testRenderRequiredElement',
                 '<qf:required>required!</qf:required>{element}<qf:required><em>*</em></qf:required>'
             );
@@ -123,7 +123,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             'text', 'foo', array('id' => 'testElementWithError')
         );
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setTemplateById(
+            ->setTemplateForId(
                 'testElementWithError',
                 '<qf:error>an error!</qf:error>{element}<qf:error>{error}</qf:error>'
             );
@@ -155,7 +155,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             'text', 'foo', array('id' => 'testSingleLabel')
         );
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setTemplateById(
+            ->setTemplateForId(
                 'testSingleLabel',
                 '<qf:label>A label: </qf:label>{element}{label}'
             );
@@ -177,7 +177,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             'text', 'foo', array('id' => 'testMultipleLabels')
         )->setLabel(array('first', 'second'));
         $renderer = HTML_Quickform2_Renderer::getInstance('default')
-            ->setTemplateById(
+            ->setTemplateForId(
                 'testMultipleLabels',
                 '<qf:label>First label: {label}</qf:label>{element}<qf:label_2>Second label: {label_2}</qf:label_2>' .
                 '<qf:label_foo>Named label: {label_foo}</qf:label_foo>'
@@ -242,6 +242,76 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $html = $form->render($renderer)->__toString();
         $this->assertNotContains('<div style="display: none;">', $html);
         $this->assertContains($hidden1->__toString() . $hidden2->__toString(), $html);
+    }
+
+    public function testRenderGroupedElementUsingMostAppropriateTemplate()
+    {
+        $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testRenderGroup'));
+        $element = $group->addElement('text', 'bar', array('id' => 'testRenderGroupedElement'));
+
+        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+            ->setTemplateForClass(
+                'HTML_QuickForm2_Element_InputText', 'IgnoreThis;html={element}'
+            )->setGroupedTemplateForClass(
+                'HTML_QuickForm2_Element_Input', 'GroupedInput;id={id},html={element}'
+            )->setGroupedTemplateForClass(
+                'HTML_QuickForm2_Element', 'GroupedElement;id={id},html={element}', 'testRenderGroup'
+            )->setTemplateForId(
+                'testRenderGroupedElement', 'testRenderGroupedElement;id={id},html={element}'
+            );
+
+        $this->assertContains(
+            'testRenderGroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $renderer->setTemplateForId('testRenderGroupedElement', null);
+        $this->assertContains(
+            'GroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $renderer->setGroupedTemplateForClass('HTML_QuickForm2_Element', null, 'testRenderGroup');
+        $this->assertContains(
+            'GroupedInput;id=' . $element->getId() . ',html=' . $element->__toString(),
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $renderer->setGroupedTemplateForClass('HTML_QuickForm2_Element_Input', null);
+        $this->assertNotContains(
+            'IgnoreThis', $group->render($renderer->reset())->__toString()
+        );
+    }
+
+    public function testRenderGroupedElementsWithSeparators()
+    {
+        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testSeparators'));
+        $element1 = $group->addElement('text', 'bar');
+        $element2 = $group->addElement('text', 'baz');
+        $element3 = $group->addElement('text', 'quux');
+
+        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+            ->setTemplateForId('testSeparators', '{content}')
+            ->setGroupedTemplateForClass(
+                'HTML_QuickForm2_Element_InputText', '<foo>{element}</foo>', 'testSeparators'
+            );
+
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo><foo>' . $element2 . '</foo><foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $group->setSeparator('&nbsp;');
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo>&nbsp;<foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $group->setSeparator(array('<br />', '&nbsp;'));
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo><br /><foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
     }
 }
 ?>

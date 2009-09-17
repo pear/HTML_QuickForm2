@@ -71,14 +71,13 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * HTML generated for the form
     * @var  array
     */
-    protected $html = array('');
+    protected $html = array(array());
 
    /**
     * HTML for hidden elements if 'group_hiddens' option is on
     * @var  string
     */
     protected $hiddenHtml = '';
-
 
    /**
     * Array of validation errors if 'group_errors' option is on
@@ -87,10 +86,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     protected $errors = array();
 
    /**
-    * Stores default templates for elements of the given class
+    * Default templates for elements of the given class
     * @var  array
     */
-    protected $templatesByClass = array(
+    protected $templatesForClass = array(
         'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
         'html_quickform2' => '<div class="quickform">{errors}<form{attributes}>{hidden}{content}</form><qf:reqnote><div class="reqnote">{reqnote}</div></qf:reqnote></div>',
         'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>',
@@ -99,46 +98,92 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'separator' => '</li><li>',
             'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message></div>'
         ),
-        'html_quickform2_element' => '<div class="row"><label for="{id}" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}</div></div>'
+        'html_quickform2_element' => '<div class="row"><label for="{id}" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}</div></div>',
+        'html_quickform2_container_group' => '<div class="row"><label class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element group<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{content}</div></div>'
     );
 
    /**
-    * Stores custom templates for elements with the given IDs
+    * Custom templates for elements with the given IDs
     * @var  array
     */
-    protected $templatesById = array();
+    protected $templatesForId = array();
 
    /**
-    * Sets template for elements of the given class
+    * Default templates for elements of the given class within groups
+    *
+    * Array has the form ('group id' => ('element class' => 'template', ...), ...),
+    * where empty group id corresponds to default grouped templates
+    *
+    * @var  array
+    */
+    protected $groupedTemplates = array(
+        '' => array(
+            'html_quickform2_element' => '{element}',
+            'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>'
+        )
+    );
+
+   /**
+    * Array containing IDs of the groups being rendered
+    * @var  array
+    */
+    protected $groupId = array();
+
+   /**
+    * Sets template for form elements that are instances of the given class
     *
     * When searching for a template to use, renderer will check for templates
-    * set for element's class and its subclasses, until found. 
+    * set for element's class and its parent classes, until found. Thus a more 
+    * specific template will override a more generic one.
     *
     * @param    string  Class name
     * @param    mixed   Template to use for elements of that class
     * @return   HTML_QuickForm2_Renderer_Default
     */
-    public function setTemplateByClass($className, $template)
+    public function setTemplateForClass($className, $template)
     {
-        $this->templatesByClass[strtolower($className)] = $template;
+        $this->templatesForClass[strtolower($className)] = $template;
         return $this;
     }
 
    /**
-    * Sets template for element with the given id
+    * Returns template for form elements of the given class
+    *
+    * @param    string  Class name
+    * @return   mixed
+    */
+    public function getTemplateForClass($className)
+    {
+        return isset($this->templatesForClass[strtolower($className)])?
+               $this->templatesForClass[strtolower($className)]: null;
+    }
+
+   /**
+    * Sets template for form element with the given id
     *
     * If a template is set for an element via this method, it will be used.
-    * In the other case a generic template set by setTemplateByClass() will
-    * be used.
+    * In the other case a generic template set by {@link setTemplateForClass()}
+    * or {@link setGroupedTemplateForClass()} will be used.
     *
     * @param    string  Element's id
     * @param    mixed   Template to use for rendering of that element 
     * @return   HTML_QuickForm2_Renderer_Default
     */
-    public function setTemplateById($id, $template)
+    public function setTemplateForId($id, $template)
     {
-        $this->templatesById[$id] = $template;
+        $this->templatesForId[$id] = $template;
         return $this;
+    }
+
+   /**
+    * Returns template for form element with the given id
+    *
+    * @param    string  Element's id
+    * @return   mixed
+    */
+    public function getTemplateForId($id)
+    {
+        return isset($this->templatesForId[$id])? $this->templatesForId[$id]: null;
     }
 
    /**
@@ -151,9 +196,51 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    array   Template for validation errors
     * @return   HTML_QuickForm2_Renderer_Default
     */
-    public function setErrorTemplate($template)
+    public function setErrorTemplate(array $template)
     {
-        return $this->setTemplateByClass('special:error', $template);
+        return $this->setTemplateForClass('special:error', $template);
+    }
+
+   /**
+    * Returns template for rendering validation errors
+    *
+    * @return   array
+    */
+    public function getErrorTemplate()
+    {
+        return $this->getTemplateForClass('special:error');
+    }
+
+   /**
+    * Sets template for grouped form elements that are instances of the given class
+    *
+    * Templates set via {@link setTemplateForClass()} will not be used for
+    * grouped form elements. When searching for a template to use, the renderer
+    * will first consider template set for a specific group id, only then the
+    * generic group templates.
+    *
+    * @param    string  Class name
+    * @param    mixed   Template
+    * @param    string  Group's id, will set generic group template if not given
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setGroupedTemplateForClass($className, $template, $groupId = '')
+    {
+        $this->groupedTemplates[$groupId][strtolower($className)] = $template;
+        return $this;
+    }
+
+   /**
+    * Returns template for grouped form elements of the given class
+    *
+    * @param    string  Class name
+    * @param    string  Group's id, will return generic group template if not given
+    * @return   mixed
+    */
+    public function getGroupedTemplateForClass($className, $groupId = '')
+    {
+        return isset($this->groupedTemplates[$groupId][strtolower($className)])?
+               $this->groupedTemplates[$groupId][strtolower($className)]: null;
     }
 
    /**
@@ -166,10 +253,11 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function reset()
     {
-        $this->html        = array('');
+        $this->html        = array(array());
         $this->hiddenHtml  = '';
         $this->errors      = array();
         $this->hasRequired = false;
+        $this->groupId     = array();
 
         return $this;
     }
@@ -181,7 +269,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function __toString()
     {
-        return $this->html[0] . $this->hiddenHtml;
+        return (isset($this->html[0][0])? $this->html[0][0]: '') .
+               $this->hiddenHtml;
     }
 
    /**
@@ -192,8 +281,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function renderElement(HTML_QuickForm2_Node $element)
     {
         $elTpl = $this->prepareTemplate($this->findTemplate($element), $element);
-        $this->html[count($this->html) - 1] .= str_replace(array('{element}', '{id}'),
-                                                           array($element, $element->getId()), $elTpl);
+        $this->html[count($this->html) - 1][] = str_replace(array('{element}', '{id}'),
+                                                            array($element, $element->getId()), $elTpl);
     }
 
    /**
@@ -206,30 +295,71 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         if ($this->options['group_hiddens']) {
             $this->hiddenHtml .= $element->__toString();
         } else {
-            $this->html[count($this->html) - 1] .= str_replace('{element}', $element,
-                                                               $this->findTemplate($element));
+            $this->html[count($this->html) - 1][] = str_replace('{element}', $element,
+                                                                $this->findTemplate($element));
         }
     }
 
    /**
-    * Renders a container
+    * Renders a generic container
     *
     * @param    HTML_QuickForm2_Node    Container being rendered
     */
     public function renderContainer(HTML_QuickForm2_Node $container)
     {
-        $this->html[] = '';
+        $this->html[]    = array();
+        $this->groupId[] = false;
         foreach ($container as $element) {
             $element->render($this);
         }
+        array_pop($this->groupId);
 
         $cTpl  = str_replace(
             array('{attributes}', '{id}'),
             array($container->getAttributes(true), $container->getId()),
-            $this->prepareTemplate($this->findTemplate($container), $container)
+            $this->prepareTemplate($this->findTemplate($container, '{content}'), $container)
         );
-        $cHtml = array_pop($this->html);
-        $this->html[count($this->html) - 1] .= str_replace('{content}', $cHtml, $cTpl);
+        $cHtml  = array_pop($this->html);
+        $break  = HTML_Common2::getOption('linebreak');
+        $indent = str_repeat(HTML_Common2::getOption('indent'), count($this->html));
+        $this->html[count($this->html) - 1][] = str_replace(
+            '{content}', $break . $indent . implode($break . $indent, $cHtml), $cTpl
+        );
+    }
+
+   /**
+    * Renders a group
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    public function renderGroup(HTML_QuickForm2_Node $group)
+    {
+        $this->html[]    = array();
+        $this->groupId[] = $group->getId();
+        foreach ($group as $element) {
+            $element->render($this);
+        }
+
+        $gTpl = str_replace(
+            array('{attributes}', '{id}'),
+            array($group->getAttributes(true), array_pop($this->groupId)),
+            $this->prepareTemplate($this->findTemplate($group, '{content}'), $group)
+        );
+
+        $separator = $group->getSeparator();
+        $elements  = array_pop($this->html);
+        if (!is_array($separator)) {
+            $content = implode((string)$separator, $elements);
+        } else {
+            $content    = '';
+            $cSeparator = count($separator);
+            for ($i = 0, $count = count($elements); $i < $count; $i++) {
+                $content .= (0 == $i? '': $separator[($i - 1) % $cSeparator]) .
+                            $elements[$i];
+            }
+        }
+
+        $this->html[count($this->html) - 1][] = str_replace('{content}', $content, $gTpl);
     }
 
    /**
@@ -249,7 +379,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             array('{attributes}', '{hidden}', '{errors}'),
             array($form->getAttributes(true), $this->hiddenHtml,
                   $this->outputGroupedErrors()),
-            $this->findTemplate($form)
+            $this->findTemplate($form, '{content}')
         );
         $this->hiddenHtml = '';
 
@@ -266,7 +396,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             );
         }
 
-        $this->html[0] = str_replace('{content}', $this->html[0], $formTpl);
+        $break         = HTML_Common2::getOption('linebreak');
+        $this->html[0] = array(str_replace(
+            '{content}', $break . implode($break, $this->html[0]), $formTpl
+        ));
     }
 
    /**
@@ -282,19 +415,19 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         if (!empty($this->options['errors_prefix'])) {
             $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
                                      array('', '', $this->options['errors_prefix']),
-                                     $this->templatesByClass['special:error']['prefix']);
+                                     $this->templatesForClass['special:error']['prefix']);
         } else {
             $errorHtml = preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                      $this->templatesByClass['special:error']['prefix']);
+                                      $this->templatesForClass['special:error']['prefix']);
         }
-        $errorHtml .= implode($this->templatesByClass['special:error']['separator'], $this->errors);
+        $errorHtml .= implode($this->templatesForClass['special:error']['separator'], $this->errors);
         if (!empty($this->options['errors_suffix'])) {
             $errorHtml .= str_replace(array('<qf:message>', '</qf:message>', '{message}'),
                                       array('', '', $this->options['errors_suffix']),
-                                      $this->templatesByClass['special:error']['suffix']);
+                                      $this->templatesForClass['special:error']['suffix']);
         } else {
             $errorHtml .= preg_replace('!<qf:message>.*</qf:message>!isU', '',
-                                      $this->templatesByClass['special:error']['suffix']);
+                                      $this->templatesForClass['special:error']['suffix']);
         }
         return $errorHtml;
     }
@@ -303,20 +436,33 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * Finds a proper template for the element
     *
     * @param    HTML_QuickForm2_Node    Element being rendered
+    * @param    string                  Default template to use if not found
     * @return   string  Template
     */
-    protected function findTemplate(HTML_QuickForm2_Node $element)
+    protected function findTemplate(HTML_QuickForm2_Node $element, $default = '{element}')
     {
-        if (!empty($this->templatesById[$element->getId()])) {
-            return $this->templatesById[$element->getId()];
+        if (!empty($this->templatesForId[$element->getId()])) {
+            return $this->templatesForId[$element->getId()];
         }
-        $class = get_class($element);
+        $class         = strtolower(get_class($element));
+        $groupId       = end($this->groupId);
+        $groupTemplate = null;
         do {
-            if (!empty($this->templatesByClass[strtolower($class)])) {
-                return $this->templatesByClass[strtolower($class)];
+            if (empty($groupId) && !empty($this->templatesForClass[$class])) {
+                return $this->templatesForClass[$class];
+
+            } elseif (!empty($groupId)) {
+                if (!empty($this->groupedTemplates[$groupId][$class])) {
+                    return $this->groupedTemplates[$groupId][$class];
+
+                } elseif (empty($groupTemplate) && 
+                          !empty($this->groupedTemplates[''][$class])
+                ) {
+                    $groupTemplate = $this->groupedTemplates[''][$class];
+                }
             }
-        } while ($class = get_parent_class($class));
-        return '{element}';
+        } while ($class = strtolower(get_parent_class($class)));
+        return ($groupId && !empty($groupTemplate))? $groupTemplate: $default;
     }
 
    /**
