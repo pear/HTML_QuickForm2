@@ -82,29 +82,56 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Renders a generic container
-    *
-    * @param    HTML_QuickForm2_Node    Container being rendered
-    */
-    public function renderContainer(HTML_QuickForm2_Node $container)
-    {
-    }
-
-   /**
-    * Renders a group
-    *
-    * @param    HTML_QuickForm2_Node    Group being rendered
-    */
-    public function renderGroup(HTML_QuickForm2_Node $group)
-    {
-    }
-
-   /**
-    * Renders a HTML_QuickForm2 object
+    * Starts rendering a form, called before processing contained elements
     *
     * @param    HTML_QuickForm2_Node    Form being rendered
     */
-    abstract public function renderForm(HTML_QuickForm2_Node $form)
+    public function startForm(HTML_QuickForm2_Node $form)
+    {
+    }
+
+   /**
+    * Finishes rendering a form, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    public function finishForm(HTML_QuickForm2_Node $form)
+    {
+    }
+    
+   /**
+    * Starts rendering a generic container, called before processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    public function startContainer(HTML_QuickForm2_Node $container)
+    {
+    }
+
+   /**
+    * Finishes rendering a generic container, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    public function finishContainer(HTML_QuickForm2_Node $container)
+    {
+    }
+    
+   /**
+    * Starts rendering a group, called before processing grouped elements
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    public function startGroup(HTML_QuickForm2_Node $group)
+    {
+    }
+
+   /**
+    * Finishes rendering a group, called after processing grouped elements
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    public function finishGroup(HTML_QuickForm2_Node $group)
     {
     }
 }
