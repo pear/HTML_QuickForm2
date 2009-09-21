@@ -70,13 +70,13 @@ require_once 'HTML/QuickForm2/Renderer.php';
 class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
 {
    /**
-    * Renderer instance 
+    * Renderer instance
     * @var HTML_QuickForm2_Renderer
     */
     private $_renderer;
 
    /**
-    * Additional renderer methods to proxy via __call(), as returned by exportMethods() 
+    * Additional renderer methods to proxy via __call(), as returned by exportMethods()
     * @var array
     */
     private $_rendererMethods = array();
@@ -128,8 +128,8 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     {
         $lower = strtolower($name);
         if (isset($this->_rendererMethods[$lower])) {
-        	// support fluent interfaces
-        	$ret = call_user_func_array(array($this->_renderer, $name), $arguments);
+            // support fluent interfaces
+            $ret = call_user_func_array(array($this->_renderer, $name), $arguments);
             return $ret === $this->_renderer? $this: $ret;
         }
         // any additional plugins since last __call()?
@@ -189,61 +189,61 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     */
     public function setOption($nameOrOptions, $value = null)
     {
-    	$this->_renderer->setOption($nameOrOptions, $value);
-    	return $this;
+        $this->_renderer->setOption($nameOrOptions, $value);
+        return $this;
     }
 
     public function getOption($name = null)
     {
-    	return $this->_renderer->getOption($name);
+        return $this->_renderer->getOption($name);
     }
 
     public function renderElement(HTML_QuickForm2_Node $element)
     {
-    	$this->_renderer->renderElement($element);
+        $this->_renderer->renderElement($element);
     }
 
     public function renderHidden(HTML_QuickForm2_Node $element)
     {
-    	$this->_renderer->renderHidden($element);
+        $this->_renderer->renderHidden($element);
     }
 
     public function startForm(HTML_QuickForm2_Node $form)
     {
-    	$this->_renderer->startForm($form);
+        $this->_renderer->startForm($form);
     }
 
     public function finishForm(HTML_QuickForm2_Node $form)
     {
-    	$this->_renderer->finishForm($form);
+        $this->_renderer->finishForm($form);
     }
-    
+
     public function startContainer(HTML_QuickForm2_Node $container)
     {
-    	$this->_renderer->startContainer($container);
+        $this->_renderer->startContainer($container);
     }
 
     public function finishContainer(HTML_QuickForm2_Node $container)
     {
-    	$this->_renderer->finishContainer($container);
+        $this->_renderer->finishContainer($container);
     }
-    
+
     public function startGroup(HTML_QuickForm2_Node $group)
     {
-    	$this->_renderer->startGroup($group);
+        $this->_renderer->startGroup($group);
     }
 
     public function finishGroup(HTML_QuickForm2_Node $group)
     {
-    	$this->_renderer->finishGroup($group);
+        $this->_renderer->finishGroup($group);
     }
    /**#@-*/
 
     public function __toString()
     {
-    	if (method_exists($this->_renderer, '__toString')) {
-    		return $this->_renderer->__toString();
-    	}
+        if (method_exists($this->_renderer, '__toString')) {
+            return $this->_renderer->__toString();
+        }
         trigger_error("Fatal error: Object of class " . get_class($this->_renderer) .
                       " could not be converted to string", E_USER_ERROR);
     }

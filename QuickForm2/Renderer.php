@@ -44,7 +44,7 @@
  */
 
 /**
- * Class with static methods for loading classes and files 
+ * Class with static methods for loading classes and files
  */
 require_once 'HTML/QuickForm2/Loader.php';
 
@@ -181,18 +181,18 @@ abstract class HTML_QuickForm2_Renderer
     *
     * Methods defined in HTML_QuickForm2_Renderer are available automatically,
     * only additional methods should be returned.
-    * 
+    *
     * @return   array
     */
     protected function exportMethods()
     {
-    	return array();
+        return array();
     }
 
    /**
-    * Sets the option(s) affecting renderer behaviour 
+    * Sets the option(s) affecting renderer behaviour
     *
-    * The following options are available: 
+    * The following options are available:
     * <ul>
     *   <li>'group_hiddens' - whether to group hidden elements together or
     *                         render them where they were added (boolean)</li>
@@ -200,7 +200,7 @@ abstract class HTML_QuickForm2_Renderer
     *                         alongside elements they apply to (boolean)</li>
     *   <li>'errors_prefix' - leading message for grouped errors (string)</li>
     *   <li>'errors_suffix' - trailing message for grouped errors (string)</li>
-    *   <li>'required_note' - note displayed if the form contains required 
+    *   <li>'required_note' - note displayed if the form contains required
     *                         elements (string)</li>
     * </ul>
     *
@@ -232,7 +232,7 @@ abstract class HTML_QuickForm2_Renderer
     * Returns the value(s) of the renderer option(s)
     *
     * @param    string  parameter name
-    * @return   mixed   value of $name parameter, array of all configuration 
+    * @return   mixed   value of $name parameter, array of all configuration
     *                   parameters if $name is not given
     * @throws   HTML_QuickForm2_NotFoundException in case of unknown option
     */
@@ -275,7 +275,7 @@ abstract class HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Node    Form being rendered
     */
     abstract public function finishForm(HTML_QuickForm2_Node $form);
-    
+
    /**
     * Starts rendering a generic container, called before processing contained elements
     *
@@ -289,7 +289,7 @@ abstract class HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Node    Container being rendered
     */
     abstract public function finishContainer(HTML_QuickForm2_Node $container);
-    
+
    /**
     * Starts rendering a group, called before processing grouped elements
     *

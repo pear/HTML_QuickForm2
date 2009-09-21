@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -65,7 +65,7 @@ require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
 class HTML_QuickForm2 extends HTML_QuickForm2_Container
 {
    /**
-    * Data sources providing values for form elements 
+    * Data sources providing values for form elements
     * @var array
     */
     protected $datasources = array();
@@ -82,9 +82,9 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     * @param    string  "id" attribute of <form> tag
     * @param    string  HTTP method used to submit the form
     * @param    mixed   Additional attributes (either a string or an array)
-    * @param    bool    Whether to track if the form was submitted by adding 
+    * @param    bool    Whether to track if the form was submitted by adding
     *                   a special hidden field
-    */ 
+    */
     public function __construct($id, $method = 'post', $attributes = null, $trackSubmit = true)
     {
         $method = ('GET' == strtoupper($method))? 'get': 'post';
@@ -151,7 +151,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     * Replaces the list of form's data sources with a completely new one
     *
     * @param    array   A new data source list
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if given array 
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if given array
     *               contains something that is not a valid data source
     */
     public function setDataSources(array $datasources)
@@ -181,7 +181,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     {
         return 'form';
     }
- 
+
     public function setValue($value)
     {
         throw new HTML_QuickForm2_Exception('Not implemented');
@@ -212,10 +212,10 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-    	$renderer->startForm($this);
-    	foreach ($this as $element) {
-    		$element->render($renderer);
-    	}
+        $renderer->startForm($this);
+        foreach ($this as $element) {
+            $element->render($renderer);
+        }
         $renderer->finishForm($this);
         return $renderer;
     }

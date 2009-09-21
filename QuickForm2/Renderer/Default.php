@@ -135,20 +135,20 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
     protected function exportMethods()
     {
-    	return array(
-    	    'reset',
-	        'setTemplateForClass',
-	        'setTemplateForId',
-	        'setErrorTemplate',
-	        'setGroupedTemplateForClass'
-	    );
+        return array(
+            'reset',
+            'setTemplateForClass',
+            'setTemplateForId',
+            'setErrorTemplate',
+            'setGroupedTemplateForClass'
+        );
     }
 
    /**
     * Sets template for form elements that are instances of the given class
     *
     * When searching for a template to use, renderer will check for templates
-    * set for element's class and its parent classes, until found. Thus a more 
+    * set for element's class and its parent classes, until found. Thus a more
     * specific template will override a more generic one.
     *
     * @param    string  Class name
@@ -169,7 +169,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * or {@link setGroupedTemplateForClass()} will be used.
     *
     * @param    string  Element's id
-    * @param    mixed   Template to use for rendering of that element 
+    * @param    mixed   Template to use for rendering of that element
     * @return   HTML_QuickForm2_Renderer_Default
     */
     public function setTemplateForId($id, $template)
@@ -181,7 +181,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
    /**
     * Sets template for rendering validation errors
     *
-    * This template will be used if 'group_errors' option is set to true. 
+    * This template will be used if 'group_errors' option is set to true.
     * The template array should contain 'prefix', 'suffix' and 'separator'
     * keys.
     *
@@ -279,7 +279,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         $this->html[]    = array();
         $this->groupId[] = false;
     }
-    
+
    /**
     * Finishes rendering a generic container, called after processing contained elements
     *
@@ -312,7 +312,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         $this->html[]    = array();
         $this->groupId[] = $group->getId();
     }
-    
+
    /**
     * Finishes rendering a group, called after processing grouped elements
     *
@@ -351,7 +351,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     {
         $this->reset();
     }
-    
+
    /**
     * Finishes rendering a form, called after processing contained elements
     *
@@ -375,7 +375,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         } else {
             $formTpl = str_replace(
                 array('<qf:reqnote>', '</qf:reqnote>', '{reqnote}'),
-                array('', '', $this->options['required_note']), 
+                array('', '', $this->options['required_note']),
                 $formTpl
             );
         }
@@ -395,7 +395,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     {
         if (empty($this->errors)) {
             return '';
-        } 
+        }
         if (!empty($this->options['errors_prefix'])) {
             $errorHtml = str_replace(array('<qf:message>', '</qf:message>', '{message}'),
                                      array('', '', $this->options['errors_prefix']),
@@ -439,7 +439,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
                 if (!empty($this->groupedTemplates[$groupId][$class])) {
                     return $this->groupedTemplates[$groupId][$class];
 
-                } elseif (empty($groupTemplate) && 
+                } elseif (empty($groupTemplate) &&
                           !empty($this->groupedTemplates[''][$class])
                 ) {
                     $groupTemplate = $this->groupedTemplates[''][$class];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract base class for HTML_QuickForm2_Renderer plugin classes 
+ * Abstract base class for HTML_QuickForm2_Renderer plugin classes
  *
  * PHP version 5
  *
@@ -44,7 +44,7 @@
  */
 
 /**
- * Abstract base class for HTML_QuickForm2_Renderer plugin classes 
+ * Abstract base class for HTML_QuickForm2_Renderer plugin classes
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -55,7 +55,7 @@
 abstract class HTML_QuickForm2_Renderer_Plugin
 {
     protected $renderer;
-	
+
    /**
     * Sets the base renderer this plugin is enhancing
     *
@@ -63,7 +63,7 @@ abstract class HTML_QuickForm2_Renderer_Plugin
     */
     public function setRenderer(HTML_QuickForm2_Renderer $renderer)
     {
-    	$this->renderer = $renderer;
+        $this->renderer = $renderer;
     }
 }
 ?>

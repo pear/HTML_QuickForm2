@@ -177,10 +177,10 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-    	$renderer->startGroup($this);
-    	foreach ($this as $element) {
-    		$element->render($renderer);
-    	}
+        $renderer->startGroup($this);
+        foreach ($this as $element) {
+            $element->render($renderer);
+        }
         $renderer->finishGroup($this);
         return $renderer;
     }
