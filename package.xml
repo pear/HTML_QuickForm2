@@ -113,6 +113,9 @@ Bug fixes:
      <file name="Plugin.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Proxy.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
     </dir> <!-- /QuickForm2/Renderer -->
     <dir name="Rule">
      <file name="Callback.php" role="php">
@@ -340,7 +343,7 @@ Bug fixes:
     <min>5.2.0</min>
    </php>
    <pearinstaller>
-    <min>1.4.3</min>
+    <min>1.5.4</min>
    </pearinstaller>
    <package>
     <name>HTML_Common2</name>

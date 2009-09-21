@@ -76,27 +76,6 @@ abstract class HTML_QuickForm2_Renderer
     );
 
    /**
-    * Renderer instances
-    * @var array
-    */
-    private static $_instances = array();
-
-   /**
-    * Plugins for this renderer instance
-    * @var array
-    */
-    private $_plugins = array();
-
-   /**
-    * Plugin methods to call via __call() magic method
-    *
-    * Array has the form ('lowercase method name' => 'index in _plugins array')
-    *
-    * @var array
-    */
-    private $_pluginMethods = array();
-
-   /**
     * Renderer options
     * @var  array
     * @see  setOption()
@@ -110,37 +89,32 @@ abstract class HTML_QuickForm2_Renderer
     );
 
    /**
-    * Returns the renderer instance of the given type
+    * Creates a new renderer instance of the given type
     *
     * Renderers are singletons, there can be only one renderer instance of
     * each registered type. This instance will auto-magically contain all the
     * plugins registered for this renderer type.
     *
     * @param    string  Type name (treated case-insensitively)
-    * @return   HTML_QuickForm2_Renderer    A renderer instance
+    * @return   HTML_QuickForm2_Renderer_Proxy  A renderer instance of the given
+    *                   type wrapped by a Proxy
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
     * @throws   HTML_QuickForm2_NotFoundException If class for the renderer can
     *           not be found and/or loaded from file
     */
-    final public static function getInstance($type)
+    final public static function factory($type)
     {
         $type = strtolower($type);
-        if (!isset(self::$_instances[$type])) {
-            if (!isset(self::$_types[$type])) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Renderer type '$type' is not known"
-                );
-            }
-            list ($className, $includeFile) = self::$_types[$type];
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-            $renderer = new $className;
-            foreach (self::$_pluginClasses[$type] as $plugin) {
-                HTML_QuickForm2_Loader::loadClass($plugin[0], $plugin[1]);
-                $renderer->addPlugin(new $plugin[0]);
-            }
-            self::$_instances[$type] = $renderer;
+        if (!isset(self::$_types[$type])) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Renderer type '$type' is not known"
+            );
         }
-        return self::$_instances[$type];
+
+        list ($className, $includeFile) = self::$_types[$type];
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile);
+        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer_Proxy');
+        return new HTML_QuickForm2_Renderer_Proxy(new $className, self::$_pluginClasses[$type]);
     }
 
    /**
@@ -190,79 +164,29 @@ abstract class HTML_QuickForm2_Renderer
             }
             self::$_pluginClasses[$type][] = array($className, $includeFile);
         }
-
-        // If there is already a renderer instance, add the plugin instance to it
-        if (isset(self::$_instances[$type])) {
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-            self::$_instances[$type]->addPlugin(new $className);
-        }
     }
 
    /**
     * Constructor
     *
-    * Renderers are singletons, instances should be created by 
-    * HTML_QuickForm_Renderer::getInstance()
+    * Renderer instances should not be created directly, use
+    * HTML_QuickForm_Renderer::factory()
     */
     protected function __construct()
     {
     }
 
    /**
-    * Disallow cloning to enforce singleton
-    */
-    private function __clone()
-    {
-    }
-
-   /**
-    * Adds a plugin to the current renderer instance
+    * Returns an array of method names that should be available through proxy
     *
-    * Plugin's methods are imported and can be later called as this object's own
-    *
-    * @param    HTML_QuickForm2_Renderer_Plugin     a plugin instance
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a plugin has already
-    *                   imported name
+    * Methods defined in HTML_QuickForm2_Renderer are available automatically,
+    * only additional methods should be returned.
+    * 
+    * @return   array
     */
-    final protected function addPlugin(HTML_QuickForm2_Renderer_Plugin $plugin)
+    protected function exportMethods()
     {
-        $pluginsKey = count($this->_plugins);
-        $methods    = array();
-        foreach (array_map('strtolower', get_class_methods($plugin)) as $method) {
-            if (method_exists($this, $method) ||
-                method_exists('HTML_QuickForm2_Renderer_Plugin', $method)
-            ) {
-                continue;
-            } elseif (isset($this->_pluginMethods[$method])) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    'Duplicate method name: ' . $method
-                );
-            }
-            $methods[$method] = $pluginsKey;
-        }
-        $plugin->setRenderer($this);
-        $this->_plugins[$pluginsKey]  = $plugin;
-        $this->_pluginMethods        += $methods;
-    }
-
-   /**
-    * Magic function; call an imported method of a plugin
-    *
-    * @param    string  method name
-    * @param    array   method arguments
-    * @return   mixed
-    */
-    final public function __call($name, $arguments)
-    {
-        $lower = strtolower($name);
-        if (isset($this->_pluginMethods[$lower])) {
-            return call_user_func_array(
-                array($this->_plugins[$this->_pluginMethods[$lower]], $name),
-                $arguments
-            );
-        }
-        trigger_error("Fatal error: Call to undefined method " .
-                      get_class($this) . "::" . $name . "()", E_USER_ERROR);
+    	return array();
     }
 
    /**
@@ -339,24 +263,45 @@ abstract class HTML_QuickForm2_Renderer
     abstract public function renderHidden(HTML_QuickForm2_Node $element);
 
    /**
-    * Renders a HTML_QuickForm2 object
+    * Starts rendering a form, called before processing contained elements
     *
     * @param    HTML_QuickForm2_Node    Form being rendered
     */
-    abstract public function renderForm(HTML_QuickForm2_Node $form);
+    abstract public function startForm(HTML_QuickForm2_Node $form);
 
    /**
-    * Renders a generic container
+    * Finishes rendering a form, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    abstract public function finishForm(HTML_QuickForm2_Node $form);
+    
+   /**
+    * Starts rendering a generic container, called before processing contained elements
     *
     * @param    HTML_QuickForm2_Node    Container being rendered
     */
-    abstract public function renderContainer(HTML_QuickForm2_Node $container);
+    abstract public function startContainer(HTML_QuickForm2_Node $container);
 
    /**
-    * Renders a group
+    * Finishes rendering a generic container, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    abstract public function finishContainer(HTML_QuickForm2_Node $container);
+    
+   /**
+    * Starts rendering a group, called before processing grouped elements
     *
     * @param    HTML_QuickForm2_Node    Group being rendered
     */
-    abstract public function renderGroup(HTML_QuickForm2_Node $group);
+    abstract public function startGroup(HTML_QuickForm2_Node $group);
+
+   /**
+    * Finishes rendering a group, called after processing grouped elements
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    abstract public function finishGroup(HTML_QuickForm2_Node $group);
 }
 ?>

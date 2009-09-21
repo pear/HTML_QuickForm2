@@ -6,8 +6,8 @@
  *
  * LICENSE:
  * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,43 +37,30 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'HTML_QuickForm2_AllTests::main');
-}
+/**
+ * PHPUnit Test Case
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
 
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
+/**
+ * Renderer base class
+ */
+require_once 'HTML/QuickForm2/Renderer.php';
 
-chdir(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+/**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
 
-require_once dirname(__FILE__) . '/QuickForm2/AllTests.php';
-require_once dirname(__FILE__) . '/QuickForm2Test.php';
-
-class HTML_QuickForm2_AllTests
+/**
+ * Unit test for HTML_QuickForm2_Renderer_Array class
+ */
+class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
 {
-    public static function main()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package');
-
-        $suite->addTest(QuickForm2_AllTests::suite());
-        $suite->addTestSuite('HTML_QuickForm2Test');
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'HTML_QuickForm2_AllTests::main') {
-    HTML_QuickForm2_AllTests::main();
 }
 ?>

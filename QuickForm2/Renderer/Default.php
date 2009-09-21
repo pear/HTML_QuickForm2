@@ -51,7 +51,11 @@ require_once 'HTML/QuickForm2/Renderer.php';
 /**
  * Default renderer for QuickForm2
  *
- * Mostly a direct port of Default renderer from QuickForm 3.x package
+ * Mostly a direct port of Default renderer from QuickForm 3.x package.
+ *
+ * While almost everything in this class is defined as public, its properties
+ * and those methods that are not listed by exportMethods() will be available
+ * to renderer plugins only.
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -65,31 +69,31 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * Whether the form contains required elements
     * @var  bool
     */
-    protected $hasRequired = false;
+    public $hasRequired = false;
 
    /**
     * HTML generated for the form
     * @var  array
     */
-    protected $html = array(array());
+    public $html = array(array());
 
    /**
     * HTML for hidden elements if 'group_hiddens' option is on
     * @var  string
     */
-    protected $hiddenHtml = '';
+    public $hiddenHtml = '';
 
    /**
     * Array of validation errors if 'group_errors' option is on
     * @var  array
     */
-    protected $errors = array();
+    public $errors = array();
 
    /**
     * Default templates for elements of the given class
     * @var  array
     */
-    protected $templatesForClass = array(
+    public $templatesForClass = array(
         'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
         'html_quickform2' => '<div class="quickform">{errors}<form{attributes}>{hidden}{content}</form><qf:reqnote><div class="reqnote">{reqnote}</div></qf:reqnote></div>',
         'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>',
@@ -106,7 +110,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * Custom templates for elements with the given IDs
     * @var  array
     */
-    protected $templatesForId = array();
+    public $templatesForId = array();
 
    /**
     * Default templates for elements of the given class within groups
@@ -116,7 +120,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *
     * @var  array
     */
-    protected $groupedTemplates = array(
+    public $groupedTemplates = array(
         '' => array(
             'html_quickform2_element' => '{element}',
             'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>'
@@ -127,7 +131,18 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * Array containing IDs of the groups being rendered
     * @var  array
     */
-    protected $groupId = array();
+    public $groupId = array();
+
+    protected function exportMethods()
+    {
+    	return array(
+    	    'reset',
+	        'setTemplateForClass',
+	        'setTemplateForId',
+	        'setErrorTemplate',
+	        'setGroupedTemplateForClass'
+	    );
+    }
 
    /**
     * Sets template for form elements that are instances of the given class
@@ -144,18 +159,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     {
         $this->templatesForClass[strtolower($className)] = $template;
         return $this;
-    }
-
-   /**
-    * Returns template for form elements of the given class
-    *
-    * @param    string  Class name
-    * @return   mixed
-    */
-    public function getTemplateForClass($className)
-    {
-        return isset($this->templatesForClass[strtolower($className)])?
-               $this->templatesForClass[strtolower($className)]: null;
     }
 
    /**
@@ -176,17 +179,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Returns template for form element with the given id
-    *
-    * @param    string  Element's id
-    * @return   mixed
-    */
-    public function getTemplateForId($id)
-    {
-        return isset($this->templatesForId[$id])? $this->templatesForId[$id]: null;
-    }
-
-   /**
     * Sets template for rendering validation errors
     *
     * This template will be used if 'group_errors' option is set to true. 
@@ -199,16 +191,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function setErrorTemplate(array $template)
     {
         return $this->setTemplateForClass('special:error', $template);
-    }
-
-   /**
-    * Returns template for rendering validation errors
-    *
-    * @return   array
-    */
-    public function getErrorTemplate()
-    {
-        return $this->getTemplateForClass('special:error');
     }
 
    /**
@@ -231,23 +213,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Returns template for grouped form elements of the given class
-    *
-    * @param    string  Class name
-    * @param    string  Group's id, will return generic group template if not given
-    * @return   mixed
-    */
-    public function getGroupedTemplateForClass($className, $groupId = '')
-    {
-        return isset($this->groupedTemplates[$groupId][strtolower($className)])?
-               $this->groupedTemplates[$groupId][strtolower($className)]: null;
-    }
-
-   /**
     * Resets the accumulated data
     *
-    * This method is called automatically by renderForm() method, but should
-    * be called manually before calling other render*() methods separately.
+    * This method is called automatically by startForm() method, but should
+    * be called manually before calling other rendering methods separately.
     *
     * @return HTML_QuickForm2_Renderer_Default
     */
@@ -301,17 +270,23 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Renders a generic container
+    * Starts rendering a generic container, called before processing contained elements
     *
     * @param    HTML_QuickForm2_Node    Container being rendered
     */
-    public function renderContainer(HTML_QuickForm2_Node $container)
+    public function startContainer(HTML_QuickForm2_Node $container)
     {
         $this->html[]    = array();
         $this->groupId[] = false;
-        foreach ($container as $element) {
-            $element->render($this);
-        }
+    }
+    
+   /**
+    * Finishes rendering a generic container, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    public function finishContainer(HTML_QuickForm2_Node $container)
+    {
         array_pop($this->groupId);
 
         $cTpl  = str_replace(
@@ -328,18 +303,23 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Renders a group
+    * Starts rendering a group, called before processing grouped elements
     *
     * @param    HTML_QuickForm2_Node    Group being rendered
     */
-    public function renderGroup(HTML_QuickForm2_Node $group)
+    public function startGroup(HTML_QuickForm2_Node $group)
     {
         $this->html[]    = array();
         $this->groupId[] = $group->getId();
-        foreach ($group as $element) {
-            $element->render($this);
-        }
-
+    }
+    
+   /**
+    * Finishes rendering a group, called after processing grouped elements
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    public function finishGroup(HTML_QuickForm2_Node $group)
+    {
         $gTpl = str_replace(
             array('{attributes}', '{id}'),
             array($group->getAttributes(true), array_pop($this->groupId)),
@@ -363,18 +343,22 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Renders a HTML_QuickForm2 object
+    * Starts rendering a form, called before processing contained elements
     *
     * @param    HTML_QuickForm2_Node    Form being rendered
     */
-    public function renderForm(HTML_QuickForm2_Node $form)
+    public function startForm(HTML_QuickForm2_Node $form)
     {
         $this->reset();
-
-        foreach ($form as $element) {
-            $element->render($this);
-        }
-
+    }
+    
+   /**
+    * Finishes rendering a form, called after processing contained elements
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    public function finishForm(HTML_QuickForm2_Node $form)
+    {
         $formTpl = str_replace(
             array('{attributes}', '{hidden}', '{errors}'),
             array($form->getAttributes(true), $this->hiddenHtml,
@@ -407,7 +391,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *
     * @return   string  HTML with a list of all validation errors
     */
-    protected function outputGroupedErrors()
+    public function outputGroupedErrors()
     {
         if (empty($this->errors)) {
             return '';
@@ -439,7 +423,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    string                  Default template to use if not found
     * @return   string  Template
     */
-    protected function findTemplate(HTML_QuickForm2_Node $element, $default = '{element}')
+    public function findTemplate(HTML_QuickForm2_Node $element, $default = '{element}')
     {
         if (!empty($this->templatesForId[$element->getId()])) {
             return $this->templatesForId[$element->getId()];
@@ -472,7 +456,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_Node    Element being rendered
     * @return   string  Template with some substitutions done
     */
-    protected function prepareTemplate($elTpl, HTML_QuickForm2_Node $element)
+    public function prepareTemplate($elTpl, HTML_QuickForm2_Node $element)
     {
         // if element is required
         $elTpl = $this->markRequired($elTpl, $element->isRequired());
@@ -487,7 +471,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    bool    Whether element is required
     * @return   string  Template with processed "required" block
     */
-    protected function markRequired($elTpl, $required)
+    public function markRequired($elTpl, $required)
     {
         if ($required) {
             $this->hasRequired = true;
@@ -506,7 +490,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    string  Validation error for the element
     * @return   string  Template with error substitutions done
     */
-    protected function outputError($elTpl, $error)
+    public function outputError($elTpl, $error)
     {
         if ($error && !$this->options['group_errors']) {
             $elTpl = str_replace(array('<qf:error>', '</qf:error>', '{error}'),
@@ -527,7 +511,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    mixed   Element label(s)
     * @return   string  Template with label substitutions done
     */
-    protected function outputLabel($elTpl, $label)
+    public function outputLabel($elTpl, $label)
     {
         $mainLabel = is_array($label)? array_shift($label): $label;
         $elTpl     = str_replace('{label}', $mainLabel, $elTpl);

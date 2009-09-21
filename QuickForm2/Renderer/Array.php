@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract base class for HTML_QuickForm2_Renderer plugin classes 
+ * A renderer for HTML_QuickForm2 building an array of form elements 
  *
  * PHP version 5
  *
@@ -38,32 +38,74 @@
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @author     Thomas Schulz <ths@4bconsult.de>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    CVS: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Abstract base class for HTML_QuickForm2_Renderer plugin classes 
+ * Abstract base class for QuickForm2 renderers
+ */
+require_once 'HTML/QuickForm2/Renderer.php';
+
+/**
+ * A renderer for HTML_QuickForm2 building an array of form elements
  *
+ * Based on Array renderer from HTML_QuickForm 3.x package
+ * 
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @author     Thomas Schulz <ths@4bconsult.de>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_Renderer_Plugin
+class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 {
-    protected $renderer;
-	
    /**
-    * Sets the base renderer this plugin is enhancing
+    * Renders a generic element
     *
-    * @param    HTML_QuickForm2_Renderer    base renderer
+    * @param    HTML_QuickForm2_Node    Element being rendered
     */
-    public function setRenderer(HTML_QuickForm2_Renderer $renderer)
+    public function renderElement(HTML_QuickForm2_Node $element)
     {
-    	$this->renderer = $renderer;
+    }
+
+   /**
+    * Renders a hidden element
+    *
+    * @param    HTML_QuickForm2_Node    Hidden element being rendered
+    */
+    public function renderHidden(HTML_QuickForm2_Node $element)
+    {
+    }
+
+   /**
+    * Renders a generic container
+    *
+    * @param    HTML_QuickForm2_Node    Container being rendered
+    */
+    public function renderContainer(HTML_QuickForm2_Node $container)
+    {
+    }
+
+   /**
+    * Renders a group
+    *
+    * @param    HTML_QuickForm2_Node    Group being rendered
+    */
+    public function renderGroup(HTML_QuickForm2_Node $group)
+    {
+    }
+
+   /**
+    * Renders a HTML_QuickForm2 object
+    *
+    * @param    HTML_QuickForm2_Node    Form being rendered
+    */
+    abstract public function renderForm(HTML_QuickForm2_Node $form)
+    {
     }
 }
 ?>

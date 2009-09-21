@@ -177,7 +177,11 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $renderer->renderGroup($this);
+    	$renderer->startGroup($this);
+    	foreach ($this as $element) {
+    		$element->render($renderer);
+    	}
+        $renderer->finishGroup($this);
         return $renderer;
     }
 
@@ -185,11 +189,10 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         require_once 'HTML/QuickForm2/Renderer.php';
 
-        $renderer    = HTML_QuickForm2_Renderer::getInstance('default')->reset();
-        $oldTemplate = $renderer->getTemplateForId($this->getId());
-
-        return $this->render($renderer->setTemplateForId($this->getId(), '{content}'))
-                    ->setTemplateForId($this->getId(), $oldTemplate)->__toString();
+        return $this->render(
+                   HTML_QuickForm2_Renderer::factory('default')
+                       ->setTemplateForId($this->getId(), '{content}')
+               )->__toString();
     }
 }
 ?>

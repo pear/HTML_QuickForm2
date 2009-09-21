@@ -67,7 +67,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element = HTML_QuickForm2_Factory::createElement(
             'text', 'foo', array('id' => 'testRenderElement')
         );
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForClass(
                 'HTML_QuickForm2_Element_InputText', 'InputText;id={id},html={element}'
             )->setTemplateForClass(
@@ -100,7 +100,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             'text', 'foo', array('id' => 'testRenderRequiredElement')
         );
 
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
                 'testRenderRequiredElement',
                 '<qf:required>required!</qf:required>{element}<qf:required><em>*</em></qf:required>'
@@ -122,7 +122,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element = HTML_QuickForm2_Factory::createElement(
             'text', 'foo', array('id' => 'testElementWithError')
         );
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
                 'testElementWithError',
                 '<qf:error>an error!</qf:error>{element}<qf:error>{error}</qf:error>'
@@ -154,7 +154,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element = HTML_QuickForm2_Factory::createElement(
             'text', 'foo', array('id' => 'testSingleLabel')
         );
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
                 'testSingleLabel',
                 '<qf:label>A label: </qf:label>{element}{label}'
@@ -176,7 +176,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element = HTML_QuickForm2_Factory::createElement(
             'text', 'foo', array('id' => 'testMultipleLabels')
         )->setLabel(array('first', 'second'));
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
                 'testMultipleLabels',
                 '<qf:label>First label: {label}</qf:label>{element}<qf:label_2>Second label: {label_2}</qf:label_2>' .
@@ -200,7 +200,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $form = new HTML_QuickForm2('reqnote');
         $element = $form->addText('testReqnote');
 
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setOption('required_note', 'This is requi-i-i-ired!');
 
         $this->assertNotContains('<div class="reqnote">', $form->render($renderer)->__toString());
@@ -213,7 +213,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     {
         $form     = new HTML_QuickForm2('groupedErrors');
         $element  = $form->addText('testGroupedErrors')->setError('Some error');
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setOption(array(
                 'group_errors'  => true,
                 'errors_prefix' => 'Your errors:',
@@ -231,7 +231,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $form     = new HTML_QuickForm2('groupedHiddens');
         $hidden1  = $form->addHidden('hidden1');
         $hidden2  = $form->addHidden('hidden2');
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setOption('group_hiddens', false);
 
         $html = $form->render($renderer)->__toString();
@@ -249,7 +249,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testRenderGroup'));
         $element = $group->addElement('text', 'bar', array('id' => 'testRenderGroupedElement'));
 
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForClass(
                 'HTML_QuickForm2_Element_InputText', 'IgnoreThis;html={element}'
             )->setGroupedTemplateForClass(
@@ -290,7 +290,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $element2 = $group->addElement('text', 'baz');
         $element3 = $group->addElement('text', 'quux');
 
-        $renderer = HTML_Quickform2_Renderer::getInstance('default')
+        $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId('testSeparators', '{content}')
             ->setGroupedTemplateForClass(
                 'HTML_QuickForm2_Element_InputText', '<foo>{element}</foo>', 'testSeparators'

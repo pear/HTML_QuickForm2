@@ -62,7 +62,7 @@ if ($form->validate()) {
 }
 
 
-$renderer = HTML_QuickForm2_Renderer::getInstance('default')
+$renderer = HTML_QuickForm2_Renderer::factory('default')
     ->setOption(array(
         'group_hiddens' => true,
         'group_errors'  => true,
@@ -79,3 +79,5 @@ $renderer = HTML_QuickForm2_Renderer::getInstance('default')
 
 echo $form->render($renderer);
 ?>
+</body>
+</html>

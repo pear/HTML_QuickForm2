@@ -62,32 +62,27 @@ require_once 'HTML/QuickForm2/Renderer/Plugin.php';
  */
 class HTML_QuickForm2_FakeRenderer extends HTML_QuickForm2_Renderer
 {
-    protected $name = 'fake';
+    public $name = 'fake';
 
     public function renderElement(HTML_QuickForm2_Node $element) {}
     public function renderHidden(HTML_QuickForm2_Node $element) {}
-    public function renderForm(HTML_QuickForm2_Node $form) {}
-    public function renderContainer(HTML_QuickForm2_Node $container) {}
-    public function renderGroup(HTML_QuickForm2_Node $group) {}
+    public function startForm(HTML_QuickForm2_Node $form) {}
+    public function finishForm(HTML_QuickForm2_Node $form) {}
+    public function startContainer(HTML_QuickForm2_Node $container) {}
+    public function finishContainer(HTML_QuickForm2_Node $container) {}
+    public function startGroup(HTML_QuickForm2_Node $group) {}
+    public function finishGroup(HTML_QuickForm2_Node $group) {}
 }
 
 /**
  * Plugin for FakeRenderer
  */
 class HTML_QuickForm2_FakeRenderer_HelloPlugin
-    extends HTML_QuickForm2_FakeRenderer
-    implements HTML_QuickForm2_Renderer_Plugin
+    extends HTML_QuickForm2_Renderer_Plugin
 {
-    protected $baseName;
-
-    public function setRenderer(HTML_QuickForm2_Renderer $base)
-    {
-        $this->baseName = $base->name;
-    }
-
     public function sayHello()
     {
-        return sprintf('Hello, %s!', $this->baseName);
+        return sprintf('Hello, %s!', $this->renderer->name);
     }
 }
 
@@ -95,19 +90,11 @@ class HTML_QuickForm2_FakeRenderer_HelloPlugin
  * Another plugin for FakeRenderer
  */
 class HTML_QuickForm2_FakeRenderer_GoodbyePlugin
-    extends HTML_QuickForm2_FakeRenderer
-    implements HTML_QuickForm2_Renderer_Plugin
+    extends HTML_QuickForm2_Renderer_Plugin
 {
-    protected $baseName;
-
-    public function setRenderer(HTML_QuickForm2_Renderer $base)
-    {
-        $this->baseName = $base->name;
-    }
-
     public function sayGoodbye()
     {
-        return sprintf('Goodbye, %s!', $this->baseName);
+        return sprintf('Goodbye, %s!', $this->renderer->name);
     }
 }
 
@@ -115,13 +102,8 @@ class HTML_QuickForm2_FakeRenderer_GoodbyePlugin
  * Yet another plugin for FakeRenderer with duplicate method name
  */
 class HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin
-    extends HTML_QuickForm2_FakeRenderer
-    implements HTML_QuickForm2_Renderer_Plugin
+    extends HTML_QuickForm2_Renderer_Plugin
 {
-    public function setRenderer(HTML_QuickForm2_Renderer $base)
-    {
-    }
-
     public function sayHello()
     {
         return 'Hello, world!';
@@ -138,9 +120,8 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         $type = 'fake' . mt_rand();
         HTML_Quickform2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
 
-        $renderer = HTML_Quickform2_Renderer::getInstance($type);
-        $this->assertType('HTML_QuickForm2_FakeRenderer', $renderer);
-        $this->assertSame($renderer, HTML_Quickform2_Renderer::getInstance($type));
+        $renderer = HTML_Quickform2_Renderer::factory($type);
+        $this->assertType('HTML_QuickForm2_Renderer', $renderer);
     }
 
     public function testRegisterOnlyOnce()
@@ -160,7 +141,7 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
         
-        $renderer = HTML_Quickform2_Renderer::getInstance($type);
+        $renderer = HTML_Quickform2_Renderer::factory($type);
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_GoodbyePlugin');
 
         $this->assertEquals('Hello, fake!', $renderer->sayHello());
@@ -190,7 +171,8 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin');
 
         try {
-            $renderer = HTML_Quickform2_Renderer::getInstance($type);
+            $renderer = HTML_Quickform2_Renderer::factory($type);
+            $renderer->sayHello();
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertRegexp('/^Duplicate method name/', $e->getMessage());
             return;

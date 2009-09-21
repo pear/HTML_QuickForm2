@@ -454,7 +454,11 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $renderer->renderContainer($this);
+    	$renderer->startContainer($this);
+    	foreach ($this as $element) {
+    		$element->render($renderer);
+    	}
+        $renderer->finishContainer($this);
         return $renderer;
     }
 
@@ -462,8 +466,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     {
         require_once 'HTML/QuickForm2/Renderer.php';
 
-        return $this->render(HTML_QuickForm2_Renderer::getInstance('default')->reset())
-                    ->__toString();
+        return $this->render(HTML_QuickForm2_Renderer::factory('default'))->__toString();
     }
 }
 
