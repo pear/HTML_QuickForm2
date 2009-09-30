@@ -32,6 +32,14 @@
  <notes>
 Milestone 3: renderers and groups
 
+Major additions and changes
+  * Renderers implemented, Default and Array renderers ported from QuickForm 3.x
+  * Groups implemented
+
+Feature requests addressed:
+  * Default rendering without tables (request #9116)
+  * setSeparator() method (request #9942)
+
 Bug fixes:
   * Updated PHP dependency to 5.2.0 (bug #14110, PHP bug #37632)
   * 'checked' attributed on checkboxes and radios was not updated after changing
