@@ -6,7 +6,7 @@
  * showcases rule chaining.
  *
  * $Id$
- */ 
+ */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -93,10 +93,10 @@ $oldPassword->addRule('empty')
 
 // this behaves exactly as it reads: either "password" and "password repeat"
 // are empty or they should be equal, password should be no less than 6 chars
-// and old password shuld be given
+// and old password should be given
 $newPassword->addRule('empty')
-            ->and_($repPassword->addRule('empty'))
-            ->or_($newPassword->createRule('eq', 'The passwords do not match', $repPassword))
+            ->and_($repPassword->createRule('empty'))
+            ->or_($repPassword->createRule('eq', 'The passwords do not match', $newPassword))
             ->and_($newPassword->createRule('minlength', 'The password is too short', 6))
             ->and_($oldPassword->createRule('nonempty', 'Supply old password if you want to change it'));
 

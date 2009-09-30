@@ -107,6 +107,9 @@ Bug fixes:
      </file>
     </dir> <!-- /QuickForm2/Element -->
     <dir name="Renderer">
+     <file name="Array.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="Default.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -244,6 +247,9 @@ Bug fixes:
      </dir> <!-- /tests/QuickForm2/Element -->
      <dir name="Renderer">
       <file name="AllTests.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ArrayTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="DefaultTest.php" role="test">

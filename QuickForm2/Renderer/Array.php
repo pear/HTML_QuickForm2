@@ -1,6 +1,6 @@
 <?php
 /**
- * A renderer for HTML_QuickForm2 building an array of form elements 
+ * A renderer for HTML_QuickForm2 building an array of form elements
  *
  * PHP version 5
  *
@@ -53,7 +53,72 @@ require_once 'HTML/QuickForm2/Renderer.php';
  * A renderer for HTML_QuickForm2 building an array of form elements
  *
  * Based on Array renderer from HTML_QuickForm 3.x package
- * 
+ *
+ * The form array structure is the following:
+ * <pre>
+ * array(
+ *   'id'               => form's "id" attribute (string),
+ *   'frozen'           => whether the form is frozen (bool),
+ *   'attributes'       => attributes for &lt;form&gt; tag (string),
+ *   // if form contains required elements:
+ *   'required_note'    => note about the required elements (string),
+ *   // if 'group_hiddens' option is true:
+ *   'hidden'           => array with html of hidden elements (array),
+ *   // if 'group_errors' option is true:
+ *   'errors' => array(
+ *     '1st element id' => 'Error for the 1st element',
+ *     ...
+ *     'nth element id' => 'Error for the nth element'
+ *   ),
+ *   'elements' => array(
+ *     element_1,
+ *     ...
+ *     element_N
+ *   )
+ * );
+ * </pre>
+ * Where element_i is an array of the form
+ * <pre>
+ * array(
+ *   'id'        => element id (string),
+ *   'type'      => type of the element (string),
+ *   'frozen'    => whether element is frozen (bool),
+ *   // if element has a label:
+ *   'label'     => 'label for the element',
+ *   // note that if 'static_labels' option is true and element's label is an
+ *   // array then there will be several 'label_*' keys corresponding to
+ *   // labels' array keys
+ *   'required'  => whether element is required (bool),
+ *   // if a validation error is present and 'group_errors' option is false:
+ *   'error'     => error associated with the element (string),
+ *   // if some style was associated with an element:
+ *   'style'     => 'some information about element style (e.g. for Smarty)',
+ *
+ *   // if element is not a Container
+ *   'value'     => element value (mixed),
+ *   'html'      => HTML for the element (string),
+ *
+ *   // if element is a Container
+ *   'attributes' => container attributes (string)
+ *   // only for groups, if separator is set:
+ *   'separator'  => separator for group elements (mixed),
+ *   'elements'   => array(
+ *     element_1,
+ *     ...
+ *     element_N
+ *   )
+ * );
+ * </pre>
+ *
+ * While almost everything in this class is defined as public, its properties
+ * and those methods that are not published (i.e. not in array returned by
+ * exportMethods()) will be available to renderer plugins only.
+ *
+ * The following methods are published:
+ *   - {@link reset()}
+ *   - {@link toArray()}
+ *   - {@link setStyleForId()}
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -64,75 +129,246 @@ require_once 'HTML/QuickForm2/Renderer.php';
 class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 {
    /**
-    * Renders a generic element
+    * An array being generated
+    * @var array
+    */
+    public $array = array();
+
+   /**
+    * Array with references to 'elements' fields of currently processed containers
+    * @var unknown_type
+    */
+    public $containers = array();
+
+   /**
+    * Whether the form contains required elements
+    * @var  bool
+    */
+    public $hasRequired = false;
+
+   /**
+    * Additional style information for elements
+    * @var array
+    */
+    public $styles = array();
+
+   /**
+    * Constructor, adds a new 'static_labels' option
+    */
+    protected function __construct()
+    {
+        $this->options['static_labels'] = false;
+    }
+
+    protected function exportMethods()
+    {
+        return array(
+            'reset',
+            'toArray',
+            'setStyleForId'
+        );
+    }
+
+   /**
+    * Resets the accumulated data
+    *
+    * This method is called automatically by startForm() method, but should
+    * be called manually before calling other rendering methods separately.
+    *
+    * @return HTML_QuickForm2_Renderer_Array
+    */
+    public function reset()
+    {
+        $this->array       = array();
+        $this->containers  = array();
+        $this->hasRequired = false;
+
+        return $this;
+    }
+
+   /**
+    * Returns the resultant array
+    *
+    * @return array
+    */
+    public function toArray()
+    {
+        return $this->array;
+    }
+
+   /**
+    * Creates an array with fields that are common to all elements
     *
     * @param    HTML_QuickForm2_Node    Element being rendered
+    * @return   array
+    */
+    public function buildCommonFields(HTML_QuickForm2_Node $element)
+    {
+        $ary = array(
+            'id'     => $element->getId(),
+            'frozen' => $element->toggleFrozen()
+        );
+        if ($labels = $element->getLabel()) {
+            if (!is_array($labels) || !$this->options['static_labels']) {
+                $ary['label'] = $labels;
+            } else {
+                foreach ($labels as $key => $label) {
+                    $key = is_int($key)? $key + 1: $key;
+                    if (1 === $key) {
+                        $ary['label'] = $label;
+                    } else {
+                        $ary['label_' . $key] = $label;
+                    }
+                }
+            }
+        }
+        if (($error = $element->getError()) && $this->options['group_errors']) {
+            $this->array['errors'][$ary['id']] = $error;
+        } elseif ($error) {
+            $ary['error'] = $error;
+        }
+        if (isset($this->styles[$ary['id']])) {
+            $ary['style'] = $this->styles[$ary['id']];
+        }
+        if (!$element instanceof HTML_QuickForm2_Container) {
+            $ary['html']       = $element->__toString();
+        } else {
+            $ary['elements']   = array();
+            $ary['attributes'] = $element->getAttributes(true);
+        }
+        return $ary;
+    }
+
+   /**
+    * Stores an array representing "scalar" element in the form array
+    *
+    * @param    array
+    */
+    public function pushScalar(array $element)
+    {
+        if (!empty($element['required'])) {
+            $this->hasRequired = true;
+        }
+        if (empty($this->containers)) {
+            $this->array += $element;
+        } else {
+            $this->containers[count($this->containers) - 1][] = $element;
+        }
+    }
+
+   /**
+    * Stores an array representing a Container in the form array
+    *
+    * @param    array
+    */
+    public function pushContainer(array $container)
+    {
+        if (!empty($container['required'])) {
+            $this->hasRequired = true;
+        }
+        if (empty($this->containers)) {
+            $this->array      += $container;
+            $this->containers  = array(&$this->array['elements']);
+        } else {
+            $cntIndex = count($this->containers) - 1;
+            $myIndex  = count($this->containers[$cntIndex]);
+            $this->containers[$cntIndex][$myIndex] = $container;
+            $this->containers[$cntIndex + 1] =& $this->containers[$cntIndex][$myIndex]['elements'];
+        }
+    }
+
+   /**
+    * Sets a style for element rendering
+    *
+    * "Style" is some information that is opaque to Array Renderer but may be
+    * of use to e.g. template engine that receives the resultant array.
+    *
+    * @param    string|array    Element id or array ('element id' => 'style')
+    * @param    sting           Element style if $idOrStyles is not an array
+    * @return   HTML_QuickForm2_Renderer_Array
+    */
+    public function setStyleForId($idOrStyles, $style = null)
+    {
+        if (is_array($idOrStyles)) {
+            $this->styles = array_merge($this->styles, $idOrStyles);
+        } else {
+            $this->styles[$idOrStyles] = $style;
+        }
+        return $this;
+    }
+
+   /**#@+
+    * Implementations of abstract methods from {@link HTML_QuickForm2_Renderer}
     */
     public function renderElement(HTML_QuickForm2_Node $element)
     {
+        $ary = $this->buildCommonFields($element) + array(
+            'value'    => $element->getValue(),
+            'type'     => $element->getType(),
+            'required' => $element->isRequired(),
+        );
+        $this->pushScalar($ary);
     }
 
-   /**
-    * Renders a hidden element
-    *
-    * @param    HTML_QuickForm2_Node    Hidden element being rendered
-    */
     public function renderHidden(HTML_QuickForm2_Node $element)
     {
+        if ($this->options['group_hiddens']) {
+            $this->array['hidden'][] = $element->__toString();
+        } else {
+            $this->renderElement($element);
+        }
     }
 
-   /**
-    * Starts rendering a form, called before processing contained elements
-    *
-    * @param    HTML_QuickForm2_Node    Form being rendered
-    */
     public function startForm(HTML_QuickForm2_Node $form)
     {
+        $this->reset();
+
+        $this->array = $this->buildCommonFields($form);
+        if ($this->options['group_errors']) {
+            $this->array['errors'] = array();
+        }
+        if ($this->options['group_hiddens']) {
+            $this->array['hidden'] = array();
+        }
+        $this->containers  = array(&$this->array['elements']);
     }
 
-   /**
-    * Finishes rendering a form, called after processing contained elements
-    *
-    * @param    HTML_QuickForm2_Node    Form being rendered
-    */
     public function finishForm(HTML_QuickForm2_Node $form)
     {
+        $this->finishContainer($form);
+        if ($this->hasRequired) {
+            $this->array['required_note'] = $this->options['required_note'];
+        }
     }
-    
-   /**
-    * Starts rendering a generic container, called before processing contained elements
-    *
-    * @param    HTML_QuickForm2_Node    Container being rendered
-    */
+
     public function startContainer(HTML_QuickForm2_Node $container)
     {
+        $ary = $this->buildCommonFields($container) + array(
+            'required' => $container->isRequired()
+        );
+        $this->pushContainer($ary);
     }
 
-   /**
-    * Finishes rendering a generic container, called after processing contained elements
-    *
-    * @param    HTML_QuickForm2_Node    Container being rendered
-    */
     public function finishContainer(HTML_QuickForm2_Node $container)
     {
-    }
-    
-   /**
-    * Starts rendering a group, called before processing grouped elements
-    *
-    * @param    HTML_QuickForm2_Node    Group being rendered
-    */
-    public function startGroup(HTML_QuickForm2_Node $group)
-    {
+        array_pop($this->containers);
     }
 
-   /**
-    * Finishes rendering a group, called after processing grouped elements
-    *
-    * @param    HTML_QuickForm2_Node    Group being rendered
-    */
+    public function startGroup(HTML_QuickForm2_Node $group)
+    {
+        $ary = $this->buildCommonFields($group) + array(
+            'required' => $group->isRequired()
+        );
+        if ($separator = $group->getSeparator()) {
+            $ary['separator'] = $separator;
+        }
+        $this->pushContainer($ary);
+    }
+
     public function finishGroup(HTML_QuickForm2_Node $group)
     {
+        $this->finishContainer($group);
     }
+    /**#@-*/
 }
 ?>

@@ -51,6 +51,16 @@ require_once 'HTML/QuickForm2/Loader.php';
 /**
  * Abstract base class for QuickForm2 renderers
  *
+ * This class serves two main purposes:
+ * <ul>
+ *   <li>Defines the API all renderers should implement (render*() methods);</li>
+ *   <li>Provides static methods for registering renderers and their plugins
+ *       and {@link factory()} method for creating renderer instances.</li>
+ * </ul>
+ *
+ * Note that renderers should always be instantiated through factory(), in the
+ * other case it will not be possible to add plugins.
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -64,7 +74,8 @@ abstract class HTML_QuickForm2_Renderer
     * @var array
     */
     private static $_types = array(
-        'default' => array('HTML_QuickForm2_Renderer_Default', null)
+        'default' => array('HTML_QuickForm2_Renderer_Default', null),
+        'array'   => array('HTML_QuickForm2_Renderer_Array', null)
     );
 
    /**
@@ -72,7 +83,8 @@ abstract class HTML_QuickForm2_Renderer
     * @var array
     */
     private static $_pluginClasses = array(
-        'default' => array()
+        'default' => array(),
+        'array'   => array()
     );
 
    /**
@@ -91,9 +103,16 @@ abstract class HTML_QuickForm2_Renderer
    /**
     * Creates a new renderer instance of the given type
     *
-    * Renderers are singletons, there can be only one renderer instance of
-    * each registered type. This instance will auto-magically contain all the
-    * plugins registered for this renderer type.
+    * A renderer is always wrapped by a Proxy, which handles calling its
+    * "published" methods and methods of its plugins. Registered plugins are
+    * added automagically to the existing renderer instances so that
+    * <code>
+    * $foo = HTML_QuickForm2_Renderer::factory('foo');
+    * // Plugin implementing bar() method
+    * HTML_QuickForm2_Renderer::registerPlugin('foo', 'Plugin_Foo_Bar');
+    * $foo->bar();
+    * </code>
+    * will work.
     *
     * @param    string  Type name (treated case-insensitively)
     * @return   HTML_QuickForm2_Renderer_Proxy  A renderer instance of the given
@@ -169,17 +188,16 @@ abstract class HTML_QuickForm2_Renderer
    /**
     * Constructor
     *
-    * Renderer instances should not be created directly, use
-    * HTML_QuickForm_Renderer::factory()
+    * Renderer instances should not be created directly, use {@link factory()}
     */
     protected function __construct()
     {
     }
 
    /**
-    * Returns an array of method names that should be available through proxy
+    * Returns an array of "published" method names that should be callable through proxy
     *
-    * Methods defined in HTML_QuickForm2_Renderer are available automatically,
+    * Methods defined in HTML_QuickForm2_Renderer are proxied automatically,
     * only additional methods should be returned.
     *
     * @return   array

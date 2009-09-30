@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -51,6 +51,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 require_once dirname(__FILE__) . '/DefaultTest.php';
+require_once dirname(__FILE__) . '/ArrayTest.php';
 
 class QuickForm2_Renderer_AllTests
 {
@@ -64,6 +65,7 @@ class QuickForm2_Renderer_AllTests
         $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Renderer');
 
         $suite->addTestSuite('HTML_QuickForm2_Renderer_DefaultTest');
+        $suite->addTestSuite('HTML_QuickForm2_Renderer_ArrayTest');
 
         return $suite;
     }

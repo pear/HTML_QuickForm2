@@ -54,8 +54,15 @@ require_once 'HTML/QuickForm2/Renderer.php';
  * Mostly a direct port of Default renderer from QuickForm 3.x package.
  *
  * While almost everything in this class is defined as public, its properties
- * and those methods that are not listed by exportMethods() will be available
- * to renderer plugins only.
+ * and those methods that are not published (i.e. not in array returned by
+ * exportMethods()) will be available to renderer plugins only.
+ *
+ * The following methods are published:
+ *   - {@link reset()}
+ *   - {@link setTemplateForClass()}
+ *   - {@link setTemplateForId()}
+ *   - {@link setErrorTemplate()}
+ *   - {@link setGroupedTemplateForClass()}
  *
  * @category   HTML
  * @package    HTML_QuickForm2
