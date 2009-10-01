@@ -44,6 +44,11 @@ Bug fixes:
   * Updated PHP dependency to 5.2.0 (bug #14110, PHP bug #37632)
   * 'checked' attributed on checkboxes and radios was not updated after changing
     'value' attribute (bug #15708)
+
+WARNING: next release will have backwards compatibility breaks in setting Rule
+configuration data. If you are just using built-in Rules you should not be
+affected, but if you wrote custom subclasses for HTML_QuickForm2_Rule then pay 
+special attention to changes in SVN.
  </notes>
  <contents>
   <dir baseinstalldir="HTML" name="/">
