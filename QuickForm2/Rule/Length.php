@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -51,16 +51,16 @@ require_once 'HTML/QuickForm2/Rule.php';
 /**
  * Rule checking the value's length
  *
- * The rule needs an "allowed length" parameter for its work, it can be either 
+ * The rule needs an "allowed length" parameter for its work, it can be either
  *  - a scalar: the value will be valid if it is exactly this long
  *  - an array: the value will be valid if its length is between the given values
  *    (inclusive). If one of these evaluates to 0, then length will be compared
- *    only with the remaining one. 
+ *    only with the remaining one.
  *
  * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
  * either of the following formats
  *  - scalar (if no parameters were registered with Factory then it is treated as
- *    an exact length, if 'min' or 'max' was already registered then it is treated 
+ *    an exact length, if 'min' or 'max' was already registered then it is treated
  *    as 'max' or 'min', respectively)
  *  - array(minlength, maxlength)
  *  - array(['min' => minlength, ]['max' => maxlength])
@@ -69,9 +69,9 @@ require_once 'HTML/QuickForm2/Rule.php';
  *  - scalar (exact length)
  *  - array(minlength, maxlength)
  *  - array(['min' => minlength, ]['max' => maxlength])
- * global config registered with the Factory overrides options set for the 
+ * global config registered with the Factory overrides options set for the
  * particular Rule instance.
- * 
+ *
  * The Rule considers empty fields as valid and doesn't try to compare their
  * lengths with provided limits.
  *
@@ -81,7 +81,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  * $password->addRule('minlength', 'The password should be at least 6 characters long', 6);
  * $message->addRule('maxlength', 'Your message is too verbose', 1000);
  * </code>
- * 
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -92,7 +92,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 {
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    whether length of the element's value is within allowed range
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor or bogus allowed length(s) were used
@@ -120,7 +120,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     }
 
    /**
-    * Adds the 'min' and 'max' fields from one array to the other 
+    * Adds the 'min' and 'max' fields from one array to the other
     *
     * @param    array   Rule configuration, array with 'min' and 'max' keys
     * @param    array   Additional configuration, fields will be added to
@@ -145,10 +145,10 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             }
         }
         return $length;
-    } 
+    }
 
    /**
-    * Searches in global config and Rule's options for allowed length limits 
+    * Searches in global config and Rule's options for allowed length limits
     *
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
     *                   if applicable

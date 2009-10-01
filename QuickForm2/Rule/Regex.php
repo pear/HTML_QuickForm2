@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -57,13 +57,13 @@ require_once 'HTML/QuickForm2/Rule.php';
  * {@link HTML_QuickForm2_Factory::registerRule()}. Regular expression
  * registered with the Factory overrides one set for the particular Rule
  * instance via setOptions().
- *  
+ *
  * The Rule can also validate file uploads, in this case the regular expression
  * is applied to upload's 'name' field.
  *
  * The Rule considers empty fields (file upload fields with UPLOAD_ERR_NO_FILE)
  * as valid and doesn't try to test them with the regular expression.
- * 
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -74,7 +74,7 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
 {
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    whether element's value matches given regular expression
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor

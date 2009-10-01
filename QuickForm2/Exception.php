@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,14 +39,14 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
  * Base class for exceptions in PEAR
  */
-require_once 'PEAR/Exception.php'; 
+require_once 'PEAR/Exception.php';
 
 /**
  * Base class for exceptions in HTML_QuickForm2 package
@@ -84,7 +84,7 @@ class HTML_QuickForm2_Exception extends PEAR_Exception
  */
 class HTML_QuickForm2_NotFoundException extends HTML_QuickForm2_Exception
 {
-} 
+}
 
 /**
  * Exception that denotes invalid arguments were passed

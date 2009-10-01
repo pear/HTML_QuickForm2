@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,20 +39,20 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements  
+ * Base class for simple HTML_QuickForm2 elements
  */
 require_once 'HTML/QuickForm2/Element.php';
 
 /**
  * Class for <button> elements
- * 
+ *
  * Note that this element was named 'xbutton' in previous version of QuickForm,
- * the name 'button' being used for current 'inputbutton' element.   
+ * the name 'button' being used for current 'inputbutton' element.
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     protected $data = array('content' => '');
 
    /**
-    * Element's submit value 
+    * Element's submit value
     * @var  string
     */
     protected $submitValue = null;
@@ -84,10 +84,10 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
    /**
     * Buttons can not be frozen
     *
-    * @param    bool    Whether element should be frozen or editable. This 
+    * @param    bool    Whether element should be frozen or editable. This
     *                   parameter is ignored in case of buttons
     * @return   bool    Always returns false
-    */  
+    */
     public function toggleFrozen($freeze = null)
     {
         return false;
@@ -97,10 +97,12 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     * Sets the contents of the button element
     *
     * @param    string  Button content (HTML to add between <button></button> tags)
+    * @return   HTML_QuickForm2_Element_Button
     */
     function setContent($content)
     {
         $this->data['content'] = $content;
+        return $this;
     }
 
    /**
@@ -120,12 +122,12 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     * The value is only returned if the following is true
     *  - button has 'type' attribute set to 'submit' (or no 'type' attribute)
     *  - the form was submitted by clicking on this button
-    * 
-    * This method returns the actual value submitted by the browser. Note that 
+    *
+    * This method returns the actual value submitted by the browser. Note that
     * different browsers submit different values!
     *
     * @return    string|null
-    */ 
+    */
     public function getValue()
     {
         if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type']) &&

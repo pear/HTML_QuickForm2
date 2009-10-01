@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -57,7 +57,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  *
  * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
  * either of the following formats
- *  - callback or arguments (the semantics depend on whether the Rule was 
+ *  - callback or arguments (the semantics depend on whether the Rule was
  *    registered in the {@link HTML_QuickForm2_Factory Factory} with the
  *    callback already given)
  *  - array(['callback' => callback, ]['arguments' => array(...)])
@@ -65,7 +65,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  * either of the following formats
  *  - callback
  *  - array(['callback' => callback, ]['arguments' => array(...)])
- * global config registered with the Factory overrides options set for the 
+ * global config registered with the Factory overrides options set for the
  * particular Rule instance. In any case you are advised to use the associative
  * array format to prevent ambiguity.
  *
@@ -75,7 +75,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  *
  * Checking that the value is not empty:
  * <code>
- * $str->addRule('callback', 'The field should not be empty', 'strlen'); 
+ * $str->addRule('callback', 'The field should not be empty', 'strlen');
  * </code>
  * Checking that the value is in the given array:
  * <code>
@@ -103,12 +103,12 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
    /**
     * Set to true if callback function was registered in Factory
     * @var  bool
-    */ 
+    */
     protected $registeredCallback = false;
 
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    the value returned by a callback function
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor or a bogus callback was provided
@@ -133,7 +133,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     }
 
    /**
-    * Searches in global config and Rule's options for a callback function to use 
+    * Searches in global config and Rule's options for a callback function to use
     *
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
     *                   if applicable
@@ -144,7 +144,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     {
         $this->registeredCallback = false;
         if (!empty($globalConfig)) {
-            if (!is_array($globalConfig) || 
+            if (!is_array($globalConfig) ||
                 !isset($globalConfig['callback']) && !isset($globalConfig['arguments']))
             {
                 $this->registeredCallback = true;
@@ -166,10 +166,10 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     }
 
    /**
-    * Searches in global config and Rule's options for callback's additional arguments  
+    * Searches in global config and Rule's options for callback's additional arguments
     *
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable 
+    *                   if applicable
     * @return   array   additional arguments to pass to a callback
     */
     protected function findArguments($globalConfig)

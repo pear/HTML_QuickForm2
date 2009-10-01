@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -58,13 +58,13 @@ require_once 'HTML/QuickForm2/Rule/Regex.php';
 require_once 'HTML/QuickForm2/Element/InputFile.php';
 
 /**
- * Unit test for HTML_QuickForm2_Rule_Regex class 
+ * Unit test for HTML_QuickForm2_Rule_Regex class
  */
 class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 {
     public function testRegexIsRequired()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                  'getValue', 'setValue', '__toString'));
         $regex  = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
         try {
@@ -78,7 +78,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 
     public function testOptionsHandling()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                  'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->exactly(2))->method('getValue')
                ->will($this->returnValue('foo123'));
@@ -92,7 +92,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 
     public function testConfigHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->exactly(2))->method('getValue')
                ->will($this->returnValue('foo'));
@@ -102,7 +102,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
         $alpha = HTML_QuickForm2_Factory::createRule('regex-alpha', $mockEl, 'an error');
         $this->assertTrue($alpha->validate());
 
-        HTML_QuickForm2_Factory::registerRule('regex-numeric', 'HTML_QuickForm2_Rule_Regex', 
+        HTML_QuickForm2_Factory::registerRule('regex-numeric', 'HTML_QuickForm2_Rule_Regex',
                                               null, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/');
         $numeric = HTML_QuickForm2_Factory::createRule('regex-numeric', $mockEl, 'an error');
         $this->assertFalse($numeric->validate());
@@ -110,7 +110,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 
     public function testConfigOverridesOptions()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->once())->method('getValue')
                ->will($this->returnValue('foo'));
@@ -124,7 +124,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 
     public function testBug10799()
     {
-        $mockInvalid = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockInvalid = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                       'getValue', 'setValue', '__toString'));
         $mockInvalid->expects($this->once())->method('getValue')
                     ->will($this->returnValue("12345\n"));
@@ -162,7 +162,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyFieldsAreSkipped()
     {
-        $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                     'getValue', 'setValue', '__toString'));
         $mockEmpty->expects($this->once())->method('getValue')
                   ->will($this->returnValue(''));

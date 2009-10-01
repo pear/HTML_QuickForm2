@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -58,13 +58,13 @@ require_once 'HTML/QuickForm2/Rule/Compare.php';
 require_once 'HTML/QuickForm2/Element.php';
 
 /**
- * Unit test for HTML_QuickForm2_Rule_Compare class 
+ * Unit test for HTML_QuickForm2_Rule_Compare class
  */
 class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 {
     public function testOperandRequired()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $compare = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error');
         try {
@@ -84,7 +84,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testDefaultOperatorIsEqual()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->exactly(2))->method('getValue')
                ->will($this->returnValue('foo'));
@@ -98,11 +98,11 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testCompareToOtherElement()
     {
-        $mockFirst = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockFirst = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockFirst->expects($this->once())->method('getValue')
                   ->will($this->returnValue('foo'));
-        $mockSecond = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockSecond = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockSecond->expects($this->once())->method('getValue')
                    ->will($this->returnValue('bar'));
@@ -114,7 +114,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testDisallowBogusOperators()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $bogus = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', array('foo', 'bar'));
         try {
@@ -128,7 +128,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testOptionsHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
                ->method('getValue')->will($this->returnValue('foo'));
@@ -142,14 +142,14 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
         $arrayNumeric = new HTML_QuickForm2_Rule_Compare($mockEl, '...', array('!==', 'bar'));
         $this->assertTrue($arrayNumeric->validate());
 
-        $arrayAssoc = new HTML_QuickForm2_Rule_Compare($mockEl, '...', 
+        $arrayAssoc = new HTML_QuickForm2_Rule_Compare($mockEl, '...',
                             array('operator' => '!==', 'operand' => 'bar'));
         $this->assertTrue($arrayAssoc->validate());
     }
 
     public function testConfigHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
                ->method('getValue')->will($this->returnValue('foo'));
@@ -166,7 +166,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
         $arrayNumeric = HTML_QuickForm2_Factory::createRule('compare-numeric', $mockEl, '...');
         $this->assertTrue($arrayNumeric->validate());
 
-        HTML_QuickForm2_Factory::registerRule('compare-assoc', 'HTML_QuickForm2_Rule_Compare', null, 
+        HTML_QuickForm2_Factory::registerRule('compare-assoc', 'HTML_QuickForm2_Rule_Compare', null,
                                               array('operator' => '!==', 'operand' => 'bar'));
         $arrayAssoc = HTML_QuickForm2_Factory::createRule('compare-assoc', $mockEl, '...');
         $this->assertTrue($arrayAssoc->validate());
@@ -174,11 +174,11 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testConfigOverridesOptions()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
                ->method('getValue')->will($this->returnValue('foo'));
-        HTML_QuickForm2_Factory::registerRule('compare-override', 'HTML_QuickForm2_Rule_Compare', null, 
+        HTML_QuickForm2_Factory::registerRule('compare-override', 'HTML_QuickForm2_Rule_Compare', null,
                                               array('operator' => '===', 'operand' => 'foo'));
         $rule1 = HTML_QuickForm2_Factory::createRule('compare-override', $mockEl, '...',
                                                      array('operator' => '===', 'operand' => 'bar'));
@@ -190,11 +190,11 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
 
     public function testBug10754()
     {
-        $mockFrom = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockFrom = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                    'getValue', 'setValue', '__toString'));
         $mockFrom->expects($this->once())->method('getValue')
                  ->will($this->returnValue('00080002310000114151'));
-        $mockTo   = $this->getMock('HTML_QuickForm2_Element', array('getType', 
+        $mockTo   = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                    'getValue', 'setValue', '__toString'));
         $mockTo->expects($this->once())->method('getValue')
                ->will($this->returnValue('00080002310000114152'));

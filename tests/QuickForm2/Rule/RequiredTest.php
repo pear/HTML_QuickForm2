@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -58,7 +58,7 @@ require_once 'HTML/QuickForm2/Rule/Required.php';
 require_once 'HTML/QuickForm2/Node.php';
 
 /**
- * Unit test for HTML_QuickForm2_Rule_Required class 
+ * Unit test for HTML_QuickForm2_Rule_Required class
  */
 class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
 {

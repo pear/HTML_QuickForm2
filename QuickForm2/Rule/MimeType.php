@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,21 +39,21 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
  * Rule checking that uploaded file is of the correct MIME type
  *
- * The Rule needs one configuration parameter for its work: a string with a 
+ * The Rule needs one configuration parameter for its work: a string with a
  * desired MIME type or array of such strings. The parameter may be passed to
  * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Parameter registered with the 
+ * {@link HTML_QuickForm2_Factory::registerRule()}. Parameter registered with the
  * Factory overrides one set for the particular Rule instance via setOptions().
  *
  * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
- *  
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -64,7 +64,7 @@ class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
 {
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    whether uploaded file's MIME type is correct
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor or bogus MIME type(s) provided
@@ -89,7 +89,7 @@ class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
         if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
             return true;
         }
-        return is_array($mime)? in_array($value['type'], $mime): 
+        return is_array($mime)? in_array($value['type'], $mime):
                                 $value['type'] == $mime;
     }
 

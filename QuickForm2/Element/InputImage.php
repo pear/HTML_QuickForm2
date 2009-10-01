@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -70,10 +70,10 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
    /**
     * Image buttons can not be frozen
     *
-    * @param    bool    Whether element should be frozen or editable. This 
+    * @param    bool    Whether element should be frozen or editable. This
     *                   parameter is ignored in case of image elements
     * @return   bool    Always returns false
-    */  
+    */
     public function toggleFrozen($freeze = null)
     {
         return false;
@@ -96,10 +96,10 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     * The value is only returned if the form was actually submitted and this
     * image button was clicked. Returns null in all other cases.
     *
-    * @return   array|null  An array with keys 'x' and 'y' containing the 
-    *                       coordinates of user click if the image was clicked, 
-    *                       null otherwise 
-    */ 
+    * @return   array|null  An array with keys 'x' and 'y' containing the
+    *                       coordinates of user click if the image was clicked,
+    *                       null otherwise
+    */
     public function getValue()
     {
         return $this->getAttribute('disabled')? null: $this->coordinates;
@@ -110,8 +110,8 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     *
     * The method changes the element's name to foo[bar][] if it was foo[bar]
     * originally. If it is not done, then one of the click coordinates will be
-    * lost, see {@link http://bugs.php.net/bug.php?id=745}  
-    * 
+    * lost, see {@link http://bugs.php.net/bug.php?id=745}
+    *
     * @return   string
     */
     public function __toString()

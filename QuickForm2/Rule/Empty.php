@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -54,7 +54,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  * Handles both simple form fields and file uploads, the latter are considered
  * valid iff no file upload was attempted.
  *
- * The rule doesn't make much sense if used separately, but can be very helpful 
+ * The rule doesn't make much sense if used separately, but can be very helpful
  * if chained:
  * <code>
  * $spamCheck->addRule('empty')
@@ -78,6 +78,6 @@ class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
             return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
         }
     }
-} 
+}
 
 ?>

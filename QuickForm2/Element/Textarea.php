@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,18 +39,18 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements  
+ * Base class for simple HTML_QuickForm2 elements
  */
 require_once 'HTML/QuickForm2/Element.php';
 
 /**
  * Class for <textarea> elements
- *  
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
     public function getType()
     {
         return 'textarea';
-    } 
+    }
 
     public function setValue($value)
     {
@@ -99,7 +99,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
     {
         $value = htmlspecialchars($this->value, ENT_QUOTES, self::getOption('charset'));
         if ('off' == $this->getAttribute('wrap')) {
-            $html = $this->getIndent() . '<pre>' . $value . 
+            $html = $this->getIndent() . '<pre>' . $value .
                     '</pre>' . self::getOption('linebreak');
         } else {
             $html = nl2br($value) . self::getOption('linbebreak');

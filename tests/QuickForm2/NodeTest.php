@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -38,7 +38,7 @@
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -81,7 +81,7 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 }
 
 /**
- * Unit test for HTML_QuickForm2_Node class, 
+ * Unit test for HTML_QuickForm2_Node class,
  */
 class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
 {
@@ -105,7 +105,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $oldFrozen = $obj->toggleFrozen(true);
         $this->assertFalse($oldFrozen, 'toggleFrozen() should return previous frozen status');
         $this->assertTrue($obj->toggleFrozen());
-        
+
         $this->assertTrue($obj->toggleFrozen(false), 'toggleFrozen() should return previous frozen status');
         $this->assertFalse($obj->toggleFrozen());
     }
@@ -118,7 +118,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $oldPersistent = $obj->persistentFreeze(true);
         $this->assertFalse($oldPersistent, 'persistentFreeze() should return previous persistence status');
         $this->assertTrue($obj->persistentFreeze());
-        
+
         $this->assertTrue($obj->persistentFreeze(false), 'persistentFreeze() should return previous persistence status');
         $this->assertFalse($obj->persistentFreeze());
     }

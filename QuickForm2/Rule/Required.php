@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -52,10 +52,10 @@ require_once 'HTML/QuickForm2/Rule/Nonempty.php';
  * Rule for required elements
  *
  * The main difference from "nonempty" Rule is that
- * - elements to which this Rule is attached will be considered required 
+ * - elements to which this Rule is attached will be considered required
  *   ({@link HTML_QuickForm2_Node::isRequired()} will return true for them) and
  *   marked accordingly when outputting the form
- * - this Rule can only be added directly to the element and other Rules can 
+ * - this Rule can only be added directly to the element and other Rules can
  *   only be added to it via and_() method
  *
  * @category   HTML

@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -49,7 +49,7 @@
  * The Rule needs one configuration parameter for its work: the size limit.
  * This limit can be passed either to
  * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Limit registered with the 
+ * {@link HTML_QuickForm2_Factory::registerRule()}. Limit registered with the
  * Factory overrides one set for the particular Rule instance via setOptions().
  *
  * Note that if file upload failed due to upload_max_filesize php.ini setting
@@ -57,7 +57,7 @@
  * File element's built-in validation setting the error message.
  *
  * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
- *  
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -68,10 +68,10 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
 {
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    whether uploaded file's size is within given limit
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or a bogus size limit was provided 
+    *           was passed to constructor or a bogus size limit was provided
     */
     protected function checkValue($value)
     {

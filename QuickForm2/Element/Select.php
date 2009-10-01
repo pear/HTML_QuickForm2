@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,12 +39,12 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
- * Base class for simple HTML_QuickForm2 elements  
+ * Base class for simple HTML_QuickForm2 elements
  */
 require_once 'HTML/QuickForm2/Element.php';
 
@@ -52,9 +52,9 @@ require_once 'HTML/QuickForm2/Element.php';
 /**
  * Collection of <option>s and <optgroup>s
  *
- * This class handles the output of <option> tags. The class is not intended to 
+ * This class handles the output of <option> tags. The class is not intended to
  * be used directly.
- * 
+ *
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
@@ -67,7 +67,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
    /**
     * List of options and optgroups in this container
     *
-    * Options are stored as arrays (for performance reasons), optgroups as 
+    * Options are stored as arrays (for performance reasons), optgroups as
     * instances of Optgroup class.
     *
     * @var array
@@ -75,20 +75,20 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     protected $options = array();
 
    /**
-    * Reference to parent <select>'s values   
+    * Reference to parent <select>'s values
     * @var array
     */
     protected $values;
 
    /**
-    * Reference to parent <select>'s possible values   
+    * Reference to parent <select>'s possible values
     * @var array
     */
     protected $possibleValues;
 
 
    /**
-    * Class constructor  
+    * Class constructor
     *
     * @param    array   Reference to values of parent <select> element
     * @param    array   Reference to possible values of parent <select> element
@@ -100,7 +100,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     }
 
    /**
-    * Adds a new option  
+    * Adds a new option
     *
     * Please note that if you pass 'selected' attribute in the $attributes
     * parameter then this option's value will be added to <select>'s values.
@@ -132,7 +132,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     }
 
    /**
-    * Adds a new optgroup  
+    * Adds a new optgroup
     *
     * @param    string  'label' attribute for optgroup tag
     * @param    mixed   Additional attributes for <optgroup> tag (either as a
@@ -142,7 +142,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     public function addOptgroup($label, $attributes = null)
     {
         $optgroup = new HTML_QuickForm2_Element_Select_Optgroup(
-                            $this->values, $this->possibleValues, 
+                            $this->values, $this->possibleValues,
                             $label, $attributes
                         );
         $this->options[] = $optgroup;
@@ -150,7 +150,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     }
 
    /**
-    * Returns an array of contained options  
+    * Returns an array of contained options
     *
     * @return   array
     */
@@ -171,7 +171,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
                 if (in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
-                $html .= $indent . '<option' . 
+                $html .= $indent . '<option' .
                          self::getAttributesString($option['attr']) .
                          '>' . $option['text'] . '</option>' . $linebreak;
             } elseif ($option instanceof HTML_QuickForm2_Element_Select_OptionContainer) {
@@ -193,7 +193,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     }
 
    /**
-    * Returns a recursive iterator over contained elements  
+    * Returns a recursive iterator over contained elements
     *
     * @return   RecursiveIteratorIterator
     */
@@ -220,7 +220,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
 /**
  * Class representing an <optgroup> tag
  *
- * Do not instantiate this class yourself, use 
+ * Do not instantiate this class yourself, use
  * {@link HTML_QuickForm2_Element_Select::addOptgroup()} method
  *
  * @category   HTML
@@ -229,7 +229,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Element_Select_Optgroup 
+class HTML_QuickForm2_Element_Select_Optgroup
     extends HTML_QuickForm2_Element_Select_OptionContainer
 {
    /**
@@ -266,14 +266,14 @@ class HTML_QuickForm2_Element_Select_Optgroup
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterator 
+class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterator
     implements RecursiveIterator
 {
     public function hasChildren()
     {
         return $this->current() instanceof HTML_QuickForm2_Element_Select_OptionContainer;
     }
-    
+
     public function getChildren()
     {
         return new HTML_QuickForm2_Element_Select_OptionIterator(
@@ -297,7 +297,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     protected $persistent = true;
 
    /**
-    * Values for the select element (i.e. values of the selected options)  
+    * Values for the select element (i.e. values of the selected options)
     * @var  array
     */
     protected $values = array();
@@ -372,7 +372,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         $options   = array();
         foreach ($this->optionContainer->getRecursiveIterator() as $child) {
             if (is_array($child) && isset($valueHash[$child['attr']['value']]) &&
-                empty($child['attr']['disabled'])) 
+                empty($child['attr']['disabled']))
             {
                 $options[] = $child['text'];
             }
@@ -380,10 +380,10 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
         $html = implode('<br />', $options);
         if ($this->persistent) {
-            $name = $this->attributes['name'] . 
+            $name = $this->attributes['name'] .
                     (empty($this->attributes['multiple'])? '': '[]');
             // Only use id attribute if doing single hidden input
-            $idAttr = (1 == count($valueHash))? array('id' => $this->getId()): array(); 
+            $idAttr = (1 == count($valueHash))? array('id' => $this->getId()): array();
             foreach ($valueHash as $key => $item) {
                 $html .= '<input type="hidden"' . self::getAttributesString(array(
                              'name'  => $name,
@@ -399,16 +399,16 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * Please note that the returned value may not necessarily be equal to that
     * passed to {@link setValue()}. It passes "intrinsic validation" confirming
-    * that such value could possibly be submitted by this <select> element.   
+    * that such value could possibly be submitted by this <select> element.
     * Specifically, this method will return null if the elements "disabled"
     * attribute is set, it will not return values if there are no options having
     * such a "value" attribute or if such options' "disabled" attribute is set.
     * It will also only return a scalar value for single selects, mimicking
-    * the common browsers' behaviour. 
+    * the common browsers' behaviour.
     *
     * @return   mixed   "value" attribute of selected option in case of single
     *                   select, array of selected options' "value" attributes in
-    *                   case of multiple selects, null if no options selected  
+    *                   case of multiple selects, null if no options selected
     */
     public function getValue()
     {
@@ -431,8 +431,8 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         } elseif (1 == count($values)) {
             return $values[0];
         } else {
-            // The <select> is not multiple, but several options are to be 
-            // selected. At least IE and Mozilla select the last selected 
+            // The <select> is not multiple, but several options are to be
+            // selected. At least IE and Mozilla select the last selected
             // option in this case, we should do the same
             foreach ($this->optionContainer->getRecursiveIterator() as $child) {
                 if (is_array($child) && in_array($child['attr']['value'], $values)) {
@@ -469,15 +469,15 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *     ...
     * )
     * </pre>
-    * If value is a scalar, then array key is treated as "value" attribute of 
-    * <option> and value as this <option>'s text. If value is an array, then 
-    * key is treated as a "label" attribute of <optgroup> and value as an 
+    * If value is a scalar, then array key is treated as "value" attribute of
+    * <option> and value as this <option>'s text. If value is an array, then
+    * key is treated as a "label" attribute of <optgroup> and value as an
     * array of <option>s for this <optgroup>.
-    * 
+    *
     * If you need to specify additional attributes for <option> and <optgroup>
     * tags, then you need to use {@link addOption()} and {@link addOptgroup()}
     * methods instead of this one.
-    * 
+    *
     * @param    array
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     * @return   HTML_QuickForm2_Element_Select
@@ -494,7 +494,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
 
    /**
-    * Adds options from given array into given container 
+    * Adds options from given array into given container
     *
     * @param    HTML_QuickForm2_Element_Select_OptionContainer  options will be
     *           added to this container
@@ -516,7 +516,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
 
    /**
-    * Adds a new option  
+    * Adds a new option
     *
     * Please note that if you pass 'selected' attribute in the $attributes
     * parameter then this option's value will be added to <select>'s values.
@@ -532,7 +532,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     }
 
    /**
-    * Adds a new optgroup  
+    * Adds a new optgroup
     *
     * @param    string  'label' attribute for optgroup tag
     * @param    mixed   Additional attributes for <optgroup> tag (either as a

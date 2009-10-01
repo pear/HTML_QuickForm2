@@ -6,8 +6,8 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -53,9 +53,9 @@ require_once 'HTML/QuickForm2/Rule.php';
  *
  * The Rule needs two configuration parameters for its work
  *  - comparison operator (defaults to equality)
- *  - operand to compare with; this can be either a constant or another form 
+ *  - operand to compare with; this can be either a constant or another form
  *    element (its value will be used)
- * 
+ *
  * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
  * either of the following formats
  *  - operand
@@ -66,14 +66,14 @@ require_once 'HTML/QuickForm2/Rule.php';
  *  - operator
  *  - array(operator[, operand])
  *  - array(['operator' => operator, ]['operand' => operand])
- * global config registered with the Factory overrides options set for the 
+ * global config registered with the Factory overrides options set for the
  * particular Rule instance.
- * 
+ *
  * Note that 'less than [or equal]' and 'greater than [or equal]' operators
  * compare the operands numerically, since this is considered as more useful
  * approach by the authors.
- * 
- * For convenience, this Rule is already registered in the Factory with the 
+ *
+ * For convenience, this Rule is already registered in the Factory with the
  * names 'eq', 'neq', 'lt', 'gt', 'lte', 'gte' corresponding to the relevant
  * operators:
  * <code>
@@ -98,7 +98,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
    /**
     * Validates the element's value
-    * 
+    *
     * @return   bool    whether (element_value operator operand) expression is true
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
     *           was passed to constructor or a bogus comparison operator is used
@@ -119,7 +119,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         } else {
             $compareFn = create_function('$a, $b', 'return strval($a) ' . $operator . ' strval($b);');
         }
-        return $compareFn($value, $operand instanceof HTML_QuickForm2_Node? 
+        return $compareFn($value, $operand instanceof HTML_QuickForm2_Node?
                                   $operand->getValue(): $operand);
     }
 
@@ -128,9 +128,9 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     * Finds a comparison operator to use in global config and Rule's options
     *
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable 
+    *                   if applicable
     * @return   string  operator to use, defaults to '==='
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus comparison 
+    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus comparison
     *           operator is used for configuration
     */
     protected function findOperator($globalConfig)
@@ -171,7 +171,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     * Finds an operand to compare element's value with in global config and Rule's options
     *
     * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable 
+    *                   if applicable
     * @return   mixed   an operand to compare with
     * @throws   HTML_QuickForm2_Exception if an operand is missing
     */

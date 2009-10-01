@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -49,7 +49,7 @@
 require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
- * Base class for <input> elements having 'checked' attribute (checkboxes and radios)   
+ * Base class for <input> elements having 'checked' attribute (checkboxes and radios)
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -62,10 +62,10 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     protected $persistent = true;
 
    /**
-    * HTML to represent the element in "frozen" state 
-    * 
-    * Array index "checked" contains HTML for element's "checked" state, 
-    * "unchecked" for not checked  
+    * HTML to represent the element in "frozen" state
+    *
+    * Array index "checked" contains HTML for element's "checked" state,
+    * "unchecked" for not checked
     * @var  array
     */
     protected $frozenHtml = array(
@@ -105,8 +105,8 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
    /**
     * Sets the label to be rendered glued to the element
     *
-    * This label is returned by {@link __toString()} method with the element's 
-    * HTML. It is automatically wrapped into the <label> tag. 
+    * This label is returned by {@link __toString()} method with the element's
+    * HTML. It is automatically wrapped into the <label> tag.
     *
     * @param    string
     * @return   HTML_QuickForm2_Element_InputCheckable

@@ -5,9 +5,9 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006, 2007, Alexey Borzov <avb@php.net>,
- *                           Bertrand Mansion <golgote@mamasam.com>
+ *
+ * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -39,7 +39,7 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    CVS: $Id$
+ * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
@@ -62,7 +62,7 @@ require_once 'HTML/QuickForm2/DataSource/Array.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_DataSource_SuperGlobal 
+class HTML_QuickForm2_DataSource_SuperGlobal
     extends HTML_QuickForm2_DataSource_Array
     implements HTML_QuickForm2_DataSource_Submit
 {
@@ -82,7 +82,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal
     * Class constructor, intializes the internal arrays from superglobals
     *
     * @param    string  Request method (GET or POST)
-    * @param    bool    Whether magic_quotes_gpc directive is on 
+    * @param    bool    Whether magic_quotes_gpc directive is on
     */
     public function __construct($requestMethod = 'POST', $magicQuotesGPC = false)
     {
@@ -127,7 +127,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal
         }
         $mapped = array();
         foreach ($arr as $k => $v) {
-            $mapped[$k] = is_array($v)? 
+            $mapped[$k] = is_array($v)?
                           $this->arrayMapRecursive($callback, $v):
                           call_user_func($callback, $v);
         }
