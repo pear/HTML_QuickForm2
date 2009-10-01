@@ -342,6 +342,9 @@ Bug fixes:
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
     <file role="doc" name="default-renderer.php" />
+    <file role="doc" name="dualselect.php">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
    </dir> <!-- /docs/examples -->
    <dir name="data">
     <file name="quickform.css" role="data" />
