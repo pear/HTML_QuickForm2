@@ -70,10 +70,10 @@ abstract class HTML_QuickForm2_Rule
     protected $message;
 
    /**
-    * Additional data for the rule
+    * Configuration data for the rule
     * @var  mixed
     */
-    protected $options;
+    protected $config;
 
    /**
     * Rules chained to this via "and" and "or" operators
@@ -113,7 +113,7 @@ abstract class HTML_QuickForm2_Rule
     {
         $this->setOwner($owner);
         $this->setMessage($message);
-        $this->setOptions($options);
+        $this->setConfig($options);
         $this->registeredType = $registeredType;
     }
 
@@ -122,21 +122,46 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param    mixed                   Rule configuration data (rule-dependent)
     * @return   HTML_QuickForm2_Rule
+    * @deprecated   Deprecated since 0.3.0, use {@link setConfig()}
     */
     public function setOptions($options)
     {
-        $this->options = $options;
-        return $this;
+        return $this->setConfig($options);
     }
 
    /**
     * Returns the rule's configuration data
     *
     * @return   mixed
+    * @deprecated   Deprecated since 0.3.0, use {@link getConfig()}
     */
     public function getOptions()
     {
-        return $this->options;
+        return $this->getConfig();
+    }
+
+   /**
+    * Sets configuration data for the rule
+    *
+    * @param    mixed   Rule configuration data (specific for a Rule)
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException    in case of invalid
+    *               configuration data
+    */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
+   /**
+    * Returns the rule's configuration data
+    *
+    * @return   mixed   Configuration data (specific for a Rule)
+    */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
    /**

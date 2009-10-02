@@ -57,7 +57,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  *    (inclusive). If one of these evaluates to 0, then length will be compared
  *    only with the remaining one.
  *
- * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
+ * Parameters can be passed to {@link HTML_QuickForm2_Rule::setConfig() setConfig()} in
  * either of the following formats
  *  - scalar (if no parameters were registered with Factory then it is treated as
  *    an exact length, if 'min' or 'max' was already registered then it is treated
@@ -159,7 +159,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     */
     protected function findAllowedLength($globalConfig)
     {
-        if (0 == count($globalConfig) && 0 == count($this->options)) {
+        if (0 == count($globalConfig) && 0 == count($this->config)) {
             throw new HTML_QuickForm2_Exception(
                 'Length Rule requires an allowed length parameter'
             );
@@ -170,21 +170,21 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             $length = $this->mergeMinMaxLength(array(), $globalConfig);
         }
 
-        if (is_array($this->options)) {
+        if (is_array($this->config)) {
             if (!isset($length)) {
-                $length = $this->mergeMinMaxLength(array(), $this->options);
+                $length = $this->mergeMinMaxLength(array(), $this->config);
             } else {
-                $length = $this->mergeMinMaxLength($length, $this->options);
+                $length = $this->mergeMinMaxLength($length, $this->config);
             }
 
-        } elseif (isset($this->options)) {
+        } elseif (isset($this->config)) {
             if (!isset($length)) {
-                $length = $this->options;
+                $length = $this->config;
             } elseif (is_array($length)) {
                 if (!array_key_exists('min', $length)) {
-                    $length['min'] = $this->options;
+                    $length['min'] = $this->config;
                 } else {
-                    $length['max'] = $this->options;
+                    $length['max'] = $this->config;
                 }
             }
         }

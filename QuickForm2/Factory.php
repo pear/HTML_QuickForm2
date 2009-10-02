@@ -44,7 +44,7 @@
  */
 
 /**
- * Class with static methods for loading classes and files 
+ * Class with static methods for loading classes and files
  */
 require_once 'HTML/QuickForm2/Loader.php';
 
@@ -188,6 +188,8 @@ class HTML_QuickForm2_Factory
     * @param    string  Rule type name (treated case-insensitively)
     * @return   mixed   Configuration data (set when registering the rule)
     * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
+    * @deprecated   Deprecated since 0.3.0, in the next release global Rule
+    *                   configuration will be provided to the Rule constructor
     */
     public static function getRuleConfig($type)
     {

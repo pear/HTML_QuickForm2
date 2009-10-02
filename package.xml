@@ -45,6 +45,11 @@ Bug fixes:
   * 'checked' attributed on checkboxes and radios was not updated after changing
     'value' attribute (bug #15708)
 
+Deprecated features:
+  * setOptions() and getOptions() methods of HTML_QuickForm2_Rule are
+    deprecated and will be removed in the next release. Use setConfig() and
+    getConfig() instead.
+
 WARNING: next release will have backwards compatibility breaks in setting Rule
 configuration data. If you are just using built-in Rules you should not be
 affected, but if you wrote custom subclasses for HTML_QuickForm2_Rule then pay 

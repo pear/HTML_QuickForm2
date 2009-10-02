@@ -272,7 +272,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertType('FakeRule', $rule);
         $this->assertSame($mockNode, $rule->owner);
         $this->assertEquals('An error message', $rule->getMessage());
-        $this->assertEquals('Some options', $rule->getOptions());
+        $this->assertEquals('Some options', $rule->getConfig());
         $this->assertEquals('fakerule', $rule->registeredType);
     }
 }

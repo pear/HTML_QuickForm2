@@ -48,9 +48,9 @@
  *
  * The Rule needs one configuration parameter for its work: the size limit.
  * This limit can be passed either to
- * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
+ * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
  * {@link HTML_QuickForm2_Factory::registerRule()}. Limit registered with the
- * Factory overrides one set for the particular Rule instance via setOptions().
+ * Factory overrides one set for the particular Rule instance via setConfig().
  *
  * Note that if file upload failed due to upload_max_filesize php.ini setting
  * or MAX_FILE_SIZE form field, then this rule won't even be called, due to
@@ -81,7 +81,7 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
             $limit = null;
         }
         if (null === $limit) {
-            $limit = $this->getOptions();
+            $limit = $this->getConfig();
         }
         if (0 >= $limit) {
             throw new HTML_QuickForm2_InvalidArgumentException(

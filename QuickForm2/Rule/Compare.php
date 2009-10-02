@@ -56,7 +56,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  *  - operand to compare with; this can be either a constant or another form
  *    element (its value will be used)
  *
- * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
+ * Parameters can be passed to {@link HTML_QuickForm2_Rule::setConfig() setConfig()} in
  * either of the following formats
  *  - operand
  *  - array([operator, ]operand)
@@ -145,13 +145,13 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
             }
         }
         if (empty($operator)) {
-            if (is_array($this->options) && isset($this->options['operator'])) {
-                $operator = $this->options['operator'];
-            } elseif (!is_array($this->options) || count($this->options) < 2) {
+            if (is_array($this->config) && isset($this->config['operator'])) {
+                $operator = $this->config['operator'];
+            } elseif (!is_array($this->config) || count($this->config) < 2) {
                 return '===';
             } else {
-                reset($this->options);
-                $operator = current($this->options);
+                reset($this->config);
+                $operator = current($this->config);
             }
         }
         if (!in_array($operator, $this->operators)) {
@@ -184,16 +184,16 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
                 return end($globalConfig);
             }
         }
-        if (0 == count($this->options)) {
+        if (0 == count($this->config)) {
             throw new HTML_QuickForm2_Exception(
                 'Compare Rule requires an argument to compare with'
             );
-        } elseif (!is_array($this->options)) {
-            return $this->options;
-        } elseif (isset($this->options['operand'])) {
-            return $this->options['operand'];
+        } elseif (!is_array($this->config)) {
+            return $this->config;
+        } elseif (isset($this->config['operand'])) {
+            return $this->config['operand'];
         } else {
-            return end($this->options);
+            return end($this->config);
         }
     }
 }

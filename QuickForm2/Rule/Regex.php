@@ -53,10 +53,10 @@ require_once 'HTML/QuickForm2/Rule.php';
  *
  * The Rule needs one configuration parameter for its work: a Perl-compatible
  * regular expression. This expression can be passed either to
- * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
+ * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
  * {@link HTML_QuickForm2_Factory::registerRule()}. Regular expression
  * registered with the Factory overrides one set for the particular Rule
- * instance via setOptions().
+ * instance via setConfig().
  *
  * The Rule can also validate file uploads, in this case the regular expression
  * is applied to upload's 'name' field.
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
             $regex = null;
         }
         if (null === $regex) {
-            $regex = $this->getOptions();
+            $regex = $this->getConfig();
         }
         if (!is_string($regex)) {
             throw new HTML_QuickForm2_Exception(

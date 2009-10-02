@@ -48,9 +48,9 @@
  *
  * The Rule needs one configuration parameter for its work: a string with a
  * desired MIME type or array of such strings. The parameter may be passed to
- * {@link HTML_QuickForm2_Rule::setOptions() setOptions()} or to
+ * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
  * {@link HTML_QuickForm2_Factory::registerRule()}. Parameter registered with the
- * Factory overrides one set for the particular Rule instance via setOptions().
+ * Factory overrides one set for the particular Rule instance via setConfig().
  *
  * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
  *
@@ -77,7 +77,7 @@ class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
             $mime = null;
         }
         if (null === $mime) {
-            $mime = $this->getOptions();
+            $mime = $this->getConfig();
         }
         if (0 == count($mime) || !is_string($mime) && !is_array($mime)) {
             throw new HTML_QuickForm2_InvalidArgumentException(

@@ -66,8 +66,8 @@ class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
 {
     protected function checkValue($value)
     {
-        // It just returns whatever value was passed to setOptions()
-        return $this->options;
+        // It just returns whatever value was passed to setConfig()
+        return $this->config;
     }
 }
 
@@ -81,10 +81,10 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $rule = new HTML_QuickForm2_Rule_ImplConst(
             new HTML_QuickForm2_Element_InputText('foo'), 'a message', 'bar'
         );
-        $this->assertEquals('bar', $rule->getOptions());
+        $this->assertEquals('bar', $rule->getConfig());
 
-        $this->assertSame($rule, $rule->setOptions('baz'));
-        $this->assertEquals('baz', $rule->getOptions());
+        $this->assertSame($rule, $rule->setConfig('baz'));
+        $this->assertEquals('baz', $rule->getConfig());
     }
 
     public function testSetAndGetMessage()

@@ -55,7 +55,7 @@ require_once 'HTML/QuickForm2/Rule.php';
  * may also be given additional arguments to pass to the callback alongside the
  * element's value.
  *
- * Parameters can be passed to {@link HTML_QuickForm2_Rule::setOptions() setOptions()} in
+ * Parameters can be passed to {@link HTML_QuickForm2_Rule::setConfig() setConfig()} in
  * either of the following formats
  *  - callback or arguments (the semantics depend on whether the Rule was
  *    registered in the {@link HTML_QuickForm2_Factory Factory} with the
@@ -154,10 +154,10 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
                 return $globalConfig['callback'];
             }
         }
-        if (is_array($this->options) && isset($this->options['callback'])) {
-            return $this->options['callback'];
-        } elseif (!empty($this->options)) {
-            return $this->options;
+        if (is_array($this->config) && isset($this->config['callback'])) {
+            return $this->config['callback'];
+        } elseif (!empty($this->config)) {
+            return $this->config;
         } else {
             throw new HTML_QuickForm2_NotFoundException(
                 'Callback Rule requires a callback to check value with'
@@ -177,10 +177,10 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
         if (is_array($globalConfig) && isset($globalConfig['arguments'])) {
             return $globalConfig['arguments'];
         }
-        if (is_array($this->options) && isset($this->options['arguments'])) {
-            return $this->options['arguments'];
-        } elseif ($this->registeredCallback && !empty($this->options)) {
-            return $this->options;
+        if (is_array($this->config) && isset($this->config['arguments'])) {
+            return $this->config['arguments'];
+        } elseif ($this->registeredCallback && !empty($this->config)) {
+            return $this->config;
         }
         return array();
     }
