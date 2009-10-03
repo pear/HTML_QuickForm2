@@ -53,12 +53,17 @@ require_once 'HTML/QuickForm2/Container/Group.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * Class representing a HTML form
+ */
+require_once 'HTML/QuickForm2.php';
+
+/**
  * Unit test for HTML_QuickForm2_Element_Group class
  */
 class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testNoRename()
+    public function testNoRenameOnEmptyGroupName()
     {
         $g1 = new HTML_QuickForm2_Container_Group();
 
@@ -170,7 +175,7 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('g4[g3][g1][]', $e8->getName());
     }
 
-    public function testInsertBefore()
+    public function testPrependGroupNameOnInsertBefore()
     {
         $foo = new HTML_QuickForm2_Container_Group('foo');
         $fooBar = $foo->insertBefore(
@@ -184,15 +189,60 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo[baz]', $fooBaz->getName());
     }
 
+    public function testRemoveGroupNameOnRemoveChild()
+    {
+        $foo  = new HTML_QuickForm2_Container_Group('foo');
+        $bar  = $foo->addElement('group', 'bar');
+        $baz  = $bar->addElement('text', 'baz');
+        $quux = $bar->addElement('text', 'qu[ux]');
+        $this->assertEquals('foo[bar][baz]', $baz->getName());
+        $this->assertEquals('foo[bar][qu][ux]', $quux->getName());
+
+        $foo->removeChild($bar);
+        $this->assertEquals('bar[baz]', $baz->getName());
+        $this->assertEquals('bar[qu][ux]', $quux->getName());
+
+        $bar->removeChild($baz);
+        $this->assertEquals('baz', $baz->getName());
+
+        $bar->removeChild($quux);
+        $this->assertEquals('qu[ux]', $quux->getName());
+    }
+
     public function testSetValue()
     {
-        $foo    = new HTML_QuickForm2_Container_Group('foo');
-        $fooBar = $foo->addText('bar');
-        $fooBaz = $foo->addText('baz');
+        $foo     = new HTML_QuickForm2_Container_Group('foo');
+        $fooBar  = $foo->addText('bar');
+        $fooBaz  = $foo->addText('baz');
+        $fooQuux = $foo->addText('qu[ux]');
 
-        $foo->setValue(array('bar' => 'first value', 'baz' => 'second value'));
+        $foo->setValue(array(
+            'bar' => 'first value',
+            'baz' => 'second value',
+            'qu'  => array('ux' => 'third value')
+        ));
         $this->assertEquals('first value', $fooBar->getValue());
         $this->assertEquals('second value', $fooBaz->getValue());
+        $this->assertEquals('third value', $fooQuux->getValue());
+    }
+
+    public function testGetValue()
+    {
+        $value1    = array('foo' => 'foo value');
+        $value2    = array('bar' => 'bar value', 'baz' => array('quux' => 'baz value'));
+        $formValue = array('g1' => $value1, 'g2' => array('i2' => $value2));
+
+        $form = new HTML_QuickForm2('testGroupGetValue');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
+        $g1 = $form->addElement('group', 'g1');
+        $g1->addElement('text', 'foo');
+        $g2 = $form->addElement('group', 'g2[i2]');
+        $g2->addElement('text', 'bar');
+        $g2->addElement('text', 'baz[quux]');
+
+        $this->assertEquals($formValue, $form->getValue());
+        $this->assertEquals($value1, $g1->getValue());
+        $this->assertEquals($value2, $g2->getValue());
     }
 }
 ?>
