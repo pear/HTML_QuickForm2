@@ -209,6 +209,18 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('qu[ux]', $quux->getName());
     }
 
+    public function testRenameElementOnChangingGroups()
+    {
+        $g1 = new HTML_QuickForm2_Container_Group('g1');
+        $g2 = new HTML_QuickForm2_Container_Group('g2');
+
+        $e1 = $g1->addElement('text', 'e1');
+        $this->assertEquals('g1[e1]', $e1->getName());
+
+        $g2->addElement($e1);
+        $this->assertEquals('g2[e1]', $e1->getName());
+    }
+
     public function testSetValue()
     {
         $foo     = new HTML_QuickForm2_Container_Group('foo');
