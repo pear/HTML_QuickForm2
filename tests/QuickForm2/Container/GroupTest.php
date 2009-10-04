@@ -223,26 +223,46 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
 
     public function testSetValue()
     {
-        $foo     = new HTML_QuickForm2_Container_Group('foo');
-        $fooBar  = $foo->addText('bar');
-        $fooBaz  = $foo->addText('baz');
-        $fooQuux = $foo->addText('qu[ux]');
+        $foo      = new HTML_QuickForm2_Container_Group('foo');
+        $fooBar   = $foo->addText('bar');
+        $fooBaz   = $foo->addText('ba[z]');
+        $fooQuux  = $foo->addGroup('qu')->addText('ux');
+        $fooXyzzy = $foo->addGroup()->addText('xyzzy');
 
         $foo->setValue(array(
-            'bar' => 'first value',
-            'baz' => 'second value',
-            'qu'  => array('ux' => 'third value')
+            'bar'   => 'first value',
+            'ba'    => array('z' => 'second value'),
+            'qu'    => array('ux' => 'third value'),
+            'xyzzy' => 'fourth value'
         ));
         $this->assertEquals('first value', $fooBar->getValue());
         $this->assertEquals('second value', $fooBaz->getValue());
         $this->assertEquals('third value', $fooQuux->getValue());
+        $this->assertEquals('fourth value', $fooXyzzy->getValue());
+
+        $anon = new HTML_QuickForm2_Container_Group();
+        $e1   = $anon->addText('e1');
+        $e2   = $anon->addText('e2[i1]');
+        $e3   = $anon->addGroup('g1')->addText('e3');
+        $e4   = $anon->addGroup()->addText('e4');
+        $foo->setValue(array(
+            'e1' => 'first value',
+            'e2' => array('i1' => 'second value'),
+            'g1' => array('e3' => 'third value'),
+            'e4' => 'fourth value'
+        ));
+        $this->assertEquals('first value', $e1->getValue());
+        $this->assertEquals('second value', $e2->getValue());
+        $this->assertEquals('third value', $e3->getValue());
+        $this->assertEquals('fourth value', $e4->getValue());
     }
 
     public function testGetValue()
     {
         $value1    = array('foo' => 'foo value');
         $value2    = array('bar' => 'bar value', 'baz' => array('quux' => 'baz value'));
-        $formValue = array('g1' => $value1, 'g2' => array('i2' => $value2));
+        $valueAnon = array('e1' => 'e1 value');
+        $formValue = array('g1' => $value1, 'g2' => array('i2' => $value2)) + $valueAnon;
 
         $form = new HTML_QuickForm2('testGroupGetValue');
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
@@ -251,10 +271,13 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $g2 = $form->addElement('group', 'g2[i2]');
         $g2->addElement('text', 'bar');
         $g2->addElement('text', 'baz[quux]');
+        $anon = $form->addElement('group');
+        $anon->addElement('text', 'e1');
 
         $this->assertEquals($formValue, $form->getValue());
         $this->assertEquals($value1, $g1->getValue());
         $this->assertEquals($value2, $g2->getValue());
+        $this->assertEquals($valueAnon, $anon->getValue());
     }
 }
 ?>
