@@ -80,11 +80,39 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         return 'group';
     }
 
+    protected function prependsName()
+    {
+        return strlen($this->name) > 0;
+    }
+
+    public function getValue()
+    {
+        $value = parent::getValue();
+        if (!$this->prependsName()) {
+            return $value;
+
+        } elseif (!strpos($this->getName(), '[')) {
+            return isset($value[$this->getName()])? $value[$this->getName()]: null;
+
+        } else {
+            $tokens   =  explode('[', str_replace(']', '', $this->getName()));
+            $valueAry =& $value;
+            do {
+                $token = array_shift($tokens);
+                if (!isset($valueAry[$token])) {
+                    return null;
+                }
+                $valueAry =& $valueAry[$token];
+            } while ($tokens);
+            return $valueAry;
+        }
+    }
+
     public function setValue($value)
     {
         // Prepare a mapper for element names as array
 
-        if (!is_null($this->name) && $this->name !== "") {
+        if ($this->prependsName()) {
             $prefix = explode('[', str_replace(']', '', $this->getName()));
         }
 
@@ -202,9 +230,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
-        $container = $element->getContainer();
-        if (!empty($container) &&
-            $container instanceof HTML_QuickForm2_Container) {
+        if (null !== ($container = $element->getContainer())) {
             $container->removeChild($element);
         }
         // Element can be renamed only after being removed from container
@@ -226,9 +252,8 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     public function removeChild(HTML_QuickForm2_Node $element)
     {
         $element = parent::removeChild($element);
-        $name = $element->getName();
-        if (strlen($this->name) > 0) {
-            $name = preg_replace('/^'.$this->name.'\[([^\]]*)\]/', '\1', $name);
+        if ($this->prependsName()) {
+            $name = preg_replace('/^' . $this->getName() . '\[([^\]]*)\]/', '\1', $element->getName());
             $element->setName($name);
         }
         return $element;

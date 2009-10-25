@@ -142,6 +142,16 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     }
 
    /**
+    * Whether container prepends its name to names of contained elements
+    *
+    * @return   bool
+    */
+    protected function prependsName()
+    {
+        return false;
+    }
+
+   /**
     * Returns the element's value
     *
     * The default implementation for Containers is to return an array with
@@ -156,7 +166,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         foreach ($this as $child) {
             $value = $child->getValue();
             if (null !== $value) {
-                if ($child instanceof HTML_QuickForm2_Container) {
+                if ($child instanceof HTML_QuickForm2_Container
+                    && !$child->prependsName()
+                ) {
                     $values = self::arrayMerge($values, $value);
                 } else {
                     $name = $child->getName();
