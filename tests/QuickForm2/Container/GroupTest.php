@@ -62,7 +62,6 @@ require_once 'HTML/QuickForm2.php';
  */
 class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
 {
-
     public function testNoRenameOnEmptyGroupName()
     {
         $g1 = new HTML_QuickForm2_Container_Group();
@@ -195,12 +194,22 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $bar  = $foo->addElement('group', 'bar');
         $baz  = $bar->addElement('text', 'baz');
         $quux = $bar->addElement('text', 'qu[ux]');
+        $xy   = $bar->addElement('group');
+        $zzy  = $xy->addElement('text', 'xyzzy');
+
         $this->assertEquals('foo[bar][baz]', $baz->getName());
         $this->assertEquals('foo[bar][qu][ux]', $quux->getName());
+        $this->assertEquals('foo[bar][]', $xy->getName());
+        $this->assertEquals('foo[bar][][xyzzy]', $zzy->getName());
 
         $foo->removeChild($bar);
         $this->assertEquals('bar[baz]', $baz->getName());
         $this->assertEquals('bar[qu][ux]', $quux->getName());
+        $this->assertEquals('bar[][xyzzy]', $zzy->getName());
+
+        $bar->removeChild($xy);
+        $this->assertEquals('', $xy->getName());
+        $this->assertEquals('xyzzy', $zzy->getName());
 
         $bar->removeChild($baz);
         $this->assertEquals('baz', $baz->getName());
@@ -227,34 +236,42 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $fooBar   = $foo->addText('bar');
         $fooBaz   = $foo->addText('ba[z]');
         $fooQuux  = $foo->addGroup('qu')->addText('ux');
-        $fooXyzzy = $foo->addGroup()->addText('xyzzy');
+        $fooNop   = $foo->addGroup();
+        $fooXyzzy = $fooNop->addText('xyzzy');
+        $fooYzzyx = $fooNop->addText('yzzyx');
 
         $foo->setValue(array(
             'bar'   => 'first value',
             'ba'    => array('z' => 'second value'),
             'qu'    => array('ux' => 'third value'),
-            'xyzzy' => 'fourth value'
+                       array('xyzzy' => 'fourth value'),
+                       array('yzzyx' => 'fifth value')
         ));
         $this->assertEquals('first value', $fooBar->getValue());
         $this->assertEquals('second value', $fooBaz->getValue());
         $this->assertEquals('third value', $fooQuux->getValue());
         $this->assertEquals('fourth value', $fooXyzzy->getValue());
+        $this->assertEquals('fifth value', $fooYzzyx->getValue());
 
         $anon = new HTML_QuickForm2_Container_Group();
         $e1   = $anon->addText('e1');
         $e2   = $anon->addText('e2[i1]');
         $e3   = $anon->addGroup('g1')->addText('e3');
-        $e4   = $anon->addGroup()->addText('e4');
-        $foo->setValue(array(
+        $g2   = $anon->addGroup();
+        $e4   = $g2->addText('e4');
+        $e5   = $g2->addText('e5');
+        $anon->setValue(array(
             'e1' => 'first value',
             'e2' => array('i1' => 'second value'),
             'g1' => array('e3' => 'third value'),
-            'e4' => 'fourth value'
+                    array('e4' => 'fourth value'),
+                    array('e5' => 'fifth value')
         ));
         $this->assertEquals('first value', $e1->getValue());
         $this->assertEquals('second value', $e2->getValue());
         $this->assertEquals('third value', $e3->getValue());
         $this->assertEquals('fourth value', $e4->getValue());
+        $this->assertEquals('fifth value', $e5->getValue());
     }
 
     public function testGetValue()
@@ -279,5 +296,6 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($value2, $g2->getValue());
         $this->assertEquals($valueAnon, $anon->getValue());
     }
+
 }
 ?>

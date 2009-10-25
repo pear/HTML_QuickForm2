@@ -82,8 +82,67 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
     public function setValue($value)
     {
-        throw new HTML_QuickForm2_Exception('Not implemented');
+        // Prepare a mapper for element names as array
+
+        if (!is_null($this->name) && $this->name !== "") {
+            $prefix = explode('[', str_replace(']', '', $this->getName()));
+        }
+
+        $elements = array();
+        foreach ($this as $child) {
+            $tokens = explode('[', str_replace(']', '', $child->getName()));
+            if (!empty($prefix)) {
+                $tokens = array_slice($tokens, count($prefix));
+            }
+            $elements[] = $tokens;
+        }
+
+        // Iterate over values to find corresponding element
+
+        $index = 0;
+
+        foreach ($value as $k => $v) {
+            $val = array($k => $v);
+            $found = null;
+            foreach ($elements as $i => $tokens) {
+                do {
+                    $token = array_shift($tokens);
+                    $numeric = false;
+                    if ($token == "") {
+                        // Deal with numeric indexes in values
+                        $token = $index;
+                        $numeric = true;
+                    }
+                    if (isset($val[$token])) {
+                        // Found a value
+                        $val = $val[$token];
+                        $found = $val;
+                        if ($numeric) {
+                            $index += 1;
+                        }
+                    } else {
+                        // Not found, skip next iterations
+                        $found = null;
+                        break;
+                    }
+
+                } while (!empty($tokens));
+
+                if (!is_null($found)) {
+                    // Found a value corresponding to element name
+                    $child = $this->elements[$i];
+                    $child->setValue($val);
+                    unset($val);
+                    if (!($child instanceof HTML_QuickForm2_Container_Group)) {
+                        // Speed up next iterations
+                        unset($elements[$i]);
+                    }
+                    break;
+                }
+            }
+        }
     }
+
 
     public function getName()
     {
@@ -143,7 +202,53 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
-        return parent::appendChild($this->renameChild($element));
+        $container = $element->getContainer();
+        if (!empty($container) &&
+            $container instanceof HTML_QuickForm2_Container) {
+            $container->removeChild($element);
+        }
+        // Element can be renamed only after being removed from container
+        $this->renameChild($element);
+
+        $element->setContainer($this);
+        $this->elements[] = $element;
+        return $element;
+    }
+
+   /**
+    * Removes the element from this container
+    *
+    * If the reference object is not given, the element will be appended.
+    *
+    * @param    HTML_QuickForm2_Node     Element to remove
+    * @return   HTML_QuickForm2_Node     Removed object
+    */
+    public function removeChild(HTML_QuickForm2_Node $element)
+    {
+        $element = parent::removeChild($element);
+        $name = $element->getName();
+        if (strlen($this->name) > 0) {
+            $name = preg_replace('/^'.$this->name.'\[([^\]]*)\]/', '\1', $name);
+            $element->setName($name);
+        }
+        return $element;
+    }
+
+   /**
+    * Inserts an element in the container
+    *
+    * If the reference object is not given, the element will be appended.
+    *
+    * @param    HTML_QuickForm2_Node     Element to insert
+    * @param    HTML_QuickForm2_Node     Reference to insert before
+    * @return   HTML_QuickForm2_Node     Inserted element
+    */
+    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
+    {
+        if (null === $reference) {
+            return $this->appendChild($element);
+        }
+        return parent::insertBefore($this->renameChild($element), $reference);
     }
 
    /**
