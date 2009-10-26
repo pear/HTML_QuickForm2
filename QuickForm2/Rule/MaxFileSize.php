@@ -48,9 +48,9 @@
  *
  * The Rule needs one configuration parameter for its work: the size limit.
  * This limit can be passed either to
- * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Limit registered with the
- * Factory overrides one set for the particular Rule instance via setConfig().
+ * {@link HTML_QuickForm2_Rule::__construct() the Rule constructor} as local
+ * configuration or to {@link HTML_QuickForm2_Factory::registerRule()} as
+ * global one. As usual, global configuration overrides local one.
  *
  * Note that if file upload failed due to upload_max_filesize php.ini setting
  * or MAX_FILE_SIZE form field, then this rule won't even be called, due to
@@ -70,32 +70,32 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
     * Validates the element's value
     *
     * @return   bool    whether uploaded file's size is within given limit
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or a bogus size limit was provided
     */
     protected function checkValue($value)
     {
-        if (!empty($this->registeredType)) {
-            $limit = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
-        } else {
-            $limit = null;
-        }
-        if (null === $limit) {
-            $limit = $this->getConfig();
-        }
-        if (0 >= $limit) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'MaxFileSize Rule requires a positive size limit, ' .
-                preg_replace('/\s+/', ' ', var_export($limit, true)) . ' given'
-            );
-        }
-
         if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
             return true;
         }
-        return ($limit >= @filesize($value['tmp_name']));
+        return ($this->getConfig() >= @filesize($value['tmp_name']));
     }
 
+   /**
+    * Sets maximum allowed file size
+    *
+    * @param    int     Maximum allowed size
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
+    */
+    public function setConfig($config)
+    {
+        if (0 >= $config) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'MaxFileSize Rule requires a positive size limit, ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        }
+        return parent::setConfig($config);
+    }
 
    /**
     * Sets the element that will be validated by this rule

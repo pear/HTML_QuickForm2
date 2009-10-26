@@ -65,20 +65,18 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testPositiveSizeLimitIsRequired()
     {
         $file    = new HTML_QuickForm2_Element_InputFile('foo');
-        $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($file, 'an error');
         try {
-            $maxSize->validate();
-        } catch (HTML_QuickForm2_Exception $e) {
+            $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($file, 'an error');
+            $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertRegexp('/MaxFileSize Rule requires a positive size limit/', $e->getMessage());
-            $maxSizeNegative = new HTML_QuickForm2_Rule_MaxFileSize($file, 'an error', -10);
-            try {
-                $maxSizeNegative->validate();
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegexp('/MaxFileSize Rule requires a positive size limit/', $e->getMessage());
-                return;
-            }
         }
-        $this->fail('The expected HTML_QuickForm2_Exception was not thrown');
+        try {
+            $maxSizeNegative = new HTML_QuickForm2_Rule_MaxFileSize($file, 'an error', -10);
+            $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertRegexp('/MaxFileSize Rule requires a positive size limit/', $e->getMessage());
+        }
     }
 
     public function testCanOnlyValidateFileUploads()

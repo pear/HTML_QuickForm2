@@ -102,42 +102,33 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param    HTML_QuickForm2_Node    Element to validate
     * @param    string                  Error message to display if validation fails
-    * @param    mixed                   Additional data for the rule
-    * @param    string                  Type that was provided to Factory when
-    *                                   creating this Rule instance, shouldn't
-    *                                   be set if instantiating the Rule object
-    *                                   manually.
+    * @param    mixed                   Configuration data for the rule
+    * @param    mixed                   Configuration data provided to Factory in
+    *                                   registerRule() call, will be merged with $config.
+    *                                   Not terribly useful if instantiating the Rule
+    *                                   object manually.
     */
     public function __construct(HTML_QuickForm2_Node $owner, $message = '',
-                                $options = null, $registeredType = null)
+                                $config = null, $globalConfig = null)
     {
         $this->setOwner($owner);
         $this->setMessage($message);
-        $this->setConfig($options);
-        $this->registeredType = $registeredType;
+        $this->setConfig($this->mergeConfig($config, $globalConfig));
     }
 
    /**
-    * Sets additional configuration data for the rule
+    * Merges local configuration with that provided for registerRule()
     *
-    * @param    mixed                   Rule configuration data (rule-dependent)
-    * @return   HTML_QuickForm2_Rule
-    * @deprecated   Deprecated since 0.3.0, use {@link setConfig()}
-    */
-    public function setOptions($options)
-    {
-        return $this->setConfig($options);
-    }
-
-   /**
-    * Returns the rule's configuration data
+    * Default behaviour is for global config to override local one, different
+    * Rules may implement more complex merging behaviours.
     *
-    * @return   mixed
-    * @deprecated   Deprecated since 0.3.0, use {@link getConfig()}
+    * @param    mixed   Local configuration
+    * @param    mixed   Global configuration, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
+    * @return   mixed   Merged configuration
     */
-    public function getOptions()
+    protected function mergeConfig($localConfig, $globalConfig)
     {
-        return $this->getConfig();
+        return is_null($globalConfig)? $localConfig: $globalConfig;
     }
 
    /**

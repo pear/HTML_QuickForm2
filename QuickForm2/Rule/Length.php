@@ -56,21 +56,8 @@ require_once 'HTML/QuickForm2/Rule.php';
  *  - an array: the value will be valid if its length is between the given values
  *    (inclusive). If one of these evaluates to 0, then length will be compared
  *    only with the remaining one.
- *
- * Parameters can be passed to {@link HTML_QuickForm2_Rule::setConfig() setConfig()} in
- * either of the following formats
- *  - scalar (if no parameters were registered with Factory then it is treated as
- *    an exact length, if 'min' or 'max' was already registered then it is treated
- *    as 'max' or 'min', respectively)
- *  - array(minlength, maxlength)
- *  - array(['min' => minlength, ]['max' => maxlength])
- * and also may be passed to {@link HTML_QuickForm2_Factory::registerRule()} in
- * either of the following formats
- *  - scalar (exact length)
- *  - array(minlength, maxlength)
- *  - array(['min' => minlength, ]['max' => maxlength])
- * global config registered with the Factory overrides options set for the
- * particular Rule instance.
+ * See {@link mergeConfig()} for description of possible ways to pass
+ * configuration parameters.
  *
  * The Rule considers empty fields as valid and doesn't try to compare their
  * lengths with provided limits.
@@ -94,28 +81,19 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     * Validates the element's value
     *
     * @return   bool    whether length of the element's value is within allowed range
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or bogus allowed length(s) were used
-    *           for rule configuration
-    * @throws   HTML_QuickForm2_Exception if rule configuration is missing
     */
     protected function checkValue($value)
     {
-        if (!empty($this->registeredType)) {
-            $config = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
-        } else {
-            $config = null;
-        }
-        $allowedLength = $this->findAllowedLength($config);
-
         if (0 == ($valueLength = strlen($value))) {
             return true;
         }
+
+        $allowedLength = $this->getConfig();
         if (is_scalar($allowedLength)) {
             return $valueLength == $allowedLength;
         } else {
-            return (!empty($allowedLength['min'])? $valueLength >= $allowedLength['min']: true) &&
-                   (!empty($allowedLength['max'])? $valueLength <= $allowedLength['max']: true);
+            return (empty($allowedLength['min']) || $valueLength >= $allowedLength['min']) &&
+                   (empty($allowedLength['max']) || $valueLength <= $allowedLength['max']);
         }
     }
 
@@ -148,74 +126,92 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     }
 
    /**
-    * Searches in global config and Rule's options for allowed length limits
+    * Merges length limits given on rule creation with those given to registerRule()
     *
-    * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable
-    * @return   int|array
-    * @throws   HTML_QuickForm2_Exception   if length limits weren't found anywhere
-    * @throws   HTML_QuickForm2_InvalidArgumentException if bogus length limits
-    *           were provided
+    * "Global" length limits may be passed to
+    * {@link HTML_QuickForm2_Factory::registerRule()} in either of the
+    * following formats
+    *  - scalar (exact length)
+    *  - array(minlength, maxlength)
+    *  - array(['min' => minlength, ]['max' => maxlength])
+    *
+    * "Local" length limits may be passed to the constructor in either of
+    * the following formats
+    *  - scalar (if global config is unset then it is treated as an exact
+    *    length, if 'min' or 'max' is in global config then it is treated
+    *    as 'max' or 'min', respectively)
+    *  - array(minlength, maxlength)
+    *  - array(['min' => minlength, ]['max' => maxlength])
+    *
+    * As usual, global configuration overrides local one.
+    *
+    * @param    int|array   Local length limits
+    * @param    int|array   Global length limits, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
+    * @return   int|array   Merged length limits
     */
-    protected function findAllowedLength($globalConfig)
+    protected function mergeConfig($localConfig, $globalConfig)
     {
-        if (0 == count($globalConfig) && 0 == count($this->config)) {
-            throw new HTML_QuickForm2_Exception(
-                'Length Rule requires an allowed length parameter'
-            );
-        }
-        if (!is_array($globalConfig)) {
+        if (!isset($globalConfig)) {
+            $length = $localConfig;
+
+        } elseif (!is_array($globalConfig)) {
             $length = $globalConfig;
+
         } else {
             $length = $this->mergeMinMaxLength(array(), $globalConfig);
-        }
-
-        if (is_array($this->config)) {
-            if (!isset($length)) {
-                $length = $this->mergeMinMaxLength(array(), $this->config);
-            } else {
-                $length = $this->mergeMinMaxLength($length, $this->config);
-            }
-
-        } elseif (isset($this->config)) {
-            if (!isset($length)) {
-                $length = $this->config;
-            } elseif (is_array($length)) {
-                if (!array_key_exists('min', $length)) {
-                    $length['min'] = $this->config;
-                } else {
-                    $length['max'] = $this->config;
-                }
-            }
-        }
-
-        if (is_array($length)) {
-            $length += array('min' => 0, 'max' => 0);
-        }
-        if (is_array($length) && ($length['min'] < 0 || $length['max'] < 0) ||
-            !is_array($length) && $length < 0)
-        {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'Length Rule requires parameters to be nonnegative, ' .
-                preg_replace('/\s+/', ' ', var_export($length, true)) . ' given'
-            );
-        } elseif (is_array($length) && $length['min'] == 0 && $length['max'] == 0 ||
-                  !is_array($length) && 0 == $length)
-        {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'Length Rule requires at least one non-zero parameter, ' .
-                preg_replace('/\s+/', ' ', var_export($length, true)) . ' given'
-            );
-        }
-
-        if (!empty($length['min']) && !empty($length['max'])) {
-            if ($length['min'] > $length['max']) {
-                list($length['min'], $length['max']) = array($length['max'], $length['min']);
-            } elseif ($length['min'] == $length['max']) {
-                $length = $length['min'];
+            if (isset($localConfig)) {
+                $length = $this->mergeMinMaxLength(
+                    $length, is_array($localConfig)? $localConfig: array($localConfig)
+                );
             }
         }
         return $length;
+    }
+
+   /**
+    * Sets the allowed length limits
+    *
+    * $config can be either of the following
+    *  - integer (rule checks for exact length)
+    *  - array(minlength, maxlength)
+    *  - array(['min' => minlength, ]['max' => maxlength])
+    *
+    * @param    int|array   Length limits
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException if bogus length limits
+    *           were provided
+    */
+    public function setConfig($config)
+    {
+        if (is_array($config)) {
+            $config = $this->mergeMinMaxLength(array(), $config)
+                      + array('min' => 0, 'max' => 0);
+        }
+        if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0) ||
+            !is_array($config) && $config < 0)
+        {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Length Rule requires limits to be nonnegative, ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+
+        } elseif (is_array($config) && $config['min'] == 0 && $config['max'] == 0 ||
+                  !is_array($config) && 0 == $config)
+        {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Length Rule requires at least one non-zero limit, ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        }
+
+        if (!empty($config['min']) && !empty($config['max'])) {
+            if ($config['min'] > $config['max']) {
+                list($config['min'], $config['max']) = array($config['max'], $config['min']);
+            } elseif ($config['min'] == $config['max']) {
+                $config = $config['min'];
+            }
+        }
+        return parent::setConfig($config);
     }
 }
 ?>

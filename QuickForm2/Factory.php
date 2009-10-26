@@ -183,28 +183,6 @@ class HTML_QuickForm2_Factory
 
 
    /**
-    * Returns configuration data for rules of the given type
-    *
-    * @param    string  Rule type name (treated case-insensitively)
-    * @return   mixed   Configuration data (set when registering the rule)
-    * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
-    * @deprecated   Deprecated since 0.3.0, in the next release global Rule
-    *                   configuration will be provided to the Rule constructor
-    */
-    public static function getRuleConfig($type)
-    {
-        $type = strtolower($type);
-        if (!isset(self::$registeredRules[$type])) {
-            throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
-        } elseif (isset(self::$registeredRules[$type][2])) {
-            return self::$registeredRules[$type][2];
-        } else {
-            return null;
-        }
-    }
-
-
-   /**
     * Checks whether a rule type is known to Factory
     *
     * @param    string  Rule type name (treated case-insensitively)
@@ -222,14 +200,14 @@ class HTML_QuickForm2_Factory
     * @param    string                  Rule type name (treated case-insensitively)
     * @param    HTML_QuickForm2_Node    Element to validate by the rule
     * @param    string                  Message to display if validation fails
-    * @param    mixed                   Additional data for the rule
+    * @param    mixed                   Configuration data for the rule
     * @return   HTML_QuickForm2_Rule    A created Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
     * @throws   HTML_QuickForm2_NotFoundException        If class for the rule
     *           can't be found and/or loaded from file
     */
     public static function createRule($type, HTML_QuickForm2_Node $owner,
-                                      $message = '', $options = null)
+                                      $message = '', $config = null)
     {
         $type = strtolower($type);
         if (!isset(self::$registeredRules[$type])) {
@@ -237,7 +215,9 @@ class HTML_QuickForm2_Factory
         }
         list($className, $includeFile) = self::$registeredRules[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-        return new $className($owner, $message, $options, $type);
+        $globalConfig = isset(self::$registeredRules[$type][2])
+                        ? self::$registeredRules[$type][2]: null;
+        return new $className($owner, $message, $config, $globalConfig);
     }
 }
 ?>

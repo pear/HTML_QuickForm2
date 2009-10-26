@@ -176,20 +176,6 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(HTML_QuickForm2_Factory::isRuleRegistered('foo'));
     }
 
-    public function testGetRuleConfig()
-    {
-        HTML_QuickForm2_Factory::registerRule('foobar', 'FooBar', null, 'Some config');
-        $this->assertEquals('Some config', HTML_QuickForm2_Factory::getRuleConfig('foobar'));
-
-        try {
-            $config = HTML_QuickForm2_Factory::getRuleConfig('foobar_' . mt_rand());
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Rule(.*)is not known/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-    }
-
     public function testCreateNotRegisteredRule()
     {
         $mockNode = $this->getMock(
@@ -273,7 +259,6 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($mockNode, $rule->owner);
         $this->assertEquals('An error message', $rule->getMessage());
         $this->assertEquals('Some options', $rule->getConfig());
-        $this->assertEquals('fakerule', $rule->registeredType);
     }
 }
 ?>

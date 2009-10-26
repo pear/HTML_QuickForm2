@@ -47,10 +47,10 @@
  * Rule checking that uploaded file is of the correct MIME type
  *
  * The Rule needs one configuration parameter for its work: a string with a
- * desired MIME type or array of such strings. The parameter may be passed to
- * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Parameter registered with the
- * Factory overrides one set for the particular Rule instance via setConfig().
+ * desired MIME type or array of such strings. This parameter can be passed
+ * either to {@link HTML_QuickForm2_Rule::__construct() the Rule constructor}
+ * as local configuration or to {@link HTML_QuickForm2_Factory::registerRule()}
+ * as global one. As usual, global configuration overrides local one.
  *
  * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
  *
@@ -66,33 +66,34 @@ class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
     * Validates the element's value
     *
     * @return   bool    whether uploaded file's MIME type is correct
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or bogus MIME type(s) provided
     */
     protected function checkValue($value)
     {
-        if (!empty($this->registeredType)) {
-            $mime = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
-        } else {
-            $mime = null;
-        }
-        if (null === $mime) {
-            $mime = $this->getConfig();
-        }
-        if (0 == count($mime) || !is_string($mime) && !is_array($mime)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'MimeType Rule requires MIME type(s), ' .
-                preg_replace('/\s+/', ' ', var_export($mime, true)) . ' given'
-            );
-        }
-
         if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
             return true;
         }
+        $mime = $this->getConfig();
         return is_array($mime)? in_array($value['type'], $mime):
                                 $value['type'] == $mime;
     }
 
+   /**
+    * Sets allowed MIME type(s) for the uploaded file
+    *
+    * @param    string|array    Allowed MIME type or an array of types
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if bogus configuration provided
+    */
+    public function setConfig($config)
+    {
+        if (0 == count($config) || !is_string($config) && !is_array($config)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'MimeType Rule requires MIME type(s), ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        }
+        return parent::setConfig($config);
+    }
 
    /**
     * Sets the element that will be validated by this rule

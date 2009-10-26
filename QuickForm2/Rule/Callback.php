@@ -53,21 +53,8 @@ require_once 'HTML/QuickForm2/Rule.php';
  *
  * The Rule needs a valid callback as a configuration parameter for its work, it
  * may also be given additional arguments to pass to the callback alongside the
- * element's value.
- *
- * Parameters can be passed to {@link HTML_QuickForm2_Rule::setConfig() setConfig()} in
- * either of the following formats
- *  - callback or arguments (the semantics depend on whether the Rule was
- *    registered in the {@link HTML_QuickForm2_Factory Factory} with the
- *    callback already given)
- *  - array(['callback' => callback, ]['arguments' => array(...)])
- * and also may be passed to {@link HTML_QuickForm2_Factory::registerRule()} in
- * either of the following formats
- *  - callback
- *  - array(['callback' => callback, ]['arguments' => array(...)])
- * global config registered with the Factory overrides options set for the
- * particular Rule instance. In any case you are advised to use the associative
- * array format to prevent ambiguity.
+ * element's value. See {@link mergeConfig()} for description of possible ways
+ * to pass configuration parameters.
  *
  * The callback will be called with element's value as the first argument, if
  * additional arguments were provided they'll be passed as well. It is expected
@@ -101,88 +88,84 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
 {
    /**
-    * Set to true if callback function was registered in Factory
-    * @var  bool
-    */
-    protected $registeredCallback = false;
-
-   /**
     * Validates the element's value
     *
     * @return   bool    the value returned by a callback function
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor or a bogus callback was provided
-    * @throws   HTML_QuickForm2_NotFoundException if the callback is missing
     */
     protected function checkValue($value)
     {
-        if (!empty($this->registeredType)) {
-            $config = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
+        $config = $this->getConfig();
+        return (bool)call_user_func_array(
+            $config['callback'], array_merge(array($value), $config['arguments'])
+        );
+    }
+
+   /**
+    * Merges local configuration with that provided for registerRule()
+    *
+    * "Global" configuration may be passed to
+    * {@link HTML_QuickForm2_Factory::registerRule()} in either of the
+    * following formats
+    *  - callback
+    *  - array(['callback' => callback, ]['arguments' => array(...)])
+    *
+    * "Local" configuration may be passed to the constructor in either of
+    * the following formats
+    *  - callback or arguments (interpretation depends on whether the global
+    *    configuration already contains the callback)
+    *  - array(['callback' => callback, ]['arguments' => array(...)])
+    *
+    * As usual, global config overrides local one. It is a good idea to use the
+    * associative array format to prevent ambiguity.
+    *
+    * @param    mixed   Local configuration
+    * @param    mixed   Global configuration
+    * @return   mixed   Merged configuration
+    */
+    protected function mergeConfig($localConfig, $globalConfig)
+    {
+        if (!isset($globalConfig)) {
+            $config = $localConfig;
+
         } else {
-            $config = null;
+            if (!is_array($globalConfig) ||
+                !isset($globalConfig['callback']) && !isset($globalConfig['arguments'])
+            ) {
+                $config = array('callback' => $globalConfig);
+            } else {
+                $config = $globalConfig;
+            }
+            if (is_array($localConfig) && (isset($localConfig['callback'])
+                || isset($localConfig['arguments']))
+            ) {
+                $config += $localConfig;
+            } elseif(isset($localConfig)) {
+                $config += array('callback' => $localConfig, 'arguments' => $localConfig);
+            }
         }
-        $callback  = $this->findCallback($config);
-        $arguments = $this->findArguments($config);
-        if (!is_callable($callback, false, $callbackName)) {
+        return $config;
+    }
+
+   /**
+    * Sets the callback to use for validation and its additional arguments
+    *
+    * @param    callback|array  Callback or array ('callback' => validation callback,
+    *                                              'arguments' => additional arguments)
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException if callback is missing or invalid
+    */
+    public function setConfig($config)
+    {
+        if (!is_array($config) || !isset($config['callback'])) {
+            $config = array('callback' => $config);
+        }
+        if (!is_callable($config['callback'], false, $callbackName)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Callback Rule requires a valid callback, \'' . $callbackName .
                 '\' was given'
             );
         }
-        return call_user_func_array($callback, array_merge(array($value), $arguments));
-    }
-
-   /**
-    * Searches in global config and Rule's options for a callback function to use
-    *
-    * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable
-    * @return   callback
-    * @throws   HTML_QuickForm2_NotFoundException   if a callback wasn't found anywhere
-    */
-    protected function findCallback($globalConfig)
-    {
-        $this->registeredCallback = false;
-        if (!empty($globalConfig)) {
-            if (!is_array($globalConfig) ||
-                !isset($globalConfig['callback']) && !isset($globalConfig['arguments']))
-            {
-                $this->registeredCallback = true;
-                return $globalConfig;
-            } elseif (isset($globalConfig['callback'])) {
-                $this->registeredCallback = true;
-                return $globalConfig['callback'];
-            }
-        }
-        if (is_array($this->config) && isset($this->config['callback'])) {
-            return $this->config['callback'];
-        } elseif (!empty($this->config)) {
-            return $this->config;
-        } else {
-            throw new HTML_QuickForm2_NotFoundException(
-                'Callback Rule requires a callback to check value with'
-            );
-        }
-    }
-
-   /**
-    * Searches in global config and Rule's options for callback's additional arguments
-    *
-    * @param    mixed   config returned by {@link HTML_QuickForm2_Factory::getRuleConfig()},
-    *                   if applicable
-    * @return   array   additional arguments to pass to a callback
-    */
-    protected function findArguments($globalConfig)
-    {
-        if (is_array($globalConfig) && isset($globalConfig['arguments'])) {
-            return $globalConfig['arguments'];
-        }
-        if (is_array($this->config) && isset($this->config['arguments'])) {
-            return $this->config['arguments'];
-        } elseif ($this->registeredCallback && !empty($this->config)) {
-            return $this->config;
-        }
-        return array();
+        return parent::setConfig($config + array('arguments' => array()));
     }
 }
 ?>

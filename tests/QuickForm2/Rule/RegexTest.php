@@ -66,14 +66,13 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                  'getValue', 'setValue', '__toString'));
-        $regex  = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
         try {
-            $regex->validate();
-        } catch (HTML_QuickForm2_Exception $e) {
+            $regex = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
+            $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertRegexp('/Regex Rule requires a regular expression/', $e->getMessage());
             return;
         }
-        $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
     }
 
     public function testOptionsHandling()

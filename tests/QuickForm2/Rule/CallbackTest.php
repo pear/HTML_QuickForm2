@@ -71,21 +71,19 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                   'getValue', 'setValue', '__toString'));
-        $callbackMissing = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error');
         try {
-            $callbackMissing->validate();
-        } catch (HTML_QuickForm2_Exception $e) {
-            $this->assertRegexp('/Callback Rule requires a callback to check value with/', $e->getMessage());
-            $callbackBogus = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error',
-                                        array('callback' => 'bogusfunctionname'));
-            try {
-                $callbackBogus->validate();
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegexp('/Callback Rule requires a valid callback/', $e->getMessage());
-                return;
-            }
+            $callbackMissing = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error');
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertRegexp('/Callback Rule requires a valid callback/', $e->getMessage());
         }
-        $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
+        try {
+            $callbackBogus = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error',
+                                    array('callback' => 'bogusfunctionname'));
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+            $this->assertRegexp('/Callback Rule requires a valid callback/', $e->getMessage());
+        }
     }
 
     public function testOptionsHandling()

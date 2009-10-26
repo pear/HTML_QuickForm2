@@ -52,11 +52,10 @@ require_once 'HTML/QuickForm2/Rule.php';
  * Validates values using regular expressions
  *
  * The Rule needs one configuration parameter for its work: a Perl-compatible
- * regular expression. This expression can be passed either to
- * {@link HTML_QuickForm2_Rule::setConfig() setConfig()} or to
- * {@link HTML_QuickForm2_Factory::registerRule()}. Regular expression
- * registered with the Factory overrides one set for the particular Rule
- * instance via setConfig().
+ * regular expression. This parameter can be passed either to
+ * {@link HTML_QuickForm2_Rule::__construct() the Rule constructor} as local
+ * configuration or to {@link HTML_QuickForm2_Factory::registerRule()}
+ * as global one. As usual, global configuration overrides local one.
  *
  * The Rule can also validate file uploads, in this case the regular expression
  * is applied to upload's 'name' field.
@@ -76,27 +75,9 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
     * Validates the element's value
     *
     * @return   bool    whether element's value matches given regular expression
-    * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus $registeredType
-    *           was passed to constructor
-    * @throws   HTML_QuickForm2_Exception if regular expression is missing
     */
     protected function checkValue($value)
     {
-        if (!empty($this->registeredType)) {
-            $regex = HTML_QuickForm2_Factory::getRuleConfig($this->registeredType);
-        } else {
-            $regex = null;
-        }
-        if (null === $regex) {
-            $regex = $this->getConfig();
-        }
-        if (!is_string($regex)) {
-            throw new HTML_QuickForm2_Exception(
-                'Regex Rule requires a regular expression, ' .
-                preg_replace('/\s+/', ' ', var_export($regex, true)) . ' given'
-            );
-        }
-
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
                 return true;
@@ -105,7 +86,25 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
         } elseif (!strlen($value)) {
             return true;
         }
-        return preg_match($regex . 'D', $value);
+        return preg_match($this->getConfig() . 'D', $value);
+    }
+
+   /**
+    * Sets the regular expression to validate with
+    *
+    * @param    string  Regular expression
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if $config is not a string
+    */
+    public function setConfig($config)
+    {
+        if (!is_string($config)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Regex Rule requires a regular expression, ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        }
+        return parent::setConfig($config);
     }
 }
 ?>
