@@ -68,12 +68,13 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
 {
    /**
-    * Validates the element's value
+    * Validates the owner element
     *
     * @return   bool    whether uploaded file's MIME type is correct
     */
-    protected function checkValue($value)
+    protected function validateOwner()
     {
+        $value = $this->owner->getValue();
         if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
             return true;
         }

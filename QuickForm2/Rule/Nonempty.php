@@ -61,8 +61,9 @@ require_once 'HTML/QuickForm2/Rule.php';
  */
 class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
 {
-    protected function checkValue($value)
+    protected function validateOwner()
     {
+        $value = $this->owner->getValue();
         if (!$this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             return (bool)strlen($value);
         } else {

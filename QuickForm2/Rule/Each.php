@@ -74,18 +74,16 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {
    /**
-    * Validates the values of the owner's children
+    * Validates the owner's children using the template Rule
     *
-    * @param    mixed   Value of the container (NOT USED)
     * @return   bool    Whether all children are valid according to a template Rule
     */
-    protected function checkValue($value)
+    protected function validateOwner()
     {
         $rule = clone $this->getConfig();
-        $rule->setMessage('');
         foreach ($this->owner as $child) {
             $rule->setOwner($child);
-            if (!$rule->validate()) {
+            if (!$rule->validateOwner()) {
                 return false;
             }
         }

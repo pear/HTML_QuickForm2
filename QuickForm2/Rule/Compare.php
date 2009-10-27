@@ -86,12 +86,13 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
 
    /**
-    * Validates the element's value
+    * Validates the owner element
     *
     * @return   bool    whether (element_value operator operand) expression is true
     */
-    protected function checkValue($value)
+    protected function validateOwner()
     {
+        $value  = $this->owner->getValue();
         $config = $this->getConfig();
         if (!in_array($config['operator'], array('===', '!=='))) {
             $compareFn = create_function(

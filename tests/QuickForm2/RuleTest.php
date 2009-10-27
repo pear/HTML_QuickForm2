@@ -64,7 +64,7 @@ require_once 'HTML/QuickForm2/Element/InputText.php';
  */
 class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
 {
-    protected function checkValue($value)
+    protected function validateOwner()
     {
         // It just returns whatever value was passed to setConfig()
         return $this->config;

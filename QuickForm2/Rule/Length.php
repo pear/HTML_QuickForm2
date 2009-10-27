@@ -78,13 +78,13 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 {
    /**
-    * Validates the element's value
+    * Validates the owner element
     *
     * @return   bool    whether length of the element's value is within allowed range
     */
-    protected function checkValue($value)
+    protected function validateOwner()
     {
-        if (0 == ($valueLength = strlen($value))) {
+        if (0 == ($valueLength = strlen($this->owner->getValue()))) {
             return true;
         }
 

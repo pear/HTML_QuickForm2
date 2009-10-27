@@ -448,22 +448,22 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el2 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
 
         $ruleTrue1 = $this->getMock(
-            'HTML_QuickForm2_Rule', array('checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($cValidate, 'irrelevant message')
         );
-        $ruleTrue1->expects($this->once())->method('checkValue')
+        $ruleTrue1->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
         $ruleFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($el1, 'some error')
         );
-        $ruleFalse->expects($this->once())->method('checkValue')
+        $ruleFalse->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(false));
         $ruleTrue2 = $this->getMock(
-            'HTML_QuickForm2_Rule', array('checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($el2, 'irrelevant message')
         );
-        $ruleTrue2->expects($this->once())->method('checkValue')
+        $ruleTrue2->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
 
         $cValidate->addRule($ruleTrue1);

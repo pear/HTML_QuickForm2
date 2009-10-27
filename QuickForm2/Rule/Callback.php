@@ -88,12 +88,13 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
 {
    /**
-    * Validates the element's value
+    * Validates the owner element
     *
     * @return   bool    the value returned by a callback function
     */
-    protected function checkValue($value)
+    protected function validateOwner()
     {
+        $value  = $this->owner->getValue();
         $config = $this->getConfig();
         return (bool)call_user_func_array(
             $config['callback'], array_merge(array($value), $config['arguments'])

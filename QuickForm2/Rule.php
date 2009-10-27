@@ -235,43 +235,43 @@ abstract class HTML_QuickForm2_Rule
     public function validate()
     {
         $globalValid = false;
-        $localValid  = $this->checkValue($this->owner->getValue());
+        $localValid  = $this->validateOwner();
         foreach ($this->chainedRules as $item) {
             foreach ($item as $multiplier) {
-                if (!$localValid) {
+                if (!($localValid = $localValid && $multiplier->validate())) {
                     break;
                 }
-                $localValid = $localValid && $multiplier->validate();
             }
-            $globalValid = $globalValid || $localValid;
-            if ($globalValid) {
+            if ($globalValid = $globalValid || $localValid) {
                 break;
             }
             $localValid = true;
         }
-        if (!$globalValid && strlen($this->message) && !$this->owner->getError()) {
-            $this->owner->setError($this->message);
-        }
+        $globalValid or $this->setOwnerError();
         return $globalValid;
     }
 
    /**
-    * Validates the element's value
+    * Validates the owner element
     *
-    * Note that the error message will be set for an element if such message
-    * exists in the rule and that method returns false
-    *
-    * @param    mixed   Form element's value
-    * @return   boolean Whether the value is valid according to the rule
+    * @return   bool    Whether owner element is valid according to the rule
+    * @todo This should be declared abstract in the next release
     */
-    abstract protected function checkValue($value);
+    protected function validateOwner()
+    {
+        $level = defined('E_USER_DEPRECATED')? E_USER_DEPRECATED: E_USER_NOTICE;
+        trigger_error('HTML_QuickForm2_Rule::checkValue() is deprecated, implement validateOwner() instead', $level);
+        return $this->checkValue($this->owner->getValue());
+    }
 
    /**
-    * Removes chained Rules on cloning the Rule instance
+    * Sets the error message on the owner element
     */
-    public function __clone()
+    protected function setOwnerError()
     {
-        $this->chainedRules = array(array());
+        if (strlen($this->getMessage()) && !$this->owner->getError()) {
+            $this->owner->setError($this->getMessage());
+        }
     }
 }
 ?>
