@@ -86,16 +86,6 @@ abstract class HTML_QuickForm2_Rule
     */
     protected $chainedRules = array(array());
 
-   /**
-    * Type that was provided to Factory when creating this Rule instance
-    *
-    * Used to get the common configuration data for the Rules of that type from
-    * Factory.
-    *
-    * @var  string
-    */
-    protected $registeredType = null;
-
 
    /**
     * Class constructor
@@ -275,5 +265,13 @@ abstract class HTML_QuickForm2_Rule
     * @return   boolean Whether the value is valid according to the rule
     */
     abstract protected function checkValue($value);
+
+   /**
+    * Removes chained Rules on cloning the Rule instance
+    */
+    public function __clone()
+    {
+        $this->chainedRules = array(array());
+    }
 }
 ?>

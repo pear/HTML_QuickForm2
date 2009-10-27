@@ -145,6 +145,9 @@ special attention to changes in SVN.
      <file name="Compare.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="Each.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="Empty.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -282,6 +285,9 @@ special attention to changes in SVN.
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="CompareTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="EachTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="EmptyTest.php" role="test">

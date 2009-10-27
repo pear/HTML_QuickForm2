@@ -59,6 +59,7 @@ require_once dirname(__FILE__) . '/CallbackTest.php';
 require_once dirname(__FILE__) . '/LengthTest.php';
 require_once dirname(__FILE__) . '/MaxFileSizeTest.php';
 require_once dirname(__FILE__) . '/MimeTypeTest.php';
+require_once dirname(__FILE__) . '/EachTest.php';
 
 class QuickForm2_Rule_AllTests
 {
@@ -80,6 +81,7 @@ class QuickForm2_Rule_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Rule_LengthTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_MaxFileSizeTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_MimeTypeTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_EachTest');
 
         return $suite;
     }

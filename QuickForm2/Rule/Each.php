@@ -1,6 +1,6 @@
 <?php
 /**
- * Rule checking that uploaded file size does not exceed the given limit
+ * Validates all elements in a Container using a template Rule
  *
  * PHP version 5
  *
@@ -49,19 +49,21 @@
 require_once 'HTML/QuickForm2/Rule.php';
 
 /**
- * Rule checking that uploaded file size does not exceed the given limit
+ * Validates all elements in a Container using a template Rule
  *
- * The Rule needs one configuration parameter for its work: the size limit.
- * This limit can be passed either to
+ * This Rule needs one configuration parameter for its work: the template Rule
+ * to use for actual validation. It can be passed either to
  * {@link HTML_QuickForm2_Rule::__construct() the Rule constructor} as local
  * configuration or to {@link HTML_QuickForm2_Factory::registerRule()} as
- * global one. As usual, global configuration overrides local one.
+ * global one. As usual, global configuration overrides local.
  *
- * Note that if file upload failed due to upload_max_filesize php.ini setting
- * or MAX_FILE_SIZE form field, then this rule won't even be called, due to
- * File element's built-in validation setting the error message.
+ * The container will be considered valid if all its elements are valid
+ * according to a template Rule.
  *
- * The Rule considers missing file uploads (UPLOAD_ERR_NO_FILE) valid.
+ * <code>
+ * $group->addRule('each', 'The fields should contain only letters',
+ *                 $group->createRule('regex', '/^[a-z]+$/i'));
+ * </code>
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -69,34 +71,48 @@ require_once 'HTML/QuickForm2/Rule.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
+class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {
    /**
-    * Validates the element's value
+    * Validates the values of the owner's children
     *
-    * @return   bool    whether uploaded file's size is within given limit
+    * @param    mixed   Value of the container (NOT USED)
+    * @return   bool    Whether all children are valid according to a template Rule
     */
     protected function checkValue($value)
     {
-        if (!isset($value['error']) || UPLOAD_ERR_NO_FILE == $value['error']) {
-            return true;
+        $rule = clone $this->getConfig();
+        $rule->setMessage('');
+        foreach ($this->owner as $child) {
+            $rule->setOwner($child);
+            if (!$rule->validate()) {
+                return false;
+            }
         }
-        return ($this->getConfig() >= @filesize($value['tmp_name']));
+        return true;
     }
 
    /**
-    * Sets maximum allowed file size
+    * Sets the template Rule to use for actual validation
     *
-    * @param    int     Maximum allowed size
+    * We do not allow using Required rules here, they are able to validate
+    * containers themselves without the help of Each rule.
+    *
+    * @param    HTML_QuickForm2_Rule    Template Rule
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
+    * @throws   HTML_QuickForm2_InvalidArgumentException if $config is either not
+    *               an instance of Rule or is an instance of Rule_Required
     */
     public function setConfig($config)
     {
-        if (0 >= $config) {
+        if (!$config instanceof HTML_QuickForm2_Rule) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                'MaxFileSize Rule requires a positive size limit, ' .
+                'Each Rule requires a template Rule to validate with, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        } elseif ($config instanceof HTML_QuickForm2_Rule_Required) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Cannot use "required" Rule as a template'
             );
         }
         return parent::setConfig($config);
@@ -105,15 +121,15 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
    /**
     * Sets the element that will be validated by this rule
     *
-    * @param    HTML_QuickForm2_Element_InputFile   File upload field to validate
+    * @param    HTML_QuickForm2_Container   Container to validate
     * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to use
-    *           this Rule on something that isn't a file upload field
+    *           this Rule on something that isn't a Container
     */
     public function setOwner(HTML_QuickForm2_Node $owner)
     {
-        if (!$owner instanceof HTML_QuickForm2_Element_InputFile) {
+        if (!$owner instanceof HTML_QuickForm2_Container) {
             throw new HTML_QuickForm2_InvalidArgumentException(
-                'MaxFileSize Rule can only validate file upload fields, '.
+                'Each Rule can only validate Containers, '.
                 get_class($owner) . ' given'
             );
         }

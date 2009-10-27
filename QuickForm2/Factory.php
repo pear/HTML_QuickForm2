@@ -113,7 +113,8 @@ class HTML_QuickForm2_Factory
         'maxlength'     => array('HTML_QuickForm2_Rule_Length', null,
                                  array('min' => 0)),
         'maxfilesize'   => array('HTML_QuickForm2_Rule_MaxFileSize', null),
-        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType', null)
+        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType', null),
+        'each'          => array('HTML_QuickForm2_Rule_Each', null)
     );
 
 
