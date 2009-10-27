@@ -58,6 +58,11 @@ require_once 'HTML/QuickForm2/Rule/Nonempty.php';
 require_once 'HTML/QuickForm2/Element/InputFile.php';
 
 /**
+ * Classes for <select> elements
+ */
+require_once 'HTML/QuickForm2/Element/Select.php';
+
+/**
  * Unit test for HTML_QuickForm2_Rule_Nonempty class
  */
 class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
@@ -108,6 +113,44 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
         $rule2 = new HTML_QuickForm2_Rule_Nonempty($mockInvalid, 'an error');
         $this->assertFalse($rule2->validate());
         $this->assertEquals('an error', $mockInvalid->getError());
+    }
+
+    public function testDefaultConfig()
+    {
+        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                 'getValue', 'setValue', '__toString'));
+        $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl);
+        $this->assertEquals(1, $rule->getConfig());
+    }
+
+    public function testPositiveNumberRequired()
+    {
+        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                 'getValue', 'setValue', '__toString'));
+        try {
+            $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl, 'an error', -1);
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+    }
+
+   /**
+    * @see  http://pear.php.net/bugs/bug.php?id=12610
+    */
+    function testValidateSelectMultiple()
+    {
+        $options     = array('1' => 'Option 1', '2' => 'Option 2');
+        $multiSelect = new HTML_QuickForm2_Element_Select(
+            'mult', array('multiple'), array('options' => $options)
+        );
+
+        $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($multiSelect, 'an error');
+        $this->assertFalse($nonEmpty->validate());
+
+        $multiSelect->setValue(array(1));
+        $this->assertTrue($nonEmpty->validate());
+
+        $nonEmpty->setConfig(2);
+        $this->assertFalse($nonEmpty->validate());
     }
 }
 ?>

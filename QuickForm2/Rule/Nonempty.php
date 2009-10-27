@@ -64,11 +64,38 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
     protected function validateOwner()
     {
         $value = $this->owner->getValue();
-        if (!$this->owner instanceof HTML_QuickForm2_Element_InputFile) {
-            return (bool)strlen($value);
-        } else {
+        if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             return isset($value['error']) && (UPLOAD_ERR_OK == $value['error']);
+        } elseif (is_array($value)) {
+            return count(array_filter($value, 'strlen')) >= $this->getConfig();
+        } else {
+            return (bool)strlen($value);
         }
+    }
+
+   /**
+    * Sets minimum number of nonempty values
+    *
+    * This is useful for multiple selects and Containers, will be ignored for
+    * all other elements. Defaults to 1, thus multiple select will be
+    * considered not empty if at least one option is selected, Container will
+    * be considered not empty if at least one contained element is not empty.
+    *
+    * @param    int     Maximum allowed size
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
+    */
+    public function setConfig($config)
+    {
+        if (is_null($config)) {
+            $config = 1;
+        } elseif (1 > intval($config)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Nonempty Rule accepts a positive count of nonempty values, ' .
+                preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
+            );
+        }
+        return parent::setConfig(intval($config));
     }
 }
 
