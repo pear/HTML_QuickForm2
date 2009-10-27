@@ -123,7 +123,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     * @param    mixed   Global configuration
     * @return   mixed   Merged configuration
     */
-    protected function mergeConfig($localConfig, $globalConfig)
+    public static function mergeConfig($localConfig, $globalConfig)
     {
         if (!isset($globalConfig)) {
             $config = $localConfig;

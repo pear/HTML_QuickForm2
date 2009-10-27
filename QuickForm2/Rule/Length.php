@@ -105,7 +105,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     *                   $length if it doesn't contain such a key already
     * @return   array
     */
-    protected function mergeMinMaxLength($length, $config)
+    protected static function mergeMinMaxLength($length, $config)
     {
         if (array_key_exists('min', $config) || array_key_exists('max', $config)) {
             if (!array_key_exists('min', $length) && array_key_exists('min', $config)) {
@@ -149,7 +149,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     * @param    int|array   Global length limits, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
     * @return   int|array   Merged length limits
     */
-    protected function mergeConfig($localConfig, $globalConfig)
+    public static function mergeConfig($localConfig, $globalConfig)
     {
         if (!isset($globalConfig)) {
             $length = $localConfig;
@@ -158,9 +158,9 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             $length = $globalConfig;
 
         } else {
-            $length = $this->mergeMinMaxLength(array(), $globalConfig);
+            $length = self::mergeMinMaxLength(array(), $globalConfig);
             if (isset($localConfig)) {
-                $length = $this->mergeMinMaxLength(
+                $length = self::mergeMinMaxLength(
                     $length, is_array($localConfig)? $localConfig: array($localConfig)
                 );
             }
@@ -184,7 +184,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     public function setConfig($config)
     {
         if (is_array($config)) {
-            $config = $this->mergeMinMaxLength(array(), $config)
+            $config = self::mergeMinMaxLength(array(), $config)
                       + array('min' => 0, 'max' => 0);
         }
         if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0) ||

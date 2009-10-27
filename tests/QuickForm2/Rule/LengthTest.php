@@ -169,37 +169,49 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
                                  'getValue', 'setValue', '__toString'));
 
-        $scalar = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 3, 4);
+        $scalar = new HTML_QuickForm2_Rule_Length(
+            $mockEl, 'an error',
+            HTML_QuickForm2_Rule_Length::mergeConfig(3, 4)
+        );
         $this->assertEquals(4, $scalar->getConfig());
 
-        $scalar2 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', array('min' => 1, 'max' => 2), 3);
+        $scalar2 = new HTML_QuickForm2_Rule_Length(
+            $mockEl, 'an error',
+            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 2), 3)
+        );
         $this->assertEquals(3, $scalar2->getConfig());
 
-        $array = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                 array('min' => 1, 'max' => 2),
-                                                 array('min' => 3, 'max' => 4));
+        $array = new HTML_QuickForm2_Rule_Length(
+            $mockEl, 'an error',
+            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 2),
+                                                     array('min' => 3, 'max' => 4))
+        );
         $this->assertEquals(array('min' => 3, 'max' => 4), $array->getConfig());
-        $array2 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                 123, array('min' => 3, 'max' => 4));
+
+        $array2 = new HTML_QuickForm2_Rule_Length(
+            $mockEl, 'an error',
+            HTML_QuickForm2_Rule_Length::mergeConfig(123, array('min' => 3, 'max' => 4))
+        );
         $this->assertEquals(array('min' => 3, 'max' => 4), $array2->getConfig());
     }
 
     public function testConfigMerging()
     {
-        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+        $this->assertEquals(
+            array('min' => 1, 'max' => 0),
+            HTML_QuickForm2_Rule_Length::mergeConfig(1, array('max' => 0))
+        );
 
-        $minLength = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                     1, array('max' => 0));
-        $this->assertEquals(array('min' => 1, 'max' => 0), $minLength->getConfig());
+        $this->assertEquals(
+            array('min' => 1, 'max' => 0),
+            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1), array('max' => 0))
+        );
 
-        $minLength2 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                     array('min' => 1), array('max' => 0));
-        $this->assertEquals(array('min' => 1, 'max' => 0), $minLength->getConfig());
-
-        $minLength3 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
-                                                     array('min' => 1, 'max' => 5), array('max' => 0));
-        $this->assertEquals(array('min' => 1, 'max' => 0), $minLength->getConfig());
+        $this->assertEquals(
+            array('min' => 1, 'max' => 0),
+            HTML_QuickForm2_Rule_Length::mergeConfig(array('min' => 1, 'max' => 5),
+                                                     array('max' => 0))
+        );
     }
 
     public function testEmptyFieldsAreSkipped()

@@ -129,15 +129,15 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     * @param    mixed   Global configuration
     * @return   mixed   Merged configuration
     */
-    protected function mergeConfig($localConfig, $globalConfig)
+    public static function mergeConfig($localConfig, $globalConfig)
     {
         $config = null;
         if (0 < count($globalConfig)) {
-            $config = $this->toCanonicalForm($globalConfig, 'operator');
+            $config = self::toCanonicalForm($globalConfig, 'operator');
         }
         if (0 < count($localConfig)) {
             $config = (isset($config)? $config: array())
-                      + $this->toCanonicalForm($localConfig);
+                      + self::toCanonicalForm($localConfig);
         }
         return $config;
     }
@@ -149,7 +149,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     * @param    string  Array key to assign $config to if it is scalar
     * @return   array   Associative array that may contain 'operand' and 'operator' keys
     */
-    protected function toCanonicalForm($config, $key = 'operand')
+    protected static function toCanonicalForm($config, $key = 'operand')
     {
         if (!is_array($config)) {
             return array($key => $config);
@@ -188,7 +188,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
                 'Compare Rule requires an argument to compare with'
             );
         }
-        $config = $this->toCanonicalForm($config);
+        $config = self::toCanonicalForm($config);
 
         $config += array('operator' => '===');
         if (!in_array($config['operator'], $this->operators)) {

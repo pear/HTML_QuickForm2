@@ -102,17 +102,6 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGlobalConfigOverrides()
-    {
-        $mockEl   = $this->getMock(
-            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
-        );
-        $empty    = $mockEl->createRule('empty');
-        $nonEmpty = $mockEl->createRule('nonempty');
-        $each     = new HTML_QuickForm2_Rule_Each($mockEl, 'an error', $empty, $nonEmpty);
-        $this->assertSame($nonEmpty, $each->getConfig());
-    }
-
     public function testValidatesWithTemplateRule()
     {
         $mockContainer = $this->getMock(

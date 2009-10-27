@@ -93,17 +93,12 @@ abstract class HTML_QuickForm2_Rule
     * @param    HTML_QuickForm2_Node    Element to validate
     * @param    string                  Error message to display if validation fails
     * @param    mixed                   Configuration data for the rule
-    * @param    mixed                   Configuration data provided to Factory in
-    *                                   registerRule() call, will be merged with $config.
-    *                                   Not terribly useful if instantiating the Rule
-    *                                   object manually.
     */
-    public function __construct(HTML_QuickForm2_Node $owner, $message = '',
-                                $config = null, $globalConfig = null)
+    public function __construct(HTML_QuickForm2_Node $owner, $message = '', $config = null)
     {
         $this->setOwner($owner);
         $this->setMessage($message);
-        $this->setConfig($this->mergeConfig($config, $globalConfig));
+        $this->setConfig($config);
     }
 
    /**
@@ -116,7 +111,7 @@ abstract class HTML_QuickForm2_Rule
     * @param    mixed   Global configuration, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
     * @return   mixed   Merged configuration
     */
-    protected function mergeConfig($localConfig, $globalConfig)
+    public static function mergeConfig($localConfig, $globalConfig)
     {
         return is_null($globalConfig)? $localConfig: $globalConfig;
     }
@@ -262,7 +257,7 @@ abstract class HTML_QuickForm2_Rule
     protected function validateOwner()
     {
         $level = defined('E_USER_DEPRECATED')? E_USER_DEPRECATED: E_USER_NOTICE;
-        trigger_error('HTML_QuickForm2_Rule::checkValue() is deprecated, implement validateOwner() instead', $level);
+        trigger_error(get_class($this) . '::checkValue() is deprecated, implement validateOwner() instead', $level);
         return $this->checkValue($this->owner->getValue());
     }
 

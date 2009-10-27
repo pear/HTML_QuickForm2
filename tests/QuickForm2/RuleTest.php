@@ -195,5 +195,18 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($chain2->validate());
         $this->assertEquals('genuine error', $elTest->getError());
     }
+
+    public function testDefaultConfigMerging()
+    {
+        $this->assertEquals('foo', HTML_QuickForm2_Rule::mergeConfig('foo', null));
+        $this->assertEquals('bar', HTML_QuickForm2_Rule::mergeConfig('foo', 'bar'));
+
+        HTML_QuickForm2_Factory::registerRule('no-config', 'HTML_QuickForm2_Rule_ImplConst');
+        HTML_QuickForm2_Factory::registerRule('with-config', 'HTML_QuickForm2_Rule_ImplConst',
+                                              null, 'bar');
+        $el = new HTML_QuickForm2_Element_InputText();
+        $this->assertEquals('foo', $el->createRule('no-config', '', 'foo')->getConfig());
+        $this->assertEquals('bar', $el->createRule('with-config', '', 'foo')->getConfig());
+    }
 }
 ?>
