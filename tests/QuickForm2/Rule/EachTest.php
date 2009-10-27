@@ -155,10 +155,10 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
 
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $ruleIgnored = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($foo)
         );
-        $ruleIgnored->expects($this->never())->method('validate');
+        $ruleIgnored->expects($this->never())->method('validateOwner');
 
         $each = new HTML_QuickForm2_Rule_Each(
             $mockContainer, 'an error', $mockContainer->createRule('empty')

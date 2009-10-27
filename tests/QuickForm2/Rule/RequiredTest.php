@@ -78,7 +78,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
             'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
             'getType', 'getValue', 'setId', 'setName', 'setValue', '__toString')
         );
-        $rule = $mockNode->addRule($this->getMock('HTML_QuickForm2_Rule', array('checkValue'),
+        $rule = $mockNode->addRule($this->getMock('HTML_QuickForm2_Rule', array('validateOwner'),
                                                    array($mockNode, 'some message')));
         try {
             $rule->and_(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
@@ -102,7 +102,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
         );
         $required = new HTML_QuickForm2_Rule_Required($mockNode, 'element is required');
         try {
-            $required->or_($this->getMock('HTML_QuickForm2_Rule', array('checkValue'),
+            $required->or_($this->getMock('HTML_QuickForm2_Rule', array('validateOwner'),
                                           array($mockNode, 'some message')));
         } catch (HTML_QuickForm2_Exception $e) {
             $this->assertRegexp('/Cannot add a rule to "required" rule/', $e->getMessage());

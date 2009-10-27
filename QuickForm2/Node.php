@@ -423,6 +423,25 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         return $rule;
     }
 
+   /**
+    * Removes a validation rule
+    *
+    * The method will *not* throw an Exception if the rule wasn't added to the
+    * element.
+    *
+    * @param    HTML_QuickForm2_Rule    Validation rule to remove
+    * @return   HTML_QuickForm2_Rule    Removed rule
+    */
+    public function removeRule(HTML_QuickForm2_Rule $rule)
+    {
+        foreach ($this->rules as $i => $r) {
+            if ($r === $rule) {
+                unset($this->rules[$i]);
+                break;
+            }
+        }
+        return $rule;
+    }
 
    /**
     * Creates a validation rule

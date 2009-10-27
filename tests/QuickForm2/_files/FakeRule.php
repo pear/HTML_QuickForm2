@@ -12,6 +12,6 @@ class FakeRule extends HTML_QuickForm2_Rule
     public $owner;
     public $registeredType;
 
-    protected function checkValue($value) { return true; }
+    protected function validateOwner() { return true; }
 }
 ?>

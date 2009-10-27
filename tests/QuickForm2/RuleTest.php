@@ -141,18 +141,18 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $ruleFalse = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', false);
 
         $ruleAndTrue = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($elTest)
         );
-        $ruleAndTrue->expects($this->once())->method('validate');
+        $ruleAndTrue->expects($this->once())->method('validateOwner');
         $ruleTrue->and_($ruleAndTrue);
         $ruleTrue->validate();
 
         $ruleAndFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($elTest)
         );
-        $ruleAndFalse->expects($this->never())->method('validate');
+        $ruleAndFalse->expects($this->never())->method('validateOwner');
         $ruleFalse->and_($ruleAndFalse);
         $ruleFalse->validate();
     }
@@ -164,18 +164,18 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $ruleFalse = new HTML_QuickForm2_Rule_ImplConst($elTest, '...', false);
 
         $ruleOrTrue = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($elTest)
         );
-        $ruleOrTrue->expects($this->never())->method('validate');
+        $ruleOrTrue->expects($this->never())->method('validateOwner');
         $ruleTrue->or_($ruleOrTrue);
         $ruleTrue->validate();
 
         $ruleOrFalse = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'checkValue'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($elTest)
         );
-        $ruleOrFalse->expects($this->once())->method('validate');
+        $ruleOrFalse->expects($this->once())->method('validateOwner');
         $ruleFalse->or_($ruleOrFalse);
         $ruleFalse->validate();
     }

@@ -171,10 +171,12 @@ abstract class HTML_QuickForm2_Rule
     * Sets the element that will be validated by this rule
     *
     * @param    HTML_QuickForm2_Node    Element to validate
-    * @todo     We should consider removing the rule from previous owner
     */
     public function setOwner(HTML_QuickForm2_Node $owner)
     {
+        if (null !== $this->owner) {
+            $this->owner->removeRule($this);
+        }
         $this->owner = $owner;
     }
 

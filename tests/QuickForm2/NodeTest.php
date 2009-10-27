@@ -162,10 +162,10 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $preError = new HTML_QuickForm2_NodeImpl();
         $preError->setError('some message');
         $ruleIrrelevant = $this->getMock(
-            'HTML_QuickForm2_Rule', array('validate', 'validateOwner'),
+            'HTML_QuickForm2_Rule', array('validateOwner'),
             array($preError)
         );
-        $ruleIrrelevant->expects($this->never())->method('validate');
+        $ruleIrrelevant->expects($this->never())->method('validateOwner');
         $preError->addRule($ruleIrrelevant);
         $this->assertFalse($preError->validate());
 
@@ -199,6 +199,48 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
         $manyRules->addRule($ruleStillIrrelevant);
         $this->assertFalse($manyRules->validate());
         $this->assertEquals('some error', $manyRules->getError());
+    }
+
+    public function testRemoveRule()
+    {
+        $node    = new HTML_QuickForm2_NodeImpl();
+        $removed = $node->addRule($this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner'),
+            array($node, '...')
+        ));
+        $removed->expects($this->never())->method('validateOwner');
+        $node->removeRule($removed);
+        $this->assertTrue($node->validate());
+    }
+
+    public function testAddRuleOnlyOnce()
+    {
+        $node = new HTML_QuickForm2_NodeImpl();
+        $mock = $node->addRule($this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner'),
+            array($node, '...')
+        ));
+        $mock->expects($this->once())->method('validateOwner')
+             ->will($this->returnValue(false));
+
+        $node->addRule($mock);
+        $this->assertFalse($node->validate());
+    }
+
+    public function testRemoveRuleOnChangingOwner()
+    {
+        $nodeOne  = new HTML_QuickForm2_NodeImpl();
+        $nodeTwo  = new HTML_QuickForm2_NodeImpl();
+        $mockRule = $nodeOne->addRule($this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner'),
+            array($nodeOne, '...')
+        ));
+        $mockRule->expects($this->once())->method('validateOwner')
+                 ->will($this->returnValue(false));
+
+        $nodeTwo->addRule($mockRule);
+        $this->assertTrue($nodeOne->validate());
+        $this->assertFalse($nodeTwo->validate());
     }
 
     public function testElementIsNotRequiredByDefault()
