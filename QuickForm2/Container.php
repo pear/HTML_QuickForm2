@@ -379,14 +379,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns a recursive iterator iterator for the container elements
     *
-    * @return    RecursiveIteratorIterator
+    * @param    int     mode passed to RecursiveIteratorIterator
+    * @return   RecursiveIteratorIterator
     */
-    public function getRecursiveIterator()
+    public function getRecursiveIterator($mode = RecursiveIteratorIterator::SELF_FIRST)
     {
         return new RecursiveIteratorIterator(
-                        new HTML_QuickForm2_ContainerIterator($this),
-                        RecursiveIteratorIterator::SELF_FIRST
-                    );
+                        new HTML_QuickForm2_ContainerIterator($this), $mode
+                   );
     }
 
    /**

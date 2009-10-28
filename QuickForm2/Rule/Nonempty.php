@@ -51,7 +51,20 @@ require_once 'HTML/QuickForm2/Rule.php';
 /**
  * Rule checking that the field is not empty
  *
- * Handles both simple form fields and file uploads
+ * Handles simple form fields, file uploads and Containers.
+ *
+ * When validating <select multiple> fields and Containers it may use an
+ * optional configuration parameter for minimum number of nonempty values,
+ * defaulting to 1. It can be passed either to
+ * {@link HTML_QuickForm2_Rule::__construct() the Rule constructor} as local
+ * configuration or to {@link HTML_QuickForm2_Factory::registerRule()} as
+ * global one. As usual, global configuration overrides local.
+ *
+ * <code>
+ * // Required rule is 'nonempty' with a bit of special handling
+ * $login->addRule('required', 'Please provide your login');
+ * $multiSelect->addRule('required', 'Please select at least two options', 2);
+ * </code>
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -63,6 +76,17 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
 {
     protected function validateOwner()
     {
+        if ($this->owner instanceof HTML_QuickForm2_Container) {
+            $nonempty = 0;
+            foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+                $rule = new self($child);
+                if ($rule->validateOwner()) {
+                    $nonempty++;
+                }
+            }
+            return $nonempty >= $this->getConfig();
+        }
+
         $value = $this->owner->getValue();
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             return isset($value['error']) && (UPLOAD_ERR_OK == $value['error']);

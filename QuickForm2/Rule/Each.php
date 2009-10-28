@@ -81,7 +81,7 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     protected function validateOwner()
     {
         $rule = clone $this->getConfig();
-        foreach ($this->owner as $child) {
+        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
             $rule->setOwner($child);
             if (!$rule->validateOwner()) {
                 return false;

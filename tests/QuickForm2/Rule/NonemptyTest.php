@@ -42,25 +42,16 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * PHPUnit2 Test Case
- */
+/** PHPUnit Test Case */
 require_once 'PHPUnit/Framework/TestCase.php';
-
-/**
- * Rule checking that the form field is not empty
- */
+/** Rule checking that the form field is not empty */
 require_once 'HTML/QuickForm2/Rule/Nonempty.php';
-
-/**
- * Class for <input type="file" /> elements
- */
+/** Class for <input type="file" /> elements */
 require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/**
- * Classes for <select> elements
- */
+/** Classes for <select> elements */
 require_once 'HTML/QuickForm2/Element/Select.php';
+/** Container class */
+require_once 'HTML/QuickForm2/Container.php';
 
 /**
  * Unit test for HTML_QuickForm2_Rule_Nonempty class
@@ -147,6 +138,43 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($nonEmpty->validate());
 
         $multiSelect->setValue(array(1));
+        $this->assertTrue($nonEmpty->validate());
+
+        $nonEmpty->setConfig(2);
+        $this->assertFalse($nonEmpty->validate());
+    }
+
+    function testValidateContainer()
+    {
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $foo = $mockContainer->addElement('text', 'foo')->setValue('');
+        $bar = $mockContainer->addElement('text', 'bar[idx]')->setValue('I am not empty');
+
+        $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($mockContainer, 'an error');
+        $this->assertTrue($nonEmpty->validate());
+
+        $nonEmpty->setConfig(2);
+        $this->assertFalse($nonEmpty->validate());
+        $this->assertEquals('an error', $mockContainer->getError());
+        $this->assertEquals('', $foo->getError());
+        $this->assertEquals('', $bar->getError());
+    }
+
+    function testValidateNestedContainer()
+    {
+        $mockOuter = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockInner = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $foo = $mockOuter->addElement('text', 'foo[idx]')->setValue('');
+        $bar = $mockInner->addElement('text', 'bar[idx]')->setValue('not empty');
+        $mockOuter->appendChild($mockInner);
+
+        $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($mockOuter, 'an error');
         $this->assertTrue($nonEmpty->validate());
 
         $nonEmpty->setConfig(2);

@@ -155,4 +155,25 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
         );
         $this->assertTrue($each->validate());
     }
+
+    public function testValidateNestedContainer()
+    {
+        $mockOuter = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockInner = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $foo = $mockOuter->addElement('text', 'foo')->setValue('');
+        $bar = $mockInner->addElement('text', 'bar')->setValue('not empty');
+        $mockOuter->appendChild($mockInner);
+
+        $each = new HTML_QuickForm2_Rule_Each(
+            $mockOuter, 'Real error', $mockOuter->createRule('empty')
+        );
+        $this->assertFalse($each->validate());
+
+        $bar->setValue('');
+        $this->assertTrue($each->validate());
+    }
 }
