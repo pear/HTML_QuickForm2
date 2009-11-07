@@ -62,7 +62,8 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *   - {@link setTemplateForClass()}
  *   - {@link setTemplateForId()}
  *   - {@link setErrorTemplate()}
- *   - {@link setGroupedTemplateForClass()}
+ *   - {@link setElementTemplateForGroupClass()}
+ *   - {@link setElementTemplateForGroupId()}
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -120,19 +121,27 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public $templatesForId = array();
 
    /**
-    * Default templates for elements of the given class within groups
+    * Default templates for elements in groups of the given classes
     *
-    * Array has the form ('group id' => ('element class' => 'template', ...), ...),
-    * where empty group id corresponds to default grouped templates
+    * Array has the form ('group class' => ('element class' => 'template', ...), ...)
     *
     * @var  array
     */
-    public $groupedTemplates = array(
-        '' => array(
+    public $elementTemplatesForGroupClass = array(
+        'html_quickform2_container' => array(
             'html_quickform2_element' => '{element}',
             'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>'
         )
     );
+
+   /**
+    * Custom templates for grouped elements in the given group IDs
+    *
+    * Array has the form ('group id' => ('element class' => 'template', ...), ...)
+    *
+    * @var  array
+    */
+    public $elementTemplatesForGroupId = array();
 
    /**
     * Array containing IDs of the groups being rendered
@@ -147,7 +156,9 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'setTemplateForClass',
             'setTemplateForId',
             'setErrorTemplate',
-            'setGroupedTemplateForClass'
+            'setGroupedTemplateForClass',
+            'setElementTemplateForGroupClass',
+            'setElementTemplateForGroupId'
         );
     }
 
@@ -212,10 +223,53 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    mixed   Template
     * @param    string  Group's id, will set generic group template if not given
     * @return   HTML_QuickForm2_Renderer_Default
+    * @todo     This method should be removed
+    * @deprecated   Use {@link setElementTemplateForGroupClass()} or
+    *               {@link setElementTemplateForGroupId()} instead
     */
     public function setGroupedTemplateForClass($className, $template, $groupId = '')
     {
-        $this->groupedTemplates[$groupId][strtolower($className)] = $template;
+        if (!empty($groupId)) {
+            return $this->setElementTemplateForGroupId($groupId, $className, $template);
+        }
+        return $this->setElementTemplateForGroupClass('html_quickform2_container', $className, $template);
+    }
+
+   /**
+    * Sets grouped elements templates using group class
+    *
+    * Templates set via {@link setTemplateForClass()} will not be used for
+    * grouped form elements. When searching for a template to use, the renderer
+    * will first consider template set for a specific group id, then the
+    * group templates set by group class.
+    *
+    * @param    string  Group class name
+    * @param    string  Element class name
+    * @param    mixed   Template
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setElementTemplateForGroupClass($groupClass, $elementClass, $template)
+    {
+        $this->elementTemplatesForGroupClass[strtolower($groupClass)][strtolower($elementClass)] = $template;
+        return $this;
+    }
+
+   /**
+    * Sets grouped elements templates using group id
+    *
+    * Templates set via {@link setTemplateForClass()} will not be used for
+    * grouped form elements. When searching for a template to use, the renderer
+    * will first consider template set for a specific group id, then the
+    * group templates set by group class.
+    *
+    * @param    string  Group id
+    * @param    string  Element class name
+    * @param    mixed   Template
+    * @return   HTML_QuickForm2_Renderer_Default
+    */
+    public function setElementTemplateForGroupId($groupId, $elementClass, $template)
+    {
+        $this->elementTemplatesForGroupId[$groupId][strtolower($elementClass)] = $template;
         return $this;
     }
 
@@ -426,6 +480,14 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
    /**
     * Finds a proper template for the element
     *
+    * Templates are scanned in a predefined order. First, if a template was
+    * set for a specific element by id, it is returned, no matter if the
+    * element belongs to a group. If the element does not belong to a group,
+    * we try to match a template using the element class.
+    * But, if the element belongs to a group, templates are first looked up
+    * using the containing group id, then using the containing group class.
+    * When no template is found, the provided default template is returned.
+    *
     * @param    HTML_QuickForm2_Node    Element being rendered
     * @param    string                  Default template to use if not found
     * @return   string  Template
@@ -435,25 +497,39 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         if (!empty($this->templatesForId[$element->getId()])) {
             return $this->templatesForId[$element->getId()];
         }
-        $class         = strtolower(get_class($element));
-        $groupId       = end($this->groupId);
-        $groupTemplate = null;
+        $class          = strtolower(get_class($element));
+        $groupId        = end($this->groupId);
+        $elementClasses = array();
         do {
             if (empty($groupId) && !empty($this->templatesForClass[$class])) {
                 return $this->templatesForClass[$class];
+            }
+            $elementClasses[$class] = true;
+        } while ($class = strtolower(get_parent_class($class)));
 
-            } elseif (!empty($groupId)) {
-                if (!empty($this->groupedTemplates[$groupId][$class])) {
-                    return $this->groupedTemplates[$groupId][$class];
-
-                } elseif (empty($groupTemplate) &&
-                          !empty($this->groupedTemplates[''][$class])
-                ) {
-                    $groupTemplate = $this->groupedTemplates[''][$class];
+        if (!empty($groupId)) {
+            if (!empty($this->elementTemplatesForGroupId[$groupId])) {
+                while (list($elClass) = each($elementClasses)) {
+                    if (!empty($this->elementTemplatesForGroupId[$groupId][$elClass])) {
+                        return $this->elementTemplatesForGroupId[$groupId][$elClass];
+                    }
                 }
             }
-        } while ($class = strtolower(get_parent_class($class)));
-        return ($groupId && !empty($groupTemplate))? $groupTemplate: $default;
+
+            $group = $element->getContainer();
+            $grClass = strtolower(get_class($group));
+            do {
+                if (!empty($this->elementTemplatesForGroupClass[$grClass])) {
+                    reset($elementClasses);
+                    while (list($elClass) = each($elementClasses)) {
+                        if (!empty($this->elementTemplatesForGroupClass[$grClass][$elClass])) {
+                            return $this->elementTemplatesForGroupClass[$grClass][$elClass];
+                        }
+                    }
+                }
+            } while ($grClass = strtolower(get_parent_class($grClass)));
+        }
+        return $default;
     }
 
    /**
