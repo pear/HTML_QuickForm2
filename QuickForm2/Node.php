@@ -101,7 +101,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Contains options and data used for the element creation
     * @var  array
     */
-    protected $data = null;
+    protected $data = array();
 
    /**
     * Validation rules for element
@@ -130,8 +130,8 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         if ('' == $this->getId()) {
             $this->setId();
         }
-        if (!is_null($data)) {
-            $this->data = $data;
+        if (!empty($data)) {
+            $this->data = array_merge($this->data, $data);
         }
     }
 

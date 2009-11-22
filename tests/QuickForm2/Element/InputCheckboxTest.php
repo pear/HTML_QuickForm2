@@ -5,7 +5,7 @@
  * PHP version 5
  *
  * LICENSE:
- * 
+ *
  * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -65,7 +65,8 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     public function setUp()
     {
         $_POST = array(
-            'box1' => '1'
+            'box1'      => '1',
+            'vegetable' => array('1', '3')
         );
         $_GET = array();
     }
@@ -98,6 +99,35 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
             'box3' => '1'
         )));
         $this->assertEquals('1', $box3->getValue());
+    }
+
+   /**
+    * Allow to properly set values for checkboxes named like 'box[]'
+    * @see http://pear.php.net/bugs/bug.php?id=16806
+    */
+    public function testRequest16806()
+    {
+        $formPost = new HTML_QuickForm2('request16806', 'post', null, false);
+
+        $box1 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 1), array('label' => 'carrot'));
+        $box2 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 2), array('label' => 'pea'));
+        $box3 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 3), array('label' => 'bean'));
+
+        $this->assertEquals('checked', $box1->getAttribute('checked'));
+        $this->assertNotEquals('checked', $box2->getAttribute('checked'));
+        $this->assertEquals('checked', $box3->getAttribute('checked'));
+    }
+
+   /**
+    * Notices were emitted when 'content' key was missing from $data
+    * @see http://pear.php.net/bugs/bug.php?id=16816
+    */
+    public function testBug16816()
+    {
+        $box = new HTML_QuickForm2_Element_InputCheckbox(
+            'vegetable[1]', array('value' => 2, 'checked' => 1), array('label' => 'pea')
+        );
+        $boxHtml = $box->__toString();
     }
 }
 ?>
