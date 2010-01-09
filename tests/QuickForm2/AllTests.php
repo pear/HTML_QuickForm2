@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -63,6 +63,7 @@ require_once dirname(__FILE__) . '/RuleTest.php';
 require_once dirname(__FILE__) . '/Rule/AllTests.php';
 require_once dirname(__FILE__) . '/RendererTest.php';
 require_once dirname(__FILE__) . '/Renderer/AllTests.php';
+require_once dirname(__FILE__) . '/ControllerTest.php';
 
 class QuickForm2_AllTests
 {
@@ -82,6 +83,7 @@ class QuickForm2_AllTests
         $suite->addTestSuite('HTML_QuickForm2_ContainerOverloadTest');
         $suite->addTestSuite('HTML_QuickForm2_RuleTest');
         $suite->addTestSuite('HTML_QuickForm2_RendererTest');
+        $suite->addTestSuite('HTML_QuickForm2_ControllerTest');
         $suite->addTest(QuickForm2_Element_AllTests::suite());
         $suite->addTest(QuickForm2_Container_AllTests::suite());
         $suite->addTest(QuickForm2_DataSource_AllTests::suite());

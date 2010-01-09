@@ -66,8 +66,19 @@ special attention to changes in SVN.
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /QuickForm2/Container -->
+    <dir name="Controller">
+     <file name="Action.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Page.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /QuickForm2/Controller -->
     <dir name="DataSource">
      <file name="Array.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Session.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Submit.php" role="php">
@@ -171,6 +182,9 @@ special attention to changes in SVN.
      </file>
     </dir> <!-- /QuickForm2/Rule -->
     <file name="Container.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="Controller.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="DataSource.php" role="php">
@@ -325,6 +339,9 @@ special attention to changes in SVN.
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="ContainerOverloadTest.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ControllerTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="ElementTest.php" role="test">
