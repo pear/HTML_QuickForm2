@@ -360,6 +360,94 @@ class HTML_QuickForm2_Controller
     }
 
    /**
+    * Returns the page preceding the given one
+    *
+    * @param    HTML_QuickForm2_Controller_Page
+    * @return   HTML_QuickForm2_Controller_Page|null
+    */
+    public function previousPage(HTML_QuickForm2_Controller_Page $reference)
+    {
+        $previous = null;
+        foreach ($this->pages as $page) {
+            if ($page === $reference) {
+                return $previous;
+            }
+            $previous = $page;
+        }
+        return null;
+    }
+
+   /**
+    * Returns the page following the given one
+    *
+    * @param    HTML_QuickForm2_Controller_Page
+    * @return   HTML_QuickForm2_Controller_Page|null
+    */
+    public function nextPage(HTML_QuickForm2_Controller_Page $reference)
+    {
+        $previous = null;
+        foreach ($this->pages as $page) {
+            if ($previous === $reference) {
+                return $page;
+            }
+            $previous = $page;
+        }
+        return null;
+    }
+
+   /**
+    * Checks whether the pages of the controller are valid
+    *
+    * @param  HTML_QuickForm2_Controller_Page   If given, check only the pages
+    *                                           before (not including) that page
+    * @return bool
+    */
+    public function isValid(HTML_QuickForm2_Controller_Page $reference = null)
+    {
+        $container = &$this->getContainer();
+        foreach ($this->pages as $id => $page) {
+            if ($reference === $page) {
+                return true;
+            }
+            if (!$container['valid'][$id]) {
+                // We should handle the possible situation when the user has never
+                // seen a page of a non-modal multipage form
+                if (!$this->isWizard() && null === $container['valid'][$id]) {
+                    // Empty Session datasource makes the form look submitted
+                    $page->getForm()->setDatasources(array_merge(
+                        $container['datasources'],
+                        array(new HTML_QuickForm2_DataSource_Session(array()))
+                    ));
+                    $page->populateFormOnce();
+                    $container['values'][$id] = $page->getForm()->getValue();
+                    // Is the page now valid?
+                    if (true === ($container['valid'][$id] = $page->getForm()->validate())) {
+                        continue;
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+   /**
+    * Returns the first page that failed validation
+    *
+    * @return   HTML_QuickForm2_Controller_Page|null
+    */
+    public function getFirstInvalidPage()
+    {
+        $container = &$this->getContainer();
+        foreach ($this->pages as $id => $page) {
+            if (!$container['valid'][$id]) {
+                return $page;
+            }
+        }
+        return null;
+    }
+
+   /**
     * Adds a new data source to the Controller
     *
     * Note that Controller data sources are stored in session, so your data source
@@ -378,6 +466,43 @@ class HTML_QuickForm2_Controller
     */
     public function getValue()
     {
+        $data   = &$this->getContainer();
+        $values = array();
+        foreach ($data['values'] as $page => $pageValues) {
+            // skip elements representing actions
+            foreach ($pageValues as $key => $value) {
+                if (0 !== strpos($key, '_qf')) {
+                    if (isset($values[$key]) && is_array($value)) {
+                        $values[$key] = self::arrayMerge($values[$key], $value);
+                    } else {
+                        $values[$key] = $value;
+                    }
+                }
+            }
+        }
+        return $values;
+    }
+
+   /**
+    * Merges two arrays
+    *
+    * Merges two arrays like the PHP function array_merge_recursive does,
+    * the difference being that existing integer keys will not be renumbered.
+    *
+    * @param    array
+    * @param    array
+    * @return   array   resulting array
+    */
+    protected static function arrayMerge($a, $b)
+    {
+        foreach ($b as $k => $v) {
+            if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {
+                $a[$k] = $v;
+            } else {
+                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: array(), $v);
+            }
+        }
+        return $a;
     }
 }
 ?>

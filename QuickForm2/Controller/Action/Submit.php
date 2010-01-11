@@ -1,6 +1,6 @@
 <?php
 /**
- * Class presenting the values stored in session by Controller as submitted ones
+ * Action handler for a 'submit' button
  *
  * PHP version 5
  *
@@ -43,19 +43,11 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Interface for data sources containing submitted values */
-require_once 'HTML/QuickForm2/DataSource/Submit.php';
-
-/** Array-based data source for HTML_QuickForm2 objects */
-require_once 'HTML/QuickForm2/DataSource/Array.php';
+/** Interface for Controller action handlers */
+require_once 'HTML/QuickForm2/Controller/Action.php';
 
 /**
- * Class presenting the values stored in session by Controller as submitted ones
- *
- * This is a less hackish implementation of loadValues() method in old
- * HTML_QuickForm_Controller. The values need to be presented as submitted so
- * that elements like checkboxes and multiselects do not try to use default
- * values from subsequent datasources.
+ * Action handler for a 'submit' button
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -63,16 +55,25 @@ require_once 'HTML/QuickForm2/DataSource/Array.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_DataSource_Session
-    extends HTML_QuickForm2_DataSource_Array
-    implements HTML_QuickForm2_DataSource_Submit
+class HTML_QuickForm2_Controller_Action_Submit
+    implements HTML_QuickForm2_Controller_Action
 {
-   /**
-    * File upload data is not stored in the session
-    */
-    public function getUpload($name)
+    public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
-        return null;
+        $valid = $page->storeValues();
+
+        // All pages are valid, process
+        if ($page->getController()->isValid()) {
+            return $page->handle('process');
+
+        // Current page is invalid, display it
+        } elseif (!$valid) {
+            return $page->handle('display');
+
+        // Some other page is invalid, redirect to it
+        } else {
+            return $page->getController()->getFirstInvalidPage()->handle('jump');
+        }
     }
 }
 ?>

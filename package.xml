@@ -67,6 +67,26 @@ special attention to changes in SVN.
      </file>
     </dir> <!-- /QuickForm2/Container -->
     <dir name="Controller">
+     <dir name="Action">
+      <file name="Back.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Direct.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Display.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Jump.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Next.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Submit.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /QuickForm2/Controller/Action -->
      <file name="Action.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -368,6 +388,11 @@ special attention to changes in SVN.
     </file>
    </dir> <!-- /tests -->
    <dir name="docs/examples">
+    <dir name="controller">
+     <file name="wizard.php" role="doc">
+      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+     </file>
+    </dir> <!-- /docs/examples/controller -->
     <file role="doc" name="basic-elements.php">
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>

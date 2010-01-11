@@ -1,6 +1,6 @@
 <?php
 /**
- * Class presenting the values stored in session by Controller as submitted ones
+ * Action handler for going to a specific page of a multipage form
  *
  * PHP version 5
  *
@@ -43,19 +43,14 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Interface for data sources containing submitted values */
-require_once 'HTML/QuickForm2/DataSource/Submit.php';
-
-/** Array-based data source for HTML_QuickForm2 objects */
-require_once 'HTML/QuickForm2/DataSource/Array.php';
+/** Interface for Controller action handlers */
+require_once 'HTML/QuickForm2/Controller/Action.php';
 
 /**
- * Class presenting the values stored in session by Controller as submitted ones
+ * Action handler for going to a specific page of a multipage form
  *
- * This is a less hackish implementation of loadValues() method in old
- * HTML_QuickForm_Controller. The values need to be presented as submitted so
- * that elements like checkboxes and multiselects do not try to use default
- * values from subsequent datasources.
+ * When an instance of this class is added in addHandler(), action name
+ * should be set to ID of a page you want to go to, not 'direct'
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -63,16 +58,14 @@ require_once 'HTML/QuickForm2/DataSource/Array.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_DataSource_Session
-    extends HTML_QuickForm2_DataSource_Array
-    implements HTML_QuickForm2_DataSource_Submit
+class HTML_QuickForm2_Controller_Action_Direct
+    implements HTML_QuickForm2_Controller_Action
 {
-   /**
-    * File upload data is not stored in the session
-    */
-    public function getUpload($name)
+    public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
-        return null;
+        $page->storeValues();
+
+        return $page->getController()->getPage($name)->handle('jump');
     }
 }
 ?>

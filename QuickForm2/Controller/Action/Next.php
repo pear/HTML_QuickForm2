@@ -1,6 +1,6 @@
 <?php
 /**
- * Class presenting the values stored in session by Controller as submitted ones
+ * Action handler for a 'next' button of wizard-type multipage form
  *
  * PHP version 5
  *
@@ -43,19 +43,11 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Interface for data sources containing submitted values */
-require_once 'HTML/QuickForm2/DataSource/Submit.php';
-
-/** Array-based data source for HTML_QuickForm2 objects */
-require_once 'HTML/QuickForm2/DataSource/Array.php';
+/** Interface for Controller action handlers */
+require_once 'HTML/QuickForm2/Controller/Action.php';
 
 /**
- * Class presenting the values stored in session by Controller as submitted ones
- *
- * This is a less hackish implementation of loadValues() method in old
- * HTML_QuickForm_Controller. The values need to be presented as submitted so
- * that elements like checkboxes and multiselects do not try to use default
- * values from subsequent datasources.
+ * Action handler for a 'next' button of wizard-type multipage form
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -63,16 +55,34 @@ require_once 'HTML/QuickForm2/DataSource/Array.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_DataSource_Session
-    extends HTML_QuickForm2_DataSource_Array
-    implements HTML_QuickForm2_DataSource_Submit
+class HTML_QuickForm2_Controller_Action_Next
+    implements HTML_QuickForm2_Controller_Action
 {
-   /**
-    * File upload data is not stored in the session
-    */
-    public function getUpload($name)
+    public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
-        return null;
+        $valid = $page->storeValues();
+
+        // Wizard and page is invalid: don't go further
+        if ($page->getController()->isWizard() && !$valid) {
+            return $page->handle('display');
+        }
+
+        // More pages?
+        if (null !== ($next = $page->getController()->nextPage($page))) {
+            return $next->handle('jump');
+
+        // Consider this a 'finish' button, if there is no explicit one
+        } elseif($page->getController()->isWizard()) {
+            if ($page->getController()->isValid()) {
+                return $page->handle('process');
+            } else {
+                // redirect to the first invalid page
+                return $page->getController()->getFirstInvalidPage()->handle('jump');
+            }
+
+        } else {
+            return $page->handle('display');
+        }
     }
 }
 ?>

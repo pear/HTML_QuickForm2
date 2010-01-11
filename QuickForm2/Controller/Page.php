@@ -202,5 +202,21 @@ abstract class HTML_QuickForm2_Controller_Page
     * be seen by the user.
     */
     abstract protected function populateForm();
+
+   /**
+    * Stores the form values (and validation status) is session container
+    *
+    * @param    bool    Whether to store validation status
+    */
+    public function storeValues($validate = true)
+    {
+        $this->populateFormOnce();
+        $c = &$this->getController()->getContainer();
+        $c['values'][$this->form->getId()] = $this->form->getValue();
+        if ($validate) {
+            $c['valid'][$this->form->getId()] = $this->form->validate();
+        }
+        return $c['valid'][$this->form->getId()];
+    }
 }
 ?>
