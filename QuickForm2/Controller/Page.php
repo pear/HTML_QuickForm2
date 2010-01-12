@@ -175,10 +175,36 @@ abstract class HTML_QuickForm2_Controller_Page
     * be passed to the script.
     *
     * @param  string    default action name
-    * @todo   Implement this via adding a 1x1 transparent pic to the form
+    * @param  string    Path to a 1x1 transparent GIF image
     */
-    public function setDefaultAction($actionName)
+    public function setDefaultAction($actionName, $imageSrc = '')
     {
+        require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
+
+        if (0 == count($this->form)) {
+            $this->form->appendChild(
+                new HTML_QuickForm2_Controller_DefaultAction(
+                    $this->getButtonName($actionName), array('src' => $imageSrc)
+                )
+            );
+
+        // replace the existing DefaultAction
+        } elseif ($image = $this->form->getElementById('_qf_default')) {
+            $image->setName($this->getButtonName($actionName))
+                  ->setAttribute('src', $imageSrc);
+
+        // Inject the element to the first position to improve chances that
+        // it ends up on top in the output
+        } else {
+            $it = $this->form->getIterator();
+            $it->rewind();
+            $this->form->insertBefore(
+                new HTML_QuickForm2_Controller_DefaultAction(
+                    $this->getButtonName($actionName), array('src' => $imageSrc)
+                ),
+                $it->current()
+            );
+        }
     }
 
    /**

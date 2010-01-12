@@ -33,7 +33,7 @@ class PageFirst extends HTML_QuickForm2_Controller_Page
 
         $radioGroup->addRule('required', 'Check Yes or No');
 
-        //$this->setDefaultAction('next');
+        $this->setDefaultAction('next', 'empty.gif');
     }
 }
 
@@ -54,7 +54,7 @@ class PageSecond extends HTML_QuickForm2_Controller_Page
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
         $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Next >>'));
 
-        //$this->setDefaultAction('next');
+        $this->setDefaultAction('next', 'empty.gif');
     }
 }
 
@@ -72,7 +72,7 @@ class PageThird extends HTML_QuickForm2_Controller_Page
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
         $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Finish'));
 
-        //$this->setDefaultAction('next');
+        $this->setDefaultAction('next', 'empty.gif');
     }
 }
 
