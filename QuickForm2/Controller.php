@@ -59,7 +59,7 @@ require_once 'HTML/QuickForm2/Controller/Page.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-class HTML_QuickForm2_Controller
+class HTML_QuickForm2_Controller implements IteratorAggregate
 {
    /**
     * Key in $_REQUEST array that contains the ID of the Controller
@@ -503,6 +503,16 @@ class HTML_QuickForm2_Controller
             }
         }
         return $a;
+    }
+
+   /**
+    * Returns an Iterator for the form's pages
+    *
+    * @return   ArrayIterator
+    */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->pages);
     }
 }
 ?>

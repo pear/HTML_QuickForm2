@@ -248,6 +248,14 @@ special attention to changes in SVN.
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/QuickForm2/Container -->
+     <dir name="Controller">
+      <file name="AllTests.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="PageTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /tests/QuickForm2/Controller -->
      <dir name="DataSource">
       <file name="AllTests.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />

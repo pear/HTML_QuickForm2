@@ -44,29 +44,15 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Controller_AllTests::main');
 }
-
 
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/ContainerOverloadTest.php';
-require_once dirname(__FILE__) . '/Container/AllTests.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-require_once dirname(__FILE__) . '/RuleTest.php';
-require_once dirname(__FILE__) . '/Rule/AllTests.php';
-require_once dirname(__FILE__) . '/RendererTest.php';
-require_once dirname(__FILE__) . '/Renderer/AllTests.php';
-require_once dirname(__FILE__) . '/ControllerTest.php';
-require_once dirname(__FILE__) . '/Controller/AllTests.php';
+require_once dirname(__FILE__) . '/PageTest.php';
 
-class QuickForm2_AllTests
+class QuickForm2_Controller_AllTests
 {
     public static function main()
     {
@@ -75,28 +61,15 @@ class QuickForm2_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2');
+        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Controller');
 
-        $suite->addTestSuite('HTML_QuickForm2_FactoryTest');
-        $suite->addTestSuite('HTML_QuickForm2_NodeTest');
-        $suite->addTestSuite('HTML_QuickForm2_ElementTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
-        $suite->addTestSuite('HTML_QuickForm2_ContainerOverloadTest');
-        $suite->addTestSuite('HTML_QuickForm2_RuleTest');
-        $suite->addTestSuite('HTML_QuickForm2_RendererTest');
-        $suite->addTestSuite('HTML_QuickForm2_ControllerTest');
-        $suite->addTest(QuickForm2_Element_AllTests::suite());
-        $suite->addTest(QuickForm2_Container_AllTests::suite());
-        $suite->addTest(QuickForm2_DataSource_AllTests::suite());
-        $suite->addTest(QuickForm2_Rule_AllTests::suite());
-        $suite->addTest(QuickForm2_Renderer_AllTests::suite());
-        $suite->addTest(QuickForm2_Controller_AllTests::suite());
+        $suite->addTestSuite('HTML_QuickForm2_Controller_PageTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_AllTests::main') {
-    QuickForm2_AllTests::main();
+if (PHPUnit_MAIN_METHOD == 'QuickForm2_Controller_AllTests::main') {
+    QuickForm2_Controller_AllTests::main();
 }
 ?>

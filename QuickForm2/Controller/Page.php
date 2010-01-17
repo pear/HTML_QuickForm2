@@ -213,6 +213,12 @@ abstract class HTML_QuickForm2_Controller_Page
     final public function populateFormOnce()
     {
         if (!$this->_formPopulated) {
+            if (!empty($this->controller) && $this->controller->propagateId()) {
+                $this->form->addElement(
+                    'hidden', HTML_QuickForm2_Controller::KEY_ID,
+                    array('id' => HTML_QuickForm2_Controller::KEY_ID)
+                )->setValue($this->controller->getId());
+            }
             $this->populateForm();
             $this->_formPopulated = true;
         }
