@@ -5,8 +5,8 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -44,12 +44,12 @@
  */
 
 /**
- * Base class for all HTML_QuickForm2 elements 
+ * Base class for all HTML_QuickForm2 elements
  */
 require_once 'HTML/QuickForm2/Node.php';
 
 /**
- * Abstract base class for simple QuickForm2 elements (not Containers) 
+ * Abstract base class for simple QuickForm2 elements (not Containers)
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -59,59 +59,10 @@ require_once 'HTML/QuickForm2/Node.php';
  */
 abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
 {
-   /**
-    * 'name' and 'id' attributes should be always present and their setting 
-    * should go through setName() and setId(). 
-    * @var array
-    */
-    protected $watchedAttributes = array('id', 'name');
-
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('name' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'name' can not be removed"
-                );
-            } else {
-                $this->setName($value);
-            }
-        } elseif ('id' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'id' can not be removed"
-                );
-            } else {
-                $this->setId($value);
-            }
-        }
-    }
-
-    public function getName()
-    {
-        return isset($this->attributes['name'])? $this->attributes['name']: null;
-    }
-
     public function setName($name)
     {
         $this->attributes['name'] = (string)$name;
         $this->updateValue();
-        return $this;
-    }
-
-    public function getId()
-    {
-        return isset($this->attributes['id'])? $this->attributes['id']: null;
-    }
-
-    public function setId($id = null)
-    {
-        if (is_null($id)) {
-            $id = self::generateId($this->getName());
-        } else {
-            self::storeId($id);
-        }
-        $this->attributes['id'] = (string)$id;
         return $this;
     }
 
@@ -138,7 +89,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
    /**
     * Called when the element needs to update its value from form's data sources
     *
-    * The default behaviour is to go through the complete list of the data 
+    * The default behaviour is to go through the complete list of the data
     * sources until the non-null value is found.
     */
     protected function updateValue()

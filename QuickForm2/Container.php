@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -66,58 +66,10 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     protected $elements = array();
 
-   /**
-    * 'name' and 'id' attributes should be always present and their setting
-    * should go through setName() and setId().
-    * @var array
-    */
-    protected $watchedAttributes = array('id', 'name');
-
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('name' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'name' can not be removed"
-                );
-            } else {
-                $this->setName($value);
-            }
-        } elseif ('id' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'id' can not be removed"
-                );
-            } else {
-                $this->setId($value);
-            }
-        }
-    }
-
-    public function getName()
-    {
-        return isset($this->attributes['name'])? $this->attributes['name']: null;
-    }
 
     public function setName($name)
     {
         $this->attributes['name'] = (string)$name;
-        return $this;
-    }
-
-    public function getId()
-    {
-        return isset($this->attributes['id'])? $this->attributes['id']: null;
-    }
-
-    public function setId($id = null)
-    {
-        if (is_null($id)) {
-            $id = self::generateId($this->getName());
-        } else {
-            self::storeId($id);
-        }
-        $this->attributes['id'] = (string)$id;
         return $this;
     }
 
