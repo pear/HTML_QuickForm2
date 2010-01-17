@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -223,7 +223,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param    mixed   Template
     * @param    string  Group's id, will set generic group template if not given
     * @return   HTML_QuickForm2_Renderer_Default
-    * @todo     This method should be removed
+    * @todo     This method should be removed after release 0.4.0
     * @deprecated   Use {@link setElementTemplateForGroupClass()} or
     *               {@link setElementTemplateForGroupId()} instead
     */

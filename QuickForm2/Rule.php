@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -252,7 +252,7 @@ abstract class HTML_QuickForm2_Rule
     * Validates the owner element
     *
     * @return   bool    Whether owner element is valid according to the rule
-    * @todo This should be declared abstract in the next release
+    * @todo This should be declared abstract after release 0.4.0
     */
     protected function validateOwner()
     {

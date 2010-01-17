@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -206,7 +206,7 @@ class HTML_QuickForm2_Factory
     * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
     * @throws   HTML_QuickForm2_NotFoundException        If class for the rule
     *           can't be found and/or loaded from file
-    * @todo     Remove the trigger_error() call in next release
+    * @todo     Remove the trigger_error() call after release 0.4.0
     */
     public static function createRule($type, HTML_QuickForm2_Node $owner,
                                       $message = '', $config = null)
