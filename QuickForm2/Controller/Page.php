@@ -174,15 +174,16 @@ abstract class HTML_QuickForm2_Controller_Page
     * clicking one of the named submit buttons and then no action name will
     * be passed to the script.
     *
-    * @param  string    default action name
+    * @param  string    Default action name
     * @param  string    Path to a 1x1 transparent GIF image
+    * @return object    Returns the image input used for default action
     */
     public function setDefaultAction($actionName, $imageSrc = '')
     {
         require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
 
         if (0 == count($this->form)) {
-            $this->form->appendChild(
+            $image = $this->form->appendChild(
                 new HTML_QuickForm2_Controller_DefaultAction(
                     $this->getButtonName($actionName), array('src' => $imageSrc)
                 )
@@ -198,13 +199,14 @@ abstract class HTML_QuickForm2_Controller_Page
         } else {
             $it = $this->form->getIterator();
             $it->rewind();
-            $this->form->insertBefore(
+            $image = $this->form->insertBefore(
                 new HTML_QuickForm2_Controller_DefaultAction(
                     $this->getButtonName($actionName), array('src' => $imageSrc)
                 ),
                 $it->current()
             );
         }
+        return $image;
     }
 
    /**
