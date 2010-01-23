@@ -245,12 +245,14 @@ abstract class HTML_QuickForm2_Controller_Page
     public function storeValues($validate = true)
     {
         $this->populateFormOnce();
-        $c = &$this->getController()->getContainer();
-        $c['values'][$this->form->getId()] = $this->form->getValue();
+        $container = $this->getController()->getSessionContainer();
+        $id        = $this->form->getId();
+
+        $container->storeValues($id, $this->form->getValue());
         if ($validate) {
-            $c['valid'][$this->form->getId()] = $this->form->validate();
+            $container->storeValidationStatus($id, $this->form->validate());
         }
-        return $c['valid'][$this->form->getId()];
+        return $container->getValidationStatus($id);
     }
 }
 ?>

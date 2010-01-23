@@ -46,6 +46,9 @@
 /** The class representing a page of a multipage form */
 require_once 'HTML/QuickForm2/Controller/Page.php';
 
+/** Object wrapping around session variable used to store controller data */
+require_once 'HTML/QuickForm2/Controller/SessionContainer.php';
+
 /**
  * Class implementing the Page Controller pattern for multipage forms
  *
@@ -106,6 +109,12 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * @var array
     */
     protected $actionName = null;
+
+   /**
+    * A wrapper around session variable used to store form data
+    * @var HTML_QuickForm2_Controller_SessionContainer
+    */
+    protected $sessionContainer = null;
 
    /**
     * Finds a controller name in $_REQUEST
@@ -192,53 +201,25 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     }
 
    /**
-    * Returns a reference to the session variable containing the controller data
+    * Returns the session container with the controller data
     *
-    * This is a "low-level" method, use getValue() if you want just to
-    * get the form's values. The format of the container is the following
-    * <pre>
-    * array(
-    *     'datasources' => array(... DataSources for default values ...),
-    *     'values'      => array(
-    *         'page_1_id' => array(... submitted values for this page ...),
-    *         ...
-    *         'page_n_id' => array(... submitted values for this page ...)
-    *     ),
-    *     'valid'       => array(
-    *         'page_1_id' => null if the page was never validated, true if valid, false otherwise,
-    *         ...
-    *         'page_n_id' => null if the page was never validated, true if valid, false otherwise
-    *     )
-    * )
-    * </pre>
-    *
-    * @return   array
+    * @return   HTML_QuickForm2_Controller_SessionContainer
     */
-    public function &getContainer()
+    public function getSessionContainer()
     {
-        $name = sprintf(self::KEY_CONTAINER, $this->id);
-        if (empty($_SESSION[$name])) {
-            $_SESSION[$name] = array(
-                'datasources' => array(),
-                'values'      => array(),
-                'valid'       => array()
-            );
+        if (empty($this->sessionContainer)) {
+            $this->sessionContainer = new HTML_QuickForm2_Controller_SessionContainer($this);
         }
-        foreach (array_keys($this->pages) as $pageName) {
-            if (!isset($_SESSION[$name]['values'][$pageName])) {
-                $_SESSION[$name]['values'][$pageName] = array();
-                $_SESSION[$name]['valid'][$pageName]  = null;
-            }
-        }
-        return $_SESSION[$name];
+        return $this->sessionContainer;
     }
 
    /**
     * Removes the session variable containing the controller data
     */
-    public function destroyContainer()
+    public function destroySessionContainer()
     {
         unset($_SESSION[sprintf(self::KEY_CONTAINER, $this->id)]);
+        $this->sessionContainer = null;
     }
 
    /**
@@ -404,24 +385,27 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function isValid(HTML_QuickForm2_Controller_Page $reference = null)
     {
-        $container = &$this->getContainer();
+        $container = $this->getSessionContainer();
         foreach ($this->pages as $id => $page) {
             if ($reference === $page) {
                 return true;
             }
-            if (!$container['valid'][$id]) {
+            if (!$container->getValidationStatus($id)) {
                 // We should handle the possible situation when the user has never
                 // seen a page of a non-modal multipage form
-                if (!$this->isWizard() && null === $container['valid'][$id]) {
+                if (!$this->isWizard()
+                    && null === $container->getValidationStatus($id)
+                ) {
                     // Empty Session datasource makes the form look submitted
                     $page->getForm()->setDatasources(array_merge(
-                        $container['datasources'],
+                        $container->getDatasources(),
                         array(new HTML_QuickForm2_DataSource_Session(array()))
                     ));
                     $page->populateFormOnce();
-                    $container['values'][$id] = $page->getForm()->getValue();
+                    $container->storeValues($id, $page->getForm()->getValue());
+                    $container->storeValidationStatus($id, $page->getForm()->validate());
                     // Is the page now valid?
-                    if (true === ($container['valid'][$id] = $page->getForm()->validate())) {
+                    if ($container->getValidationStatus($id)) {
                         continue;
                     }
                 }
@@ -438,9 +422,8 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function getFirstInvalidPage()
     {
-        $container = &$this->getContainer();
         foreach ($this->pages as $id => $page) {
-            if (!$container['valid'][$id]) {
+            if (!$this->getSessionContainer()->getValidationStatus($id)) {
                 return $page;
             }
         }
@@ -457,6 +440,10 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function addDataSource(HTML_QuickForm2_DataSource $datasource)
     {
+        $this->getSessionContainer()->storeDatasources(
+            array_merge($this->getSessionContainer()->getDatasources(),
+                        array($datasource))
+        );
     }
 
    /**
@@ -466,9 +453,9 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function getValue()
     {
-        $data   = &$this->getContainer();
         $values = array();
-        foreach ($data['values'] as $page => $pageValues) {
+        foreach (array_keys($this->pages) as $id) {
+            $pageValues = $this->getSessionContainer()->getValues($id);
             // skip elements representing actions
             foreach ($pageValues as $key => $value) {
                 if (0 !== strpos($key, '_qf')) {

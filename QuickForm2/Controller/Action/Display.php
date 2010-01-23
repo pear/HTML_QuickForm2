@@ -68,7 +68,7 @@ class HTML_QuickForm2_Controller_Action_Display
     {
         $validate        = false;
         $datasources     = $page->getForm()->getDataSources();
-        $container       = &$page->getController()->getContainer();
+        $container       = $page->getController()->getSessionContainer();
         list(, $oldName) = $page->getController()->getActionName();
         // Check the original action name, we need to do additional processing
         // if it was 'display'
@@ -83,16 +83,16 @@ class HTML_QuickForm2_Controller_Action_Display
             // If we have values in container then we should inject the Session
             // DataSource, if page was invalid previously we should later call
             // validate() to get the errors
-            if (!empty($container['values'][$page->getForm()->getId()])) {
+            if (count($container->getValues($page->getForm()->getId()))) {
                 array_unshift($datasources, new HTML_QuickForm2_DataSource_Session(
-                    $container['values'][$page->getForm()->getId()]
+                    $container->getValues($page->getForm()->getId())
                 ));
-                $validate = false === $container['valid'][$page->getForm()->getId()];
+                $validate = false === $container->getValidationStatus($page->getForm()->getId());
             }
         }
 
         // Add "defaults" datasources stored in session
-        $page->getForm()->setDataSources(array_merge($datasources, $container['datasources']));
+        $page->getForm()->setDataSources(array_merge($datasources, $container->getDatasources()));
         $page->populateFormOnce();
         if ($validate) {
             $page->getForm()->validate();

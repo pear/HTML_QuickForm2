@@ -95,13 +95,11 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
     {
         $_SESSION = array();
 
-        $controller =  new HTML_QuickForm2_Controller('foo');
-        $container  =& $controller->getContainer();
+        $controller = new HTML_QuickForm2_Controller('foo');
+        $container  = $controller->getSessionContainer();
         $this->assertNotEquals(array(), $_SESSION);
-        $this->assertArrayHasKey('values', $container);
-        $this->assertArrayHasKey('valid', $container);
 
-        $controller->destroyContainer();
+        $controller->destroySessionContainer();
         $this->assertEquals(array(), $_SESSION);
     }
 
