@@ -44,16 +44,16 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Controller_AllTests::main');
+    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Controller_Action_AllTests::main');
 }
 
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-require_once dirname(__FILE__) . '/PageTest.php';
-require_once dirname(__FILE__) . '/Action/AllTests.php';
+require_once dirname(__FILE__) . '/BackTest.php';
+require_once dirname(__FILE__) . '/DirectTest.php';
 
-class QuickForm2_Controller_AllTests
+class QuickForm2_Controller_Action_AllTests
 {
     public static function main()
     {
@@ -62,16 +62,17 @@ class QuickForm2_Controller_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Controller');
+        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Controller - Action');
 
-        $suite->addTestSuite('HTML_QuickForm2_Controller_PageTest');
-        $suite->addTest(QuickForm2_Controller_Action_AllTests::suite());
+        $suite->addTestSuite('HTML_QuickForm2_Controller_Action_BackTest');
+        $suite->addTestSuite('HTML_QuickForm2_Controller_Action_DirectTest');
 
         return $suite;
     }
 }
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_Controller_AllTests::main') {
-    QuickForm2_Controller_AllTests::main();
+
+if (PHPUnit_MAIN_METHOD == 'QuickForm2_Controller_Action_AllTests::main') {
+    QuickForm2_Controller_Action_AllTests::main();
 }
 ?>

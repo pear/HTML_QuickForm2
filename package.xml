@@ -6,7 +6,25 @@
  <name>HTML_QuickForm2</name>
  <channel>pear.php.net</channel>
  <summary>PHP5 rewrite of HTML_QuickForm package</summary>
- <description>The package is expected to offer at least the same functionality as HTML_QuickForm and work with PHP5 E_STRICT setting.</description>
+ <description>
+ PHP5 rewrite of HTML_QuickForm and HTML_QuickForm_Controller packages.
+ 
+ This package provides methods to create, validate and render HTML forms.
+ 
+ Features:
+   * Supports all form elements defined by HTML standard
+   * Server-side validation, several popular rules provided
+   * Multipage forms (tabbed forms and wizards)
+   * Pluggable elements, rules, renderers and renderer plugins
+ 
+ Advantages over PHP4 version:
+   * DOM-like API for building the form structure, new streamlined API for 
+     elements' values handling
+   * Default rendering without tables (inspired by
+     HTML_QuickForm_Renderer_Tableless)
+   * Renderer plugins for elements with complex rendering needs
+   * Ability to chain validation rules with 'and' and 'or'
+ </description>
  <lead>
   <name>Alexey Borzov</name>
   <user>avb</user>
@@ -19,10 +37,10 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2009-10-25</date>
+ <date>2010-03-01</date>
  <version>
-  <release>0.3.0</release>
-  <api>0.3.0</api>
+  <release>0.4.0</release>
+  <api>0.4.0</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -30,30 +48,32 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 3: renderers and groups
+Milestone 4: port of HTML_QuickForm_Controller, group rules
 
 Major additions and changes
-  * Renderers implemented, Default and Array renderers ported from QuickForm 3.x
-  * Groups implemented
+  * Includes a port of HTML_QuickForm_Controller. It is now possible to create
+    multipage forms (wizards, tabbed forms, etc.) with HTML_QuickForm2
+  * It is now possible to leverage existing rules for group validation 
+    (see also request #12610)
+  * Rule configuration redone, now an error for an incomplete or bogus
+    configuration will be thrown immediately on adding a Rule rather than on
+    validating with it. Rule::getConfig() will now return the complete
+    configuration rather than a local part of it.
 
-Feature requests addressed:
-  * Default rendering without tables (request #9116)
-  * setSeparator() method (request #9942)
+Feature requests addressed
+  * Checkboxes named 'foo[]' properly get their values from data sources
+    (request #16806)
 
-Bug fixes:
-  * Updated PHP dependency to 5.2.0 (bug #14110, PHP bug #37632)
-  * 'checked' attributed on checkboxes and radios was not updated after changing
-    'value' attribute (bug #15708)
+Bug fixes
+  * E_NOTICE for an undefined index could be emitted when outputting 
+    a checkbox (bug #16816)
 
-Deprecated features:
-  * setOptions() and getOptions() methods of HTML_QuickForm2_Rule are
-    deprecated and will be removed in the next release. Use setConfig() and
-    getConfig() instead.
-
-WARNING: next release will have backwards compatibility breaks in setting Rule
-configuration data. If you are just using built-in Rules you should not be
-affected, but if you wrote custom subclasses for HTML_QuickForm2_Rule then pay 
-special attention to changes in SVN.
+Backwards compatibility issues
+  * If you implemented custom Rules, you should rewrite them to conform
+    to the new Rule configuration approach (this may require implementing
+    custom mergeConfig() and setConfig() methods) and implement 
+    validateOwner() method instead of checkValue(). Old-style Rules will emit
+    notices in 0.4.0 and will stop working completely in the next release. 
  </notes>
  <contents>
   <dir baseinstalldir="HTML" name="/">
@@ -252,6 +272,17 @@ special attention to changes in SVN.
       </file>
      </dir> <!-- /tests/QuickForm2/Container -->
      <dir name="Controller">
+      <dir name="Action">
+       <file name="AllTests.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="BackTest.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="DirectTest.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir>
       <file name="AllTests.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -447,6 +478,44 @@ special attention to changes in SVN.
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-10-25</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>
+Milestone 3: renderers and groups
+
+Major additions and changes
+  * Renderers implemented, Default and Array renderers ported from QuickForm 3.x
+  * Groups implemented
+
+Feature requests addressed:
+  * Default rendering without tables (request #9116)
+  * setSeparator() method (request #9942)
+
+Bug fixes:
+  * Updated PHP dependency to 5.2.0 (bug #14110, PHP bug #37632)
+  * 'checked' attributed on checkboxes and radios was not updated after changing
+    'value' attribute (bug #15708)
+
+Deprecated features:
+  * setOptions() and getOptions() methods of HTML_QuickForm2_Rule are
+    deprecated and will be removed in the next release. Use setConfig() and
+    getConfig() instead.
+
+WARNING: next release will have backwards compatibility breaks in setting Rule
+configuration data. If you are just using built-in Rules you should not be
+affected, but if you wrote custom subclasses for HTML_QuickForm2_Rule then pay 
+special attention to changes in SVN.
+   </notes>
+  </release>
   <release>
   <version>
    <release>0.2.0</release>

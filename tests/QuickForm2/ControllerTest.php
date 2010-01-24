@@ -169,5 +169,81 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
         $_REQUEST = array();
         $this->assertEquals(array('foo', 'bar'), $controller1->getActionName());
     }
+
+    public function testIsValidSimple()
+    {
+        $controller = new HTML_QuickForm2_Controller('simpleIsValid');
+        $controller->addPage($this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('first'))
+        ));
+        $second = $this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('second'))
+        );
+        $controller->addPage($second);
+        $controller->getSessionContainer()->storeValidationStatus('first', true);
+        $controller->getSessionContainer()->storeValidationStatus('second', false);
+
+        $this->assertFalse($controller->isValid());
+        $this->assertTrue($controller->isValid($second));
+    }
+
+    public function testIsValidNotVisited()
+    {
+        $controller = new HTML_QuickForm2_Controller('isValidUnseen', false);
+        $controller->addPage($this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('seen'))
+        ));
+        $mockUnseen = $this->getMock(
+            'HTML_QuickForm2', array('validate', 'getValue'),
+            array('unseen')
+        );
+        $mockUnseen->expects($this->once())->method('validate')
+                   ->will($this->returnValue(true));
+        $mockUnseen->expects($this->once())->method('getValue')
+                   ->will($this->returnValue(array('foo' => 'bar')));
+        $controller->addPage($this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array($mockUnseen)
+        ));
+        $controller->getSessionContainer()->storeValidationStatus('seen', true);
+
+        $this->assertTrue($controller->isValid());
+    }
+
+   /**
+    * Default values for checkboxes and multiselects were ignored when validating an unseen page
+    *
+    * Unlikely that this bug will resurface, but just in case.
+    *
+    * @see http://pear.php.net/bugs/bug.php?id=8687
+    */
+    public function testBug8687()
+    {
+        $mockForm = $this->getMock(
+            'HTML_QuickForm2', array('validate'), array('invalid')
+        );
+        $mockForm->expects($this->once())->method('validate')
+                 ->will($this->returnValue(false));
+        $select = $mockForm->addElement('select', 'foo', array('multiple'))
+                           ->loadOptions(array('one' => 'First label', 'two' => 'Second label'));
+        $box    = $mockForm->addElement('checkbox', 'bar');
+        $mockPage = $this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array($mockForm)
+        );
+        $controller = new HTML_QuickForm2_Controller('bug8687', false);
+        $controller->addPage($mockPage);
+        $controller->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => array('two'),
+            'bar' => '1'
+        )));
+
+        $this->assertFalse($controller->isValid());
+        $this->assertEquals(array('two'), $select->getValue());
+        $this->assertEquals('1', $box->getValue());
+    }
 }
 ?>

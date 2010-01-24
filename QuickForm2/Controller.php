@@ -49,6 +49,9 @@ require_once 'HTML/QuickForm2/Controller/Page.php';
 /** Object wrapping around session variable used to store controller data */
 require_once 'HTML/QuickForm2/Controller/SessionContainer.php';
 
+/** Class presenting the values stored in session by Controller as submitted ones */
+require_once 'HTML/QuickForm2/DataSource/Session.php';
+
 /**
  * Class implementing the Page Controller pattern for multipage forms
  *
@@ -401,11 +404,9 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
                         $container->getDatasources(),
                         array(new HTML_QuickForm2_DataSource_Session(array()))
                     ));
-                    $page->populateFormOnce();
-                    $container->storeValues($id, $page->getForm()->getValue());
-                    $container->storeValidationStatus($id, $page->getForm()->validate());
-                    // Is the page now valid?
-                    if ($container->getValidationStatus($id)) {
+                    // This will store the "submitted" values in session and
+                    // return validation status
+                    if ($page->storeValues()) {
                         continue;
                     }
                 }
