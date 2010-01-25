@@ -282,6 +282,9 @@ Backwards compatibility issues
        <file name="DirectTest.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
+       <file name="DisplayTest.php" role="test">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
       </dir>
       <file name="AllTests.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />

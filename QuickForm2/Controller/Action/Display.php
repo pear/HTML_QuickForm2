@@ -100,6 +100,15 @@ class HTML_QuickForm2_Controller_Action_Display
         return $this->renderForm($page->getForm());
     }
 
+   /**
+    * Outputs the form
+    *
+    * Default behaviour is to rely on form's __toString() magic method.
+    * If you want to customize form appearance or use a different Renderer,
+    * you should override this method.
+    *
+    * @param    HTML_QuickForm2
+    */
     protected function renderForm(HTML_QuickForm2 $form)
     {
         echo $form;
