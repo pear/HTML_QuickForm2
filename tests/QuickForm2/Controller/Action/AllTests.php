@@ -54,6 +54,8 @@ require_once dirname(__FILE__) . '/BackTest.php';
 require_once dirname(__FILE__) . '/DirectTest.php';
 require_once dirname(__FILE__) . '/DisplayTest.php';
 require_once dirname(__FILE__) . '/JumpTest.php';
+require_once dirname(__FILE__) . '/NextTest.php';
+require_once dirname(__FILE__) . '/SubmitTest.php';
 
 class QuickForm2_Controller_Action_AllTests
 {
@@ -70,6 +72,8 @@ class QuickForm2_Controller_Action_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Controller_Action_DirectTest');
         $suite->addTestSuite('HTML_QuickForm2_Controller_Action_DisplayTest');
         $suite->addTestSuite('HTML_QuickForm2_Controller_Action_JumpTest');
+        $suite->addTestSuite('HTML_QuickForm2_Controller_Action_NextTest');
+        $suite->addTestSuite('HTML_QuickForm2_Controller_Action_SubmitTest');
 
         return $suite;
     }
