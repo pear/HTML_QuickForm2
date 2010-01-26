@@ -5,8 +5,8 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -86,7 +86,7 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
                 'error'     => UPLOAD_ERR_OK
             ),
             'bar' => array(
-                'name'      => array('key' => 'a\\\'thing\\\'.foobar'), 
+                'name'      => array('key' => 'a\\\'thing\\\'.foobar'),
                 'tmp_name'  => array('key' => 'C:\\windows\\temp\\whatever'),
                 'type'      => array('key' => 'application/foobar'),
                 'size'      => array('key' => 4321),
@@ -162,7 +162,7 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
             'error'     => UPLOAD_ERR_OK
         ), $ds1->getUpload('foo'));
         $this->assertEquals(array(
-            'name'      => 'a\\\'thing\\\'.foobar', 
+            'name'      => 'a\\\'thing\\\'.foobar',
             'tmp_name'  => 'C:\\windows\\temp\\whatever',
             'type'      => 'application/foobar',
             'size'      => 4321,
@@ -178,7 +178,7 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
 
         $ds2 = new HTML_QuickForm2_DataSource_SuperGlobal('POST', true);
         $this->assertEquals(array(
-            'name'      => 'a\'thing\'.foobar', 
+            'name'      => 'a\'thing\'.foobar',
             'tmp_name'  => 'C:\\windows\\temp\\whatever',
             'type'      => 'application/foobar',
             'size'      => 4321,

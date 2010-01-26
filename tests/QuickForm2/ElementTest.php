@@ -5,8 +5,8 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -58,7 +58,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'HTML/QuickForm2.php';
 
 /**
- * A non-abstract subclass of Element 
+ * A non-abstract subclass of Element
  *
  * Element class is still abstract, we should "implement" the remaining methods.
  * Note the default implementation of setValue() / getValue(), needed to test
@@ -83,7 +83,7 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
 }
 
 /**
- * Unit test for HTML_QuickForm2_Element class, 
+ * Unit test for HTML_QuickForm2_Element class,
  */
 class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 {
