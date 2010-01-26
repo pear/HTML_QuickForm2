@@ -52,7 +52,7 @@ require_once 'HTML/QuickForm2/Controller.php';
 require_once 'HTML/QuickForm2.php';
 
 /** Action handler for outputting the form */
-require_once 'HTML/QuickForm2/Controller/Action/Direct.php';
+require_once 'HTML/QuickForm2/Controller/Action/Display.php';
 
 /**
  * Unit test for HTML_QuickForm2_Controller_Action_Display class

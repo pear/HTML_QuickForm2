@@ -93,12 +93,17 @@ class HTML_QuickForm2_Controller_Action_Jump
                     $i++;
                 }
 
-            } elseif ('..' == $pathAry[$i] && $i > 1 && '..' != $pathAry[$i - 1]) {
-                if ($i < count($pathAry) -1) {
-                    array_splice($pathAry, $i - 1, 2);
-                    $i--;
-                } else {
-                    array_splice($pathAry, $i - 1, 2, '');
+            } elseif ('..' == $pathAry[$i]) {
+                if (1 == $i) {
+                    array_splice($pathAry, 1, 1);
+
+                } elseif ('..' != $pathAry[$i - 1]) {
+                    if ($i < count($pathAry) - 1) {
+                        array_splice($pathAry, $i - 1, 2);
+                        $i--;
+                    } else {
+                        array_splice($pathAry, $i - 1, 2, '');
+                    }
                 }
 
             } else {
@@ -134,7 +139,8 @@ class HTML_QuickForm2_Controller_Action_Jump
                 return $host . $_SERVER['REQUEST_URI'];
 
             } elseif ('/' == $url[0]) {
-                return $host . $url;
+                list($actPath, $actQuery) = self::splitUri($url);
+                return $host . self::normalizePath($actPath) . $actQuery;
 
             } else {
                 list($basePath, $baseQuery) = self::splitUri($_SERVER['REQUEST_URI']);
@@ -163,7 +169,7 @@ class HTML_QuickForm2_Controller_Action_Jump
         // generate the URL for the page 'display' event and redirect to it
         $action = $page->getForm()->getAttribute('action');
         // Bug #13087: RFC 2616 requires an absolute URI in Location header
-        if (!preg_match('!^https?://!i', $action)) {
+        if (!preg_match('@^([a-z][a-z0-9.+-]*):@i', $action)) {
             $action = self::resolveRelativeURL($action);
         }
 
@@ -179,10 +185,24 @@ class HTML_QuickForm2_Controller_Action_Jump
             $sessionId = '&' . SID;
         }
 
-        header(
-            'Location: ' . $action . (false === strpos($action, '?')? '?': '&') .
+        return $this->doRedirect(
+            $action . (false === strpos($action, '?')? '?': '&') .
             $page->getButtonName('display') . '=true' . $controllerId . $sessionId
         );
+    }
+
+
+   /**
+    * Redirects to a given URL via Location: header and exits the script
+    *
+    * A separate method is mostly needed for creating mocks of this class
+    * during testing.
+    *
+    * @param    string  URL to redirect to
+    */
+    protected function doRedirect($url)
+    {
+        header('Location: ' . $url);
         exit;
     }
 }
