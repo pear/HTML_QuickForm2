@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -59,25 +59,15 @@ require_once 'HTML/QuickForm2/Container.php';
  */
 class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
 {
+   /**
+    * Fieldsets don't have a 'name' attribute, so we only handle 'id'
+    * @var array
+    */
+    protected $watchedAttributes = array('id');
+
     public function getType()
     {
         return 'fieldset';
-    }
-
-
-    protected function onAttributeChange($name, $value = null)
-    {
-        if ('name' == $name) {
-            // Fieldsets do not have a name attribute
-        } elseif ('id' == $name) {
-            if (null === $value) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    "Required attribute 'id' can not be removed"
-                );
-            } else {
-                $this->setId($value);
-            }
-        }
     }
 
 

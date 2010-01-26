@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -122,7 +122,7 @@ class HTML_QuickForm2_Renderer_ArrayTest extends PHPUnit_Framework_TestCase
         $array = $fieldset->render($renderer)->toArray();
         $this->_assertHasKeys(
             $array,
-            array('id', 'required', 'frozen', 'elements', 'attributes')
+            array('id', 'type', 'required', 'frozen', 'elements', 'attributes')
         );
         $this->assertEquals(array(), $array['elements']);
 

@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -344,7 +344,8 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     public function startContainer(HTML_QuickForm2_Node $container)
     {
         $ary = $this->buildCommonFields($container) + array(
-            'required' => $container->isRequired()
+            'required' => $container->isRequired(),
+            'type'     => $container->getType()
         );
         $this->pushContainer($ary);
     }
@@ -357,7 +358,8 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     public function startGroup(HTML_QuickForm2_Node $group)
     {
         $ary = $this->buildCommonFields($group) + array(
-            'required' => $group->isRequired()
+            'required' => $group->isRequired(),
+            'type'     => $group->getType()
         );
         if ($separator = $group->getSeparator()) {
             $ary['separator'] = $separator;
