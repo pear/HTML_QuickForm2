@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -319,15 +319,25 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     protected $optionContainer;
 
    /**
+    * Enable intrinsic validation by default
+    * @var  array
+    */
+    protected $data = array('intrinsic_validation' => true);
+
+   /**
     * Class constructor
+    *
+    * Select element can understand the following keys in $data parameter:
+    *   - 'options': data to populate element's options with. Passed to
+    *     {@link loadOptions()} method.
+    *   - 'intrinsic_validation': setting this to false will disable
+    *     that validation, {@link getValue()} will then return all submit
+    *     values, not just those corresponding to options present in the
+    *     element. May be useful in AJAX scenarios.
     *
     * @param    string  Element name
     * @param    mixed   Attributes (either a string or an array)
-    * @param    array   Data used to populate the element's options, passed to
-    *                   {@link loadOptions()} method. Format:
-    *                   <code>
-    *                   $data = array('options' => array('option1', 'option2'));
-    *                   </code>
+    * @param    array   Additional element data
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
     public function __construct($name = null, $attributes = null, array $data = array())
@@ -412,15 +422,16 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function getValue()
     {
-        if (0 == count($this->optionContainer) || 0 == count($this->values) ||
-            0 == count($this->possibleValues) || !empty($this->attributes['disabled']))
-        {
+        if (!empty($this->attributes['disabled']) || 0 == count($this->values)
+            || ($this->data['intrinsic_validation']
+                && (0 == count($this->optionContainer) || 0 == count($this->possibleValues)))
+        ) {
             return null;
         }
 
         $values = array();
         foreach ($this->values as $value) {
-            if (!empty($this->possibleValues[$value])) {
+            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value])) {
                 $values[] = $value;
             }
         }

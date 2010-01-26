@@ -5,8 +5,8 @@
  * PHP version 5
  *
  * LICENSE:
- * 
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ *
+ * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -17,9 +17,9 @@
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the 
+ *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.
- *    * The names of the authors may not be used to endorse or promote products 
+ *    * The names of the authors may not be used to endorse or promote products
  *      derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
@@ -53,7 +53,7 @@ require_once 'HTML/QuickForm2/Element/Select.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * Let's just make parseAttributes() public rather than copy and paste regex   
+ * Let's just make parseAttributes() public rather than copy and paste regex
  */
 abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_Common2
 {
@@ -147,21 +147,21 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $sel->addOption('Text', 'Value');
         $this->assertRegExp(
             '!^<select[^>]*>\\s*<option[^>]+value="Value"[^>]*>Text</option>\\s*</select>!',
-            $sel->__toString() 
+            $sel->__toString()
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
         $sel2->addOption('Text', 'Value', array('class' => 'bar'));
         $this->assertRegExp(
             '!<option[^>]+class="bar"[^>]*>Text</option>!',
-            $sel2->__toString() 
+            $sel2->__toString()
         );
 
         $sel3 = new HTML_QuickForm2_Element_Select();
         $sel3->addOption('Text', 'Value', array('selected'));
         $this->assertEquals('Value', $sel3->getValue());
         $this->assertRegExp(
-            '!<option[^>]+selected="selected"[^>]*>Text</option>!', 
+            '!<option[^>]+selected="selected"[^>]*>Text</option>!',
             $sel3->__toString()
         );
     }
@@ -173,14 +173,14 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $this->assertType('HTML_QuickForm2_Element_Select_Optgroup', $optgroup);
         $this->assertRegExp(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*</optgroup>\\s*</select>!',
-            $sel->__toString() 
+            $sel->__toString()
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
         $optgroup2 = $sel2->addOptgroup('Label', array('class' => 'bar'));
         $this->assertRegExp(
             '!<optgroup[^>]+class="bar"[^>]*>\\s*</optgroup>!',
-            $sel2->__toString() 
+            $sel2->__toString()
         );
     }
 
@@ -192,7 +192,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*' .
             '<option[^>]+value="Value"[^>]*>Text</option>\\s*</optgroup>\\s*</select>!',
-            $sel->__toString() 
+            $sel->__toString()
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
@@ -200,7 +200,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $optgroup2->addOption('Text', 'Value', array('class' => 'bar'));
         $this->assertRegExp(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+class="bar"[^>]*>Text</option>\\s*</optgroup>!',
-            $sel2->__toString() 
+            $sel2->__toString()
         );
 
         $sel3 = new HTML_QuickForm2_Element_Select();
@@ -208,7 +208,7 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $optgroup3->addOption('Text', 'Value', array('selected'));
         $this->assertEquals('Value', $sel3->getValue());
         $this->assertRegExp(
-            '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+selected="selected"[^>]*>Text</option>\\s*</optgroup>!', 
+            '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+selected="selected"[^>]*>Text</option>\\s*</optgroup>!',
             $sel3->__toString()
         );
     }
@@ -344,6 +344,35 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $this->assertContains('value="02"', $selFrozen);
         $this->assertNotContains('TwoWithoutZero', $selFrozen);
         $this->assertNotContains('value="2"', $selFrozen);
+    }
+
+   /**
+    * Disable possibleValues checks in getValue()
+    *
+    * For lazy people who add options to selects on client side and do not
+    * want to add the same stuff server-side
+    *
+    * @link http://pear.php.net/bugs/bug.php?id=13088
+    * @link http://pear.php.net/bugs/bug.php?id=16974
+    */
+    public function testDisableIntrinsicValidation()
+    {
+        $selectSingle = new HTML_QuickForm2_Element_Select(
+            'foo', null, array('intrinsic_validation' => false)
+        );
+        $selectSingle->setValue('foo');
+        $this->assertEquals('foo', $selectSingle->getValue());
+
+        $selectSingle->loadOptions(array('one' => 'First', 'two' => 'Second'));
+        $selectSingle->setValue('three');
+        $this->assertEquals('three', $selectSingle->getValue());
+
+        $selectMultiple = new HTML_QuickForm2_Element_Select(
+            'bar', array('multiple'), array('intrinsic_validation' => false)
+        );
+        $selectMultiple->loadOptions(array('one' => 'First', 'two' => 'Second'));
+        $selectMultiple->setValue(array('two', 'three'));
+        $this->assertEquals(array('two', 'three'), $selectMultiple->getValue());
     }
 }
 ?>
