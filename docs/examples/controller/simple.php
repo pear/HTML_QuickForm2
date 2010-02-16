@@ -72,7 +72,7 @@ body {
 
 <?php
     if ('@data_dir@' != '@' . 'data_dir@') {
-        $filename = '@data_dir@/HTML_QuickForm2/data/quickform.css';
+        $filename = '@data_dir@/HTML_QuickForm2/quickform.css';
     } else {
         $filename = dirname(dirname(dirname(__FILE__))) . '/data/quickform.css';
     }

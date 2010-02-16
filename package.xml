@@ -80,188 +80,193 @@ Backwards compatibility issues
     notices in 0.4.0 and will stop working completely in the next release. 
  </notes>
  <contents>
-  <dir baseinstalldir="HTML" name="/">
-   <dir name="QuickForm2">
-    <dir name="Container">
-     <file name="Fieldset.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Group.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-    </dir> <!-- /QuickForm2/Container -->
-    <dir name="Controller">
-     <dir name="Action">
-      <file name="Back.php" role="php">
+  <dir name="/">
+   <dir name="HTML">
+    <dir name="QuickForm2">
+     <dir name="Container">
+      <file name="Fieldset.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file name="Direct.php" role="php">
+      <file name="Group.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file name="Display.php" role="php">
+     </dir> <!-- /HTML/QuickForm2/Container -->
+     <dir name="Controller">
+      <dir name="Action">
+       <file name="Back.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Direct.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Display.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Jump.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Next.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="Submit.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /HTML/QuickForm2/Controller/Action -->
+      <file name="Action.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file name="Jump.php" role="php">
+      <file name="DefaultAction.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-      <file name="Next.php" role="php">
+      <file name="Page.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="SessionContainer.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/Controller -->
+     <dir name="DataSource">
+      <file name="Array.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Session.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Submit.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
-     </dir> <!-- /QuickForm2/Controller/Action -->
-     <file name="Action.php" role="php">
+      <file name="SuperGlobal.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/DataSource -->
+     <dir name="Element">
+      <file name="Button.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Input.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputButton.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputCheckable.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputCheckbox.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputFile.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputHidden.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputImage.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputPassword.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputRadio.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputReset.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputSubmit.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="InputText.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Select.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Textarea.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/Element -->
+     <dir name="Renderer">
+      <file name="Array.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Default.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Plugin.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Proxy.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/Renderer -->
+     <dir name="Rule">
+      <file name="Callback.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Compare.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Each.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Empty.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Length.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="MaxFileSize.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="MimeType.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Nonempty.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Regex.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Required.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/Rule -->
+     <file name="Container.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="DefaultAction.php" role="php">
+     <file name="Controller.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Page.php" role="php">
+     <file name="DataSource.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="SessionContainer.php" role="php">
+     <file name="Element.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-    </dir> <!-- /QuickForm2/Controller -->
-    <dir name="DataSource">
-     <file name="Array.php" role="php">
+     <file name="Exception.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Session.php" role="php">
+     <file name="Factory.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Submit.php" role="php">
+     <file name="Loader.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="SuperGlobal.php" role="php">
+     <file name="Node.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-    </dir> <!-- /QuickForm2/DataSource -->
-    <dir name="Element">
-     <file name="Button.php" role="php">
+     <file name="Renderer.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="Input.php" role="php">
+     <file name="Rule.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
-     <file name="InputButton.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputCheckable.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputCheckbox.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputFile.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputHidden.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputImage.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputPassword.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputRadio.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputReset.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputSubmit.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="InputText.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Select.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Textarea.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-    </dir> <!-- /QuickForm2/Element -->
-    <dir name="Renderer">
-     <file name="Array.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Default.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Plugin.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Proxy.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-    </dir> <!-- /QuickForm2/Renderer -->
-    <dir name="Rule">
-     <file name="Callback.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Compare.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Each.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Empty.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Length.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="MaxFileSize.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="MimeType.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Nonempty.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Regex.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-     <file name="Required.php" role="php">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
-    </dir> <!-- /QuickForm2/Rule -->
-    <file name="Container.php" role="php">
+    </dir> <!-- /HTML/QuickForm2 -->
+    <file name="QuickForm2.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
-    <file name="Controller.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="DataSource.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Element.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Exception.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Factory.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Loader.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Node.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Renderer.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-    <file name="Rule.php" role="php">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
-   </dir> <!-- /QuickForm2 -->
+   </dir> <!-- /HTML -->
    <dir name="tests">
     <dir name="QuickForm2">
      <dir name="Container">
@@ -469,13 +474,8 @@ Backwards compatibility issues
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
    </dir> <!-- /docs/examples -->
-   <dir name="data">
-    <file name="quickform.css" role="data" />
-   </dir> <!-- /data -->
-   <file name="QuickForm2.php" role="php">
-    <tasks:replace from="@package_version@" to="version" type="package-info" />
-   </file>
-  </dir> <!-- / -->
+   <file name="data/quickform.css" role="data" />
+  </dir>
  </contents>
  <dependencies>
   <required>
@@ -492,7 +492,77 @@ Backwards compatibility issues
    </package>
   </required>
  </dependencies>
- <phprelease />
+ <phprelease>
+  <filelist>
+   <install as="quickform.css" name="data/quickform.css" />
+   <install as="examples/controller/simple.php" name="docs/examples/controller/simple.php" />
+   <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />
+   <install as="examples/controller/empty.gif" name="docs/examples/controller/empty.gif" />
+   <install as="examples/basic-elements.php" name="docs/examples/basic-elements.php" />
+   <install as="examples/builtin-rules.php" name="docs/examples/builtin-rules.php" />
+   <install as="examples/default-renderer.php" name="docs/examples/default-renderer.php" />
+   <install as="examples/dualselect.php" name="docs/examples/dualselect.php" />
+
+   <install as="AllTests.php" name="tests/AllTests.php" />
+   <install as="QuickForm2Test.php" name="tests/QuickForm2Test.php" />
+   <install as="QuickForm2/AllTests.php" name="tests/QuickForm2/AllTests.php" />
+   <install as="QuickForm2/ContainerOverloadTest.php" name="tests/QuickForm2/ContainerOverloadTest.php" />
+   <install as="QuickForm2/ContainerTest.php" name="tests/QuickForm2/ContainerTest.php" />
+   <install as="QuickForm2/ControllerTest.php" name="tests/QuickForm2/ControllerTest.php" />
+   <install as="QuickForm2/ElementTest.php" name="tests/QuickForm2/ElementTest.php" />
+   <install as="QuickForm2/FactoryTest.php" name="tests/QuickForm2/FactoryTest.php" />
+   <install as="QuickForm2/NodeTest.php" name="tests/QuickForm2/NodeTest.php" />
+   <install as="QuickForm2/RendererTest.php" name="tests/QuickForm2/RendererTest.php" />
+   <install as="QuickForm2/RuleTest.php" name="tests/QuickForm2/RuleTest.php" />
+   <install as="QuickForm2/Container/AllTests.php" name="tests/QuickForm2/Container/AllTests.php" />
+   <install as="QuickForm2/Container/FieldsetTest.php" name="tests/QuickForm2/Container/FieldsetTest.php" />
+   <install as="QuickForm2/Container/GroupTest.php" name="tests/QuickForm2/Container/GroupTest.php" />
+   <install as="QuickForm2/Controller/AllTests.php" name="tests/QuickForm2/Controller/AllTests.php" />
+   <install as="QuickForm2/Controller/PageTest.php" name="tests/QuickForm2/Controller/PageTest.php" />
+   <install as="QuickForm2/Controller/Action/AllTests.php" name="tests/QuickForm2/Controller/Action/AllTests.php" />
+   <install as="QuickForm2/Controller/Action/BackTest.php" name="tests/QuickForm2/Controller/Action/BackTest.php" />
+   <install as="QuickForm2/Controller/Action/DirectTest.php" name="tests/QuickForm2/Controller/Action/DirectTest.php" />
+   <install as="QuickForm2/Controller/Action/DisplayTest.php" name="tests/QuickForm2/Controller/Action/DisplayTest.php" />
+   <install as="QuickForm2/Controller/Action/JumpTest.php" name="tests/QuickForm2/Controller/Action/JumpTest.php" />
+   <install as="QuickForm2/Controller/Action/NextTest.php" name="tests/QuickForm2/Controller/Action/NextTest.php" />
+   <install as="QuickForm2/Controller/Action/SubmitTest.php" name="tests/QuickForm2/Controller/Action/SubmitTest.php" />
+   <install as="QuickForm2/DataSource/AllTests.php" name="tests/QuickForm2/DataSource/AllTests.php" />
+   <install as="QuickForm2/DataSource/ArrayTest.php" name="tests/QuickForm2/DataSource/ArrayTest.php" />
+   <install as="QuickForm2/DataSource/SuperGlobalTest.php" name="tests/QuickForm2/DataSource/SuperGlobalTest.php" />
+   <install as="QuickForm2/Element/AllTests.php" name="tests/QuickForm2/Element/AllTests.php" />
+   <install as="QuickForm2/Element/ButtonTest.php" name="tests/QuickForm2/Element/ButtonTest.php" />
+   <install as="QuickForm2/Element/InputButtonTest.php" name="tests/QuickForm2/Element/InputButtonTest.php" />
+   <install as="QuickForm2/Element/InputCheckableTest.php" name="tests/QuickForm2/Element/InputCheckableTest.php" />
+   <install as="QuickForm2/Element/InputCheckboxTest.php" name="tests/QuickForm2/Element/InputCheckboxTest.php" />
+   <install as="QuickForm2/Element/InputFileTest.php" name="tests/QuickForm2/Element/InputFileTest.php" />
+   <install as="QuickForm2/Element/InputHiddenTest.php" name="tests/QuickForm2/Element/InputHiddenTest.php" />
+   <install as="QuickForm2/Element/InputImageTest.php" name="tests/QuickForm2/Element/InputImageTest.php" />
+   <install as="QuickForm2/Element/InputPasswordTest.php" name="tests/QuickForm2/Element/InputPasswordTest.php" />
+   <install as="QuickForm2/Element/InputResetTest.php" name="tests/QuickForm2/Element/InputResetTest.php" />
+   <install as="QuickForm2/Element/InputSubmitTest.php" name="tests/QuickForm2/Element/InputSubmitTest.php" />
+   <install as="QuickForm2/Element/InputTest.php" name="tests/QuickForm2/Element/InputTest.php" />
+   <install as="QuickForm2/Element/SelectTest.php" name="tests/QuickForm2/Element/SelectTest.php" />
+   <install as="QuickForm2/Element/TextareaTest.php" name="tests/QuickForm2/Element/TextareaTest.php" />
+   <install as="QuickForm2/Renderer/AllTests.php" name="tests/QuickForm2/Renderer/AllTests.php" />
+   <install as="QuickForm2/Renderer/ArrayTest.php" name="tests/QuickForm2/Renderer/ArrayTest.php" />
+   <install as="QuickForm2/Renderer/DefaultTest.php" name="tests/QuickForm2/Renderer/DefaultTest.php" />
+   <install as="QuickForm2/Rule/AllTests.php" name="tests/QuickForm2/Rule/AllTests.php" />
+   <install as="QuickForm2/Rule/CallbackTest.php" name="tests/QuickForm2/Rule/CallbackTest.php" />
+   <install as="QuickForm2/Rule/CompareTest.php" name="tests/QuickForm2/Rule/CompareTest.php" />
+   <install as="QuickForm2/Rule/EachTest.php" name="tests/QuickForm2/Rule/EachTest.php" />
+   <install as="QuickForm2/Rule/EmptyTest.php" name="tests/QuickForm2/Rule/EmptyTest.php" />
+   <install as="QuickForm2/Rule/LengthTest.php" name="tests/QuickForm2/Rule/LengthTest.php" />
+   <install as="QuickForm2/Rule/MaxFileSizeTest.php" name="tests/QuickForm2/Rule/MaxFileSizeTest.php" />
+   <install as="QuickForm2/Rule/MimeTypeTest.php" name="tests/QuickForm2/Rule/MimeTypeTest.php" />
+   <install as="QuickForm2/Rule/NonemptyTest.php" name="tests/QuickForm2/Rule/NonemptyTest.php" />
+   <install as="QuickForm2/Rule/RegexTest.php" name="tests/QuickForm2/Rule/RegexTest.php" />
+   <install as="QuickForm2/Rule/RequiredTest.php" name="tests/QuickForm2/Rule/RequiredTest.php" />
+   <install as="QuickForm2/_files/1024-bytes.upload" name="tests/QuickForm2/_files/1024-bytes.upload" />
+   <install as="QuickForm2/_files/FakeElement.php" name="tests/QuickForm2/_files/FakeElement.php" />
+   <install as="QuickForm2/_files/FakeRule.php" name="tests/QuickForm2/_files/FakeRule.php" />
+   <install as="QuickForm2/_files/InvalidFile.php" name="tests/QuickForm2/_files/InvalidFile.php" />
+  </filelist>
+ </phprelease>
  <changelog>
   <release>
    <version>

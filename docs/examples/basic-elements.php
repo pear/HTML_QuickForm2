@@ -3,7 +3,7 @@
  * Usage example for HTML_QuickForm2 package: basic elements
  *
  * $Id$
- */ 
+ */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -27,7 +27,7 @@ body {
 
 <?php
 if ('@data_dir@' != '@' . 'data_dir@') {
-    $filename = '@data_dir@/HTML_QuickForm2/data/quickform.css';
+    $filename = '@data_dir@/HTML_QuickForm2/quickform.css';
 } else {
     $filename = dirname(dirname(dirname(__FILE__))) . '/data/quickform.css';
 }
@@ -62,10 +62,10 @@ $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
 // text input elements
 $fsText = $form->addElement('fieldset')->setLabel('Text boxes');
 $fsText->addElement(
-    'text', 'textTest', array('style' => 'width: 300px;'), array('label' => 'Test Text:') 
+    'text', 'textTest', array('style' => 'width: 300px;'), array('label' => 'Test Text:')
 );
 $fsText->addElement(
-    'password', 'pwdTest', array('style' => 'width: 300px;'), array('label' => 'Test Password:') 
+    'password', 'pwdTest', array('style' => 'width: 300px;'), array('label' => 'Test Password:')
 );
 $area = $fsText->addElement(
     'textarea', 'areaTest', array('style' => 'width: 300px;', 'cols' => 50, 'rows' => 7),
@@ -115,7 +115,7 @@ $fsButton->addElement(
     array('value' => 'Click this button', 'onclick' => "alert('This is a test.');")
 );
 $fsButton->addElement(
-    'button', 'testButton', array('onclick' => "alert('Almost nothing');", 'type' => 'button'), 
+    'button', 'testButton', array('onclick' => "alert('Almost nothing');", 'type' => 'button'),
     array('content' => '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
         'width="32" height="32" alt="pear" />This button does almost nothing')
 );
@@ -125,7 +125,7 @@ $fsSubmit->addElement(
     'submit', 'testSubmit', array('value' => 'Test Submit')
 );
 $fsSubmit->addElement(
-    'button', 'testSubmitButton', array('type' => 'submit'), 
+    'button', 'testSubmitButton', array('type' => 'submit'),
      array('content' => '<img src="http://pear.php.net/gifs/pear-icon.gif" '.
         'width="32" height="32" alt="pear" />This button submits')
 );
