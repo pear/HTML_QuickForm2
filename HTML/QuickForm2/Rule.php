@@ -252,14 +252,8 @@ abstract class HTML_QuickForm2_Rule
     * Validates the owner element
     *
     * @return   bool    Whether owner element is valid according to the rule
-    * @todo This should be declared abstract after release 0.4.0
     */
-    protected function validateOwner()
-    {
-        $level = defined('E_USER_DEPRECATED')? E_USER_DEPRECATED: E_USER_NOTICE;
-        trigger_error(get_class($this) . '::checkValue() is deprecated, implement validateOwner() instead', $level);
-        return $this->checkValue($this->owner->getValue());
-    }
+    abstract protected function validateOwner();
 
    /**
     * Sets the error message on the owner element

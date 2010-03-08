@@ -252,10 +252,11 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForClass(
                 'HTML_QuickForm2_Element_InputText', 'IgnoreThis;html={element}'
-            )->setGroupedTemplateForClass(
-                'HTML_QuickForm2_Element_Input', 'GroupedInput;id={id},html={element}'
-            )->setGroupedTemplateForClass(
-                'HTML_QuickForm2_Element', 'GroupedElement;id={id},html={element}', 'testRenderGroup'
+            )->setElementTemplateForGroupClass(
+                'HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input',
+                'GroupedInput;id={id},html={element}'
+            )->setElementTemplateForGroupId(
+                'testRenderGroup', 'HTML_QuickForm2_Element', 'GroupedElement;id={id},html={element}'
             )->setTemplateForId(
                 'testRenderGroupedElement', 'testRenderGroupedElement;id={id},html={element}'
             );
@@ -271,13 +272,13 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             $group->render($renderer->reset())->__toString()
         );
 
-        $renderer->setGroupedTemplateForClass('HTML_QuickForm2_Element', null, 'testRenderGroup');
+        $renderer->setElementTemplateForGroupId('testRenderGroup', 'HTML_QuickForm2_Element', null);
         $this->assertContains(
             'GroupedInput;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
-        $renderer->setGroupedTemplateForClass('HTML_QuickForm2_Element_Input', null);
+        $renderer->setElementTemplateForGroupClass('HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input', null);
         $this->assertNotContains(
             'IgnoreThis', $group->render($renderer->reset())->__toString()
         );
@@ -292,8 +293,8 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
 
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId('testSeparators', '{content}')
-            ->setGroupedTemplateForClass(
-                'HTML_QuickForm2_Element_InputText', '<foo>{element}</foo>', 'testSeparators'
+            ->setElementTemplateForGroupId(
+                'testSeparators', 'HTML_QuickForm2_Element_InputText', '<foo>{element}</foo>'
             );
 
         $this->assertEquals(

@@ -212,30 +212,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Sets template for grouped form elements that are instances of the given class
-    *
-    * Templates set via {@link setTemplateForClass()} will not be used for
-    * grouped form elements. When searching for a template to use, the renderer
-    * will first consider template set for a specific group id, only then the
-    * generic group templates.
-    *
-    * @param    string  Class name
-    * @param    mixed   Template
-    * @param    string  Group's id, will set generic group template if not given
-    * @return   HTML_QuickForm2_Renderer_Default
-    * @todo     This method should be removed after release 0.4.0
-    * @deprecated   Use {@link setElementTemplateForGroupClass()} or
-    *               {@link setElementTemplateForGroupId()} instead
-    */
-    public function setGroupedTemplateForClass($className, $template, $groupId = '')
-    {
-        if (!empty($groupId)) {
-            return $this->setElementTemplateForGroupId($groupId, $className, $template);
-        }
-        return $this->setElementTemplateForGroupClass('html_quickform2_container', $className, $template);
-    }
-
-   /**
     * Sets grouped elements templates using group class
     *
     * Templates set via {@link setTemplateForClass()} will not be used for

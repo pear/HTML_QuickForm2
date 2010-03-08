@@ -206,7 +206,6 @@ class HTML_QuickForm2_Factory
     * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
     * @throws   HTML_QuickForm2_NotFoundException        If class for the rule
     *           can't be found and/or loaded from file
-    * @todo     Remove the trigger_error() call after release 0.4.0
     */
     public static function createRule($type, HTML_QuickForm2_Node $owner,
                                       $message = '', $config = null)
@@ -220,9 +219,6 @@ class HTML_QuickForm2_Factory
         if (isset(self::$registeredRules[$type][2])) {
             $config = call_user_func(array($className, 'mergeConfig'), $config,
                                      self::$registeredRules[$type][2]);
-            if (method_exists($className, 'checkValue')) {
-                trigger_error("$className may need a custom mergeConfig() method implemented", E_USER_NOTICE);
-            }
         }
         return new $className($owner, $message, $config);
     }
