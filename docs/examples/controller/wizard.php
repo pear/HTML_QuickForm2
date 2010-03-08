@@ -9,6 +9,7 @@
 
 require_once 'HTML/QuickForm2.php';
 require_once 'HTML/QuickForm2/Controller.php';
+require_once 'HTML/QuickForm2/Renderer.php';
 
 // Load some default action handlers
 require_once 'HTML/QuickForm2/Controller/Action/Next.php';
@@ -43,12 +44,14 @@ class PageSecond extends HTML_QuickForm2_Controller_Page
     {
         $fs = $this->form->addElement('fieldset')->setLabel('Wizard page 2 of 3');
 
-        $nameGroup = $fs->addElement('group', 'name')
-                        ->setLabel('Name (last, first):')
+        $nameGroup = $fs->addElement('group', 'name', array('id' => 'nameGrp'))
+                        ->setLabel('Name:')
                         ->setSeparator(',&nbsp;');
-        $nameGroup->addElement('text', 'last', array('size' => 30))
+        $nameGroup->addElement('text', 'last', array('size' => 20))
+                  ->setLabel('Last')
                   ->addRule('required', 'Last name is required');
-        $nameGroup->addElement('text', 'first', array('size' => 20));
+        $nameGroup->addElement('text', 'first', array('size' => 20))
+                  ->setLabel('first');
 
         $buttonGroup = $fs->addElement('group');
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
@@ -114,7 +117,15 @@ body {
   </head>
   <body>
 <?php
-        echo $form;
+    $renderer = HTML_QuickForm2_Renderer::factory('default');
+    $renderer->setElementTemplateForGroupId(
+        'nameGrp', 'html_quickform2_element',
+        '<div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}<br /><label for="{id}"><qf:required><span class="required">* </span></qf:required>{label}</label></div>'
+    );
+    $renderer->setTemplateForId(
+        'nameGrp', '<div class="row"><label class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>{content}</div>'
+    );
+    echo $form->render($renderer);
 ?>
   </body>
 </html>

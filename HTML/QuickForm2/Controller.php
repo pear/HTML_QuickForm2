@@ -156,7 +156,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * @throws   HTML_QuickForm2_NotFoundException   if ID is not given and cannot
     *               be found in $_REQUEST, or session container is empty
     */
-    public function __construct($id = null, $wizard = true, $propagateId = true)
+    public function __construct($id = null, $wizard = true, $propagateId = false)
     {
         if (empty($id)) {
             $propagateId = true;

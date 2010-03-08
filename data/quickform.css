@@ -59,6 +59,7 @@
     padding: 0;
 }
 .quickform div.reqnote {
+    clear: both;
     font-size: 80%; 
     margin: 0.5em 0 0 1em;
 }
