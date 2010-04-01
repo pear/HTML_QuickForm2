@@ -69,6 +69,7 @@ class HTML_QuickForm2_Factory
     protected static $elementTypes = array(
         'button'        => array('HTML_QuickForm2_Element_Button', null),
         'checkbox'      => array('HTML_QuickForm2_Element_InputCheckbox', null),
+        'date'          => array('HTML_QuickForm2_Element_Date', null),
         'fieldset'      => array('HTML_QuickForm2_Container_Fieldset', null),
         'group'         => array('HTML_QuickForm2_Container_Group', null),
         'file'          => array('HTML_QuickForm2_Element_InputFile', null),
