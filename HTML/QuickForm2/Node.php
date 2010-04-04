@@ -245,6 +245,17 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
 
    /**
+    * Returns the element options
+    *
+    * @return   array
+    */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+
+   /**
     * Returns the element's type
     *
     * @return   string
