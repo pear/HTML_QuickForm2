@@ -304,6 +304,24 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     }
 
    /**
+    * Called when the element needs to update its value from form's data sources
+    *
+    * Since the date element also accepts a timestamp as value, the default
+    * group behavior is changed.
+    */
+    protected function updateValue()
+    {
+        $name = $this->getName();
+        foreach ($this->getDataSources() as $ds) {
+            if (null !== ($value = $ds->getValue($name))) {
+                $this->setValue($value);
+                return;
+            }
+        }
+        parent::updateValue();
+    }
+
+   /**
     * Options in different languages
     *
     * Note to potential translators: to avoid encoding problems please send
