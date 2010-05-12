@@ -191,6 +191,9 @@ Backwards compatibility issues
       <file name="Select.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Static.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Textarea.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -232,6 +235,12 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Nonempty.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NotCallback.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NotRegex.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Regex.php" role="php">
@@ -371,6 +380,9 @@ Backwards compatibility issues
       <file name="SelectTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="StaticTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="TextareaTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -412,6 +424,12 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="NonemptyTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NotCallbackTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="NotRegexTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="RegexTest.php" role="test">
@@ -555,6 +573,7 @@ Backwards compatibility issues
    <install as="QuickForm2/Element/InputSubmitTest.php" name="tests/QuickForm2/Element/InputSubmitTest.php" />
    <install as="QuickForm2/Element/InputTest.php" name="tests/QuickForm2/Element/InputTest.php" />
    <install as="QuickForm2/Element/SelectTest.php" name="tests/QuickForm2/Element/SelectTest.php" />
+   <install as="QuickForm2/Element/StaticTest.php" name="tests/QuickForm2/Element/StaticTest.php" />
    <install as="QuickForm2/Element/TextareaTest.php" name="tests/QuickForm2/Element/TextareaTest.php" />
    <install as="QuickForm2/Renderer/AllTests.php" name="tests/QuickForm2/Renderer/AllTests.php" />
    <install as="QuickForm2/Renderer/ArrayTest.php" name="tests/QuickForm2/Renderer/ArrayTest.php" />
@@ -568,6 +587,8 @@ Backwards compatibility issues
    <install as="QuickForm2/Rule/MaxFileSizeTest.php" name="tests/QuickForm2/Rule/MaxFileSizeTest.php" />
    <install as="QuickForm2/Rule/MimeTypeTest.php" name="tests/QuickForm2/Rule/MimeTypeTest.php" />
    <install as="QuickForm2/Rule/NonemptyTest.php" name="tests/QuickForm2/Rule/NonemptyTest.php" />
+   <install as="QuickForm2/Rule/NotCallbackTest.php" name="tests/QuickForm2/Rule/NotCallbackTest.php" />
+   <install as="QuickForm2/Rule/NotRegexTest.php" name="tests/QuickForm2/Rule/NotRegexTest.php" />
    <install as="QuickForm2/Rule/RegexTest.php" name="tests/QuickForm2/Rule/RegexTest.php" />
    <install as="QuickForm2/Rule/RequiredTest.php" name="tests/QuickForm2/Rule/RequiredTest.php" />
    <install as="QuickForm2/_files/1024-bytes.upload" name="tests/QuickForm2/_files/1024-bytes.upload" />
