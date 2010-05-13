@@ -99,6 +99,11 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function tearDown()
+    {
+        HTML_Common2::setOption('id_force_append_index', true);
+    }
+
     public function testCanSetName()
     {
         $obj = new HTML_QuickForm2_ElementImpl();
@@ -230,6 +235,25 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $elFoo = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
         $elFoo->setName('fooReborn');
         $this->assertEquals('another value', $elFoo->getValue());
+    }
+
+    public function testGenerateIdsWithoutIndexes()
+    {
+        HTML_Common2::setOption('id_force_append_index', false);
+
+        $name = 'foo_' . mt_rand(0, 1000);
+        $el = new HTML_QuickForm2_ElementImpl($name);
+        $this->assertEquals($name, $el->getId());
+
+        $el2 = new HTML_QuickForm2_ElementImpl($name . '[bar]');
+        $this->assertEquals($name . '-bar', $el2->getId());
+    }
+
+    public function testUniqueIdsGeneratedWithoutIndexes()
+    {
+        HTML_Common2::setOption('id_force_append_index', false);
+
+        $this->testUniqueIdsGenerated();
     }
 }
 ?>

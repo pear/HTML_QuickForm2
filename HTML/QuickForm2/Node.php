@@ -48,6 +48,13 @@
  */
 require_once 'HTML/Common2.php';
 
+// By default, we generate element IDs with numeric indexes appended even for
+// elements with unique names. If you want IDs to be equal to the element
+// names by default, set this configuration option to false.
+if (null === HTML_Common2::getOption('id_force_append_index')) {
+    HTML_Common2::setOption('id_force_append_index', true);
+}
+
 /**
  * Exception classes for HTML_QuickForm2
  */
@@ -185,9 +192,10 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     protected static function generateId($elementName)
     {
-        $tokens    =  strlen($elementName)?
-                      explode('[', str_replace(']', '', $elementName)):
-                      array('qfauto');
+        $stop      =  !self::getOption('id_force_append_index');
+        $tokens    =  strlen($elementName)
+                      ? explode('[', str_replace(']', '', $elementName))
+                      : ($stop? array('qfauto', ''): array('qfauto'));
         $container =& self::$ids;
         $id        =  '';
 
@@ -208,17 +216,17 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             $id .= '-' . $token;
             if (!isset($container[$token])) {
                 $container[$token] = array();
+            // Handle duplicate names when not having mandatory indexes
+            } elseif (empty($tokens) && $stop) {
+                $tokens[] = '';
+            }
+            // Handle mandatory indexes
+            if (empty($tokens) && !$stop) {
+                $tokens[] = '';
+                $stop     = true;
             }
             $container =& $container[$token];
         } while (!empty($tokens));
-
-        // Append the final index
-        $index = count($keys = array_keys($container))? end($keys): 0;
-        while (isset($container[$index])) {
-            $index++;
-        }
-        $container[$index] = array();
-        $id .= '-' . $index;
 
         return substr($id, 1);
     }
