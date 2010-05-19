@@ -418,7 +418,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         }
 
         $break         = HTML_Common2::getOption('linebreak');
-        $this->html[0] = array(str_replace(
+        $script        = $this->getJsBuilder()->__toString();
+        $this->html[0] = array((empty($script)? '': $script . $break) . str_replace(
             '{content}', $break . implode($break, $this->html[0]), $formTpl
         ));
     }

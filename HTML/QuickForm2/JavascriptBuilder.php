@@ -1,6 +1,6 @@
 <?php
 /**
- * Base class for simple HTML_QuickForm2 elements (not Containers)
+ * Javascript aggregator and builder class
  *
  * PHP version 5
  *
@@ -44,12 +44,12 @@
  */
 
 /**
- * Base class for all HTML_QuickForm2 elements
+ * Exception classes for HTML_QuickForm2
  */
-require_once 'HTML/QuickForm2/Node.php';
+require_once 'HTML/QuickForm2/Exception.php';
 
 /**
- * Abstract base class for simple QuickForm2 elements (not Containers)
+ * Javascript aggregator and builder class
  *
  * @category   HTML
  * @package    HTML_QuickForm2
@@ -57,76 +57,64 @@ require_once 'HTML/QuickForm2/Node.php';
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
  */
-abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
+class HTML_QuickForm2_JavascriptBuilder
 {
-    public function setName($name)
+   /**
+    * Client-side rules
+    * @var array
+    */
+    protected $rules = array();
+
+   /**
+    * Current form ID
+    * @var string
+    */
+    protected $formId = null;
+
+   /**
+    * Sets the form currently being processed
+    *
+    * @param HTML_QuickForm2
+    */
+    public function startForm(HTML_QuickForm2 $form)
     {
-        $this->attributes['name'] = (string)$name;
-        $this->updateValue();
-        return $this;
+        $this->formId = $form->getId();
+        $this->rules[$this->formId] = array();
     }
 
    /**
-    * Generates hidden form field containing the element's value
+    * Adds the Rule javascript to the list of current form Rules
     *
-    * This is used to pass the frozen element's value if 'persistent freeze'
-    * feature is on
-    *
-    * @return string
+    * @param HTML_QuickForm2_Rule
     */
-    protected function getPersistentContent()
+    public function addRule(HTML_QuickForm2_Rule $rule)
     {
-        if (!$this->persistent || null === ($value = $this->getValue())) {
-            return '';
-        }
-        return '<input type="hidden"' . self::getAttributesString(array(
-            'name'  => $this->getName(),
-            'value' => $value,
-            'id'    => $this->getId()
-        )) . ' />';
+        $this->rules[$this->formId][] = $rule->getJavascript();
     }
 
    /**
-    * Called when the element needs to update its value from form's data sources
+    * Returns client-side validation code
     *
-    * The default behaviour is to go through the complete list of the data
-    * sources until the non-null value is found.
+    * @todo This shouldn't probably be __toString() as we can't throw exceptions from that
+    * @todo Of course we shouldn't put library files into each page, need some means to include them via <script> tags
     */
-    protected function updateValue()
+    public function __toString()
     {
-        $name = $this->getName();
-        foreach ($this->getDataSources() as $ds) {
-            if (null !== ($value = $ds->getValue($name))) {
-                $this->setValue($value);
-                return;
+        $js = '';
+        foreach ($this->rules as $formId => $rules) {
+            if (!empty($rules)) {
+                $js .= "new qf.validator(document.getElementById('{$formId}'), [\n" .
+                       implode(",\n", $rules) .
+                       "\n]);";
             }
         }
-    }
-
-   /**
-    * Renders the element using the given renderer
-    *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance
-    * @return   HTML_QuickForm2_Renderer
-    */
-    public function render(HTML_QuickForm2_Renderer $renderer)
-    {
-        foreach ($this->rules as $rule) {
-            $renderer->getJsBuilder()->addRule($rule);
+        if ('' != $js) {
+            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+                  file_get_contents('@data_dir@/HTML_QuickForm2/quickform.js') .
+                  "qf.events.contentReady(function() {\n{$js}\n});\n" .
+                  "//]]>\n</script>";
         }
-        $renderer->renderElement($this);
-        return $renderer;
-    }
-
-   /**
-    * Returns Javascript code for getting the element's value
-    *
-    * @return   string
-    * @todo     This should be declared abstract in Node and also implemented in Container
-    */
-    public function getJavascriptValue()
-    {
-        return "qf.form.getValue(document.getElementById('" . $this->getId() . "'))";
+        return $js;
     }
 }
 ?>

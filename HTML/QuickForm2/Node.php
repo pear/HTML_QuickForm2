@@ -478,6 +478,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *               wrong type or rule name isn't registered with Factory
     * @throws   HTML_QuickForm2_NotFoundException   if class for a given rule
     *               name cannot be found
+    * @todo     Need some means to mark the Rules for running client-side
     */
     public function addRule($rule, $message = '', $options = null)
     {

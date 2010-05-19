@@ -79,6 +79,11 @@ class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
             return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
         }
     }
+
+    protected function getJavascriptCallback()
+    {
+        return "function() { return " . $this->owner->getJavascriptValue() . " == ''; }";
+    }
 }
 
 ?>

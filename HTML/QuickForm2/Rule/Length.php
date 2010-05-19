@@ -97,6 +97,25 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
         }
     }
 
+    protected function getJavascriptCallback()
+    {
+        $allowedLength = $this->getConfig();
+        if (is_scalar($allowedLength)) {
+            $check = "length == {$allowedLength}";
+        } else {
+            $checks = array();
+            if (!empty($allowedLength['min'])) {
+                $checks[] = "length >= {$allowedLength['min']}";
+            }
+            if (!empty($allowedLength['max'])) {
+                $checks[] = "length <= {$allowedLength['max']}";
+            }
+            $check = implode(' && ', $checks);
+        }
+        return "function() { var length = " . $this->owner->getJavascriptValue() .
+               ".length; if (0 == length) { return true; } else { return {$check}; } }";
+    }
+
    /**
     * Adds the 'min' and 'max' fields from one array to the other
     *

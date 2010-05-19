@@ -101,6 +101,12 @@ abstract class HTML_QuickForm2_Renderer
     );
 
    /**
+    * Javascript builder object
+    * @var  HTML_QuickForm2_JavascriptBuilder
+    */
+    protected $jsBuilder;
+
+   /**
     * Creates a new renderer instance of the given type
     *
     * A renderer is always wrapped by a Proxy, which handles calling its
@@ -264,6 +270,35 @@ abstract class HTML_QuickForm2_Renderer
             );
         }
         return $this->options[$name];
+    }
+
+   /**
+    * Returns the javascript builder object
+    *
+    * @return   HTML_QuickForm2_JavascriptBuilder
+    */
+    public function getJsBuilder()
+    {
+        if (empty($this->jsBuilder)) {
+            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+            $this->jsBuilder = new HTML_QuickForm2_JavascriptBuilder();
+        }
+        return $this->jsBuilder;
+    }
+
+   /**
+    * Sets the javascript builder object
+    *
+    * You may want to reuse the same builder object if outputting several
+    * forms on one page.
+    *
+    * @param    HTML_QuickForm2_JavascriptBuilder
+    * @return   HTML_QuickForm2_Renderer
+    */
+    public function setJsBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
+    {
+        $this->jsBuilder = $builder;
+        return $this;
     }
 
    /**

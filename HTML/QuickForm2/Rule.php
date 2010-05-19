@@ -264,5 +264,58 @@ abstract class HTML_QuickForm2_Rule
             $this->owner->setError($this->getMessage());
         }
     }
+
+   /**
+    * Returns the client-side validation callback
+    *
+    * This essentially builds a Javascript version of validateOwner() method,
+    * with element ID and Rule configuration hardcoded.
+    *
+    * @return   string    Javascript function to validate the element's value
+    * @throws   HTML_QuickForm2_Exception   if Rule can only be run server-side
+    */
+    protected function getJavascriptCallback()
+    {
+        throw new HTML_QuickForm2_Exception(
+            get_class($this) . ' does not implement javascript validation'
+        );
+    }
+
+   /**
+    * Returns the client-side representation of the Rule
+    *
+    * The Javascript object returned contains the following fields:
+    *  - callback: {@see getJavascriptCallback()}
+    *  - elementId: element ID to set error for if validation fails
+    *  - errorMessage: error message to set if validation fails
+    *  - chained: chained rules, array of arrays like in $chainedRules property
+    *
+    * @return   string
+    * @throws   HTML_QuickForm2_Exception   if Rule or its chained Rules can only
+    *                                       be run server-side
+    */
+    public function getJavascript()
+    {
+        $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
+              "\telementId: '" . $this->owner->getId() . "',\n" .
+              "\terrorMessage: '" . strtr($this->getMessage(), array(
+                    "\r"    => '\r',
+                    "\n"    => '\n',
+                    "\t"    => '\t',
+                    "'"     => "\\'",
+                    '"'     => '\"',
+                    '\\'    => '\\\\'
+              )) . "',\n\tchained: [";
+        $chained = array();
+        foreach ($this->chainedRules as $item) {
+            $multipliers = array();
+            foreach ($item as $multiplier) {
+                $multipliers[] = $multiplier->getJavascript();
+            }
+            $chained[] = '[' . implode(",\n", $multipliers) . ']';
+        }
+        $js .= implode(",\n", $chained) . "]\n}";
+        return $js;
+    }
 }
 ?>

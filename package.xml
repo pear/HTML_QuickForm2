@@ -268,6 +268,10 @@ Backwards compatibility issues
      <file name="Factory.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="JavascriptBuilder.php" role="php">
+      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="Loader.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -505,6 +509,7 @@ Backwards compatibility issues
     </file>
    </dir> <!-- /docs/examples -->
    <file name="data/quickform.css" role="data" />
+   <file name="data/quickform.js" role="data" />
   </dir>
  </contents>
  <dependencies>
@@ -525,6 +530,7 @@ Backwards compatibility issues
  <phprelease>
   <filelist>
    <install as="quickform.css" name="data/quickform.css" />
+   <install as="quickform.js" name="data/quickform.js" />
    <install as="examples/controller/simple.php" name="docs/examples/controller/simple.php" />
    <install as="examples/controller/tabbed.php" name="docs/examples/controller/tabbed.php" />
    <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />

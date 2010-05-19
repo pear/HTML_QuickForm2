@@ -107,6 +107,30 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
                                   ? $config['operand']->getValue(): $config['operand']);
     }
 
+    protected function getJavascriptCallback()
+    {
+        $config   = $this->getConfig();
+        $operand1 = $this->owner->getJavascriptValue();
+        $operand2 = $config['operand'] instanceof HTML_QuickForm2_Node
+                    ? $config['operand']->getJavascriptValue()
+                    : "'" . strtr($config['operand'], array(
+                                "\r" => '\r',
+                                "\n" => '\n',
+                                "\t" => '\t',
+                                "'"  => "\\'",
+                                '"'  => '\"',
+                                '\\' => '\\\\'
+                            )) . "'";
+
+        if (!in_array($config['operator'], array('===', '!=='))) {
+            $check = "Number({$operand1}) {$config['operator']} Number({$operand2})";
+        } else {
+            $check = "String({$operand1}) {$config['operator']} String({$operand2})";
+        }
+
+        return "function () { return {$check}; }";
+    }
+
    /**
     * Merges local configuration with that provided for registerRule()
     *
