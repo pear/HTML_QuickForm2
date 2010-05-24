@@ -183,6 +183,34 @@ qf.form = {
             }
             return null;
         }
+    },
+    getContainerValue: function() {
+        var map = new qf.map();
+        if (arguments.length > 0) {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] instanceof qf.map) {
+                    map.merge(arguments[i]);
+                } else {
+                    var element = document.getElementById(arguments[i]);
+                    var value   = this.getValue(element);
+                    if (null != value) {
+                        var prevValue = map.get(element.name);
+                        if (typeof prevValue == 'undefined') {
+                            map.set(element.name, value);
+                        } else {
+                            if (!prevValue instanceof Array) {
+                                prevValue = [prevValue];
+                            }
+                            if (!value instanceof Array) {
+                                value = [value];
+                            }
+                            map.set(element.name, prevValue.concat(value));
+                        }
+                    }
+                }
+            }
+        }
+        return map;
     }
 };
 

@@ -418,6 +418,11 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
+        foreach ($this->rules as $rule) {
+            if ($rule[1] & HTML_QuickForm2_Rule::RUNAT_CLIENT) {
+                $renderer->getJavascriptBuilder()->addRule($rule[0]);
+            }
+        }
         $renderer->startContainer($this);
         foreach ($this as $element) {
             $element->render($renderer);
@@ -431,6 +436,24 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         require_once 'HTML/QuickForm2/Renderer.php';
 
         return $this->render(HTML_QuickForm2_Renderer::factory('default'))->__toString();
+    }
+
+   /**
+    * Returns Javascript code for getting the element's value
+    *
+    * @return   string
+    */
+    public function getJavascriptValue()
+    {
+        $args = array();
+        foreach ($this as $child) {
+            if ($child instanceof HTML_QuickForm2_Container) {
+                $args[] = $child->getJavascriptValue();
+            } else {
+                $args[] = "'" . $child->getId() . "'";
+            }
+        }
+        return 'qf.form.getContainerValue(' . implode(', ', $args) . ')';
     }
 }
 

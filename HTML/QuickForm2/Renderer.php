@@ -277,7 +277,7 @@ abstract class HTML_QuickForm2_Renderer
     *
     * @return   HTML_QuickForm2_JavascriptBuilder
     */
-    public function getJsBuilder()
+    public function getJavascriptBuilder()
     {
         if (empty($this->jsBuilder)) {
             HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
@@ -295,7 +295,7 @@ abstract class HTML_QuickForm2_Renderer
     * @param    HTML_QuickForm2_JavascriptBuilder
     * @return   HTML_QuickForm2_Renderer
     */
-    public function setJsBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
+    public function setJavascriptBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
     {
         $this->jsBuilder = $builder;
         return $this;

@@ -66,6 +66,12 @@ require_once 'HTML/QuickForm2/Exception.php';
 require_once 'HTML/QuickForm2/Factory.php';
 
 /**
+ * Base class for HTML_QuickForm2 rules
+ */
+require_once 'HTML/QuickForm2/Rule.php';
+
+
+/**
  * Abstract base class for all QuickForm2 Elements and Containers
  *
  * This class is mostly here to define the interface that should be implemented
@@ -471,8 +477,12 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Adds a validation rule
     *
     * @param    HTML_QuickForm2_Rule|string     Validation rule or rule type
-    * @param    string                          Message to display if validation fails
+    * @param    string|int                      If first parameter is rule type, then
+    *               message to display if validation fails, otherwise constant showing
+    *               whether to perfom validation client-side and/or server-side
     * @param    mixed                           Additional data for the rule
+    * @param    int                             Whether to perfom validation server-side
+    *               and/or client side. Combination of HTML_QuickForm2_Rule::RUNAT_* constants
     * @return   HTML_QuickForm2_Rule            The added rule
     * @throws   HTML_QuickForm2_InvalidArgumentException    if $rule is of a
     *               wrong type or rule name isn't registered with Factory
@@ -480,12 +490,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *               name cannot be found
     * @todo     Need some means to mark the Rules for running client-side
     */
-    public function addRule($rule, $message = '', $options = null)
+    public function addRule($rule, $messageOrRunAt = '', $options = null,
+                            $runAt = HTML_QuickForm2_Rule::RUNAT_SERVER)
     {
         if ($rule instanceof HTML_QuickForm2_Rule) {
             $rule->setOwner($this);
+            $runAt = '' == $messageOrRunAt? HTML_QuickForm2_Rule::RUNAT_SERVER: $messageOrRunAt;
         } elseif (is_string($rule)) {
-            $rule = HTML_QuickForm2_Factory::createRule($rule, $this, $message, $options);
+            $rule = HTML_QuickForm2_Factory::createRule($rule, $this, $messageOrRunAt, $options);
         } else {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'addRule() expects either a rule type or ' .
@@ -493,7 +505,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             );
         }
 
-        $this->rules[] = $rule;
+        $this->rules[] = array($rule, $runAt);
         return $rule;
     }
 
@@ -509,7 +521,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     public function removeRule(HTML_QuickForm2_Rule $rule)
     {
         foreach ($this->rules as $i => $r) {
-            if ($r === $rule) {
+            if ($r[0] === $rule) {
                 unset($this->rules[$i]);
                 break;
             }
@@ -550,7 +562,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     public function isRequired()
     {
         foreach ($this->rules as $rule) {
-            if ($rule instanceof HTML_QuickForm2_Rule_Required) {
+            if ($rule[0] instanceof HTML_QuickForm2_Rule_Required) {
                 return true;
             }
         }
@@ -569,7 +581,9 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             if (strlen($this->error)) {
                 break;
             }
-            $rule->validate();
+            if ($rule[1] & HTML_QuickForm2_Rule::RUNAT_SERVER) {
+                $rule[0]->validate();
+            }
         }
         return !strlen($this->error);
     }
@@ -595,5 +609,12 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     {
         return $this->error;
     }
+
+   /**
+    * Returns Javascript code for getting the element's value
+    *
+    * @return string
+    */
+    abstract public function getJavascriptValue();
 }
 ?>

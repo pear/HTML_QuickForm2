@@ -112,7 +112,9 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         foreach ($this->rules as $rule) {
-            $renderer->getJsBuilder()->addRule($rule);
+            if ($rule[1] & HTML_QuickForm2_Rule::RUNAT_CLIENT) {
+                $renderer->getJavascriptBuilder()->addRule($rule[0]);
+            }
         }
         $renderer->renderElement($this);
         return $renderer;
@@ -122,7 +124,6 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     * Returns Javascript code for getting the element's value
     *
     * @return   string
-    * @todo     This should be declared abstract in Node and also implemented in Container
     */
     public function getJavascriptValue()
     {
