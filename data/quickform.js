@@ -200,7 +200,7 @@ qf.events = {
         e = e || window.event;
 
         e.preventDefault  = e.preventDefault || function() { this.returnValue = false; };
-        e.stopPropagation = e.stopPropagaton || function() { this.cancelBubble = true; };
+        e.stopPropagation = e.stopPropagation || function() { this.cancelBubble = true; };
 
         if (!e.target) {
             e.target = e.srcElement;
