@@ -628,7 +628,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *
     * A filter is simply a PHP callback which will be applied to the element value 
     * when getValue() is called. A filter is by default applied recursively : 
-    * if the element is an HTML_QuickForm2_Container, each elements it contains will 
+    * if the value is an array, each elements it contains will 
     * also be filtered, unless the recursive flag is set to false.
     *
     * @param    callback    The PHP callback used for filter
