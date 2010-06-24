@@ -141,7 +141,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 }
             }
         }
-        return empty($values)? null: $values;
+        return empty($values)? null: $this->applyFilters($values);
     }
 
    /**

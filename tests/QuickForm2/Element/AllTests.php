@@ -65,6 +65,15 @@ require_once dirname(__FILE__) . '/ButtonTest.php';
 require_once dirname(__FILE__) . '/InputFileTest.php';
 require_once dirname(__FILE__) . '/StaticTest.php';
 
+function filterTrim($value, $trim = null)
+{
+    if (strlen($trim)) {
+        return trim($value, $trim);
+    } else {
+        return trim($value);
+    }
+}
+
 class QuickForm2_Element_AllTests
 {
     public static function main()

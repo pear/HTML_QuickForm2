@@ -60,7 +60,6 @@ require_once 'HTML/QuickForm2/DataSource.php';
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
- * @todo       Add filters handling
  */
 interface HTML_QuickForm2_DataSource_Submit extends HTML_QuickForm2_DataSource
 {

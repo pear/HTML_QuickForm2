@@ -154,5 +154,19 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
                       )->setAttribute('value', 1);
         $this->assertContains('checked', $aRadio->__toString());
     }
+
+    public function testFilters()
+    {
+        $checkable = new HTML_QuickForm2_Element_InputCheckable();
+        $checkable->setAttribute('value', 'my value');
+        $checkable->addFilter('str_rot13');
+
+        $this->assertNull($checkable->getValue());
+        $checkable->setAttribute('checked');
+        $this->assertEquals(str_rot13('my value'), $checkable->getValue());
+
+        $checkable->setValue('not my value!');
+        $this->assertNull($checkable->getValue());
+    }
 }
 ?>

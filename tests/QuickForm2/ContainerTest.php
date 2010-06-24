@@ -77,7 +77,10 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
 
     public function getValue()
     {
-        return $this->value;
+        if (is_null($this->value)) {
+            return $this->value;
+        }
+        return $this->applyFilters($this->value);
     }
 
     public function setValue($value)
@@ -471,6 +474,42 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el2->addRule($ruleTrue2);
         $this->assertFalse($cValidate->validate());
         $this->assertEquals('', $cValidate->getError());
+    }
+
+    public function nonRecursiveFilter($value, $str = '')
+    {
+        if (is_array($value)) {
+            foreach ($value as $v) {
+                $str .= $v;
+            }
+        }
+        return $str;
+    }
+
+    public function testFilter()
+    {
+        $c1 = new HTML_QuickForm2_ContainerImpl('hasValues');
+        $this->assertNull($c1->getValue());
+
+        $el1 = $c1->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
+        $el2 = $c1->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
+        $el3 = $c1->appendChild(new HTML_QuickForm2_ElementImpl2('baz'));
+        $this->assertNull($c1->getValue());
+        $el1->setValue('A');
+        $el1->addFilter('strtolower');
+        $el2->setValue('B');
+        $el3->setValue('C');
+        $this->assertEquals(array(
+            'foo' => 'a',
+            'bar' => 'B',
+            'baz' => 'C'
+        ), $c1->getValue());
+
+        $c1->addFilter(array($this, 'nonRecursiveFilter'), null, false);
+        $this->assertEquals('aBC', $c1->getValue());
+        $c1->removeFilters();
+
+
     }
 }
 ?>

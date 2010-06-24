@@ -124,5 +124,13 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/bar/', $obj->__toString());
         $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $obj->__toString());
     }
+
+    public function testFilters()
+    {
+        $obj = new HTML_QuickForm2_Element_InputImpl('test');
+        $obj->addFilter('strtolower');
+        $obj->setAttribute('value', 'BAR');
+        $this->assertEquals('bar', $obj->getValue());
+    }
 }
 ?>

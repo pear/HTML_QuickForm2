@@ -51,7 +51,6 @@
  * @author     Alexey Borzov <avb@php.net>
  * @author     Bertrand Mansion <golgote@mamasam.com>
  * @version    Release: @package_version@
- * @todo       Add filters handling
  */
 interface HTML_QuickForm2_DataSource
 {

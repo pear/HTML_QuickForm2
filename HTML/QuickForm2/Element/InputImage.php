@@ -102,7 +102,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     */
     public function getValue()
     {
-        return $this->getAttribute('disabled')? null: $this->coordinates;
+        return $this->getAttribute('disabled')? null: $this->applyFilters($this->coordinates);
     }
 
    /**

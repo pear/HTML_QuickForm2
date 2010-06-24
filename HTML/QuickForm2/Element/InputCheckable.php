@@ -140,7 +140,7 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     public function getValue()
     {
         if (!empty($this->attributes['checked']) && empty($this->attributes['disabled'])) {
-            return $this->getAttribute('value');
+            return $this->applyFilters($this->getAttribute('value'));
         } else {
             return null;
         }

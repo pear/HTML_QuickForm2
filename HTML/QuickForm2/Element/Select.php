@@ -438,9 +438,9 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         if (0 == count($values)) {
             return null;
         } elseif (!empty($this->attributes['multiple'])) {
-            return $values;
+            return $this->applyFilters($values);
         } elseif (1 == count($values)) {
-            return $values[0];
+            return $this->applyFilters($values[0]);
         } else {
             // The <select> is not multiple, but several options are to be
             // selected. At least IE and Mozilla select the last selected
@@ -450,7 +450,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
                     $lastValue = $child['attr']['value'];
                 }
             }
-            return $lastValue;
+            return $this->applyFilters($lastValue);
         }
     }
 

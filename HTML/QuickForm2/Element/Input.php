@@ -88,7 +88,7 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
 
     public function getValue()
     {
-        return $this->getAttribute('disabled')? null: $this->getAttribute('value');
+        return $this->getAttribute('disabled')? null: $this->applyFilters($this->getAttribute('value'));
     }
 
     public function __toString()

@@ -80,7 +80,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
 
     public function getValue()
     {
-        return empty($this->attributes['disabled'])? $this->value: null;
+        return empty($this->attributes['disabled'])? $this->applyFilters($this->value): null;
     }
 
     public function __toString()

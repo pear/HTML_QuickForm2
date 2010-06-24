@@ -101,7 +101,7 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
     */
     public function getValue()
     {
-        return $this->getAttribute('disabled')? null: $this->submitValue;
+        return $this->getAttribute('disabled')? null: $this->applyFilters($this->submitValue);
     }
 
     protected function updateValue()

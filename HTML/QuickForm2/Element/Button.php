@@ -133,7 +133,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
         if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type']) &&
             !$this->getAttribute('disabled'))
         {
-            return $this->submitValue;
+            return $this->applyFilters($this->submitValue);
         } else {
             return null;
         }
