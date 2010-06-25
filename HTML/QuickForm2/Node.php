@@ -668,15 +668,16 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     {
         foreach ($this->filters as $filter) {
             if (is_array($value) && !empty($filter['recursive'])) {
-                array_walk_recursive(&$value, array($this, '_applyFilter'), $filter);
+                array_walk_recursive(&$value, 
+                    array('HTML_QuickForm2_Node', 'applyFilter'), $filter);
             } else {
-                $this->_applyFilter($value, null, $filter);
+                self::applyFilter($value, null, $filter);
             }
         }
         return $value;
     }
 
-    protected function _applyFilter(&$value, $key = null, $filter)
+    protected static function applyFilter(&$value, $key = null, $filter)
     {
         $callback = $filter[0];
         $options  = $filter[1];
