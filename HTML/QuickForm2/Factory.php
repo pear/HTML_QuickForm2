@@ -80,6 +80,7 @@ class HTML_QuickForm2_Factory
         'radio'         => array('HTML_QuickForm2_Element_InputRadio', null),
         'reset'         => array('HTML_QuickForm2_Element_InputReset', null),
         'select'        => array('HTML_QuickForm2_Element_Select', null),
+        'static'        => array('HTML_QuickForm2_Element_Static'),
         'submit'        => array('HTML_QuickForm2_Element_InputSubmit', null),
         'text'          => array('HTML_QuickForm2_Element_InputText', null),
         'textarea'      => array('HTML_QuickForm2_Element_Textarea', null)

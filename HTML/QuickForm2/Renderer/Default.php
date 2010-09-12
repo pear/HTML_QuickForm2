@@ -103,7 +103,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public $templatesForClass = array(
         'html_quickform2_element_inputhidden' => '<div style="display: none;">{element}</div>',
-        'html_quickform2' => '<div class="quickform">{errors}<form{attributes}>{hidden}{content}</form><qf:reqnote><div class="reqnote">{reqnote}</div></qf:reqnote></div>',
+        'html_quickform2' => '<div class="quickform">{errors}<form{attributes}><div>{hidden}{content}</div></form><qf:reqnote><div class="reqnote">{reqnote}</div></qf:reqnote></div>',
         'html_quickform2_container_fieldset' => '<fieldset{attributes}><qf:label><legend id="{id}-legend">{label}</legend></qf:label>{content}</fieldset>',
         'special:error' => array(
             'prefix'    => '<div class="errors"><qf:message><p>{message}</p></qf:message><ul><li>',
@@ -419,9 +419,10 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
         $break         = HTML_Common2::getOption('linebreak');
         $script        = $this->getJavascriptBuilder()->__toString();
-        $this->html[0] = array((empty($script)? '': $script . $break) . str_replace(
-            '{content}', $break . implode($break, $this->html[0]), $formTpl
-        ));
+        $this->html[0] = array(
+            str_replace('{content}', $break . implode($break, $this->html[0]), $formTpl) .
+            (empty($script)? '': $break . $script)
+        );
     }
 
    /**

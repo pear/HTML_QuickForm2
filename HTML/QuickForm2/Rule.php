@@ -61,13 +61,13 @@ abstract class HTML_QuickForm2_Rule
     * Constant showing that validation should be run server-side
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const RUNAT_SERVER = 1;
+    const SERVER = 1;
 
    /**
     * Constant showing that validation should be run client-side
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const RUNAT_CLIENT = 2;
+    const CLIENT = 2;
 
    /**
     * An element whose value will be validated by this rule

@@ -105,6 +105,24 @@ class HTML_QuickForm2_ContainerImpl extends HTML_QuickForm2_Container
 }
 
 /**
+ * A Rule to check that Container Rules are called after those of contained elements
+ *
+ * @see https://pear.php.net/bugs/17576
+ */
+class RuleRequest17576 extends HTML_QuickForm2_Rule
+{
+    protected function validateOwner()
+    {
+        foreach ($this->owner as $child) {
+            if ($child->getError()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/**
  * Unit test for HTML_QuickForm2_Container class
  */
 class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
@@ -474,6 +492,35 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el2->addRule($ruleTrue2);
         $this->assertFalse($cValidate->validate());
         $this->assertEquals('', $cValidate->getError());
+    }
+
+   /**
+    * Container rules should be called after element rules
+    *
+    * @see https://pear.php.net/bugs/17576
+    */
+    public function testRequest17576()
+    {
+        $container = new HTML_QuickForm2_ContainerImpl('last');
+        $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
+
+        $ruleChange = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner'),
+            array($element, 'a message')
+        );
+        $ruleChange->expects($this->exactly(2))->method('validateOwner')
+                   ->will($this->onConsecutiveCalls(true, false));
+        $element->addRule($ruleChange);
+
+        $container->addRule(new RuleRequest17576(
+            $container, 'a contained element is invalid'
+        ));
+
+        // first call
+        $this->assertTrue($container->validate());
+        // second call
+        $this->assertFalse($container->validate());
+        $this->assertEquals('a contained element is invalid', $container->getError());
     }
 
     public function nonRecursiveFilter($value, $str = '')

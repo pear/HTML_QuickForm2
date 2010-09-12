@@ -374,10 +374,11 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     protected function validate()
     {
-        $valid = parent::validate();
+        $valid = true;
         foreach ($this as $child) {
             $valid = $child->validate() && $valid;
         }
+        $valid = parent::validate() && $valid;
         return $valid;
     }
 
@@ -419,7 +420,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         foreach ($this->rules as $rule) {
-            if ($rule[1] & HTML_QuickForm2_Rule::RUNAT_CLIENT) {
+            if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
                 $renderer->getJavascriptBuilder()->addRule($rule[0]);
             }
         }

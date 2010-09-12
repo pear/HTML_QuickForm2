@@ -488,7 +488,8 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *               whether to perfom validation client-side and/or server-side
     * @param    mixed                           Additional data for the rule
     * @param    int                             Whether to perfom validation server-side
-    *               and/or client side. Combination of HTML_QuickForm2_Rule::RUNAT_* constants
+    *               and/or client side. Combination of HTML_QuickForm2_Rule::SERVER and
+    *               HTML_QuickForm2_Rule::CLIENT constants
     * @return   HTML_QuickForm2_Rule            The added rule
     * @throws   HTML_QuickForm2_InvalidArgumentException    if $rule is of a
     *               wrong type or rule name isn't registered with Factory
@@ -497,11 +498,11 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @todo     Need some means to mark the Rules for running client-side
     */
     public function addRule($rule, $messageOrRunAt = '', $options = null,
-                            $runAt = HTML_QuickForm2_Rule::RUNAT_SERVER)
+                            $runAt = HTML_QuickForm2_Rule::SERVER)
     {
         if ($rule instanceof HTML_QuickForm2_Rule) {
             $rule->setOwner($this);
-            $runAt = '' == $messageOrRunAt? HTML_QuickForm2_Rule::RUNAT_SERVER: $messageOrRunAt;
+            $runAt = '' == $messageOrRunAt? HTML_QuickForm2_Rule::SERVER: $messageOrRunAt;
         } elseif (is_string($rule)) {
             $rule = HTML_QuickForm2_Factory::createRule($rule, $this, $messageOrRunAt, $options);
         } else {
@@ -587,7 +588,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             if (strlen($this->error)) {
                 break;
             }
-            if ($rule[1] & HTML_QuickForm2_Rule::RUNAT_SERVER) {
+            if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
                 $rule[0]->validate();
             }
         }
@@ -626,9 +627,9 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Adds a filter
     *
-    * A filter is simply a PHP callback which will be applied to the element value 
-    * when getValue() is called. A filter is by default applied recursively : 
-    * if the value is an array, each elements it contains will 
+    * A filter is simply a PHP callback which will be applied to the element value
+    * when getValue() is called. A filter is by default applied recursively :
+    * if the value is an array, each elements it contains will
     * also be filtered, unless the recursive flag is set to false.
     *
     * @param    callback    The PHP callback used for filter
@@ -668,7 +669,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     {
         foreach ($this->filters as $filter) {
             if (is_array($value) && !empty($filter['recursive'])) {
-                array_walk_recursive(&$value, 
+                array_walk_recursive($value,
                     array('HTML_QuickForm2_Node', 'applyFilter'), $filter);
             } else {
                 self::applyFilter($value, null, $filter);

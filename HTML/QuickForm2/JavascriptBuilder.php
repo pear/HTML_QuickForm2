@@ -111,8 +111,7 @@ class HTML_QuickForm2_JavascriptBuilder
         if ('' != $js) {
             $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
                   file_get_contents('@data_dir@/HTML_QuickForm2/quickform.js') .
-                  "qf.events.contentReady(function() {\n{$js}\n});\n" .
-                  "//]]>\n</script>";
+                  $js . "\n//]]>\n</script>";
         }
         return $js;
     }
