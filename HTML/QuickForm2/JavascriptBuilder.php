@@ -115,5 +115,76 @@ class HTML_QuickForm2_JavascriptBuilder
         }
         return $js;
     }
+
+   /**
+    * Encodes a value for use as Javascript literal
+    *
+    * NB: unlike json_encode() we do not enforce UTF-8 encoding here
+    *
+    * @param    mixed   $value
+    * @return   string  value as Javascript literal
+    */
+    public static function encode($value)
+    {
+        switch (gettype($value)) {
+        case 'NULL':
+            return 'null';
+
+        case 'boolean':
+            return $value? 'true': 'false';
+
+        case 'integer':
+        case 'double':
+        case 'float':
+            return $value;
+
+        case 'string':
+            return '"' . strtr($value, array(
+                                "\r" => '\r',
+                                "\n" => '\n',
+                                "\t" => '\t',
+                                "'"  => "\\'",
+                                '"'  => '\"',
+                                '\\' => '\\\\'
+                              )) . '"';
+
+        case 'array':
+            // associative array, encoding as JS object
+            if (count($value) && array_keys($value) !== range(0, count($value) - 1)) {
+                return '{' . implode(',', array_map(
+                    array('HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'),
+                    array_keys($value), array_values($value)
+                )) . '}';
+            }
+            return '[' . implode(',', array_map(
+                array('HTML_QuickForm2_JavascriptBuilder', 'encode'),
+                $value
+            )) . ']';
+
+        case 'object':
+            $vars = get_object_vars($value);
+            return '{' . implode(',', array_map(
+                array('HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'),
+                array_keys($vars), array_values($vars)
+            )) . '}';
+
+        default:
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                'Cannot encode ' . gettype($value) . ' as Javascript value'
+            );
+        }
+    }
+
+   /**
+    * Callback for array_map used to generate name-value pairs
+    *
+    * @param    mixed
+    * @param    mixed
+    * @return   string
+    */
+    protected static function encodeNameValue($name, $value)
+    {
+        return self::encode((string)$name) . ':' . self::encode($value);
+    }
 }
 ?>

@@ -91,6 +91,24 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     }
 
    /**
+    * Builds the callbacks for the owner's children using the template Rule
+    *
+    * @return   string    Javascript function calling all children's callbacks
+    */
+    protected function getJavascriptCallback()
+    {
+        $rule      = clone $this->getConfig();
+        $callbacks = array();
+        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+            $rule->setOwner($child);
+            $callbacks[] = $rule->getJavascriptCallback();
+        }
+        return "function () {\n\t\tvar callbacks = [\n\t\t" . implode(",\n\t\t", $callbacks) .
+               "\n\t\t];\n\t\tfor (var i = 0; i < callbacks.length; i++) { if (!callbacks[i]()) return false; }" .
+               "\n\t\treturn true;\n\t\t}";
+    }
+
+   /**
     * Sets the template Rule to use for actual validation
     *
     * We do not allow using Required rules here, they are able to validate

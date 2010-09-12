@@ -308,16 +308,12 @@ abstract class HTML_QuickForm2_Rule
     */
     public function getJavascript()
     {
+        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+
         $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
               "\telementId: '" . $this->owner->getId() . "',\n" .
-              "\terrorMessage: '" . strtr($this->getMessage(), array(
-                    "\r"    => '\r',
-                    "\n"    => '\n',
-                    "\t"    => '\t',
-                    "'"     => "\\'",
-                    '"'     => '\"',
-                    '\\'    => '\\\\'
-              )) . "',\n\tchained: [";
+              "\terrorMessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage()) . ",\n" .
+              "\tchained: [";
         $chained = array();
         foreach ($this->chainedRules as $item) {
             $multipliers = array();

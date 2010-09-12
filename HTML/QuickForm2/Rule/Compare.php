@@ -109,18 +109,13 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
     protected function getJavascriptCallback()
     {
+        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+
         $config   = $this->getConfig();
         $operand1 = $this->owner->getJavascriptValue();
         $operand2 = $config['operand'] instanceof HTML_QuickForm2_Node
                     ? $config['operand']->getJavascriptValue()
-                    : "'" . strtr($config['operand'], array(
-                                "\r" => '\r',
-                                "\n" => '\n',
-                                "\t" => '\t',
-                                "'"  => "\\'",
-                                '"'  => '\"',
-                                '\\' => '\\\\'
-                            )) . "'";
+                    : HTML_QuickForm2_JavascriptBuilder::encode($config['operand']);
 
         if (!in_array($config['operator'], array('===', '!=='))) {
             $check = "Number({$operand1}) {$config['operator']} Number({$operand2})";
