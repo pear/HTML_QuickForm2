@@ -419,14 +419,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
+        $renderer->startContainer($this);
+        foreach ($this as $element) {
+            $element->render($renderer);
+        }
         foreach ($this->rules as $rule) {
             if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
                 $renderer->getJavascriptBuilder()->addRule($rule[0]);
             }
-        }
-        $renderer->startContainer($this);
-        foreach ($this as $element) {
-            $element->render($renderer);
         }
         $renderer->finishContainer($this);
         return $renderer;

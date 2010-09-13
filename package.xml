@@ -152,6 +152,9 @@ Backwards compatibility issues
       <file name="Button.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Date.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Input.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
