@@ -66,21 +66,137 @@ class HTML_QuickForm2_JavascriptBuilder
     protected $rules = array();
 
    /**
+    * Elements' setup code
+    * @var array
+    */
+    protected $scripts = array();
+
+   /**
+    * Javascript libraries
+    * @var array
+    */
+    protected $libraries = array(
+        'base' => array('file' => 'quickform.js')
+    );
+
+   /**
+    * Default web path to JS library files
+    * @var string
+    */
+    protected $defaultWebPath;
+
+   /**
+    * Default filesystem path to JS library files
+    * @var string
+    */
+    protected $defaultAbsPath;
+
+   /**
     * Current form ID
     * @var string
     */
     protected $formId = null;
 
+
    /**
-    * Sets the form currently being processed
+    * Constructor, sets default web path to JS library files and default filesystem path
     *
-    * @param HTML_QuickForm2
+    * @param string default web path to JS library files (to use in <script src="...">)
+    * @param string default filesystem path to JS library files (to include these
+    *               files into the page), this is set to a package subdirectory of PEAR
+    *               data_dir if not given
     */
-    public function startForm(HTML_QuickForm2 $form)
+    public function __construct($defaultWebPath = 'js/', $defaultAbsPath = null)
     {
-        $this->formId = $form->getId();
-        $this->rules[$this->formId] = array();
+        $this->defaultWebPath = $defaultWebPath;
+
+        if (null === $defaultAbsPath) {
+            $defaultAbsPath = '@data_dir@' . DIRECTORY_SEPARATOR . 'HTML_QuickForm2' . DIRECTORY_SEPARATOR;
+            // package was probably not installed, use relative path
+            if (0 === strpos($defaultAbsPath, '@' . 'data_dir@')) {
+                $defaultAbsPath = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'
+                                           . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data')
+                                  . DIRECTORY_SEPARATOR;
+            }
+        }
+        $this->defaultAbsPath = $defaultAbsPath;
     }
+
+
+   /**
+    * Adds a Javascript library file to the list
+    *
+    * @param string name to reference the library by
+    * @param string file name, without path
+    * @param string path relative to web root to reference in <script src=""> tags,
+    *               $defaultWebPath will be used if not given
+    * @param string filesystem path where the file resides, used when inlining
+    *               libraries, $defaultAbsPath will be used if not given
+    */
+    public function addLibrary($name, $fileName, $webPath = null, $absPath = null)
+    {
+        $this->libraries[strtolower($name)] = array(
+            'file' => $fileName, 'webPath' => $webPath, 'absPath' => $absPath
+        );
+    }
+
+
+   /**
+    * Returns Javascript libraries
+    *
+    * @param    bool    whether to return a list of library file names or contents of files
+    * @param    bool    whether to enclose the results in <script> tags
+    * @return   string|array
+    */
+    public function getLibraries($inline = false, $addScriptTags = true)
+    {
+        $ret = $inline? '': array();
+        foreach ($this->libraries as $name => $library) {
+            if ($inline) {
+                $path = !empty($library['absPath'])? $library['absPath']: $this->defaultAbsPath;
+                if (DIRECTORY_SEPARATOR != substr($path, -1)) {
+                    $path .= DIRECTORY_SEPARATOR;
+                }
+                if (false === ($file = @file_get_contents($path . $library['file']))) {
+                    throw new HTML_QuickForm2_NotFoundException(
+                        "File '{$library['file']}' for JS library '{$name}' not found at '{$path}'"
+                    );
+                }
+                $ret .= ('' == $ret? '': "\n") . $file;
+
+            } else {
+                $path = !empty($library['webPath'])? $library['webPath']: $this->defaultWebPath;
+                if ('/' != substr($path, -1)) {
+                    $path .= '/';
+                }
+                $ret[$name] = $addScriptTags
+                              ? "<script type=\"text/javascript\" src=\"{$path}{$library['file']}\"></script>"
+                              : $path . $library['file'];
+            }
+        }
+        if ($inline && '' != $ret && $addScriptTags) {
+            $ret = "<script type=\"text/javascript\">\n//<![CDATA[\n"
+                   . $ret  . "\n//]]>\n</script>";
+        }
+        return $ret;
+    }
+
+
+   /**
+    * Sets ID of the form currently being processed
+    *
+    * All subsequent calls to addRule() and addElementJavascript() will store
+    * the scripts for that form
+    *
+    * @param string
+    */
+    public function setFormId($formId)
+    {
+        $this->formId = $formId;
+        $this->rules[$this->formId]   = array();
+        $this->scripts[$this->formId] = array();
+    }
+
 
    /**
     * Adds the Rule javascript to the list of current form Rules
@@ -92,34 +208,51 @@ class HTML_QuickForm2_JavascriptBuilder
         $this->rules[$this->formId][] = $rule->getJavascript();
     }
 
+
    /**
-    * Returns client-side validation code
+    * Adds element's setup code to form's Javascript
     *
-    * @todo This shouldn't probably be __toString() as we can't throw exceptions from that
-    * @todo Of course we shouldn't put library files into each page, need some means to include them via <script> tags
+    * @param string
     */
-    public function __toString()
+    public function addElementJavascript($script)
+    {
+        $this->scripts[$this->formId][] = $script;
+    }
+
+
+   /**
+    * Returns per-form javascript (client-side validation and elements' setup)
+    *
+    * @param    string  form ID, if empty returns code for all forms
+    * @param    boolean whether to enclose code in <script> tags
+    * @return   string
+    */
+    public function getFormJavascript($formId = null, $addScriptTags = true)
     {
         $js = '';
-        foreach ($this->rules as $formId => $rules) {
-            if (!empty($rules)) {
-                $js .= "new qf.validator(document.getElementById('{$formId}'), [\n" .
-                       implode(",\n", $rules) .
-                       "\n]);";
+        foreach ($this->rules as $id => $rules) {
+            if ((null === $formId || $id == $formId) && !empty($rules)) {
+                $js .= ('' == $js? '': "\n") . "new qf.validator(document.getElementById('{$id}'), [\n"
+                       . implode(",\n", $rules) . "\n]);";
             }
         }
-        if ('' != $js) {
-            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-                  file_get_contents('@data_dir@/HTML_QuickForm2/quickform.js') .
-                  $js . "\n//]]>\n</script>";
+        foreach ($this->scripts as $id => $scripts) {
+            if ((null === $formId || $id == $formId) && !empty($scripts)) {
+                $js .= ('' == $js? '': "\n") . implode("\n", $scripts);
+            }
+        }
+        if ('' != $js && $addScriptTags) {
+            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n"
+                  . $js . "\n//]]>\n</script>";
         }
         return $js;
     }
 
+
    /**
     * Encodes a value for use as Javascript literal
     *
-    * NB: unlike json_encode() we do not enforce UTF-8 encoding here
+    * NB: unlike json_encode() we do not enforce UTF-8 charset here
     *
     * @param    mixed   $value
     * @return   string  value as Javascript literal
@@ -174,6 +307,7 @@ class HTML_QuickForm2_JavascriptBuilder
             );
         }
     }
+
 
    /**
     * Callback for array_map used to generate name-value pairs

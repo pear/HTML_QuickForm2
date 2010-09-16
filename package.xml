@@ -470,6 +470,9 @@ Backwards compatibility issues
      <file name="FactoryTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="JavascriptBuilderTest.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="NodeTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -551,6 +554,7 @@ Backwards compatibility issues
    <install as="QuickForm2/ControllerTest.php" name="tests/QuickForm2/ControllerTest.php" />
    <install as="QuickForm2/ElementTest.php" name="tests/QuickForm2/ElementTest.php" />
    <install as="QuickForm2/FactoryTest.php" name="tests/QuickForm2/FactoryTest.php" />
+   <install as="QuickForm2/JavascriptBuilderTest.php" name="tests/QuickForm2/JavascriptBuilderTest.php" />
    <install as="QuickForm2/NodeTest.php" name="tests/QuickForm2/NodeTest.php" />
    <install as="QuickForm2/RendererTest.php" name="tests/QuickForm2/RendererTest.php" />
    <install as="QuickForm2/RuleTest.php" name="tests/QuickForm2/RuleTest.php" />

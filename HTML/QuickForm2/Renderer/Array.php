@@ -64,6 +64,8 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *   'required_note'    => note about the required elements (string),
  *   // if 'group_hiddens' option is true:
  *   'hidden'           => array with html of hidden elements (array),
+ *   // if form has some javascript for setup or validation:
+ *   'javascript'       => form javascript (string)
  *   // if 'group_errors' option is true:
  *   'errors' => array(
  *     '1st element id' => 'Error for the 1st element',
@@ -339,6 +341,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
         if ($this->hasRequired) {
             $this->array['required_note'] = $this->options['required_note'];
         }
+        $this->array['javascript'] = $this->getJavascriptBuilder()->getFormJavascript($form->getId());
     }
 
     public function startContainer(HTML_QuickForm2_Node $container)

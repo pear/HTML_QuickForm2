@@ -213,7 +213,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $renderer->startForm($this);
-        $renderer->getJavascriptBuilder()->startForm($this);
+        $renderer->getJavascriptBuilder()->setFormId($this->getId());
         foreach ($this as $element) {
             $element->render($renderer);
         }
