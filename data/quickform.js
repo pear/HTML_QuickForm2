@@ -155,6 +155,9 @@ qf.form = {
         return values;
     },
     getValue: function(el) {
+        if (typeof el == 'string') {
+            el = document.getElementById(el);
+        }
         if (typeof el.type == 'undefined') {
             return null;
         }
@@ -253,6 +256,9 @@ qf.events = {
     }
 };
 
+/**
+ * Form validator, attaches onsubmit handler that runs the given rules
+ */
 qf.validator = function(form, rules)
 {
     this.prefix  = 'Invalid information entered.';
@@ -268,7 +274,7 @@ qf.validator = function(form, rules)
 
         var errorMap = new qf.map();
         for (var i = 0; i < rules.length; i++) {
-            if (errorMap.hasKey(rules[i].elementId)) {
+            if (errorMap.hasKey(rules[i].owner)) {
                 continue;
             }
             form.validator.validate(rules[i], errorMap);
@@ -305,27 +311,82 @@ qf.validator.prototype.oninvalid = function(errorMap)
 // port of H_QF2_Rule::validate();
 qf.validator.prototype.validate = function(rule, errorMap)
 {
-    var globalValid = false;
-    var localValid  = rule.callback();
+    var globalValid, localValid = rule.callback();
 
-    for (var i = 0; i < rule.chained.length; i++) {
-        for (var j = 0; j < rule.chained[i].length; j++) {
-            localValid = localValid && this.validate(rule.chained[i][j], errorMap);
-            if (!localValid) {
+    if (typeof rule.chained == 'undefined') {
+        globalValid = localValid;
+
+    } else {
+        globalValid = false;
+        for (var i = 0; i < rule.chained.length; i++) {
+            for (var j = 0; j < rule.chained[i].length; j++) {
+                localValid = localValid && this.validate(rule.chained[i][j], errorMap);
+                if (!localValid) {
+                    break;
+                }
+            }
+            globalValid = globalValid || localValid;
+            if (globalValid) {
                 break;
             }
+            localValid = true;
         }
-        globalValid = globalValid || localValid;
-        if (globalValid) {
-            break;
-        }
-        localValid = true;
     }
 
-    if (!globalValid && rule.errorMessage && !errorMap.hasKey(rule.elementId)) {
-        errorMap.set(rule.elementId, rule.errorMessage);
-        this.onerror(rule.elementId, rule.errorMessage);
+    if (!globalValid && rule.message && !errorMap.hasKey(rule.owner)) {
+        errorMap.set(rule.owner, rule.message);
+        this.onerror(rule.owner, rule.message);
     }
 
     return globalValid;
+};
+
+/**
+ * Client-side implementations of Rules that are a bit too complex to inline
+ */
+qf.rules = {
+    each: function(callbacks) {
+        for (var i = 0; i < callbacks.length; i++) {
+            if (!callbacks[i]()) {
+                return false;
+            }
+        }
+        return true;
+    },
+    empty: function(value) {
+        if (!value instanceof Array) {
+            return '' == value;
+        } else {
+            for (var i = 0; i < value.length; i++) {
+                if ('' != value[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    },
+    nonempty: function(value, minValid) {
+        var i, valid = 0;
+
+        if (value instanceof Array) {
+            for (i = 0; i < value.length; i++) {
+                if ('' != value[i]) {
+                    valid++;
+                }
+            }
+            return valid >= minValid;
+
+        } else if (value instanceof qf.map) {
+            var values = value.getValues();
+            for (i = 0; i < values.length; i++) {
+                if (this.nonempty(values[i], 1)) {
+                    valid++;
+                }
+            }
+            return valid >= minValid;
+
+        } else {
+            return '' != value;
+        }
+    }
 };

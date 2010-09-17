@@ -127,7 +127,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     */
     public function getJavascriptValue()
     {
-        return "qf.form.getValue(document.getElementById('" . $this->getId() . "'))";
+        return "qf.form.getValue('" . $this->getId() . "')";
     }
 }
 ?>

@@ -73,16 +73,18 @@ class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
     protected function validateOwner()
     {
         $value = $this->owner->getValue();
-        if (!$this->owner instanceof HTML_QuickForm2_Element_InputFile) {
-            return 0 == strlen($value);
-        } else {
+        if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
+        } elseif (is_array($value)) {
+            return 0 == count(array_filter($value, 'strlen'));
+        } else {
+            return 0 == strlen($value);
         }
     }
 
     protected function getJavascriptCallback()
     {
-        return "function() { return " . $this->owner->getJavascriptValue() . " == ''; }";
+        return "function() { return qf.rules.empty(" . $this->owner->getJavascriptValue() . "); }";
     }
 }
 

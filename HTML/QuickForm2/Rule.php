@@ -311,19 +311,20 @@ abstract class HTML_QuickForm2_Rule
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
-              "\telementId: '" . $this->owner->getId() . "',\n" .
-              "\terrorMessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage()) . ",\n" .
-              "\tchained: [";
-        $chained = array();
-        foreach ($this->chainedRules as $item) {
-            $multipliers = array();
-            foreach ($item as $multiplier) {
-                $multipliers[] = $multiplier->getJavascript();
+              "\towner: '" . $this->owner->getId() . "',\n" .
+              "\tmessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());
+        if (count($this->chainedRules) > 1 || count($this->chainedRules[0]) > 0) {
+            $chained = array();
+            foreach ($this->chainedRules as $item) {
+                $multipliers = array();
+                foreach ($item as $multiplier) {
+                    $multipliers[] = $multiplier->getJavascript();
+                }
+                $chained[] = '[' . implode(",\n", $multipliers) . ']';
             }
-            $chained[] = '[' . implode(",\n", $multipliers) . ']';
+            $js .= ",\n\tchained: [" . implode(",\n", $chained) . "]";
         }
-        $js .= implode(",\n", $chained) . "]\n}";
-        return $js;
+        return $js . "\n}";
     }
 }
 ?>

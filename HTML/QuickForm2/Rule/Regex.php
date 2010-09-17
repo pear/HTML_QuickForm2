@@ -126,8 +126,8 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
             $regex = preg_replace('/(?<!\\\\)(?>\\\\\\\\)*\\\\x{([a-fA-F0-9]+)}/', '\\u$1', $regex);
         }
 
-        return "function() { var regex = {$regex}; var value = " . $this->owner->getJavascriptValue() .
-               "; return value == '' || regex.test(value); }";
+        return "function() { var value = " . $this->owner->getJavascriptValue() .
+               "; return value == '' || {$regex}.test(value); }";
     }
 }
 ?>

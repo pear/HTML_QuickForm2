@@ -124,17 +124,8 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
 
     protected function getJavascriptCallback()
     {
-        $js = "function() {var value = " . $this->owner->getJavascriptValue() . ";";
-        if (!$this->owner instanceof HTML_QuickForm2_Container) {
-            $js .= " if (!value instanceof Array) { return value != ''; } else { " .
-                   "var valid = 0; for (var i = 0; i < value.length; i++) { " .
-                   "if ('' != value[i]) { valid++; } } return valid >= " . $this->getConfig() . "; } }";
-        } else {
-            $js .= " var values = value.getValues(); var valid = 0; " .
-                   "for (var i = 0; i < values.length; i++) { " .
-                   "if ('' != values[i]) { valid++; } } return valid >= " . $this->getConfig() . "; }";
-        }
-        return $js;
+        return "function() { return qf.rules.nonempty(" . $this->owner->getJavascriptValue()
+               . ", " . $this->getConfig() . "); }";
     }
 }
 

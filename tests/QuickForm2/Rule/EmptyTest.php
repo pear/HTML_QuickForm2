@@ -125,5 +125,22 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($rule->validate());
         $this->assertEquals('an error', $mockFailed->getError());
     }
+
+    public function testValidateArray()
+    {
+        $mockElEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                      'getValue', 'setValue', '__toString'));
+        $mockElEmpty->expects($this->once())->method('getValue')
+                    ->will($this->returnValue(array()));
+        $rule = new HTML_QuickForm2_Rule_Empty($mockElEmpty, 'an error');
+        $this->assertTrue($rule->validate());
+
+        $mockElNonEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                         'getValue', 'setValue', '__toString'));
+        $mockElNonEmpty->expects($this->once())->method('getValue')
+                       ->will($this->returnValue(array('foo', 'bar')));
+        $rule = new HTML_QuickForm2_Rule_Empty($mockElNonEmpty, 'an error');
+        $this->assertFalse($rule->validate());
+    }
 }
 ?>

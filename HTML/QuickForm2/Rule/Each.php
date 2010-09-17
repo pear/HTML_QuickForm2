@@ -103,9 +103,7 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
             $rule->setOwner($child);
             $callbacks[] = $rule->getJavascriptCallback();
         }
-        return "function () {\n\t\tvar callbacks = [\n\t\t" . implode(",\n\t\t", $callbacks) .
-               "\n\t\t];\n\t\tfor (var i = 0; i < callbacks.length; i++) { if (!callbacks[i]()) return false; }" .
-               "\n\t\treturn true;\n\t\t}";
+        return "function () { return qf.rules.each([\n\t\t" . implode(",\n\t\t", $callbacks) . "\n\t]); }";
     }
 
    /**

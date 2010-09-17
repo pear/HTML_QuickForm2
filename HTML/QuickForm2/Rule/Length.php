@@ -113,7 +113,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             $check = implode(' && ', $checks);
         }
         return "function() { var length = " . $this->owner->getJavascriptValue() .
-               ".length; if (0 == length) { return true; } else { return {$check}; } }";
+               ".length; return (0 == length) || ({$check}); }";
     }
 
    /**
