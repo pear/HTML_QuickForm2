@@ -74,6 +74,7 @@ class HTML_QuickForm2_Factory
         'group'         => array('HTML_QuickForm2_Container_Group', null),
         'file'          => array('HTML_QuickForm2_Element_InputFile', null),
         'hidden'        => array('HTML_QuickForm2_Element_InputHidden', null),
+        'hierselect'    => array('HTML_QuickForm2_Element_Hierselect', null),
         'image'         => array('HTML_QuickForm2_Element_InputImage', null),
         'inputbutton'   => array('HTML_QuickForm2_Element_InputButton', null),
         'password'      => array('HTML_QuickForm2_Element_InputPassword', null),

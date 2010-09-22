@@ -4,9 +4,74 @@
  * $Id$
  */
 
+/**
+ * Base namespace for QuickForm, we no longer define our stuff in global namespace
+ */
 var qf = qf || {};
 
-// stuff borrowed from closure library
+/**
+ * Enhanced version of typeof operator
+ *
+ * Returns "null" for null values and "array" for arrays. Handles edge cases
+ * like objects passed across browser windows, etc. Borrowed from closure library.
+ *
+ * @param   {*} value   The value to get the type of
+ * @return  {string}    Type name 
+ */
+qf.typeOf = function(value) {
+    var s = typeof value;
+    if ('function' == s && 'undefined' == typeof value.call) {
+        return 'object';
+    } else if ('object' == s) {
+        if (!value) {
+            return 'null';
+
+        } else {
+            if (value instanceof Array
+                || (!(value instanceof Object)
+                    && '[object Array]' == Object.prototype.toString.call(value)
+                    && 'number' == typeof value.length
+                    && 'undefined' != typeof value.splice
+                    && 'undefined' != typeof value.propertyIsEnumerable
+                    && !value.propertyIsEnumerable('splice'))
+            ) {
+                return 'array';
+            }
+            if (!(value instanceof Object)
+                && ('[object Function]' == Object.prototype.toString.call(value)
+                    || 'undefined' != typeof value.call
+                    && 'undefined' != typeof value.propertyIsEnumerable
+                    && !value.propertyIsEnumerable('call'))
+            ) {
+                return 'function';
+            }
+        }
+    }
+    return s;
+};
+
+/**
+ * Builds an object structure for the provided namespace path
+ *
+ * Ensures that names that already exist are not overwritten. For
+ * example:
+ * "a.b.c" -> a = {};a.b={};a.b.c={};
+ * Borrowed from closure library
+ * 
+ * @param {string} ns name of the object that this file defines.
+ */
+qf.addNamespace = function(ns) {
+    var parts = ns.split('.');
+    var cur   = window;
+
+    for (var part; parts.length && (part = parts.shift());) {
+        if (cur[part]) {
+            cur = cur[part];
+        } else {
+            cur = cur[part] = {};
+        }
+    }
+};
 
 qf.map = function(inMap)
 {
@@ -158,7 +223,7 @@ qf.form = {
         if (typeof el == 'string') {
             el = document.getElementById(el);
         }
-        if (typeof el.type == 'undefined') {
+        if (!el || !('type' in el)) {
             return null;
         }
         switch(el.type.toLowerCase()) {
@@ -201,10 +266,10 @@ qf.form = {
                         if (typeof prevValue == 'undefined') {
                             map.set(element.name, value);
                         } else {
-                            if (!prevValue instanceof Array) {
+                            if ('array' != qf.typeOf(prevValue)) {
                                 prevValue = [prevValue];
                             }
-                            if (!value instanceof Array) {
+                            if ('array' != qf.typeOf(value)) {
                                 value = [value];
                             }
                             map.set(element.name, prevValue.concat(value));
@@ -214,6 +279,50 @@ qf.form = {
             }
         }
         return map;
+    },
+    _setSelectSingleValue: function(el, value) {
+        el.selectedIndex = -1;
+        for (var option, i = 0; option = el.options[i]; i++) {
+            if (option.value == value) {
+                option.selected = true;
+                return;
+            }
+        }
+    },
+    _setSelectMultipleValue: function(el, value) {
+        if ('array' != qf.typeOf(value)) {
+            value = [value];
+        }
+        for (var option, i = 0; option = el.options[i]; i++) {
+            option.selected = false;
+            for (var j = 0, l = value.length; j < l; j++) {
+                if (option.value == value[j]) {
+                    option.selected = true;
+                }
+            }
+        }
+    },
+    setValue: function(el, value) {
+        if (typeof el == 'string') {
+            el = document.getElementById(el);
+        }
+        if (!el || !('type' in el)) {
+            return;
+        }
+        switch (el.type.toLowerCase()) {
+            case 'checkbox':
+            case 'radio':
+                el.checked = !!value;
+                break;
+            case 'select-single':
+                qf.forms._setSelectSingleValue(el, value);
+                break;
+            case 'select-multiple':
+                qf.forms._setSelectMultipleValue(el, value);
+                break;
+            default:
+                el.value = value;
+        }
     }
 };
 
@@ -354,7 +463,7 @@ qf.rules = {
         return true;
     },
     empty: function(value) {
-        if (!value instanceof Array) {
+        if ('array' != qf.typeOf(value)) {
             return '' == value;
         } else {
             for (var i = 0; i < value.length; i++) {
@@ -368,7 +477,7 @@ qf.rules = {
     nonempty: function(value, minValid) {
         var i, valid = 0;
 
-        if (value instanceof Array) {
+        if ('array' == qf.typeOf(value)) {
             for (i = 0; i < value.length; i++) {
                 if ('' != value[i]) {
                     valid++;
