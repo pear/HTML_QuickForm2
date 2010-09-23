@@ -6,6 +6,9 @@
  * shows how it can be output via a renderer plugin. The example element is
  * a (much) simpler version of HTML_QuickForm_advmultiselect.
  *
+ * It also demonstrates how to plug in element's javascript and how to use
+ * client-side validation with custom element.
+ *
  * $Id$
  */
 
@@ -50,7 +53,7 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
                         $this->getId(),
                         "<table class=\"dualselect\">\n" .
                         "    <tr>\n" .
-                        "       <td style=\"vertical-align: top;\">{js}{select_from}</td>\n" .
+                        "       <td style=\"vertical-align: top;\">{select_from}</td>\n" .
                         "       <td style=\"vertical-align: middle;\">{button_from_to}<br />{button_to_from}</td>\n" .
                         "       <td style=\"vertical-align: top;\">{select_to}</td>\n" .
                         "    </tr>\n" .
@@ -66,6 +69,15 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
         if ($this->frozen) {
             $renderer->renderElement($this);
         } else {
+            $jsBuilder = $renderer->getJavascriptBuilder();
+            foreach ($this->rules as $rule) {
+                if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
+                    $jsBuilder->addRule($rule[0]);
+                }
+            }
+            $jsBuilder->addLibrary('dualselect', 'dualselect.js', 'js/',
+                                   dirname(__FILE__) . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR);
+            $jsBuilder->addElementJavascript("qf.elements.dualselect.init('{$this->getId()}-to');");
             $renderer->renderDualSelect($this);
         }
         return $renderer;
@@ -102,21 +114,34 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
         $keepSorted = empty($this->data['keepSorted'])? 'false': 'true';
         $buttonFromTo = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_fromto",
-            array('type' => 'button', 'onclick' => "qf.moveOptions('{$id}-from', '{$id}-to', {$keepSorted})") +
+            array('type' => 'button', 'onclick' => "qf.elements.dualselect.moveOptions('{$id}-from', '{$id}-to', {$keepSorted})") +
                 (empty($this->data['from_to']['attributes'])? array(): self::prepareAttributes($this->data['from_to']['attributes'])),
-            array('content' => (empty($this->data['from_to']['content'])? ' >> ': $this->data['from_to']['content']))
+            array('content' => (empty($this->data['from_to']['content'])? ' &gt;&gt; ': $this->data['from_to']['content']))
         );
         $buttonToFrom = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_tofrom",
-            array('type' => 'button', 'onclick' => "qf.moveOptions('{$id}-to', '{$id}-from', {$keepSorted})") +
+            array('type' => 'button', 'onclick' => "qf.elements.dualselect.moveOptions('{$id}-to', '{$id}-from', {$keepSorted})") +
                 (empty($this->data['to_from']['attributes'])? array(): self::prepareAttributes($this->data['to_from']['attributes'])),
-            array('content' => (empty($this->data['to_from']['content'])? ' << ': $this->data['to_from']['content']))
+            array('content' => (empty($this->data['to_from']['content'])? ' &lt;&lt; ': $this->data['to_from']['content']))
         );
         return array(
             'select_from'    => $selectFrom->__toString(),   'select_to'      => $selectTo->__toString(),
-            'button_from_to' => $buttonFromTo->__toString(), 'button_to_from' => $buttonToFrom->__toString(),
-            'js'             => "<script type=\"text/javascript\">qf.dualselects['{$id}-to'] = true;</script>"
+            'button_from_to' => $buttonFromTo->__toString(), 'button_to_from' => $buttonToFrom->__toString()
         );
+    }
+
+   /**
+    * Returns Javascript code for getting the element's value
+    *
+    * All options in "to" select are considered dualselect's values,
+    * we need to use an implementation different from that for a standard
+    * select-multiple
+    *
+    * @return   string
+    */
+    public function getJavascriptValue()
+    {
+        return "qf.elements.dualselect.getValue('{$this->getId()}-to')";
     }
 }
 
@@ -138,7 +163,6 @@ class HTML_QuickForm2_Renderer_Default_DualSelectPlugin
 <div class="row">
     <label for="{id}-from" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>
     <div class="element<qf:error> error</qf:error>">
-        {js}
         <qf:error><span class="error">{error}</span><br /></qf:error>
         <table class="dualselect">
             <tr>
@@ -205,102 +229,6 @@ if ('@data_dir@' != '@' . 'data_dir@') {
 readfile($filename);
 ?>
     </style>
-    <script type="text/javascript">
-// <![CDATA[
-/**
- * Javascript for dualselect element handling
- *
- * Contains methods for moving options between selects and also for selecting
- * all options of 'to' select on form submit. This is necessary since
- * unselected options obviously won't send any values.
- */
-
-var qf = {
-    dualselects: {}
-};
-
-qf.moveOptions = function(srcId, destId, keepSorted) {
-    var src  = document.getElementById(srcId);
-    var dest = document.getElementById(destId);
-
-    for (var i = src.options.length - 1; i >= 0; i--) {
-        if (src.options[i].selected) {
-            var option = src.options[i];
-            src.remove(i);
-            option.selected = false;
-            qf.addOption(dest, option, keepSorted);
-        }
-    }
-};
-
-qf.addOption = function(box, option, keepSorted) {
-    /*@cc_on
-    return qf.addOptionIE(box, option, keepSorted);
-    @*/
-    return qf.addOptionDOM(box, option, keepSorted);
-};
-
-qf.addOptionIE = function(box, option, keepSorted) {
-    if (box.options.length <= 0 || (keepSorted && option.text < box.options[0].text))  {
-        box.add(option, 0);
-
-    } else if (!keepSorted || (option.text > box.options[box.options.length - 1].text)) {
-        box.add(option);
-
-    } else {
-        for (var i = box.options.length; i >= 0; i--) {
-            if (option.text >= box.options[i-1].text) {
-                box.add(option, i);
-                break;
-            }
-        }
-    }
-    return true;
-};
-
-qf.addOptionDOM = function(box, option, keepSorted) {
-    if (!keepSorted || 0 == box.options.length ||
-        option.text > box.options[box.options.length-1].text
-    ) {
-        box.add(option, null);
-
-    } else if (option.text < box.options[0].text) {
-        box.add(option, box.options[0]);
-
-    } else {
-        for (var i = box.options.length - 1; i >= 0; i--) {
-            if (option.text >= box.options[i].text) {
-                box.add(option, box.options[i + 1]);
-                break;
-            }
-        }
-    }
-    return true;
-};
-
-qf.selectAll = function(event) {
-    for (var i in qf.dualselects) {
-        var select = document.getElementById(i);
-        for (var j = 0; j < select.options.length; j++) {
-            select.options[j].selected = true;
-        }
-    }
-};
-
-qf.addOnSubmitHandler = function() {
-    var forms = document.getElementsByTagName('form');
-    for (var i = 0; i < forms.length; i++) {
-        if (forms[i].addEventListener) {
-            forms[i].addEventListener('submit', qf.selectAll, false);
-        } else if (forms[i].attachEvent) {
-            forms[i].attachEvent('onsubmit', qf.selectAll);
-        }
-    }
-};
-
-window.onload = qf.addOnSubmitHandler;
-// ]]>
-    </script>
     <title>HTML_QuickForm2 dualselect example: custom element and renderer plugin</title>
 </head>
 <body>
@@ -343,14 +271,17 @@ $ds = $fs->addElement(
     array(
         'options'    => $options,
         'keepSorted' => true,
-        'from_to'    => array('content' => ' >> ', 'attributes' => array('style' => 'font-size: 90%')),
-        'to_from'    => array('content' => ' << ', 'attributes' => array('style' => 'font-size: 90%')),
+        'from_to'    => array('content' => ' &gt;&gt; ', 'attributes' => array('style' => 'font-size: 90%')),
+        'to_from'    => array('content' => ' &lt&lt; ', 'attributes' => array('style' => 'font-size: 90%')),
     )
 )->setLabel(array(
     'Popular travel destinations:',
     'Available',
     'Chosen'
 ));
+
+$ds->addRule('required', 'Select at least two destinations', 2,
+             HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
 
 $fs->addElement('checkbox', 'doFreeze', null, array('content' => 'Freeze dualselect on form submit'));
 
@@ -368,7 +299,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     }
 }
 
-echo $form;
+$renderer = HTML_QuickForm2_Renderer::factory('default');
+
+$form->render($renderer);
+echo $renderer->getJavascriptBuilder()->getLibraries(true, true);
+echo $renderer;
 ?>
 </body>
 </html>

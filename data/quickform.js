@@ -487,6 +487,13 @@ qf.rules = {
 
         } else if (value instanceof qf.map) {
             var values = value.getValues();
+            // corner case: group of checkboxes or something similar
+            if (1 == value.length()) {
+                var k = value.getKeys()[0], v = values[0];
+                if ('[]' == k.slice(-2) && 'array' == qf.typeOf(v)) {
+                    return this.nonempty(v, minValid);
+                }
+            }
             for (i = 0; i < values.length; i++) {
                 if (this.nonempty(values[i], 1)) {
                     valid++;

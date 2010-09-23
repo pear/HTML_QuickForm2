@@ -509,6 +509,9 @@ Backwards compatibility issues
      </file>
      <file name="empty.gif" role="doc" />
     </dir> <!-- /docs/examples/controller -->
+    <dir name="js">
+     <file name="dualselect.js" role="doc" />
+    </dir> <!-- /docs/examples/js -->
     <file role="doc" name="basic-elements.php">
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
@@ -549,6 +552,7 @@ Backwards compatibility issues
    <install as="examples/controller/tabbed.php" name="docs/examples/controller/tabbed.php" />
    <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />
    <install as="examples/controller/empty.gif" name="docs/examples/controller/empty.gif" />
+   <install as="examples/js/dualselect.js" name="docs/examples/js/dualselect.js" />
    <install as="examples/basic-elements.php" name="docs/examples/basic-elements.php" />
    <install as="examples/builtin-rules.php" name="docs/examples/builtin-rules.php" />
    <install as="examples/default-renderer.php" name="docs/examples/default-renderer.php" />

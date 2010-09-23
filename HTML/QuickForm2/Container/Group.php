@@ -311,6 +311,11 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         foreach ($this as $element) {
             $element->render($renderer);
         }
+        foreach ($this->rules as $rule) {
+            if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
+                $renderer->getJavascriptBuilder()->addRule($rule[0]);
+            }
+        }
         $renderer->finishGroup($this);
         return $renderer;
     }
