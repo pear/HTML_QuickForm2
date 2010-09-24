@@ -36,13 +36,11 @@ qf.elements.hierselect.init = function(selects, optionsCallback)
                 return;
             }
             var defaults = qf.elements.hierselect.defaults[firstSelect.id],
-                next     = firstSelect.hierselect.next,
-                values   = [];
+                next     = firstSelect.hierselect.next;
             for (var i = 0; i < next.length; i++) {
-                values.push(defaults[i]);
                 qf.elements.hierselect.replaceOptions(
                     document.getElementById(next[i]),
-                    qf.elements.hierselect.getOptions(firstSelect.id, values)
+                    qf.elements.hierselect.getOptions(firstSelect.id, defaults.slice(0, i + 1))
                 );
                 qf.form.setValue(next[i], defaults[i + 1]);
             }

@@ -85,12 +85,12 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
    /**
     * Class constructor
-    * 
+    *
     * The following keys may appear in $data array:
     * - 'language': date language
     * - 'format': Format of the date, based on PHP's date() function.
     *   The following characters are currently recognised in format string:
-    *   <pre>  
+    *   <pre>
     *       D => Short names of days
     *       l => Long names of days
     *       d => Day numbers
@@ -128,7 +128,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         $separator =  '';
 
         for ($i = 0, $length = strlen($this->data['format']); $i < $length; $i++) {
-            $sign = $this->data['format']{$i};
+            $sign = $this->data['format'][$i];
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;
@@ -223,7 +223,9 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                             $options = array($this->data['emptyOptionValue'] => $this->data['emptyOptionText']) + $options;
                         }
                     }
-                    $this->addSelect($sign, $this->getAttributes())->loadOptions($options);
+                    $this->addSelect($sign, array('id' => self::generateId($this->getName() . "[{$sign}]"))
+                                            + $this->getAttributes())
+                         ->loadOptions($options);
                 }
             }
         }

@@ -448,7 +448,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     {
         $args = array();
         foreach ($this as $child) {
-            if ($child instanceof HTML_QuickForm2_Container) {
+            if ($child instanceof HTML_QuickForm2_Element_Static) {
+                continue;
+            } elseif ($child instanceof HTML_QuickForm2_Container) {
                 $args[] = $child->getJavascriptValue();
             } else {
                 $args[] = "'" . $child->getId() . "'";
