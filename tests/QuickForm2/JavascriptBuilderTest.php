@@ -110,11 +110,11 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertContains('<script', $libraries['base']);
 
         $libraries = $builder->getLibraries(true, false);
-        $this->assertContains('qf.validator', $libraries);
+        $this->assertContains('qf.Validator', $libraries);
         $this->assertNotContains('<script', $libraries);
 
         $libraries = $builder->getLibraries(true, true);
-        $this->assertContains('qf.validator', $libraries);
+        $this->assertContains('qf.Validator', $libraries);
         $this->assertContains('<script', $libraries);
     }
 

@@ -232,7 +232,7 @@ class HTML_QuickForm2_JavascriptBuilder
         $js = '';
         foreach ($this->rules as $id => $rules) {
             if ((null === $formId || $id == $formId) && !empty($rules)) {
-                $js .= ('' == $js? '': "\n") . "new qf.validator(document.getElementById('{$id}'), [\n"
+                $js .= ('' == $js? '': "\n") . "new qf.Validator(document.getElementById('{$id}'), [\n"
                        . implode(",\n", $rules) . "\n]);";
             }
         }
