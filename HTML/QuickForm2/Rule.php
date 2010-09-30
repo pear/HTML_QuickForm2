@@ -178,9 +178,19 @@ abstract class HTML_QuickForm2_Rule
     * Sets the element that will be validated by this rule
     *
     * @param    HTML_QuickForm2_Node    Element to validate
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to set
+    *       an instance of HTML_QuickForm2_Element_Static as rule owner
     */
     public function setOwner(HTML_QuickForm2_Node $owner)
     {
+        // Very little sense to validate static elements as they're, well, static.
+        // If someone comes up with a validation rule for these, he can override
+        // setOwner() there...
+        if ($owner instanceof HTML_QuickForm2_Element_Static) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                get_class($this) . ' cannot validate Static elements'
+            );
+        }
         if (null !== $this->owner) {
             $this->owner->removeRule($this);
         }

@@ -104,5 +104,17 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
         $obj->toggleFrozen(true);
         $this->assertEquals('<b>content</b>', (string)$obj);
     }
+
+    public function testCannotValidate()
+    {
+        $static = new HTML_QuickForm2_Element_Static('novalidate');
+        try {
+            $rule = $this->getMock(
+                'HTML_QuickForm2_Rule', array('validateOwner'),
+                array($static, 'a message')
+            );
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
+    }
 }
 ?>

@@ -176,4 +176,41 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
         $bar->setValue('');
         $this->assertTrue($each->validate());
     }
+
+    public function testIgnoresStaticServerSide()
+    {
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockContainer->addElement('static', 'noValidateServer');
+
+        $rule = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner'),
+            array($mockContainer, 'a message')
+        );
+        $rule->expects($this->any())->method('validateOwner')
+             ->will($this->returnValue(false));
+
+        $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
+        $this->assertTrue($each->validate());
+    }
+
+    public function testIgnoresStaticClientSide()
+    {
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockContainer->addElement('static', 'noValidateClient');
+
+        $rule = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($mockContainer, 'a message')
+        );
+        $rule->expects($this->any())->method('getJavascriptCallback')
+             ->will($this->returnValue('staticCallback'));
+
+        $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
+        $this->assertNotContains('staticCallback', $each->getJavascript());
+    }
 }
+?>

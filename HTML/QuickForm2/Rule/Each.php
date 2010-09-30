@@ -82,10 +82,12 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     {
         $rule = clone $this->getConfig();
         foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
-            $rule->setOwner($child);
-            if (!$rule->validateOwner()) {
-                return false;
-            }
+            try {
+                $rule->setOwner($child);
+                if (!$rule->validateOwner()) {
+                    return false;
+                }
+            } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
         }
         return true;
     }
@@ -100,8 +102,10 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
         $rule      = clone $this->getConfig();
         $callbacks = array();
         foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
-            $rule->setOwner($child);
-            $callbacks[] = $rule->getJavascriptCallback();
+            try {
+                $rule->setOwner($child);
+                $callbacks[] = $rule->getJavascriptCallback();
+            } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
         }
         return "function () { return qf.rules.each([\n\t\t" . implode(",\n\t\t", $callbacks) . "\n\t]); }";
     }
