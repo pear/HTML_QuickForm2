@@ -217,6 +217,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         foreach ($this as $element) {
             $element->render($renderer);
         }
+        $this->renderClientRules($renderer->getJavascriptBuilder());
         $renderer->finishForm($this);
         return $renderer;
     }

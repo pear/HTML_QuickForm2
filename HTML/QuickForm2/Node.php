@@ -575,6 +575,22 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         return false;
     }
 
+   /**
+    * Adds element's client-side validation rules to a builder object
+    *
+    * @param HTML_QuickForm2_JavascriptBuilder
+    */
+    protected function renderClientRules(HTML_QuickForm2_JavascriptBuilder $builder)
+    {
+        if ($this->toggleFrozen()) {
+            return;
+        }
+        foreach ($this->rules as $rule) {
+            if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
+                $builder->addRule($rule[0]);
+            }
+        }
+    }
 
    /**
     * Performs the server-side validation

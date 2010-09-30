@@ -111,12 +111,8 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        foreach ($this->rules as $rule) {
-            if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
-                $renderer->getJavascriptBuilder()->addRule($rule[0]);
-            }
-        }
         $renderer->renderElement($this);
+        $this->renderClientRules($renderer->getJavascriptBuilder());
         return $renderer;
     }
 

@@ -58,6 +58,11 @@ require_once 'HTML/QuickForm2/Element.php';
 require_once 'HTML/QuickForm2/Rule.php';
 
 /**
+ * Base class for HTML_QuickForm2 renderers
+ */
+require_once 'HTML/QuickForm2/Renderer.php';
+
+/**
  * PHPUnit Test Case
  */
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -497,7 +502,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
    /**
     * Container rules should be called after element rules
     *
-    * @see https://pear.php.net/bugs/17576
+    * @link http://pear.php.net/bugs/17576
     */
     public function testRequest17576()
     {
@@ -521,6 +526,54 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         // second call
         $this->assertFalse($container->validate());
         $this->assertEquals('a contained element is invalid', $container->getError());
+    }
+
+   /**
+    * Checks that JS for container rules comes after js for rules on contained elements
+    */
+    public function testRequest17576Client()
+    {
+        $container = new HTML_QuickForm2_ContainerImpl('aContainer');
+        $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('anElement'));
+
+        $ruleContainer = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($container)
+        );
+        $ruleContainer->expects($this->once())->method('getJavascriptCallback')
+                      ->will($this->returnValue('containerCallback'));
+        $ruleElement = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($element)
+        );
+        $ruleElement->expects($this->once())->method('getJavascriptCallback')
+                    ->will($this->returnValue('elementCallback'));
+
+        $container->addRule($ruleContainer, HTML_QuickForm2_Rule::CLIENT);
+        $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
+        $this->assertRegexp(
+            '/elementCallback.*containerCallback/s',
+            $container->render(HTML_QuickForm2_Renderer::factory('default'))
+                      ->getJavascriptBuilder()->getFormJavascript()
+        );
+    }
+
+    public function testFrozenContainersHaveNoClientValidation()
+    {
+        $container = new HTML_QuickForm2_ContainerImpl('aContainer');
+        $ruleContainer = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($container)
+        );
+        $ruleContainer->expects($this->never())->method('getJavascriptCallback');
+
+        $container->addRule($ruleContainer, HTML_QuickForm2_Rule::CLIENT);
+        $container->toggleFrozen(true);
+        $this->assertEquals(
+            '',
+            $container->render(HTML_QuickForm2_Renderer::factory('default'))
+                      ->getJavascriptBuilder()->getFormJavascript()
+        );
     }
 
     public function nonRecursiveFilter($value, $str = '')

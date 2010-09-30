@@ -316,7 +316,7 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $el1 = $g1->addElement('text', 'foo');
         $el1->addFilter('trim', array('o'));
         $g2 = $form->addElement('group', 'g2[i2]');
-        
+
         $g2->addFilter('ucfirst');
         $g2->addElement('text', 'bar');
         $g2->addElement('text', 'baz[quux]');
@@ -325,6 +325,54 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $anon->addFilter('substr', array(1, 1));
 
         $this->assertEquals($formValueF, $form->getValue());
+    }
+
+   /**
+    * Checks that JS for group rules comes after js for rules on contained elements
+    */
+    public function testRequest17576Client()
+    {
+        $group   = new HTML_QuickForm2_Container_Group('aGroup');
+        $element = $group->addElement('text', 'anElement');
+
+        $ruleGroup = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($group)
+        );
+        $ruleGroup->expects($this->once())->method('getJavascriptCallback')
+                  ->will($this->returnValue('groupCallback'));
+        $ruleElement = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($element)
+        );
+        $ruleElement->expects($this->once())->method('getJavascriptCallback')
+                    ->will($this->returnValue('elementCallback'));
+
+        $group->addRule($ruleGroup, HTML_QuickForm2_Rule::CLIENT);
+        $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
+        $this->assertRegexp(
+            '/elementCallback.*groupCallback/s',
+            $group->render(HTML_QuickForm2_Renderer::factory('default'))
+                  ->getJavascriptBuilder()->getFormJavascript()
+        );
+    }
+
+    public function testFrozenGroupsHaveNoClientValidation()
+    {
+        $group = new HTML_QuickForm2_Container_Group('aGroup');
+        $ruleGroup = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($group)
+        );
+        $ruleGroup->expects($this->never())->method('getJavascriptCallback');
+
+        $group->addRule($ruleGroup, HTML_QuickForm2_Rule::CLIENT);
+        $group->toggleFrozen(true);
+        $this->assertEquals(
+            '',
+            $group->render(HTML_QuickForm2_Renderer::factory('default'))
+                  ->getJavascriptBuilder()->getFormJavascript()
+        );
     }
 }
 ?>
