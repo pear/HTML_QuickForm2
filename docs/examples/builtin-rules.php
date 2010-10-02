@@ -37,7 +37,29 @@ if ('@data_dir@' != '@' . 'data_dir@') {
 readfile($filename);
 ?>
     </style>
-    <title>HTML_QuickForm2 basic elements example</title>
+    <script type="text/javascript">
+// <![CDATA[
+var validatorBackup;
+
+//in real application the password check will a bit be different, of course
+function check_password(password)
+{
+    return (password == 'qwerty');
+}
+
+function enableValidation(box)
+{
+    if (box.checked) {
+        box.form.validator = validatorBackup;
+    } else {
+        validatorBackup = box.form.validator;
+        box.form.validator = null;
+    }
+}
+
+// ]]>
+    </script>
+    <title>HTML_QuickForm2 built-in rules example</title>
   </head>
   <body>
 <?php
@@ -53,6 +75,7 @@ function check_password($password)
 //
 
 require_once 'HTML/QuickForm2.php';
+require_once 'HTML/QuickForm2/Renderer.php';
 
 $form = new HTML_QuickForm2('basicRules');
 // for file upload to work
@@ -60,7 +83,8 @@ $form->setAttribute('enctype', 'multipart/form-data');
 
 // data source with default values:
 $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-    'testUsername'      => 'luser'
+    'testUsername'      => 'luser',
+    'friends'           => array('luser123', 'gangsta1998')
 )));
 
 // override whatever value was submitted
@@ -84,21 +108,46 @@ $newPassword = $fsPasswords->addElement('password', 'newPassword', array('style'
 $repPassword = $fsPasswords->addElement('password', 'newPasswordRepeat', array('style' => 'width: 200px;'))
                            ->setLabel('Repeat new password:');
 
-$username->addRule('required', 'Username is required');
-$username->addRule('regex', 'Username should contain only letters', '/^[a-zA-Z]+$/');
+$username->addRule('required', 'Username is required', null,
+                   HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+$username->addRule('regex', 'Username should contain only letters', '/^[a-zA-Z]+$/',
+                   HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
 
 // old password should be either left blank or be equal to 'qwerty'
-$oldPassword->addRule('empty')
+$oldPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT)
             ->or_($oldPassword->createRule('callback', 'Wrong password', 'check_password'));
 
 // this behaves exactly as it reads: either "password" and "password repeat"
 // are empty or they should be equal, password should be no less than 6 chars
 // and old password should be given
-$newPassword->addRule('empty')
+$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT)
             ->and_($repPassword->createRule('empty'))
             ->or_($repPassword->createRule('eq', 'The passwords do not match', $newPassword))
             ->and_($newPassword->createRule('minlength', 'The password is too short', 6))
             ->and_($oldPassword->createRule('nonempty', 'Supply old password if you want to change it'));
+
+//
+// Grouped elements validation
+//
+
+$fsGrouped = $form->addElement('fieldset')->setLabel('Validating grouped elements');
+$boxGroup = $fsGrouped->addElement('group', 'boxes')->setLabel('Check at least two:');
+$boxGroup->addElement('checkbox', null, array('value' => 'red'))->setContent('<span style="color: #f00;">Red</span>');
+$boxGroup->addElement('checkbox', null, array('value' => 'green'))->setContent('<span style="color: #0f0;">Green</span>');
+$boxGroup->addElement('checkbox', null, array('value' => 'blue'))->setContent('<span style="color: #00f;">Blue</span>');
+
+$boxGroup->addRule('required', 'Check at least two boxes', 2,
+                   HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+
+$friends = $fsGrouped->addElement('group', 'friends')->setLabel('Friends usernames (letters only):')
+                     ->setSeparator('<br />');
+$friends->addElement('text', '0', array('style' => 'width: 200px;', 'id' => 'friend-1'));
+$friends->addElement('text', '1', array('style' => 'width: 200px;', 'id' => 'friend-2'));
+$friends->addElement('text', '2', array('style' => 'width: 200px;', 'id' => 'friend-3'));
+
+$friends->addRule('each', 'Friends\' usernames should contain only letters',
+                  $friends->createRule('regex', '', '/^[a-zA-Z]+$/'),
+                  HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
 
 //
 // File uploads validation
@@ -108,15 +157,24 @@ $fsUpload = $form->addElement('fieldset')->setLabel('Upload picture (try one &gt
 $upload = $fsUpload->addElement('file', 'testUpload', array('style' => 'width: 200px'))
                    ->setLabel('Picture (gif, jpg, png, &lt;=20kB):');
 
-// no longer using special 'uploadedfile' rule for uploads
-$upload->addRule('required', 'Please upload picture');
-// no longer using 'filename' rule for uploads
-$upload->addRule('regex', 'Allowed extensions: .gif, .jp(e)g, .png', '/\\.(gif|jpe?g|png)$/i');
+// no longer using special 'uploadedfile' rule for uploads, allow client-side validation
+$upload->addRule('required', 'Please upload picture', null,
+                 HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+// no longer using 'filename' rule for uploads, allow client-side validation
+$upload->addRule('regex', 'Allowed extensions: .gif, .jp(e)g, .png', '/\\.(gif|jpe?g|png)$/i',
+                 HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+
+// these don't work client-side, for obvious reasons
 $upload->addRule('mimetype', 'Your browser doesn\'t think that\'s an image',
                  array('image/gif', 'image/png', 'image/jpeg', 'image/pjpeg'));
 $upload->addRule('maxfilesize', 'File is too big, allowed size 20kB', 20480);
 
-$form->addElement('submit', 'testSubmit', array('value' => 'Send'));
+$submitGrp = $form->addElement('group')->setSeparator('&nbsp;&nbsp;&nbsp;');
+
+$submitGrp->addElement('submit', 'testSubmit', array('value' => 'Send'));
+$submitGrp->addElement('checkbox', 'clientSide', array('onclick' => 'enableValidation(this);'))
+          ->setContent('perform client-side validation')
+          ->setAttribute('checked'); // override submit value
 
 if ($form->validate()) {
     echo "<pre>\n";
@@ -125,7 +183,11 @@ if ($form->validate()) {
     $form->toggleFrozen(true);
 }
 
-echo $form;
+$renderer = HTML_QuickForm2_Renderer::factory('default');
+$form->render($renderer);
+// Output javascript libraries, needed for client-side validation
+echo $renderer->getJavascriptBuilder()->getLibraries(true, true);
+echo $renderer;
 ?>
   </body>
 </html>
