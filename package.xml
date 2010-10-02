@@ -511,7 +511,11 @@ Backwards compatibility issues
     </dir> <!-- /docs/examples/controller -->
     <dir name="js">
      <file name="dualselect.js" role="doc" />
+     <file name="hierselect-server.php" role="doc" />
     </dir> <!-- /docs/examples/js -->
+    <dir name="support">
+     <file name="hierselect-loader.php" role="doc" />
+    </dir> <!-- /docs/examples/support -->
     <file role="doc" name="basic-elements.php">
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
@@ -520,6 +524,9 @@ Backwards compatibility issues
     </file>
     <file role="doc" name="default-renderer.php" />
     <file role="doc" name="dualselect.php">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
+    <file name="hierselect-ajax.php" role="doc">
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
    </dir> <!-- /docs/examples -->
@@ -553,10 +560,13 @@ Backwards compatibility issues
    <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />
    <install as="examples/controller/empty.gif" name="docs/examples/controller/empty.gif" />
    <install as="examples/js/dualselect.js" name="docs/examples/js/dualselect.js" />
+   <install as="examples/js/hierselect-server.php" name="docs/examples/js/hierselect-server.php" />
+   <install as="examples/support/hierselect-loader.php" name="docs/examples/support/hierselect-loader.php" />
    <install as="examples/basic-elements.php" name="docs/examples/basic-elements.php" />
    <install as="examples/builtin-rules.php" name="docs/examples/builtin-rules.php" />
    <install as="examples/default-renderer.php" name="docs/examples/default-renderer.php" />
    <install as="examples/dualselect.php" name="docs/examples/dualselect.php" />
+   <install as="examples/hierselect-ajax.php" name="docs/examples/hierselect-ajax.php" />
 
    <install as="AllTests.php" name="tests/AllTests.php" />
    <install as="QuickForm2Test.php" name="tests/QuickForm2Test.php" />

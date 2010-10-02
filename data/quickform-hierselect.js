@@ -144,31 +144,85 @@ qf.elements.hierselect.replaceOptions = function(ctl, options)
 /**
  * Finds options for next select element in hierselect.
  * 
- * TODO: get new options for next select via callback
- *
  * @param   {String} selectId   ID attribute of first select element
  * @param   {Array}  keys       Values of previous select elements
- * @returns {Array}
- * @todo    Use
+ * @param   {Function} callback Function to use for loading additional options
+ * @returns {Object}
  */
-qf.elements.hierselect.getOptions = function(selectId, keys)
+qf.elements.hierselect.getOptions = function(selectId, keys, callback)
 {
     if (!(selectId in qf.elements.hierselect.options)
         || typeof qf.elements.hierselect.options[selectId][keys.length - 1] == 'undefined'
     ) {
         return qf.elements.hierselect.missingOptions;
     }
-    var ary = qf.elements.hierselect.options[selectId][keys.length - 1];
-    while (keys.length) {
-        var key = keys.shift();
-        if (!(key in ary)) {
-            return qf.elements.hierselect.missingOptions;
-        } else if (0 == keys.length) {
+    var ary    = qf.elements.hierselect.options[selectId][keys.length - 1];
+    // we need to pass keys to a callback, so don't mangle 'em.
+    var search = keys.concat();
+    while (search.length) {
+        var key = search.shift();
+        if (0 == search.length) {
+            if (!(key in ary) ) {
+                ary[key] = callback? callback(keys, selectId): qf.elements.hierselect.missingOptions;
+            }
             return ary[key];
+        } else if (!(key in ary)) {
+            ary[key] = {};
+        }
+        ary = ary[key];
+    }
+};
+
+/**
+ * Stores options for a select element in options object.
+ * 
+ * Useful mostly for asynchronous requests.
+ * 
+ * @param   {String} selectId   ID attribute of first select element
+ * @param   {Array}  keys       Values of previous select elements
+ * @param   {Object} options    New options
+ * @private
+ */
+qf.elements.hierselect._storeOptions = function(selectId, keys, options)
+{
+    if (!(selectId in qf.elements.hierselect.options)) {
+        qf.elements.hierselect.options[selectId] = [];
+    }
+    if (typeof qf.elements.hierselect.options[selectId][keys.length - 1] == 'undefined') {
+        qf.elements.hierselect.options[selectId][keys.length - 1] = {};
+    }
+    var ary    = qf.elements.hierselect.options[selectId][keys.length - 1];
+    var search = keys.concat();
+    while (search.length) {
+        var key = search.shift();
+        if (0 == search.length) {
+            ary[key] = options;
+        } else if (!(key in ary)) {
+            ary = ary[key] = {};
         } else {
             ary = ary[key];
         }
     }
+};
+
+/**
+ * Returns a callback that should be called on successful completion of asynchronous request for additional options.
+ *
+ * @param   {String} selectId   ID attribute of first select element in hierselect
+ * @param   {Array}  keys       Values of previous select elements
+ * @returns {Function}
+ */
+qf.elements.hierselect.getAsyncCallback = function(selectId, keys)
+{
+    return function(result) {
+        qf.elements.hierselect._storeOptions(selectId, keys, result);
+        var hs   = document.getElementById(selectId).hierselect;
+        var next = document.getElementById(hs.next[keys.length - 1]);
+        qf.elements.hierselect.replaceOptions(next, result);
+        if (keys.length < hs.next.length) {
+            qf.elements.hierselect.cascade.call(next);
+        }
+    };
 };
 
 /**
@@ -184,7 +238,8 @@ qf.elements.hierselect.cascade = function()
     // replace options on next select
     qf.elements.hierselect.replaceOptions(
         document.getElementById(this.hierselect.next[0]),
-        qf.elements.hierselect.getOptions(this.hierselect.previous[0], values)
+        qf.elements.hierselect.getOptions(this.hierselect.previous[0], values,
+                                          this.hierselect.callback)
     );
     // if next select is not last, call cascade on that, too
     if (1 < this.hierselect.next.length) {

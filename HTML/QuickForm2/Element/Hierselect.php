@@ -357,7 +357,8 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         foreach ($this as $element) {
             $ids[] = $element->getId();
         }
-        return 'qf.elements.hierselect.init(' . HTML_QuickForm2_JavascriptBuilder::encode($ids) . ');';
+        return 'qf.elements.hierselect.init(' . HTML_QuickForm2_JavascriptBuilder::encode($ids)
+               . (empty($this->jsCallback)? '': ", {$this->jsCallback}") . ');';
     }
 
     public function __toString()
