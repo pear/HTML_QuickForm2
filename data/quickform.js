@@ -183,9 +183,9 @@ qf.Map.prototype.isEmpty = function()
  */
 qf.Map.prototype.clear = function()
 {
-    this.map_         = {};
-    this.keys_.length = 0;
-    this.count_       = 0;
+    this._map         = {};
+    this._keys.length = 0;
+    this._count       = 0;
 };
 
 /**
@@ -571,7 +571,13 @@ qf.Validator = function(form, rules)
     * Validation rules
     * @type {Object[]}
     */
-    this.rules = rules || [];
+    this.rules  = rules || [];
+
+   /**
+    * Form errors, keyed by element's ID attribute
+    * @type {qf.Map}
+    */
+    this.errors = new qf.Map();
 
     form.validator = this;
     qf.events.addListener(form, 'submit', qf.Validator.submitHandler);
@@ -623,11 +629,10 @@ qf.Validator.prototype.onValid = function() {};
 
 /**
  * Called on failed validation
- * @param {qf.Map} errorMap Hash with the elements' errors
  */
-qf.Validator.prototype.onInvalid = function(errorMap)
+qf.Validator.prototype.onInvalid = function()
 {
-    alert(this.msgPrefix + '\n - ' + errorMap.getValues().join('\n - ') + '\n' + this.msgPostfix);
+    alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);
 };
 
 /**
@@ -637,23 +642,22 @@ qf.Validator.prototype.onInvalid = function(errorMap)
  */
 qf.Validator.prototype.run = function(form)
 {
-    var errorMap = new qf.Map();
-
     this.onStart(form);
 
+    this.errors.clear();
     for (var i = 0, rule; rule = this.rules[i]; i++) {
-        if (errorMap.hasKey(rule.owner)) {
+        if (this.errors.hasKey(rule.owner)) {
             continue;
         }
-        this.validate(rule, errorMap);
+        this.validate(rule);
     }
 
-    if (errorMap.isEmpty()) {
+    if (this.errors.isEmpty()) {
         this.onValid();
         return true;
 
     } else {
-        this.onInvalid(errorMap);
+        this.onInvalid();
         return false;
     }
 };
@@ -662,10 +666,9 @@ qf.Validator.prototype.run = function(form)
  * Performs validation, sets the element's error if validation fails.
  *
  * @param   {Object} rule Validation rule, maybe with chained rules
- * @param   {qf.Map} errorMap Hash with elements' errors
  * @returns {boolean}
  */
-qf.Validator.prototype.validate = function(rule, errorMap)
+qf.Validator.prototype.validate = function(rule)
 {
     var globalValid, localValid = rule.callback();
 
@@ -676,7 +679,7 @@ qf.Validator.prototype.validate = function(rule, errorMap)
         globalValid = false;
         for (var i = 0; i < rule.chained.length; i++) {
             for (var j = 0; j < rule.chained[i].length; j++) {
-                localValid = localValid && this.validate(rule.chained[i][j], errorMap);
+                localValid = localValid && this.validate(rule.chained[i][j]);
                 if (!localValid) {
                     break;
                 }
@@ -689,8 +692,8 @@ qf.Validator.prototype.validate = function(rule, errorMap)
         }
     }
 
-    if (!globalValid && rule.message && !errorMap.hasKey(rule.owner)) {
-        errorMap.set(rule.owner, rule.message);
+    if (!globalValid && rule.message && !this.errors.hasKey(rule.owner)) {
+        this.errors.set(rule.owner, rule.message);
         this.onError(rule.owner, rule.message);
     }
 
