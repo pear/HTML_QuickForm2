@@ -44,7 +44,16 @@ $options = array(
     'd' => 'Letter D', 'e' => 'Letter E', 'f' => 'Letter F'
 );
 
+$main = array("Pop", "Rock", "Classical");
+
+$secondary = array(
+    array(0 => "Belle & Sebastian", 1 => "Elliot Smith", 2 => "Beck"),
+    array(3 => "Noir Desir", 4 => "Violent Femmes"),
+    array(5 => "Wagner", 6 => "Mozart", 7 => "Beethoven")
+);
+
 require_once 'HTML/QuickForm2.php';
+require_once 'HTML/QuickForm2/Renderer.php';
 
 $form = new HTML_QuickForm2('elements');
 
@@ -56,7 +65,9 @@ $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
     'selSingleTest'   => 'f',
     'selMultipleTest' => array('b', 'c'),
     'boxTest'         => '1',
-    'radioTest'       => '2'
+    'radioTest'       => '2',
+    'testDate'        => time(),
+    'testHierselect'  => array(2, 5)
 )));
 
 // text input elements
@@ -105,6 +116,17 @@ $fsCheck->addElement(
     'radio', 'radioTest', array('value' => 2), array('content' => 'select radio #2', 'label' => '(continued)')
 );
 
+$fsCustom = $form->addElement('fieldset')->setLabel('Custom elements');
+$fsCustom->addElement(
+    'date', 'testDate', null,
+    array('format' => 'd-F-Y', 'minYear' => date('Y'), 'maxYear' => 2001)
+)->setLabel('Today is:');
+
+$fsCustom->addElement('hierselect', 'testHierselect', array('style' => 'width: 20em;'))
+         ->setLabel('Hierarchical select:')
+         ->loadOptions(array($main, $secondary))
+         ->setSeparator('<br />');
+
 // buttons
 $fsButton = $form->addElement('fieldset')->setLabel('Buttons');
 $testReset = $fsButton->addElement(
@@ -143,7 +165,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     $form->toggleFrozen(true);
 }
 
-echo $form;
+$renderer = HTML_QuickForm2_Renderer::factory('default');
+$form->render($renderer);
+// Output javascript libraries, needed by hierselect
+echo $renderer->getJavascriptBuilder()->getLibraries(true, true);
+echo $renderer;
 ?>
   </body>
 </html>

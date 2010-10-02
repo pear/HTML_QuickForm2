@@ -30,7 +30,7 @@ qf.elements.hierselect.init = function(selects, optionsCallback)
             next:     selects.concat(),
             callback: optionsCallback
         };
-        qf.events.addListener(el, 'change', qf.elements.hierselect.cascade);
+        qf.events.addListener(el, 'change', qf.elements.hierselect._onChangeHandler);
     }
     qf.events.addListener(firstSelect.form, 'reset',
                           qf.elements.hierselect._getResetHandler(firstSelect));
@@ -227,12 +227,22 @@ qf.elements.hierselect.getAsyncCallback = function(selectId, keys)
 
 /**
  * The 'onchange' handler for selects, replaces the options of subsequent select(s).
+ * @param {Event} event
+ * @private
+ */
+qf.elements.hierselect._onChangeHandler = function(event)
+{
+    event = qf.events.fixEvent(event);
+    if (event.target.hierselect && 0 != event.target.hierselect.next.length) {
+        qf.elements.hierselect.cascade.call(event.target);
+    }
+};
+
+/**
+ * Replaces the options of subsequent selects based on values of this and previous ones.
  */
 qf.elements.hierselect.cascade = function()
 {
-    if (!this.hierselect || 0 == this.hierselect.next.length) {
-        return true;
-    }
     // find values, starting from first upto current
     var values = qf.elements.hierselect.getValue(this.hierselect.previous);
     // replace options on next select

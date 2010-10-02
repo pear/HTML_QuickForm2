@@ -670,7 +670,7 @@ qf.Validator.prototype.run = function(form)
  */
 qf.Validator.prototype.validate = function(rule)
 {
-    var globalValid, localValid = rule.callback();
+    var globalValid, localValid = rule.callback.call(this);
 
     if (typeof rule.chained == 'undefined') {
         globalValid = localValid;

@@ -180,6 +180,8 @@ class OptionLoader
     */
     public function getOptionsAjax(array $values = array())
     {
+        // This helps to notice the difference between sync and async calls
+        sleep(1);
         $options = $this->getOptions($values);
         return array('values' => array_keys($options),
                      'texts'  => array_values($options));
