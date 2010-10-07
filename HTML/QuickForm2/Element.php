@@ -119,11 +119,12 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
    /**
     * Returns Javascript code for getting the element's value
     *
-    * @return   string
+    * @param  bool  Whether it should return a parameter for qf.form.getContainerValue()
+    * @return string
     */
-    public function getJavascriptValue()
+    public function getJavascriptValue($inContainer = false)
     {
-        return "qf.form.getValue('" . $this->getId() . "')";
+        return $inContainer? "'{$this->getId()}'": "qf.\$v('{$this->getId()}')";
     }
 }
 ?>

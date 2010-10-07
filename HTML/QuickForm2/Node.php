@@ -635,9 +635,10 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Returns Javascript code for getting the element's value
     *
+    * @param  bool  Whether it should return a parameter for qf.form.getContainerValue()
     * @return string
     */
-    abstract public function getJavascriptValue();
+    abstract public function getJavascriptValue($inContainer = false);
 
    /**
     * Adds a filter

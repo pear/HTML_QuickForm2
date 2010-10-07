@@ -135,13 +135,19 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
     *
     * All options in "to" select are considered dualselect's values,
     * we need to use an implementation different from that for a standard
-    * select-multiple
+    * select-multiple. When returning a parameter for getContainerValue()
+    * we should also provide the element's name.
     *
+    * @param  bool  Whether it should return a parameter for qf.form.getContainerValue()
     * @return   string
     */
-    public function getJavascriptValue()
+    public function getJavascriptValue($inContainer = false)
     {
-        return "qf.elements.dualselect.getValue('{$this->getId()}-to')";
+        if ($inContainer) {
+            return "{name: '{$this->getName()}[]', value: qf.elements.dualselect.getValue('{$this->getId()}-to')}";
+        } else {
+            return "qf.elements.dualselect.getValue('{$this->getId()}-to')";
+        }
     }
 }
 

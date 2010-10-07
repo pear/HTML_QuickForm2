@@ -133,6 +133,11 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
         return $this->getIndent() . $this->data['content'];
     }
 
+    public function getJavascriptValue($inContainer = false)
+    {
+        return '';
+    }
+
    /**
     * Called when the element needs to update its value from form's data sources
     *

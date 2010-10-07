@@ -86,6 +86,8 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->ds->getValue('something'));
         $this->assertNull($this->ds->getValue('bar[missing]'));
+        // http://news.php.net/php.pear.general/30752
+        $this->assertNull($this->ds->getValue('foo[key]'));
     }
 
     public function testGetValue()

@@ -382,7 +382,7 @@ qf.form.getValue = function(el)
     if (!el || !('type' in el)) {
         return null;
     }
-    switch(el.type.toLowerCase()) {
+    switch (el.type.toLowerCase()) {
         case 'checkbox':
         case 'radio':
             return el.checked? el.value: null;
@@ -397,30 +397,72 @@ qf.form.getValue = function(el)
 };
 
 /**
- * Gets the values of a container.
+ * Gets the submit value of a form element. It will return null for disabled
+ * elements and elements that cannot have submit values (buttons, reset controls).
+ *
+ * @param   {string|Element} el
+ * @returns {string|string[]|null}
+ */
+qf.form.getSubmitValue = function(el)
+{
+    if (typeof el == 'string') {
+        el = document.getElementById(el);
+    }
+    if (!el || (!'type' in el) || el.disabled) {
+        return null;
+    }
+    switch (el.type.toLowerCase()) {
+        case 'reset':
+        case 'button':
+            return null;
+        default:
+            return qf.form.getValue(el);
+    }
+};
+
+/**
+ * Alias for qf.form.getSubmitValue
+ * @type {Function}
+ */
+qf.$v = qf.form.getSubmitValue;
+
+/**
+ * Gets the submit values of a container.
  *
  * @param   [...] This accepts a variable number of arguments, that are either
- *      strings or instances of qf.Map and represent the contained elements 
+ *      strings (considered element ID attributes), objects {name: element name,
+ *      value: element value} or instances of qf.Map, representing the contained elements 
  * @returns qf.Map
  */
-qf.form.getContainerValue = function()
+qf.form.getContainerSubmitValue = function()
 {
     var map = new qf.Map();
     for (var i = 0; i < arguments.length; i++) {
         if (arguments[i] instanceof qf.Map) {
             map.merge(arguments[i], qf.Map.mergeArrayConcat);
         } else {
-            var element = document.getElementById(arguments[i]);
-            var value   = this.getValue(element);
-            if (null !== value) {
+            if ('object' == qf.typeOf(arguments[i])) {
+                var k  = arguments[i].name;
+                var v  = arguments[i].value;
+            } else {
+                var k = document.getElementById(arguments[i]).name;
+                var v = qf.form.getSubmitValue(arguments[i]);
+            }
+            if (null !== v) {
                 var valueObj = {};
-                valueObj[element.name] = value;
+                valueObj[k] = v;
                 map.merge(valueObj, qf.Map.mergeArrayConcat);
             }
         }
     }
     return map;
 };
+
+/**
+ * Alisas for qf.form.getContainerSubmitValue
+ * @type {Function}
+ */
+qf.$cv = qf.form.getContainerSubmitValue;
 
 /**
  * Sets the value of a select-one element.

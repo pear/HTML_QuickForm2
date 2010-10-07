@@ -438,21 +438,18 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns Javascript code for getting the element's value
     *
+    * @param  bool  Whether it should return a parameter for qf.form.getContainerValue()
     * @return   string
     */
-    public function getJavascriptValue()
+    public function getJavascriptValue($inContainer = false)
     {
         $args = array();
         foreach ($this as $child) {
-            if ($child instanceof HTML_QuickForm2_Element_Static) {
-                continue;
-            } elseif ($child instanceof HTML_QuickForm2_Container) {
-                $args[] = $child->getJavascriptValue();
-            } else {
-                $args[] = "'" . $child->getId() . "'";
+            if ('' != ($value = $child->getJavascriptValue(true))) {
+                $args[] = $value;
             }
         }
-        return 'qf.form.getContainerValue(' . implode(', ', $args) . ')';
+        return 'qf.$cv(' . implode(', ', $args) . ')';
     }
 }
 

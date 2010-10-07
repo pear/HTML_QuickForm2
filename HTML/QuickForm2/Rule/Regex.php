@@ -127,7 +127,7 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
         }
 
         return "function() { var value = " . $this->owner->getJavascriptValue() .
-               "; return value == '' || {$regex}.test(value); }";
+               "; return qf.rules.empty(value) || {$regex}.test(value); }";
     }
 }
 ?>

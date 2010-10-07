@@ -86,6 +86,9 @@ qf.elements.dualselect.addOptionDOM = function(box, option, keepSorted)
 qf.elements.dualselect.getValue = function (destId)
 {
     var values = [], el = document.getElementById(destId);
+    if (el.disabled) {
+        return null;
+    }
     for (var option, i = 0; option = el.options[i]; i++) {
         values.push(option.value);
     }

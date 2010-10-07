@@ -85,7 +85,7 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource
             $value = $this->values;
             do {
                 $token = array_shift($tokens);
-                if (!isset($value[$token])) {
+                if (!is_array($value) || !isset($value[$token])) {
                     return null;
                 }
                 $value = $value[$token];
