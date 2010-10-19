@@ -259,19 +259,16 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public static function encode($value)
     {
-        switch (gettype($value)) {
-        case 'NULL':
+        if (is_null($value)) {
             return 'null';
 
-        case 'boolean':
+        } elseif (is_bool($value)) {
             return $value? 'true': 'false';
 
-        case 'integer':
-        case 'double':
-        case 'float':
+        } elseif (is_int($value) || is_float($value)) {
             return $value;
 
-        case 'string':
+        } elseif (is_string($value)) {
             return '"' . strtr($value, array(
                                 "\r" => '\r',
                                 "\n" => '\n',
@@ -281,7 +278,7 @@ class HTML_QuickForm2_JavascriptBuilder
                                 '\\' => '\\\\'
                               )) . '"';
 
-        case 'array':
+        } elseif (is_array($value)) {
             // associative array, encoding as JS object
             if (count($value) && array_keys($value) !== range(0, count($value) - 1)) {
                 return '{' . implode(',', array_map(
@@ -294,14 +291,14 @@ class HTML_QuickForm2_JavascriptBuilder
                 $value
             )) . ']';
 
-        case 'object':
+        } elseif (is_object($value)) {
             $vars = get_object_vars($value);
             return '{' . implode(',', array_map(
                 array('HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'),
                 array_keys($vars), array_values($vars)
             )) . '}';
 
-        default:
+        } else {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Cannot encode ' . gettype($value) . ' as Javascript value'
             );

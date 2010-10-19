@@ -79,7 +79,7 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 
     public function validate() { return parent::validate(); }
 
-    public function getJavascriptValue() { return ''; }
+    public function getJavascriptValue($inContainer = false) { return ''; }
 }
 
 /**
