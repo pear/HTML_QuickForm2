@@ -641,57 +641,11 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     abstract public function getJavascriptValue($inContainer = false);
 
    /**
-    * Adds a filter
-    *
-    * A filter is simply a PHP callback which will be applied to the element value
-    * when getValue() is called. A filter is by default applied recursively :
-    * if the value is an array, each elements it contains will
-    * also be filtered, unless the recursive flag is set to false.
-    *
-    * @param    callback    The PHP callback used for filter
-    * @param    array       Optional arguments for the callback. The first parameter
-    *                       will always be the element value, then these options will
-    *                       be used as parameters for the callback.
-    * @param    bool        Whether to apply the filter recursively to contained elements
-    * @return   HTML_QuickForm2_Node    The element
-    * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
-    */
-    public function addFilter($callback, array $options = null, $recursive = true)
-    {
-        if (!is_callable($callback, false, $callbackName)) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                'Callback Filter requires a valid callback, \'' . $callbackName .
-                '\' was given'
-            );
-        }
-        $this->filters[] = array($callback, $options, 'recursive' => $recursive);
-        return $this;
-    }
-
-   /**
-    * Removes all element filters
+    * Removes all filters
     */
     public function removeFilters()
     {
         $this->filters = array();
-    }
-
-   /**
-    * Applies element filters on element value
-    * @param    mixed   Element value
-    * @return   mixed   Filtered value
-    */
-    protected function applyFilters($value)
-    {
-        foreach ($this->filters as $filter) {
-            if (is_array($value) && !empty($filter['recursive'])) {
-                array_walk_recursive($value,
-                    array('HTML_QuickForm2_Node', 'applyFilter'), $filter);
-            } else {
-                self::applyFilter($value, null, $filter);
-            }
-        }
-        return $value;
     }
 
     protected static function applyFilter(&$value, $key = null, $filter)

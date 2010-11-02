@@ -61,6 +61,7 @@ require_once dirname(__FILE__) . '/Container/AllTests.php';
 require_once dirname(__FILE__) . '/DataSource/AllTests.php';
 require_once dirname(__FILE__) . '/RuleTest.php';
 require_once dirname(__FILE__) . '/Rule/AllTests.php';
+require_once dirname(__FILE__) . '/FilterTest.php';
 require_once dirname(__FILE__) . '/RendererTest.php';
 require_once dirname(__FILE__) . '/Renderer/AllTests.php';
 require_once dirname(__FILE__) . '/ControllerTest.php';
@@ -84,6 +85,7 @@ class QuickForm2_AllTests
         $suite->addTestSuite('HTML_QuickForm2_ContainerTest');
         $suite->addTestSuite('HTML_QuickForm2_ContainerOverloadTest');
         $suite->addTestSuite('HTML_QuickForm2_RuleTest');
+        $suite->addTestSuite('HTML_QuickForm2_FilterTest');
         $suite->addTestSuite('HTML_QuickForm2_RendererTest');
         $suite->addTestSuite('HTML_QuickForm2_ControllerTest');
         $suite->addTestSuite('HTML_QuickForm2_JavascriptBuilderTest');

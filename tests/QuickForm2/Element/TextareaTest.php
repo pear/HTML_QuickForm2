@@ -104,17 +104,5 @@ class HTML_QuickForm2_Element_TextareaTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/Some string/', $area->__toString());
         $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
     }
-
-    public function testFilters()
-    {
-        $area = new HTML_QuickForm2_Element_Textarea('area');
-        $area->setValue(' foo ');
-        $area->addFilter('filterTrim');
-        $this->assertEquals('foo', $area->getValue());
-        $area->addFilter('filterTrim', array('o'));
-        $this->assertEquals('f', $area->getValue());
-        $area->removeFilters();
-        $this->assertEquals(' foo ', $area->getValue());
-    }
 }
 ?>

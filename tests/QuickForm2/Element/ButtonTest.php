@@ -102,13 +102,5 @@ class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
         $foo->setAttribute('disabled');
         $this->assertNull($foo->getValue());
     }
-
-    public function testFilters()
-    {
-        $form = new HTML_QuickForm2('buttons', 'post', null, false);
-        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array('type' => 'submit')));
-        $foo->addFilter('strtolower');
-        $this->assertEquals('a button clicked', $foo->getValue());
-    }
 }
 ?>

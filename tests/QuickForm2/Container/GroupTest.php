@@ -297,36 +297,6 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($valueAnon, $anon->getValue());
     }
 
-    public function testFilters()
-    {
-        $value1     = array('foo' => 'foo');
-        $value1F    = array('foo' => 'F');
-        $value2     = array('bar' => 'bar', 'baz' => array('quux' => 'baz'));
-        $value2F    = array('bar' => 'Bar', 'baz' => array('quux' => 'Baz'));
-        $valueAnon  = array('e1' => 'e1');
-        $valueAnonF = array('e1' => '1');
-        $formValue  = array('g1' => $value1, 'g2' => array('i2' => $value2)) + $valueAnon;
-        $formValueF = array('g1' => $value1F, 'g2' => array('i2' => $value2F)) + $valueAnonF;
-
-
-        $form = new HTML_QuickForm2('testGroupGetValue');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
-        $g1 = $form->addElement('group', 'g1');
-        $g1->addFilter('strtoupper');
-        $el1 = $g1->addElement('text', 'foo');
-        $el1->addFilter('trim', array('o'));
-        $g2 = $form->addElement('group', 'g2[i2]');
-
-        $g2->addFilter('ucfirst');
-        $g2->addElement('text', 'bar');
-        $g2->addElement('text', 'baz[quux]');
-        $anon = $form->addElement('group');
-        $anon->addElement('text', 'e1');
-        $anon->addFilter('substr', array(1, 1));
-
-        $this->assertEquals($formValueF, $form->getValue());
-    }
-
    /**
     * Checks that JS for group rules comes after js for rules on contained elements
     */
