@@ -243,12 +243,17 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 "Element with name '".$element->getName()."' was not found"
             );
         }
+        $unset = false;
         foreach ($this as $key => $child){
             if ($child === $element) {
                 unset($this->elements[$key]);
                 $element->setContainer(null);
+                $unset = true;
                 break;
             }
+        }
+        if ($unset) {
+            $this->elements = array_values($this->elements);
         }
         return $element;
     }
