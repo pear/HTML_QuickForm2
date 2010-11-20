@@ -457,7 +457,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
      * Adds a filter
      *
      * A filter is simply a PHP callback which will be applied to the element value
-     * when getValue() is called. A filter on a container is by default applied 
+     * when getValue() is called. A filter on a container is by default applied
      * in cascade, all elements contained in the container will be affected by the
      * filter, unless otherwise specified.
      *
@@ -469,7 +469,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
      * @return   HTML_QuickForm2_Container    The container
      * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
      */
-     public function addFilter($callback, array $options = null, $cascade = true)
+     public function addFilter($callback, array $options = array(), $cascade = false)
      {
          if (!is_callable($callback, false, $callbackName)) {
              throw new HTML_QuickForm2_InvalidArgumentException(
@@ -489,7 +489,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
      * @see getFilterChain()
      * @return  array   Array of filters
      */
-     public function getFilters()
+     protected function getFilters()
      {
          $filters = array();
          foreach ($this->filters as $filter) {
@@ -509,7 +509,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
      * @see getFilters()
      * @return  array   Array of filters
      */
-     public function getFilterChain()
+     protected function getFilterChain()
      {
          $filters = array();
          $container = $this->getContainer();
@@ -526,7 +526,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
      /**
       * Applies filters on container value only
-      * 
+      *
       * @param    mixed   Container value
       * @return   mixed   Filtered value
       */

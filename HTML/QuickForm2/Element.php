@@ -131,7 +131,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
      * Adds a filter
      *
      * A filter is simply a PHP callback which will be applied to the element value
-     * when getValue() is called. If the element value is an array, for example with 
+     * when getValue() is called. If the element value is an array, for example with
      * selects of type 'multiple', the filter is applied to all values recursively.
      *
      * @param    callback    The PHP callback used for filter
@@ -141,7 +141,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
      * @return   HTML_QuickForm2_Node    The element
      * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
      */
-     public function addFilter($callback, array $options = null)
+     public function addFilter($callback, array $options = array())
      {
          if (!is_callable($callback, false, $callbackName)) {
              throw new HTML_QuickForm2_InvalidArgumentException(
@@ -160,7 +160,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
      * @see getFilterChain()
      * @return  array   Array of filters
      */
-     public function getFilters()
+     protected function getFilters()
      {
          return $this->filters;
      }
@@ -174,7 +174,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
      * @see getFilters()
      * @return  array   Array of filters
      */
-     public function getFilterChain()
+     protected function getFilterChain()
      {
          $filters = array();
          $container = $this->getContainer();

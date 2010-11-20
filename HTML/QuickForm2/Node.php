@@ -640,14 +640,6 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     abstract public function getJavascriptValue($inContainer = false);
 
-   /**
-    * Removes all filters
-    */
-    public function removeFilters()
-    {
-        $this->filters = array();
-    }
-
     protected static function applyFilter(&$value, $key = null, $filter)
     {
         $callback = $filter[0];
@@ -659,5 +651,17 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         $value = call_user_func_array($callback, $options);
     }
 
+    abstract protected function getFilters();
+
+    abstract protected function getFilterChain();
+
+    public function addFilter($callback, array $options = array())
+    {
+    }
+
+    public function addRecursiveFilter($callback, array $options = array())
+    {
+        return $this->addFilter($callback, $options, true);
+    }
 }
 ?>
