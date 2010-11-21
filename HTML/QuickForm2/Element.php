@@ -128,83 +128,28 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     }
 
     /**
-     * Adds a filter
+     * Applies recursive and non-recursive filters on element value
      *
-     * A filter is simply a PHP callback which will be applied to the element value
-     * when getValue() is called. If the element value is an array, for example with
-     * selects of type 'multiple', the filter is applied to all values recursively.
-     *
-     * @param    callback    The PHP callback used for filter
-     * @param    array       Optional arguments for the callback. The first parameter
-     *                       will always be the element value, then these options will
-     *                       be used as parameters for the callback.
-     * @return   HTML_QuickForm2_Node    The element
-     * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
+     * @param    mixed   Element value
+     * @return   mixed   Filtered value
      */
-     public function addFilter($callback, array $options = array())
-     {
-         if (!is_callable($callback, false, $callbackName)) {
-             throw new HTML_QuickForm2_InvalidArgumentException(
-                 'Callback Filter requires a valid callback, \'' . $callbackName .
-                 '\' was given'
-             );
-         }
-         $this->filters[] = array($callback, $options, 'cascade' => false);
-         return $this;
-     }
-
-    /**
-     * Returns filters affecting the element only
-     * This method will not return for the element's parent container filters.
-     *
-     * @see getFilterChain()
-     * @return  array   Array of filters
-     */
-     protected function getFilters()
-     {
-         return $this->filters;
-     }
-
-    /**
-     * Returns all filters affecting the element, parent filters included
-     *
-     * Returns an array of filters including all the filters applied to
-     * the ancestor containers.
-     *
-     * @see getFilters()
-     * @return  array   Array of filters
-     */
-     protected function getFilterChain()
-     {
-         $filters = array();
-         $container = $this->getContainer();
-         if (null !== $container) {
-             $filters = $container->getFilterChain();
-         }
-         foreach ($this->filters as $filter) {
-             $filters[] = $filter;
-         }
-         return $filters;
-     }
-
-     /**
-      * Applies element filters on element value
-      *
-      * @param    mixed   Element value
-      * @return   mixed   Filtered value
-      */
-      protected function applyFilters($value, $recursive = true)
-      {
-          $filters = $this->getFilterChain();
-          foreach ($filters as $filter) {
-              if (is_array($value)) {
-                  array_walk_recursive($value,
-                      array('HTML_QuickForm2_Node', 'applyFilter'), $filter);
-              } else {
-                  self::applyFilter($value, null, $filter);
-              }
-          }
-          return $value;
-      }
+    protected function applyFilters($value)
+    {
+        $recursive = $this->recursiveFilters;
+        $container = $this->getContainer();
+        while (!empty($container)) {
+            $recursive = array_merge($container->recursiveFilters, $recursive);
+            $container = $container->getContainer();
+        }
+        foreach ($recursive as $filter) {
+            if (is_array($value)) {
+                array_walk_recursive($value,
+                    array('HTML_QuickForm2_Node', 'applyFilter'), $filter);
+            } else {
+                self::applyFilter($value, null, $filter);
+            }
+        }
+        return parent::applyFilters($value);
+    }
 }
 ?>

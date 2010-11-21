@@ -129,6 +129,16 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected $filters = array();
 
    /**
+    * Recursive filter callbacks for element
+    *
+    * These are recursively applied for array values of element or propagated
+    * to contained elements if the element is a Container
+    *
+    * @var  array
+    */
+    protected $recursiveFilters = array();
+
+   /**
     * Error message (usually set via Rule if validation fails)
     * @var  string
     */
@@ -640,28 +650,89 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     abstract public function getJavascriptValue($inContainer = false);
 
-    protected static function applyFilter(&$value, $key = null, $filter)
+
+    /**
+     * Adds a filter
+     *
+     * A filter is simply a PHP callback which will be applied to the element value
+     * when getValue() is called.
+     *
+     * @param    callback    The PHP callback used for filter
+     * @param    array       Optional arguments for the callback. The first parameter
+     *                       will always be the element value, then these options will
+     *                       be used as parameters for the callback.
+     * @return   HTML_QuickForm2_Node    The element
+     * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
+     */
+    public function addFilter($callback, array $options = array())
     {
-        $callback = $filter[0];
-        $options  = $filter[1];
-        if (!is_array($options)) {
-            $options = array();
+        if (!is_callable($callback, false, $callbackName)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Filter should be a valid callback, '{$callbackName}' was given"
+            );
         }
+        $this->filters[] = array($callback, $options);
+        return $this;
+    }
+
+    /**
+     * Adds a recursive filter
+     *
+     * A filter is simply a PHP callback which will be applied to the element value
+     * when getValue() is called. If the element value is an array, for example with
+     * selects of type 'multiple', the filter is applied to all values recursively.
+     * A filter on a container will not be applied on a container value but
+     * propagated to all contained elements instead.
+     *
+     * If the element is not a container and its value is not an array the behaviour
+     * will be identical to filters added via addFilter().
+     *
+     * @param    callback    The PHP callback used for filter
+     * @param    array       Optional arguments for the callback. The first parameter
+     *                       will always be the element value, then these options will
+     *                       be used as parameters for the callback.
+     * @return   HTML_QuickForm2_Container    The container
+     * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
+     */
+    public function addRecursiveFilter($callback, array $options = array())
+    {
+        if (!is_callable($callback, false, $callbackName)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Filter should be a valid callback, '{$callbackName}' was given"
+            );
+        }
+        $this->recursiveFilters[] = array($callback, $options);
+        return $this;
+    }
+
+   /**
+    * Helper function for applying filter callback to a value
+    *
+    * @param    mixed   Value being filtered
+    * @param    mixed   Array key (not used, present to be able to use this
+    *                   method as a callback to array_walk_recursive())
+    * @param    array   Array containing callback and additional callback
+    *                   parameters
+    */
+    protected static function applyFilter(&$value, $key, $filter)
+    {
+        list($callback, $options) = $filter;
         array_unshift($options, $value);
         $value = call_user_func_array($callback, $options);
     }
 
-    abstract protected function getFilters();
-
-    abstract protected function getFilterChain();
-
-    public function addFilter($callback, array $options = array())
+    /**
+     * Applies non-recursive filters on element value
+     *
+     * @param    mixed   Element value
+     * @return   mixed   Filtered value
+     */
+    protected function applyFilters($value)
     {
-    }
-
-    public function addRecursiveFilter($callback, array $options = array())
-    {
-        return $this->addFilter($callback, $options, true);
+        foreach ($this->filters as $filter) {
+            self::applyFilter($value, null, $filter);
+        }
+        return $value;
     }
 }
 ?>

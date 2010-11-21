@@ -50,6 +50,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 
 require_once 'HTML/QuickForm2.php';
 require_once 'HTML/QuickForm2/Element/InputCheckable.php';
+require_once 'HTML/QuickForm2/Element/Select.php';
 
 class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
 {
@@ -103,13 +104,23 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('value2', $select->getValue());
     }
 
-    public function testSelectMultiple()
+    public function testSelectMultipleRecursive()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $select = $form->addSelect('baz', array('multiple' => 'multiple'))->loadOptions(
             array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
-        $select->addFilter('strtolower');
+        $select->addRecursiveFilter('strtolower');
         $this->assertEquals(array('value1', 'value2'), $select->getValue());
+    }
+
+    public function testSelectMultipleNonRecursive()
+    {
+        $s = new HTML_QuickForm2_Element_Select('foo', array('multiple' => 'multiple'),
+                                                array('intrinsic_validation' => false));
+        $s->setValue(array('foo', 'bar'));
+        $s->addFilter('count');
+
+        $this->assertEquals(2, $s->getValue());
     }
 
     public function testInputCheckable()
