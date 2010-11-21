@@ -70,7 +70,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testValidCallbackRequired()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         try {
             $callbackMissing = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error');
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -89,9 +89,9 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         $strlen = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error', 'strlen');
         $this->assertTrue($strlen->validate());
@@ -108,9 +108,9 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('strlen', 'HTML_QuickForm2_Rule_Callback', null, 'strlen');
         $strlen = HTML_QuickForm2_Factory::createRule('strlen', $mockEl, 'an error');
@@ -131,9 +131,9 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('inarray-override', 'HTML_QuickForm2_Rule_Callback', null,
                                     array('callback' => 'in_array',

@@ -65,8 +65,8 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                    'getValue', 'setValue', '__toString'));
-        $mockEmpty->expects($this->once())->method('getValue')
+                                    'getRawValue', 'setValue', '__toString'));
+        $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
         $ruleSimple = new HTML_QuickForm2_Rule_NotRegex($mockEmpty, 'an error', '/^[a-zA-Z]+$/');
         $this->assertTrue($ruleSimple->validate());
@@ -87,8 +87,8 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
     public function testNegatesResult()
     {
         $mockComment = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                      'getValue', 'setValue', '__toString'));
-        $mockComment->expects($this->once())->method('getValue')
+                                      'getRawValue', 'setValue', '__toString'));
+        $mockComment->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue('Buy some cheap VIAGRA from our online pharmacy!!!'));
         $ruleNoSpam = new HTML_QuickForm2_Rule_NotRegex($mockComment, 'an error', '/viagra/i');
         $this->assertFalse($ruleNoSpam->validate());

@@ -112,7 +112,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @return   array|null
     */
-    public function getValue()
+    protected function getRawValue()
     {
         $values = array();
         foreach ($this as $child) {
@@ -141,7 +141,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 }
             }
         }
-        return empty($values)? null: $this->applyFilters($values, false);
+        return empty($values)? null: $values;
     }
 
    /**

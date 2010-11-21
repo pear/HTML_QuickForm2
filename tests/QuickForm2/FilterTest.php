@@ -85,6 +85,25 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFiltersShouldPreserveNulls()
+    {
+        $mockElement = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                      'getRawValue', 'setValue', '__toString'));
+        $mockElement->expects($this->atLeastOnce())
+                    ->method('getRawValue')->will($this->returnValue(null));
+        $mockElement->addFilter('trim');
+        $this->assertNull($mockElement->getValue());
+
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockContainer->appendChild($mockElement);
+        $mockContainer->addRecursiveFilter('intval');
+        $mockContainer->addFilter('count');
+
+        $this->assertNull($mockContainer->getValue());
+    }
+
     public function testContainerValidation()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);

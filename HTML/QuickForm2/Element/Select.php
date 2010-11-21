@@ -420,7 +420,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *                   select, array of selected options' "value" attributes in
     *                   case of multiple selects, null if no options selected
     */
-    public function getValue()
+    protected function getRawValue()
     {
         if (!empty($this->attributes['disabled']) || 0 == count($this->values)
             || ($this->data['intrinsic_validation']
@@ -438,9 +438,9 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         if (0 == count($values)) {
             return null;
         } elseif (!empty($this->attributes['multiple'])) {
-            return $this->applyFilters($values);
+            return $values;
         } elseif (1 == count($values)) {
-            return $this->applyFilters($values[0]);
+            return $values[0];
         } else {
             // The <select> is not multiple, but several options are to be
             // selected. At least IE and Mozilla select the last selected
@@ -450,7 +450,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
                     $lastValue = $child['attr']['value'];
                 }
             }
-            return $this->applyFilters($lastValue);
+            return $lastValue;
         }
     }
 

@@ -65,7 +65,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testLimitsAreRequired()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         try {
             $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error');
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -83,7 +83,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testScalarLengthIsPositive()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         try {
             $lengthZero = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 0);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -102,7 +102,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testMinMaxLengthIsNonnegative()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         try {
             $lengthZeros = new HTML_QuickForm2_Rule_Length($mockEl, 'an error',
                                                            array('min' => 0, 'max' => 0));
@@ -121,9 +121,9 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testLimitsHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         $length3 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 3);
         $this->assertTrue($length3->validate());
@@ -150,7 +150,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testConfigCanonicalForm()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', array('min' => 4, 'max' => 2));
         $this->assertEquals(array('min' => 2, 'max' => 4), $length->getConfig());
 
@@ -167,7 +167,7 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testGlobalConfigOverrides()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
 
         $scalar = new HTML_QuickForm2_Rule_Length(
             $mockEl, 'an error',
@@ -217,8 +217,8 @@ class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                    'getValue', 'setValue', '__toString'));
-        $mockEmpty->expects($this->once())->method('getValue')
+                                    'getRawValue', 'setValue', '__toString'));
+        $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
         $length = new HTML_QuickForm2_Rule_Length($mockEmpty, 'an error', array('min' => 5));
         $this->assertTrue($length->validate());

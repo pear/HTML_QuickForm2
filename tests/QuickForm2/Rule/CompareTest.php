@@ -65,7 +65,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testOperandRequired()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         try {
             $compare = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error');
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -83,8 +83,8 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testDefaultOperatorIsEqual()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
-        $mockEl->expects($this->exactly(2))->method('getValue')
+                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo'));
 
         $compareFoo = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', 'foo');
@@ -97,12 +97,12 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testCompareToOtherElement()
     {
         $mockFirst = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
-        $mockFirst->expects($this->once())->method('getValue')
+                                  'getRawValue', 'setValue', '__toString'));
+        $mockFirst->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue('foo'));
         $mockSecond = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
-        $mockSecond->expects($this->once())->method('getValue')
+                                  'getRawValue', 'setValue', '__toString'));
+        $mockSecond->expects($this->once())->method('getRawValue')
                    ->will($this->returnValue('bar'));
 
         $compareElements = new HTML_QuickForm2_Rule_Compare($mockFirst, 'not equal', $mockSecond);
@@ -113,7 +113,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testDisallowBogusOperators()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         try {
             $bogus = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', array('foo', 'bar'));
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -125,9 +125,9 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         $scalar = new HTML_QuickForm2_Rule_Compare($mockEl, '...', 'foo');
         $this->assertTrue($scalar->validate());
@@ -146,9 +146,9 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('compare-scalar', 'HTML_QuickForm2_Rule_Compare', null, '!==');
         $scalar = HTML_QuickForm2_Factory::createRule('compare-scalar', $mockEl, '...', 'bar');
@@ -171,9 +171,9 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         $mockEl->expects($this->atLeastOnce())
-               ->method('getValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->will($this->returnValue('foo'));
         HTML_QuickForm2_Factory::registerRule('compare-override', 'HTML_QuickForm2_Rule_Compare', null,
                                               array('operator' => '===', 'operand' => 'foo'));
         $rule1 = HTML_QuickForm2_Factory::createRule('compare-override', $mockEl, '...',
@@ -187,12 +187,12 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
     public function testBug10754()
     {
         $mockFrom = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                   'getValue', 'setValue', '__toString'));
-        $mockFrom->expects($this->once())->method('getValue')
+                                   'getRawValue', 'setValue', '__toString'));
+        $mockFrom->expects($this->once())->method('getRawValue')
                  ->will($this->returnValue('00080002310000114151'));
         $mockTo   = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                   'getValue', 'setValue', '__toString'));
-        $mockTo->expects($this->once())->method('getValue')
+                                   'getRawValue', 'setValue', '__toString'));
+        $mockTo->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('00080002310000114152'));
 
         $ruleAccounts = new HTML_QuickForm2_Rule_Compare(

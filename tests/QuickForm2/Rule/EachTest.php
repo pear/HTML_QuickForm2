@@ -91,7 +91,7 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
     public function testCanOnlyValidateContainers()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         try {
             $each = new HTML_QuickForm2_Rule_Each(
                 $mockEl, '', $mockEl->createRule('empty')

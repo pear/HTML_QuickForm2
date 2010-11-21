@@ -71,7 +71,7 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
     public function getType() { return 'concrete'; }
     public function __toString() { return ''; }
 
-    public function getValue()
+    protected function getRawValue()
     {
         return $this->value;
     }

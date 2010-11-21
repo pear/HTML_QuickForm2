@@ -347,12 +347,22 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
 
    /**
-    * Returns the element's value
+    * Returns the element's value without filters applied
     *
     * @return   mixed
     */
-    abstract public function getValue();
+    abstract protected function getRawValue();
 
+   /**
+    * Returns the element's value, possibly with filters applied
+    *
+    * @return mixed
+    */
+    public function getValue()
+    {
+        $value = $this->getRawValue();
+        return is_null($value)? null: $this->applyFilters($value);
+    }
 
    /**
     * Sets the element's value
