@@ -82,7 +82,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         try {
             $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($mockEl, 'an error', 1024);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {

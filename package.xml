@@ -38,7 +38,7 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2010-11-01</date>
+ <date>2010-12-09</date>
  <version>
   <release>0.5.0</release>
   <api>0.5.0</api>
@@ -49,7 +49,7 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 5: Javascript support, client-side validation
+Milestone 5: Javascript support, client-side validation, filters
 
 Major additions and changes
   * It is now possible to run validation rules client-side as well as 
@@ -63,6 +63,9 @@ Major additions and changes
   * Implemented base Javascript library to support client-side validation.
     It should hopefully allow easier customization than inline Javascript in
     HTML_QuickForm 3.x
+  * Implemented addFilter() and addRecursiveFilter() methods which can be used
+    to (recursively) apply filter callbacks to element values when calling
+    getValue(). A new getRawValue() method allows getting unfiltered values.
 
 Other features and changes
   * Ported Date element from HTML_QuickForm 3.x

@@ -65,7 +65,7 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testRegexIsRequired()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
+                                 'getRawValue', 'setValue', '__toString'));
         try {
             $regex = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
             $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
@@ -78,8 +78,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                 'getValue', 'setValue', '__toString'));
-        $mockEl->expects($this->exactly(2))->method('getValue')
+                                 'getRawValue', 'setValue', '__toString'));
+        $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo123'));
 
         $alpha = new HTML_QuickForm2_Rule_Regex($mockEl, 'an error', '/^[a-zA-Z]+$/');
@@ -92,8 +92,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
-        $mockEl->expects($this->exactly(2))->method('getValue')
+                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('regex-alpha', 'HTML_QuickForm2_Rule_Regex',
@@ -110,8 +110,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
-        $mockEl->expects($this->once())->method('getValue')
+                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('regex-override', 'HTML_QuickForm2_Rule_Regex',
@@ -124,8 +124,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testBug10799()
     {
         $mockInvalid = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                      'getValue', 'setValue', '__toString'));
-        $mockInvalid->expects($this->once())->method('getValue')
+                                      'getRawValue', 'setValue', '__toString'));
+        $mockInvalid->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue("12345\n"));
         $ruleNumeric = new HTML_QuickForm2_Rule_Regex($mockInvalid, 'not valid',
                                                       '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/');
@@ -162,8 +162,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                    'getValue', 'setValue', '__toString'));
-        $mockEmpty->expects($this->once())->method('getValue')
+                                    'getRawValue', 'setValue', '__toString'));
+        $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
         $ruleSimple = new HTML_QuickForm2_Rule_Regex($mockEmpty, 'an error', '/^[a-zA-Z]+$/');
         $this->assertTrue($ruleSimple->validate());

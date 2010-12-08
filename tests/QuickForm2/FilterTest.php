@@ -50,6 +50,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 
 require_once 'HTML/QuickForm2.php';
 require_once 'HTML/QuickForm2/Element/InputCheckable.php';
+require_once 'HTML/QuickForm2/Element/Select.php';
 
 class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
 {
@@ -68,11 +69,6 @@ function repeatFilter($value)
     return substr($value, 0, 1).$value;
 }
 
-function nonRecursiveFilter($value, $str = '')
-{
-    return implode('', $value);
-}
-
 /**
  * Unit test for HTML_QuickForm2_Rule class
  */
@@ -89,12 +85,31 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFiltersShouldPreserveNulls()
+    {
+        $mockElement = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                      'getRawValue', 'setValue', '__toString'));
+        $mockElement->expects($this->atLeastOnce())
+                    ->method('getRawValue')->will($this->returnValue(null));
+        $mockElement->addFilter('trim');
+        $this->assertNull($mockElement->getValue());
+
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $mockContainer->appendChild($mockElement);
+        $mockContainer->addRecursiveFilter('intval');
+        $mockContainer->addFilter('count');
+
+        $this->assertNull($mockContainer->getValue());
+    }
+
     public function testContainerValidation()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $username = $form->addElement('text', 'foo');
         $username->addRule('required', 'Username is required');
-        $form->addFilter('trim');
+        $form->addRecursiveFilter('trim');
         $this->assertFalse($form->validate());
         $this->assertSame('', $username->getValue());
     }
@@ -108,13 +123,23 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('value2', $select->getValue());
     }
 
-    public function testSelectMultiple()
+    public function testSelectMultipleRecursive()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $select = $form->addSelect('baz', array('multiple' => 'multiple'))->loadOptions(
             array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
-        $select->addFilter('strtolower');
+        $select->addRecursiveFilter('strtolower');
         $this->assertEquals(array('value1', 'value2'), $select->getValue());
+    }
+
+    public function testSelectMultipleNonRecursive()
+    {
+        $s = new HTML_QuickForm2_Element_Select('foo', array('multiple' => 'multiple'),
+                                                array('intrinsic_validation' => false));
+        $s->setValue(array('foo', 'bar'));
+        $s->addFilter('count');
+
+        $this->assertEquals(2, $s->getValue());
     }
 
     public function testInputCheckable()
@@ -159,8 +184,6 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $area = $form->addTextarea('bar');
         $area->addFilter('strtolower');
         $this->assertEquals('value', $area->getValue());
-        $area->removeFilters();
-        $this->assertEquals('VALUE', $area->getValue());
     }
 
     public function testContainer()
@@ -175,10 +198,6 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
 
         $el1->setValue('A');
         $el1->addFilter('repeatFilter');
-        $f = $el1->getFilters();
-        $this->assertEquals(1, count($f));
-        $this->assertEquals('repeatFilter', $f[0][0]);
-        $this->assertEquals(false, $f[0]['cascade']);
 
         $el2->setValue('B');
         $el3->setValue('C');
@@ -189,31 +208,14 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
             'baz' => 'C'
         ), $c1->getValue());
 
-        $c1->addFilter('strtolower');
-        $f = $el1->getFilterChain();
-        $this->assertEquals(2, count($f));
-        $this->assertEquals('strtolower', $f[0][0]);
-        $this->assertEquals('repeatFilter', $f[1][0]);
+        $c1->addRecursiveFilter('strtolower');
 
         $this->assertEquals('aa', $el1->getValue());
         $this->assertEquals('b',  $el2->getValue());
         $this->assertEquals('c',  $el3->getValue());
 
-        $c1->addFilter('trim');
-        $f = $el1->getFilterChain();
-        $this->assertEquals(3, count($f));
-        $this->assertEquals('strtolower', $f[0][0]);
-        $this->assertEquals('trim', $f[1][0]);
-        $this->assertEquals('repeatFilter', $f[2][0]);
-
-
-        $c1->addFilter('repeatFilter');
-        $f = $el1->getFilterChain();
-        $this->assertEquals(4, count($f));
-        $this->assertEquals('strtolower', $f[0][0]);
-        $this->assertEquals('trim', $f[1][0]);
-        $this->assertEquals('repeatFilter', $f[2][0]);
-        $this->assertEquals('repeatFilter', $f[3][0]);
+        $c1->addRecursiveFilter('trim');
+        $c1->addRecursiveFilter('repeatFilter');
 
         $this->assertEquals('aaa', $el1->getValue());
         $this->assertEquals('bb',  $el2->getValue());
@@ -222,24 +224,6 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('aaa', $el1->getValue());
         $this->assertEquals('bb',  $el2->getValue());
         $this->assertEquals('cc',  $el3->getValue());
-
-        $c1->addFilter('nonRecursiveFilter', null, false);
-        $f = $c1->getFilters();
-        $this->assertEquals(1, count($f));
-        $this->assertEquals('nonRecursiveFilter', $f[0][0]);
-        $this->assertEquals('aaabbcc', $c1->getValue());
-
-        $f = $el1->getFilterChain();
-        $this->assertEquals(4, count($f));
-        $this->assertEquals('strtolower', $f[0][0]);
-        $this->assertEquals('trim', $f[1][0]);
-        $this->assertEquals('repeatFilter', $f[2][0]);
-        $this->assertEquals('repeatFilter', $f[3][0]);
-
-        $f = $el1->getFilters();
-        $this->assertEquals(1, count($f));
-        $this->assertEquals('repeatFilter', $f[0][0]);
-
     }
 
     public function testGroup()
@@ -257,27 +241,35 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
 
         $g1 = $form->addGroup('g1');
-        $g1->addFilter('strtoupper');
+        $g1->addRecursiveFilter('strtoupper');
 
         $el1 = $g1->addText('foo');
         // Trim O *after* strtoupper
         $el1->addFilter('trim', array('O'));
 
-        $f = $el1->getFilterchain();
-        $this->assertEquals(2, count($f));
-        $this->assertEquals('strtoupper', $f[0][0]);
-        $this->assertEquals('trim', $f[1][0]);
-
         $g2 = $form->addGroup('g2[i2]');
-        $g2->addFilter('ucfirst');
+        $g2->addRecursiveFilter('ucfirst');
         $g2->addText('bar');
         $g2->addText('baz[quux]');
 
         $anon = $form->addGroup();
         $anon->addText('e1');
-        $anon->addFilter('substr', array(1, 1));
+        $anon->addRecursiveFilter('substr', array(1, 1));
 
         $this->assertEquals($formValueF, $form->getValue());
+    }
+
+    public function testContainerNonRecursive()
+    {
+        $c = new HTML_QuickForm2_ContainerFilterImpl('nonrecursive');
+        $el1 = $c->addElement('text', 'el1')->setValue(' foo');
+        $el2 = $c->addElement('text', 'el2')->setValue('bar ');
+
+        $c->addRecursiveFilter('trim');
+        $c->addFilter('count');
+
+        $this->assertEquals(2, $c->getValue());
+        $this->assertEquals('foo', $el1->getValue());
     }
 }
 ?>

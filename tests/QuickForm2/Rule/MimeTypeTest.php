@@ -76,7 +76,7 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends PHPUnit_Framework_TestCase
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getValue', 'setValue', '__toString'));
+                                  'getRawValue', 'setValue', '__toString'));
         try {
             $mimeType = new HTML_QuickForm2_Rule_MimeType($mockEl, 'an error', 'text/plain');
             $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');

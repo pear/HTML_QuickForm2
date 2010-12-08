@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
     *
     * return    string|null
     */
-    public function getValue()
+    public function getRawValue()
     {
         return null;
     }

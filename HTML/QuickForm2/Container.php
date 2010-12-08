@@ -104,19 +104,17 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     }
 
    /**
-    * Returns the element's value
+    * Returns the array containing child elements' values
     *
-    * The default implementation for Containers is to return an array with
-    * contained elements' values. The array is indexed the same way $_GET and
-    * $_POST arrays would be for these elements.
-    *
+    * @param    bool    Whether child elements should apply filters on values
     * @return   array|null
     */
-    public function getValue()
+    protected function getChildValues($filtered = false)
     {
+        $method = $filtered? 'getValue': 'getRawValue';
         $values = array();
         foreach ($this as $child) {
-            $value = $child->getValue();
+            $value = $child->$method();
             if (null !== $value) {
                 if ($child instanceof HTML_QuickForm2_Container
                     && !$child->prependsName()
@@ -141,7 +139,36 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 }
             }
         }
-        return empty($values)? null: $this->applyFilters($values, false);
+        return empty($values)? null: $values;
+    }
+
+   /**
+    * Returns the container's value without filters applied
+    *
+    * The default implementation for Containers is to return an array with
+    * contained elements' values. The array is indexed the same way $_GET and
+    * $_POST arrays would be for these elements.
+    *
+    * @return   array|null
+    */
+    public function getRawValue()
+    {
+        return $this->getChildValues(false);
+    }
+
+   /**
+    * Returns the container's value, possibly with filters applied
+    *
+    * The default implementation for Containers is to return an array with
+    * contained elements' values. The array is indexed the same way $_GET and
+    * $_POST arrays would be for these elements.
+    *
+    * @return   array|null
+    */
+    public function getValue()
+    {
+        $value = $this->getChildValues(true);
+        return is_null($value)? null: $this->applyFilters($value);
     }
 
    /**
@@ -456,93 +483,6 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         }
         return 'qf.$cv(' . implode(', ', $args) . ')';
     }
-
-
-    /**
-     * Adds a filter
-     *
-     * A filter is simply a PHP callback which will be applied to the element value
-     * when getValue() is called. A filter on a container is by default applied 
-     * in cascade, all elements contained in the container will be affected by the
-     * filter, unless otherwise specified.
-     *
-     * @param    callback    The PHP callback used for filter
-     * @param    array       Optional arguments for the callback. The first parameter
-     *                       will always be the element value, then these options will
-     *                       be used as parameters for the callback.
-     * @param    bool        Whether to apply the filter in cascade to contained elements (default).
-     * @return   HTML_QuickForm2_Container    The container
-     * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
-     */
-     public function addFilter($callback, array $options = null, $cascade = true)
-     {
-         if (!is_callable($callback, false, $callbackName)) {
-             throw new HTML_QuickForm2_InvalidArgumentException(
-                 'Callback Filter requires a valid callback, \'' . $callbackName .
-                 '\' was given'
-             );
-         }
-         $this->filters[] = array($callback, $options, 'cascade' => $cascade);
-         return $this;
-     }
-
-    /**
-     * Returns filters affecting the container only
-     *
-     * Filters affecting contained elements are discarded from the returned array.
-     *
-     * @see getFilterChain()
-     * @return  array   Array of filters
-     */
-     public function getFilters()
-     {
-         $filters = array();
-         foreach ($this->filters as $filter) {
-             if (empty($filter['cascade'])) {
-                 $filters[] = $filter;
-             }
-         }
-         return $filters;
-     }
-
-    /**
-     * Returns all filters affecting the container, parent filters included
-     *
-     * Returns an array of filters including all the filters applied to
-     * the ancestor containers.
-     *
-     * @see getFilters()
-     * @return  array   Array of filters
-     */
-     public function getFilterChain()
-     {
-         $filters = array();
-         $container = $this->getContainer();
-         if ($container) {
-             $filters = $container->getFilterChain();
-         }
-         foreach ($this->filters as $filter) {
-             if (!empty($filter['cascade'])) {
-                 $filters[] = $filter;
-             }
-         }
-         return $filters;
-     }
-
-     /**
-      * Applies filters on container value only
-      * 
-      * @param    mixed   Container value
-      * @return   mixed   Filtered value
-      */
-      protected function applyFilters($value, $recursive = true)
-      {
-          $filters = $this->getFilters();
-          foreach ($filters as $filter) {
-              self::applyFilter($value, null, $filter);
-          }
-          return $value;
-      }
 }
 
 /**

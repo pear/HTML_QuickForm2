@@ -182,9 +182,18 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *
     * @return   array|null
     */
-    public function getValue()
+    public function getRawValue()
     {
         return $this->value;
+    }
+
+   /**
+    * Alias of getRawValue(), InputFile elements do not allow filters
+    * @return   array|null
+    */
+    public function getValue()
+    {
+        return $this->getRawValue();
     }
 
    /**
@@ -258,7 +267,14 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         return parent::validate();
     }
 
-    public function addFilter($callback, array $options = null, $recursive = true)
+    public function addFilter($callback, array $options = array())
+    {
+        throw new HTML_QuickForm2_Exception(
+            'InputFile elements do not support filters'
+        );
+    }
+
+    public function addRecursiveFilter($callback, array $options = array())
     {
         throw new HTML_QuickForm2_Exception(
             'InputFile elements do not support filters'
