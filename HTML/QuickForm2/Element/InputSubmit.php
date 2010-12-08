@@ -99,7 +99,7 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
     *
     * @return    string|null
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         return $this->getAttribute('disabled')? null: $this->submitValue;
     }

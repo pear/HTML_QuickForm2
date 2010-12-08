@@ -66,7 +66,7 @@ require_once 'HTML/QuickForm2/Rule.php';
 class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 {
     public function getType() { return 'concrete'; }
-    protected function getRawValue() { return ''; }
+    public function getRawValue() { return ''; }
     public function setValue($value) { return ''; }
     public function __toString() { return ''; }
 

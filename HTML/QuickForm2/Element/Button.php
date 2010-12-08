@@ -128,7 +128,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     *
     * @return    string|null
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type']) &&
             !$this->getAttribute('disabled'))

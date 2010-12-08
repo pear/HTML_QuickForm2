@@ -85,9 +85,9 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         return strlen($this->name) > 0;
     }
 
-    protected function getRawValue()
+    protected function getChildValues($filtered = false)
     {
-        $value = parent::getRawValue();
+        $value = parent::getChildValues($filtered);
         if (!$this->prependsName()) {
             return $value;
 

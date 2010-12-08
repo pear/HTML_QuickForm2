@@ -297,6 +297,28 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($valueAnon, $anon->getValue());
     }
 
+    public function testGetRawValue()
+    {
+        $unfiltered = array(
+            'foo' => ' foo value ',
+            'bar' => ' BAR VALUE '
+        );
+
+        $g = new HTML_QuickForm2_Container_Group('filtered');
+        $foo = $g->addElement('text', 'foo');
+        $bar = $g->addElement('text', 'bar');
+
+        $g->setValue($unfiltered);
+        $this->assertEquals($unfiltered, $g->getRawValue());
+
+        $g->addRecursiveFilter('trim');
+        $bar->addFilter('strtolower');
+        $this->assertEquals($unfiltered, $g->getRawValue());
+
+        $g->addFilter('count');
+        $this->assertEquals($unfiltered, $g->getRawValue());
+    }
+
    /**
     * Checks that JS for group rules comes after js for rules on contained elements
     */

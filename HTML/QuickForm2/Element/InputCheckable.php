@@ -137,7 +137,7 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
         }
     }
 
-    protected function getRawValue()
+    public function getRawValue()
     {
         if (!empty($this->attributes['checked']) && empty($this->attributes['disabled'])) {
             return $this->getAttribute('value');

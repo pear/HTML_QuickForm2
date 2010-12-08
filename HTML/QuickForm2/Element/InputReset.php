@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_InputReset extends HTML_QuickForm2_Element_Input
     *
     * @return    string|null
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         return null;
     }

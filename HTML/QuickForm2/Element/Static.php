@@ -123,7 +123,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @return    null
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         return null;
     }

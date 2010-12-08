@@ -104,19 +104,17 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     }
 
    /**
-    * Returns the element's value
+    * Returns the array containing child elements' values
     *
-    * The default implementation for Containers is to return an array with
-    * contained elements' values. The array is indexed the same way $_GET and
-    * $_POST arrays would be for these elements.
-    *
+    * @param    bool    Whether child elements should apply filters on values
     * @return   array|null
     */
-    protected function getRawValue()
+    protected function getChildValues($filtered = false)
     {
+        $method = $filtered? 'getValue': 'getRawValue';
         $values = array();
         foreach ($this as $child) {
-            $value = $child->getValue();
+            $value = $child->$method();
             if (null !== $value) {
                 if ($child instanceof HTML_QuickForm2_Container
                     && !$child->prependsName()
@@ -142,6 +140,35 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             }
         }
         return empty($values)? null: $values;
+    }
+
+   /**
+    * Returns the container's value without filters applied
+    *
+    * The default implementation for Containers is to return an array with
+    * contained elements' values. The array is indexed the same way $_GET and
+    * $_POST arrays would be for these elements.
+    *
+    * @return   array|null
+    */
+    public function getRawValue()
+    {
+        return $this->getChildValues(false);
+    }
+
+   /**
+    * Returns the container's value, possibly with filters applied
+    *
+    * The default implementation for Containers is to return an array with
+    * contained elements' values. The array is indexed the same way $_GET and
+    * $_POST arrays would be for these elements.
+    *
+    * @return   array|null
+    */
+    public function getValue()
+    {
+        $value = $this->getChildValues(true);
+        return is_null($value)? null: $this->applyFilters($value);
     }
 
    /**

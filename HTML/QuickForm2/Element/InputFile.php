@@ -182,7 +182,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *
     * @return   array|null
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         return $this->value;
     }

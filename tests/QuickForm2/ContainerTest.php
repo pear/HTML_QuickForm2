@@ -80,7 +80,7 @@ class HTML_QuickForm2_ElementImpl2 extends HTML_QuickForm2_Element
     public function getType() { return 'concrete'; }
     public function __toString() { return ''; }
 
-    protected function getRawValue()
+    public function getRawValue()
     {
         return $this->value;
     }
@@ -462,6 +462,34 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
             'bar' => 'other value',
             'baz' => 'yet another value'
         ), $c1->getValue());
+    }
+
+    public function testGetRawValue()
+    {
+        $c = new HTML_QuickForm2_ContainerImpl('filtered');
+
+        $foo = $c->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
+        $bar = $c->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
+
+        $foo->setValue(' foo value ');
+        $bar->setValue(' BAR VALUE ');
+        $this->assertEquals(array(
+            'foo' => ' foo value ',
+            'bar' => ' BAR VALUE '
+        ), $c->getRawValue());
+
+        $c->addRecursiveFilter('trim');
+        $bar->addFilter('strtolower');
+        $this->assertEquals(array(
+            'foo' => ' foo value ',
+            'bar' => ' BAR VALUE '
+        ), $c->getRawValue());
+
+        $c->addFilter('count');
+        $this->assertEquals(array(
+            'foo' => ' foo value ',
+            'bar' => ' BAR VALUE '
+        ), $c->getRawValue());
     }
 
     public function testValidate()

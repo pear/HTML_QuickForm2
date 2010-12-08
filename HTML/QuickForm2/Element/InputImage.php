@@ -100,7 +100,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     *                       coordinates of user click if the image was clicked,
     *                       null otherwise
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         return $this->getAttribute('disabled')? null: $this->coordinates;
     }

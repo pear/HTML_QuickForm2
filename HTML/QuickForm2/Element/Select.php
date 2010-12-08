@@ -420,7 +420,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *                   select, array of selected options' "value" attributes in
     *                   case of multiple selects, null if no options selected
     */
-    protected function getRawValue()
+    public function getRawValue()
     {
         if (!empty($this->attributes['disabled']) || 0 == count($this->values)
             || ($this->data['intrinsic_validation']

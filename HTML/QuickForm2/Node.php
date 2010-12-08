@@ -351,7 +351,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *
     * @return   mixed
     */
-    abstract protected function getRawValue();
+    abstract public function getRawValue();
 
    /**
     * Returns the element's value, possibly with filters applied

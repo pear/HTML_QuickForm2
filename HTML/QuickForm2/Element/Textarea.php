@@ -78,7 +78,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
         return $this;
     }
 
-    protected function getRawValue()
+    public function getRawValue()
     {
         return empty($this->attributes['disabled'])? $this->value: null;
     }
