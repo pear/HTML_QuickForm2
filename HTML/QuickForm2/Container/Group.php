@@ -253,7 +253,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         $element = parent::removeChild($element);
         if ($this->prependsName()) {
-            $name = preg_replace('/^' . $this->getName() . '\[([^\]]*)\]/', '\1', $element->getName());
+            $name = preg_replace('/^' . preg_quote($this->getName()) . '\[([^\]]*)\]/', '\1', $element->getName());
             $element->setName($name);
         }
         return $element;
