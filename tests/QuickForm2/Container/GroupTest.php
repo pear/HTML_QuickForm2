@@ -366,5 +366,27 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
                   ->getJavascriptBuilder()->getFormJavascript()
         );
     }
+
+   /**
+    * removeElement() could break with a warning if element name contained special regexp characters
+    *
+    * @link http://pear.php.net/bugs/18182
+    */
+    public function testBug18182()
+    {
+        $group = new HTML_QuickForm2_Container_Group('foo[a-b]');
+        $el1 = $group->addElement('text', 'bar');
+        $this->assertEquals('foo[a-b][bar]', $el1->getName());
+
+        $group->removeChild($el1);
+        $this->assertEquals('bar', $el1->getName());
+
+        $group->setName('foo[c/d]');
+        $el2 = $group->addElement('text', 'baz');
+        $this->assertEquals('foo[c/d][baz]', $el2->getName());
+
+        $group->removeChild($el2);
+        $this->assertEquals('baz', $el2->getName());
+    }
 }
 ?>
