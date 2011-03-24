@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -47,11 +47,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'HTML_QuickForm2_AllTests::main');
 }
 
-require_once 'PHPUnit/Framework.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-
-chdir(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-
 require_once dirname(__FILE__) . '/QuickForm2/AllTests.php';
 require_once dirname(__FILE__) . '/QuickForm2Test.php';
 
@@ -59,6 +54,9 @@ class HTML_QuickForm2_AllTests
 {
     public static function main()
     {
+        if (!function_exists('phpunit_autoload')) {
+            require_once 'PHPUnit/TextUI/TestRunner.php';
+        }
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 

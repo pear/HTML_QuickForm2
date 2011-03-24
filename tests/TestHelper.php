@@ -43,35 +43,16 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Controller_AllTests::main');
-}
+/** Include PHPUnit dependencies based on version */
+require_once 'PHPUnit/Runner/Version.php';
 
-require_once dirname(__FILE__) . '/PageTest.php';
-require_once dirname(__FILE__) . '/Action/AllTests.php';
-
-class QuickForm2_Controller_AllTests
-{
-    public static function main()
-    {
-        if (!function_exists('phpunit_autoload')) {
-            require_once 'PHPUnit/TextUI/TestRunner.php';
-        }
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-
-    public static function suite()
-    {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Controller');
-
-        $suite->addTestSuite('HTML_QuickForm2_Controller_PageTest');
-        $suite->addTest(QuickForm2_Controller_Action_AllTests::suite());
-
-        return $suite;
-    }
-}
-
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_Controller_AllTests::main') {
-    QuickForm2_Controller_AllTests::main();
+$phpunitVersion = PHPUnit_Runner_Version::id();
+if ($phpunitVersion == '@' . 'package_version@' || !version_compare($phpunitVersion, '3.6', '<=')) {
+    echo "This version of PHPUnit is not supported.";
+    exit(1);
+} elseif (version_compare($phpunitVersion, '3.5.5', '>=')) {
+    require_once 'PHPUnit/Autoload.php';
+} else {
+    require_once 'PHPUnit/Framework.php';
 }
 ?>

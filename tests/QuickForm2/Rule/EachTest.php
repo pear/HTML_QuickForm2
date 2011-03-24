@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -42,8 +42,8 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** PHPUnit Test Case */
-require_once 'PHPUnit/Framework/TestCase.php';
+/** Helper for PHPUnit includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /** Validates all elements in a Container using a template Rule */
 require_once 'HTML/QuickForm2/Rule/Each.php';
 /** Element class */

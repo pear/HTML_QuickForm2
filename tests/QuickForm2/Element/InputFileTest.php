@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -47,10 +47,8 @@
  */
 require_once 'HTML/QuickForm2/Element/InputFile.php';
 
-/**
- * PHPUnit2 Test Case
- */
-require_once 'PHPUnit/Framework/TestCase.php';
+/** Helper for PHPUnit includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
  * Class representing a HTML form

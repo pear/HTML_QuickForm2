@@ -497,6 +497,9 @@ Backwards compatibility issues
     <file name="QuickForm2Test.php" role="test">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="TestHelper.php" role="test">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir> <!-- /tests -->
    <dir name="docs/examples">
     <dir name="controller">
@@ -572,6 +575,7 @@ Backwards compatibility issues
 
    <install as="AllTests.php" name="tests/AllTests.php" />
    <install as="QuickForm2Test.php" name="tests/QuickForm2Test.php" />
+   <install as="TestHelper.php" name="tests/TestHelper.php" />
    <install as="QuickForm2/AllTests.php" name="tests/QuickForm2/AllTests.php" />
    <install as="QuickForm2/ContainerOverloadTest.php" name="tests/QuickForm2/ContainerOverloadTest.php" />
    <install as="QuickForm2/ContainerTest.php" name="tests/QuickForm2/ContainerTest.php" />
