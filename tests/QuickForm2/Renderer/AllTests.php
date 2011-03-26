@@ -49,6 +49,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once dirname(__FILE__) . '/DefaultTest.php';
 require_once dirname(__FILE__) . '/ArrayTest.php';
+require_once dirname(__FILE__) . '/CallbackTest.php';
 
 class QuickForm2_Renderer_AllTests
 {
@@ -66,6 +67,7 @@ class QuickForm2_Renderer_AllTests
 
         $suite->addTestSuite('HTML_QuickForm2_Renderer_DefaultTest');
         $suite->addTestSuite('HTML_QuickForm2_Renderer_ArrayTest');
+        $suite->addTestSuite('HTML_QuickForm2_Renderer_CallbackTest');
 
         return $suite;
     }
