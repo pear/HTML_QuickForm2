@@ -120,26 +120,6 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
         return (string)$element;
     }
 
-    public static function _renderGroupInputText($renderer, $element)
-    {
-        return 'IgnoreThis;html='.$element;
-    }
-
-    public static function _renderGroupInput($renderer, $element)
-    {
-        return 'GroupedInput;id='.$element->getId().',html='.$element;
-    }
-
-    public static function _renderGroupElement($renderer, $element)
-    {
-        return 'GroupedElement;id='.$element->getId().',html='.$element;
-    }
-
-    public static function _renderGroupId($renderer, $element)
-    {
-        return 'testRenderGroupedElement;id='.$element->getId().',html='.$element;
-    }
-
     public function testRenderElementUsingMostAppropriateCallback()
     {
         $element = HTML_QuickForm2_Factory::createElement(
@@ -325,7 +305,27 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains($hidden1->__toString() . $hidden2->__toString(), $html);
     }
-/*
+
+    public static function _renderGroupInputText($renderer, $element)
+    {
+        return 'IgnoreThis;html='.$element;
+    }
+
+    public static function _renderGroupInput($renderer, $element)
+    {
+        return 'GroupedInput;id='.$element->getId().',html='.$element;
+    }
+
+    public static function _renderGroup($renderer, $element)
+    {
+        return 'GroupedElement;id='.$element->getId().',html='.$element;
+    }
+
+    public static function _renderGroupedElement($renderer, $element)
+    {
+        return 'testRenderGroupedElement;id='.$element->getId().',html='.$element;
+    }
+
     public function testRenderGroupedElementUsingMostAppropriateTemplate()
     {
         $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testRenderGroup'));
@@ -341,10 +341,10 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
                 array($class, '_renderGroupInput')
             )->setElementCallbackForGroupId(
                 'testRenderGroup', 'HTML_QuickForm2_Element', 
-                array($class, '_renderGroupElement')
+                array($class, '_renderGroup')
             )->setCallbackForId(
                 'testRenderGroupedElement', 
-                array($class, '_renderGroupId')
+                array($class, '_renderGroupedElement')
             );
 
         $this->assertContains(
@@ -353,7 +353,6 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
         );
 
         $renderer->setCallbackForId('testRenderGroupedElement', null);
-        var_dump($group->render($renderer->reset())->__toString());
         $this->assertContains(
             'GroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
@@ -370,7 +369,58 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
             'IgnoreThis', $group->render($renderer->reset())->__toString()
         );
     }
-*/
 
+    public static function _renderTestSeparators($renderer, $group)
+    {
+        $separator = $group->getSeparator();
+        $elements  = array_pop($renderer->html);
+        if (!is_array($separator)) {
+            $content = implode((string)$separator, $elements);
+        } else {
+            $content    = '';
+            $cSeparator = count($separator);
+            for ($i = 0, $count = count($elements); $i < $count; $i++) {
+                $content .= (0 == $i? '': $separator[($i - 1) % $cSeparator]) .
+                            $elements[$i];
+            }
+        }
+        return $content;
+    }
+
+    public static function _renderTestSeparators2($renderer, $element)
+    {
+        return '<foo>'.$element.'</foo>';
+    }
+
+    public function testRenderGroupedElementsWithSeparators()
+    {
+        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testSeparators'));
+        $element1 = $group->addElement('text', 'bar');
+        $element2 = $group->addElement('text', 'baz');
+        $element3 = $group->addElement('text', 'quux');
+
+        $renderer = HTML_Quickform2_Renderer::factory('callback')
+            ->setCallbackForId('testSeparators', array(get_class($this), '_renderTestSeparators'))
+            ->setElementCallbackForGroupId(
+                'testSeparators', 'HTML_QuickForm2_Element_InputText', array(get_class($this), '_renderTestSeparators2')
+            );
+
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo><foo>' . $element2 . '</foo><foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $group->setSeparator('&nbsp;');
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo>&nbsp;<foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
+
+        $group->setSeparator(array('<br />', '&nbsp;'));
+        $this->assertEquals(
+            '<foo>' . $element1 . '</foo><br /><foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
+            $group->render($renderer->reset())->__toString()
+        );
+    }
 }
 ?>
