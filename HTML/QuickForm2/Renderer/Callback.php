@@ -627,7 +627,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     public function setElementCallbackForGroupId($groupId, $elementClass, $callback)
     {
         if ($this->_validateCallback($callback)) {
-            $this->elementTemplatesForGroupId[$groupId][strtolower($elementClass)] = $callback;
+            $this->elementCallbacksForGroupId[$groupId][strtolower($elementClass)] = $callback;
         }
         return $this;
     }
