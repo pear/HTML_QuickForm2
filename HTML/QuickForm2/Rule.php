@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -68,6 +68,12 @@ abstract class HTML_QuickForm2_Rule
     * @see  HTML_QuickForm2_Node::addRule()
     */
     const CLIENT = 2;
+
+   /**
+    * A combination of SERVER and CLIENT constants
+    * @see  HTML_QuickForm2_Node::addRule()
+    */
+    const CLIENTSERVER = 3;
 
    /**
     * An element whose value will be validated by this rule

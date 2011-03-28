@@ -598,5 +598,16 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
                       ->getJavascriptBuilder()->getFormJavascript()
         );
     }
+
+    public function testGetValueBrackets()
+    {
+        $c = new HTML_QuickForm2_ContainerImpl('withBrackets');
+        $el1 = $c->appendChild(new HTML_QuickForm2_ElementImpl2('foo[]'));
+        $el2 = $c->appendChild(new HTML_QuickForm2_ElementImpl2('foo[]'));
+
+        $el1->setValue('first');
+        $el2->setValue('second');
+        $this->assertEquals(array('foo' => array('first', 'second')), $c->getValue());
+    }
 }
 ?>

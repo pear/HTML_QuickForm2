@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ require_once 'HTML/QuickForm2/Element/InputCheckable.php';
  */
 class HTML_QuickForm2_Element_InputRadio extends HTML_QuickForm2_Element_InputCheckable
 {
-    protected $attributes = array('type' => 'radio');
+    protected $attributes = array('type' => 'radio', 'value' => 'on');
 
     protected $frozenHtml = array(
         'checked'   => '<tt>(x)</tt>',

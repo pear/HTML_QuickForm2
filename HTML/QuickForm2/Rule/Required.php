@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -83,6 +83,27 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
         throw new HTML_QuickForm2_Exception(
             'or_(): Cannot add a rule to "required" rule'
         );
+    }
+
+   /**
+    * Sets the error message output by the rule
+    *
+    * Required rules cannot have an empty error message as that may allow
+    * validation to succeed even if the element is empty, and that will make
+    * visual difference ("* denotes required field") bogus.
+    *
+    * @param    string                  Error message to display if validation fails
+    * @return   HTML_QuickForm2_Rule
+    * @throws   HTML_QuickForm2_InvalidArgumentException
+    */
+    public function setMessage($message)
+    {
+        if (!strlen($message)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                '"required" rule cannot have an empty error message'
+            );
+        }
+        return parent::setMessage($message);
     }
 }
 ?>

@@ -108,5 +108,18 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
         }
         $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
     }
+
+   /**
+    * @link http://pear.php.net/bugs/18133
+    * @expectedException HTML_QuickForm2_InvalidArgumentException
+    */
+    public function testCannotHaveEmptyMessage()
+    {
+        $mockNode = $this->getMock(
+            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
+            'getType', 'getRawValue', 'setId', 'setName', 'setValue', '__toString', 'getJavascriptValue')
+        );
+        $required = new HTML_QuickForm2_Rule_Required($mockNode);
+    }
 }
 ?>

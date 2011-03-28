@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -112,7 +112,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     protected function getChildValues($filtered = false)
     {
         $method = $filtered? 'getValue': 'getRawValue';
-        $values = array();
+        $values = $forceKeys = array();
         foreach ($this as $child) {
             $value = $child->$method();
             if (null !== $value) {
@@ -134,7 +134,14 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                             }
                             $valueAry =& $valueAry[$token];
                         } while (count($tokens) > 1);
-                        $valueAry[$tokens[0]] = $value;
+                        if ('' != $tokens[0]) {
+                            $valueAry[$tokens[0]] = $value;
+                        } else {
+                            if (!isset($forceKeys[$name])) {
+                                $forceKeys[$name] = 0;
+                            }
+                            $valueAry[$forceKeys[$name]++] = $value;
+                        }
                     }
                 }
             }

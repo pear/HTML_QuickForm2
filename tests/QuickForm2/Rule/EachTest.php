@@ -81,7 +81,7 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
             'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
         );
         try {
-            $each = new HTML_QuickForm2_Rule_Each($mockEl, 'an error', $mockEl->createRule('required'));
+            $each = new HTML_QuickForm2_Rule_Each($mockEl, 'an error', $mockEl->createRule('required', 'an error'));
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertContains('Cannot use "required" Rule as a template', $e->getMessage());

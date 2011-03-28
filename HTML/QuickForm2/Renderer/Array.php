@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -103,7 +103,7 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *   // if element is a Container
  *   'attributes' => container attributes (string)
  *   // only for groups, if separator is set:
- *   'separator'  => separator for group elements (mixed),
+ *   'separator'  => separator for group elements (array),
  *   'elements'   => array(
  *     element_1,
  *     ...
@@ -365,7 +365,14 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
             'type'     => $group->getType()
         );
         if ($separator = $group->getSeparator()) {
-            $ary['separator'] = $separator;
+            $ary['separator'] = array();
+            for ($i = 0, $count = count($group); $i < $count - 1; $i++) {
+                if (!is_array($separator)) {
+                    $ary['separator'][] = (string)$separator;
+                } else {
+                    $ary['separator'][] = $separator[$i % count($separator)];
+                }
+            }
         }
         $this->pushContainer($ary);
     }
