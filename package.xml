@@ -210,6 +210,9 @@ Backwards compatibility issues
       <file name="Array.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Callback.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="Default.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -404,6 +407,9 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="ArrayTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="CallbackTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="DefaultTest.php" role="test">
@@ -619,6 +625,7 @@ Backwards compatibility issues
    <install as="QuickForm2/Element/TextareaTest.php" name="tests/QuickForm2/Element/TextareaTest.php" />
    <install as="QuickForm2/Renderer/AllTests.php" name="tests/QuickForm2/Renderer/AllTests.php" />
    <install as="QuickForm2/Renderer/ArrayTest.php" name="tests/QuickForm2/Renderer/ArrayTest.php" />
+   <install as="QuickForm2/Renderer/CallbackTest.php" name="tests/QuickForm2/Renderer/CallbackTest.php" />
    <install as="QuickForm2/Renderer/DefaultTest.php" name="tests/QuickForm2/Renderer/DefaultTest.php" />
    <install as="QuickForm2/Rule/AllTests.php" name="tests/QuickForm2/Rule/AllTests.php" />
    <install as="QuickForm2/Rule/CallbackTest.php" name="tests/QuickForm2/Rule/CallbackTest.php" />

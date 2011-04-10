@@ -188,20 +188,31 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     }
 
    /**
+    * Tells whether the form was already submitted
+    *
+    * This is a shortcut for checking whether there is an instance of Submit
+    * data source in the list of form data sources
+    *
+    * @return bool
+    */
+    public function isSubmitted()
+    {
+        foreach ($this->datasources as $ds) {
+            if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+   /**
     * Performs the server-side validation
     *
     * @return   boolean Whether all form's elements are valid
     */
     public function validate()
     {
-        $isSubmitted = false;
-        foreach ($this->datasources as $ds) {
-            if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
-                $isSubmitted = true;
-                break;
-            }
-        }
-        return $isSubmitted? parent::validate(): false;
+        return $this->isSubmitted() && parent::validate();
     }
 
    /**
