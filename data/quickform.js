@@ -871,40 +871,38 @@ qf.Validator.prototype.removeRelatedErrors = function(rule)
 
 qf.Validator.prototype.runLive = function(event)
 {
-    var elId     = event.target.id,
-        testId   = ' ' + elId + ' ',
-        found    = false,
-        queue    = [],
-        triggers = [];
+    var testId   = ' ' + event.target.id + ' ',
+        ruleHash = new qf.Map(),
+        length   = -1;
 
-    // first: find all elements "related" to the given one
-    for (var i = 0, rule; rule = this.rules[i]; i++) {
-        if (typeof rule.triggers == 'undefined') {
-            continue;
-        }
-        if (-1 < (' ' + rule.triggers.join(' ') + ' ').indexOf(testId)) {
-            triggers = triggers.concat(rule.triggers);
-        }
-    }
-
-    // second: find all rules for "related" elements, clear their messages
-    triggers = ' ' + triggers.join(' ') + ' ';
-    for (i = 0; rule = this.rules[i]; i++) {
-        if (typeof rule.triggers == 'undefined') {
-            continue;
-        }
-        for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
-            if (-1 < triggers.indexOf(' ' + trigger + ' ')) {
-                this.removeRelatedErrors(rule);
-                queue.push(rule);
-                break;
+    // first: find all rules "related" to the given element
+    while (ruleHash.length() > length) {
+        length = ruleHash.length();
+        for (var i = 0, rule; rule = this.rules[i]; i++) {
+            if (typeof rule.triggers == 'undefined' || ruleHash.hasKey(i)) {
+                continue;
+            }
+            for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
+                if (-1 < testId.indexOf(' ' + trigger + ' ')) {
+                    ruleHash.set(i, true);
+                    testId += rule.triggers.join(' ') + ' ';
+                    break;
+                }
             }
         }
     }
 
-    // third: run all found rules
-    for (i = 0; rule = queue[i]; i++) {
-        if (this.errors.hasKey(rule.owner)) {
+    // second: clear messages for "related" rules
+    for (i = 0; rule = this.rules[i]; i++) {
+        if (!ruleHash.hasKey(i)) {
+            continue;
+        }
+        this.removeRelatedErrors(rule);
+    }
+
+    // third: run all "related" rules
+    for (i = 0; rule = this.rules[i]; i++) {
+        if (!ruleHash.hasKey(i) || this.errors.hasKey(rule.owner)) {
             continue;
         }
         this.validate(rule);
