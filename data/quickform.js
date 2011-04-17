@@ -50,6 +50,54 @@ qf.typeOf = function(value) {
     return s;
 };
 
+qf.addClass = function(element, name)
+{
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    if (!element.className) {
+        element.className = name.join(' ');
+    } else {
+        var checkName = ' ' + element.className + ' ',
+            newName   = element.className;
+        for (var i = 0, len = name.length; i < len; i++) {
+            if (name[i] && 0 > checkName.indexOf(' ' + name[i] + ' ')) {
+                newName += ' ' + name[i];
+            }
+        }
+        element.className = newName;
+    }
+};
+
+qf.removeClass = function(element, name)
+{
+    if (!element.className) {
+        return;
+    }
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    var className = (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ');
+    for (var i = 0, len = name.length; i < len; i++) {
+        if (name[i]) {
+            className = className.replace(' ' + name[i] + ' ', ' ');
+        }
+    }
+    element.className = className.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+qf.hasClass = function(element, name)
+{
+    if (!element) {
+        alert(name);
+        return false;
+    }
+    if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
+        return true;
+    }
+    return false;
+};
+
 /**
  * Builds an object structure for the provided namespace path.
  *
@@ -280,17 +328,17 @@ qf.Map.prototype._cleanupKeys = function()
     var srcIndex  = 0;
     var destIndex = 0;
     var seen      = {};
-    while (srcIndex < this.keys_.length) {
-        var key = this.keys_[srcIndex];
+    while (srcIndex < this._keys.length) {
+        var key = this._keys[srcIndex];
         if (qf.Map._hasKey(this._map, key)
             && !qf.Map._hasKey(seen, key)
         ) {
-            this.keys_[destIndex++] = key;
+            this._keys[destIndex++] = key;
             seen[key] = true;
         }
         srcIndex++;
     }
-    this.keys_.length = destIndex;
+    this._keys.length = destIndex;
 };
 
 /**
@@ -547,15 +595,32 @@ qf.addNamespace('qf.events');
  * @param   {Element}    element
  * @param   {String}     type
  * @param   {function()} handler
+ * @param   {boolean}    capture
  */
-qf.events.addListener = function(element, type, handler)
+qf.events.addListener = function(element, type, handler, capture)
 {
     if (element.addEventListener) {
-        element.addEventListener(type, handler, false);
+        element.addEventListener(type, handler, capture);
     } else {
+        /* Replace events that don't bubble */
+        if ('blur' == type) {
+            type = 'focusout';
+        } else if('focus' == type) {
+            type = 'focusin';
+        }
         element.attachEvent('on' + type, handler);
     }
 };
+
+qf.events.removeListener = function(element, type, handler, capture)
+{
+    if (element.removeEventListener) {
+        element.removeEventListener(type, handler, capture);
+    } else {
+        element.detachEvent('on' + type, handler);
+    }
+};
+
 
 /**
  * Adds some standard fields to (IE's) event object.
@@ -607,7 +672,7 @@ qf.events.fixEvent = function(e)
  * @param {Array} rules
  * @constructor
  */
-qf.Validator = function(form, rules)
+qf.Validator = function(form, rules, live)
 {
    /**
     * Validation rules
@@ -623,6 +688,15 @@ qf.Validator = function(form, rules)
 
     form.validator = this;
     qf.events.addListener(form, 'submit', qf.Validator.submitHandler);
+
+    for (var i = 0, rule; rule = this.rules[i]; i++) {
+        if (typeof rule.triggers != 'undefined') {
+            // TODO: a special onchange handling for IE below 9, events don't bubble there
+            qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
+            qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
+            break;
+        }
+    }
 };
 
 /**
@@ -635,6 +709,16 @@ qf.Validator.submitHandler = function(event)
     var form = event.target;
     if (form.validator && !form.validator.run(form)) {
         event.preventDefault();
+    }
+};
+
+
+qf.Validator.liveHandler = function (event)
+{
+    event    = qf.events.fixEvent(event);
+    var form = event.target.form;
+    if (form.validator) {
+        form.validator.runLive(event);
     }
 };
 
@@ -654,7 +738,20 @@ qf.Validator.prototype.msgPostfix = 'Please correct these fields.';
  * Called before starting the validation. May be used e.g. to clear the errors from form elements.
  * @param {HTMLFormElement} form The form being validated currently
  */
-qf.Validator.prototype.onStart = function(form) {};
+qf.Validator.prototype.onStart = function(form) 
+{
+    this.clearErrors(form);
+};
+
+qf.Validator.prototype.clearErrors = function(element)
+{
+    var spans = element.getElementsByTagName('span');
+    for (var i = 0, span; span = spans[i]; i++) {
+        if (qf.hasClass(span, 'error')) {
+            span.parentNode.removeChild(span);
+        }
+    }
+};
 
 /**
  * Called on setting the element error
@@ -662,7 +759,56 @@ qf.Validator.prototype.onStart = function(form) {};
  * @param {string} elementId ID attribute of an element
  * @param {string} errorMessage
  */
-qf.Validator.prototype.onError = function(elementId, errorMessage) {};
+qf.Validator.prototype.onError = function(elementId, errorMessage)
+{
+    var el = document.getElementById(elementId), parent = el, error;
+    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
+        parent = parent.parentNode;
+    }
+    qf.removeClass(parent, 'valid');
+    qf.addClass(parent, 'error');
+
+    this.clearErrors(parent);
+
+    error = document.createElement('span');
+    error.className = 'error';
+    error.appendChild(document.createTextNode(errorMessage));
+    error.appendChild(document.createElement('br'));
+    if ('fieldset' != parent.nodeName.toLowerCase()) {
+        parent.insertBefore(error, parent.firstChild);
+    } else {
+        // error span should be inserted *after* legend, IE will render it before fieldset otherwise
+        var legends = parent.getElementsByTagName('legend');
+        if (0 == legends.length) {
+            parent.insertBefore(error, parent.firstChild);
+        } else {
+            legends[legends.length - 1].parentNode.insertBefore(error, legends[legends.length - 1].nextSibling);
+        }
+    }
+};
+
+qf.Validator.prototype.onFieldValid = function(elementId)
+{
+    var el = document.getElementById(elementId), parent = el;
+    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
+        parent = parent.parentNode;
+    }
+    qf.removeClass(parent, 'error');
+    qf.addClass(parent, 'valid');
+
+    this.clearErrors(parent);
+};
+
+qf.Validator.prototype.clearValidationStatus = function(elementId)
+{
+    var el = document.getElementById(elementId), parent = el;
+    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
+        parent = parent.parentNode;
+    }
+    qf.removeClass(parent, ['error', 'valid']);
+
+    this.clearErrors(parent);
+};
 
 /**
  * Called on successfully validating the form
@@ -674,8 +820,9 @@ qf.Validator.prototype.onValid = function() {};
  */
 qf.Validator.prototype.onInvalid = function()
 {
-    alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);
+    /*alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);*/
 };
+
 
 /**
  * Performs validation using the stored rules
@@ -701,6 +848,66 @@ qf.Validator.prototype.run = function(form)
     } else {
         this.onInvalid();
         return false;
+    }
+};
+
+qf.Validator.prototype.removeRelatedErrors = function(rule)
+{
+    if (this.errors.hasKey(rule.owner)) {
+        this.errors.remove(rule.owner);
+        this.clearValidationStatus(rule.owner);
+    }
+    if (typeof rule.chained != 'undefined') {
+        for (var i = 0; i < rule.chained.length; i++) {
+            for (var j = 0; j < rule.chained[i].length; j++) {
+                if (this.errors.hasKey(rule.chained[i][j].owner)) {
+                    this.errors.remove(rule.chained[i][j].owner);
+                    this.clearValidationStatus(rule.chained[i][j].owner);
+                }
+            }
+        }
+    }
+};
+
+qf.Validator.prototype.runLive = function(event)
+{
+    var elId     = event.target.id,
+        testId   = ' ' + elId + ' ',
+        found    = false,
+        queue    = [],
+        triggers = [];
+
+    // first: find all elements "related" to the given one
+    for (var i = 0, rule; rule = this.rules[i]; i++) {
+        if (typeof rule.triggers == 'undefined') {
+            continue;
+        }
+        if (-1 < (' ' + rule.triggers.join(' ') + ' ').indexOf(testId)) {
+            triggers = triggers.concat(rule.triggers);
+        }
+    }
+
+    // second: find all rules for "related" elements, clear their messages
+    triggers = ' ' + triggers.join(' ') + ' ';
+    for (i = 0; rule = this.rules[i]; i++) {
+        if (typeof rule.triggers == 'undefined') {
+            continue;
+        }
+        for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
+            if (-1 < triggers.indexOf(' ' + trigger + ' ')) {
+                this.removeRelatedErrors(rule);
+                queue.push(rule);
+                break;
+            }
+        }
+    }
+
+    // third: run all found rules
+    for (i = 0; rule = queue[i]; i++) {
+        if (this.errors.hasKey(rule.owner)) {
+            continue;
+        }
+        this.validate(rule);
     }
 };
 
@@ -737,6 +944,8 @@ qf.Validator.prototype.validate = function(rule)
     if (!globalValid && rule.message && !this.errors.hasKey(rule.owner)) {
         this.errors.set(rule.owner, rule.message);
         this.onError(rule.owner, rule.message);
+    } else if (!this.errors.hasKey(rule.owner)) {
+        this.onFieldValid(rule.owner);
     }
 
     return globalValid;

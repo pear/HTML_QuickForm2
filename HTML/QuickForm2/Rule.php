@@ -309,6 +309,11 @@ abstract class HTML_QuickForm2_Rule
         );
     }
 
+    protected function getLiveTriggers()
+    {
+        return array($this->owner->getId());
+    }
+
    /**
     * Returns the client-side representation of the Rule
     *
@@ -322,25 +327,37 @@ abstract class HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_Exception   if Rule or its chained Rules can only
     *                                       be run server-side
     */
-    public function getJavascript()
+    public function getJavascript($outputTriggers = true)
     {
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
               "\towner: '" . $this->owner->getId() . "',\n" .
               "\tmessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());
+        if ($outputTriggers) {
+            $triggers = $this->getLiveTriggers();
+        }
         if (count($this->chainedRules) > 1 || count($this->chainedRules[0]) > 0) {
             $chained = array();
             foreach ($this->chainedRules as $item) {
                 $multipliers = array();
                 foreach ($item as $multiplier) {
-                    $multipliers[] = $multiplier->getJavascript();
+                    $multipliers[] = $multiplier->getJavascript(false);
+                    if ($outputTriggers) {
+                        $triggers = array_merge($triggers, $multiplier->getLiveTriggers());
+                    }
                 }
                 $chained[] = '[' . implode(",\n", $multipliers) . ']';
             }
             $js .= ",\n\tchained: [" . implode(",\n", $chained) . "]";
         }
-        return $js . "\n}";
+        if (!$outputTriggers) {
+            $triggersStr = '';
+        } else {
+            $triggers    = array_values(array_unique($triggers));
+            $triggersStr = ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers);
+        }
+        return $js . $triggersStr . "\n}";
     }
 }
 ?>

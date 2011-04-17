@@ -110,6 +110,15 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
         return "function () { return qf.rules.each([\n\t\t" . implode(",\n\t\t", $callbacks) . "\n\t]); }";
     }
 
+    protected function getLiveTriggers()
+    {
+        $triggers = array();
+        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+            $triggers[] = $child->getId();
+        }
+        return $triggers;
+    }
+
    /**
     * Sets the template Rule to use for actual validation
     *

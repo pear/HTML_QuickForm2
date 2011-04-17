@@ -97,6 +97,18 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
         }
     }
 
+    protected function getLiveTriggers()
+    {
+        if (!$this->owner instanceof HTML_QuickForm2_Container) {
+            return parent::getLiveTriggers();
+        }
+        $triggers = array();
+        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+            $triggers[] = $child->getId();
+        }
+        return $triggers;
+    }
+
    /**
     * Sets minimum number of nonempty values
     *

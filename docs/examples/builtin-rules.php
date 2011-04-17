@@ -36,6 +36,10 @@ if ('@data_dir@' != '@' . 'data_dir@') {
 }
 readfile($filename);
 ?>
+
+.quickform .valid input { background: #F0FFF0; }
+.quickform .error input { background: #FFF0F0; }
+
     </style>
     <script type="text/javascript">
 // <![CDATA[
@@ -118,13 +122,20 @@ $oldPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::SERVER | HTML_Qui
             ->or_($oldPassword->createRule('callback', 'Wrong password', 'check_password'));
 
 // this behaves exactly as it reads: either "password" and "password repeat"
-// are empty or they should be equal, password should be no less than 6 chars
-// and old password should be given
+// are both empty or they should be equal
 $newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT)
             ->and_($repPassword->createRule('empty'))
-            ->or_($repPassword->createRule('eq', 'The passwords do not match', $newPassword))
-            ->and_($newPassword->createRule('minlength', 'The password is too short', 6))
-            ->and_($oldPassword->createRule('nonempty', 'Supply old password if you want to change it'));
+            ->or_($repPassword->createRule('eq', 'The passwords do not match', $newPassword));
+
+// Either new password is not given, or old password is required
+$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::CLIENTSERVER)
+            ->or_($oldPassword->createRule('nonempty', 'Supply old password if you want to change it'));
+
+$newPassword->addRule('minlength', 'The password is too short', 6, HTML_QuickForm2_Rule::CLIENTSERVER);
+
+// No sense changing the password to the same value
+$newPassword->addRule('nonempty', '', null, HTML_QuickForm2_Rule::CLIENTSERVER)
+            ->and_($newPassword->createRule('neq', 'New password is the same as the old one', $oldPassword));
 
 //
 // Grouped elements validation

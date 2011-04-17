@@ -186,6 +186,16 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         }
     }
 
+    protected function getLiveTriggers()
+    {
+        $config = $this->getConfig();
+        if ($config['operand'] instanceof HTML_QuickForm2_Node) {
+            return array($this->owner->getId(), $config['operand']->getId());
+        } else {
+            return parent::getLiveTriggers();
+        }
+    }
+
    /**
     * Sets the comparison operator and operand to compare to
     *
