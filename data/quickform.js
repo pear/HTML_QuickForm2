@@ -761,16 +761,10 @@ qf.Validator.prototype.clearErrors = function(element)
  */
 qf.Validator.prototype.onError = function(elementId, errorMessage)
 {
-    var el = document.getElementById(elementId), parent = el, error;
-    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
-        parent = parent.parentNode;
-    }
-    qf.removeClass(parent, 'valid');
+    var parent = this.clearValidationStatus(elementId);
     qf.addClass(parent, 'error');
 
-    this.clearErrors(parent);
-
-    error = document.createElement('span');
+    var error = document.createElement('span');
     error.className = 'error';
     error.appendChild(document.createTextNode(errorMessage));
     error.appendChild(document.createElement('br'));
@@ -789,14 +783,8 @@ qf.Validator.prototype.onError = function(elementId, errorMessage)
 
 qf.Validator.prototype.onFieldValid = function(elementId)
 {
-    var el = document.getElementById(elementId), parent = el;
-    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
-        parent = parent.parentNode;
-    }
-    qf.removeClass(parent, 'error');
+    var parent = this.clearValidationStatus(elementId);
     qf.addClass(parent, 'valid');
-
-    this.clearErrors(parent);
 };
 
 qf.Validator.prototype.clearValidationStatus = function(elementId)
@@ -808,6 +796,8 @@ qf.Validator.prototype.clearValidationStatus = function(elementId)
     qf.removeClass(parent, ['error', 'valid']);
 
     this.clearErrors(parent);
+
+    return parent;
 };
 
 /**
@@ -860,10 +850,7 @@ qf.Validator.prototype.removeRelatedErrors = function(rule)
     if (typeof rule.chained != 'undefined') {
         for (var i = 0; i < rule.chained.length; i++) {
             for (var j = 0; j < rule.chained[i].length; j++) {
-                if (this.errors.hasKey(rule.chained[i][j].owner)) {
-                    this.errors.remove(rule.chained[i][j].owner);
-                    this.clearValidationStatus(rule.chained[i][j].owner);
-                }
+                this.removeRelatedErrors(rule.chained[i][j]);
             }
         }
     }
@@ -875,7 +862,7 @@ qf.Validator.prototype.runLive = function(event)
         ruleHash = new qf.Map(),
         length   = -1;
 
-    // first: find all rules "related" to the given element
+    // first: find all rules "related" to the given element, clear their error messages
     while (ruleHash.length() > length) {
         length = ruleHash.length();
         for (var i = 0, rule; rule = this.rules[i]; i++) {
@@ -885,6 +872,7 @@ qf.Validator.prototype.runLive = function(event)
             for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
                 if (-1 < testId.indexOf(' ' + trigger + ' ')) {
                     ruleHash.set(i, true);
+                    this.removeRelatedErrors(rule);
                     testId += rule.triggers.join(' ') + ' ';
                     break;
                 }
@@ -892,15 +880,7 @@ qf.Validator.prototype.runLive = function(event)
         }
     }
 
-    // second: clear messages for "related" rules
-    for (i = 0; rule = this.rules[i]; i++) {
-        if (!ruleHash.hasKey(i)) {
-            continue;
-        }
-        this.removeRelatedErrors(rule);
-    }
-
-    // third: run all "related" rules
+    // second: run all "related" rules
     for (i = 0; rule = this.rules[i]; i++) {
         if (!ruleHash.hasKey(i) || this.errors.hasKey(rule.owner)) {
             continue;
