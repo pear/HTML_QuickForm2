@@ -538,6 +538,36 @@ qf.form.setValue = function(el, value)
 qf.addNamespace('qf.events');
 
 /**
+ * Tests for specific events support
+ *
+ * Code "inspired" by jQuery, original technique from here:
+ * http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+ *
+ * @type {Object}
+ */
+qf.events.test = (function() {
+    var test = {
+        submitBubbles: true,
+        changeBubbles: true,
+        focusinBubbles: false
+    };
+    var div = document.createElement('div');
+
+    if (div.attachEvent) {
+        for (var i in {'submit': true, 'change': true, 'focusin': true}) {
+            var eventName   = 'on' + i;
+            var isSupported = (eventName in div);
+            if (!isSupported) {
+                div.setAttribute(eventName, 'return;');
+                isSupported = (typeof div[eventName] === 'function');
+            }
+            test[i + 'Bubbles'] = isSupported;
+        }
+    }
+    return test;
+})();
+
+/**
  * A na&iuml;ve wrapper around addEventListener() and attachEvent().
  *
  * QuickForm does not need a complete framework for crossbrowser event handling
@@ -554,12 +584,6 @@ qf.events.addListener = function(element, type, handler, capture)
     if (element.addEventListener) {
         element.addEventListener(type, handler, capture);
     } else {
-        /* Replace events that don't bubble */
-        if ('blur' == type) {
-            type = 'focusout';
-        } else if('focus' == type) {
-            type = 'focusin';
-        }
         element.attachEvent('on' + type, handler);
     }
 };
@@ -721,9 +745,41 @@ qf.Validator = function(form, rules, live)
 
     for (var i = 0, rule; rule = this.rules[i]; i++) {
         if (typeof rule.triggers != 'undefined') {
-            // TODO: a special onchange handling for IE below 9, events don't bubble there
-            qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
-            qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
+            if (qf.events.test.changeBubbles) {
+                qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
+
+            } else {
+                // This is IE with change event not bubbling... We don't
+                // terribly need an onchange event here, only an event that
+                // fires sometime around onchange. Therefore no checks whether
+                // a value actually *changed*
+                qf.events.addListener(form, 'click', function (event) {
+                    event  = qf.events.fixEvent(event);
+                    var el = event.target;
+                    if ('select' == el.nodeName.toLowerCase() 
+                        || 'input' == el.nodeName.toLowerCase() 
+                         && ('checkbox' == el.type || 'radio' == el.type) 
+                    ) {
+                        qf.Validator.liveHandler(event);
+                    }
+                });
+                qf.events.addListener(form, 'keydown', function (event) {
+                    event  = qf.events.fixEvent(event);
+                    var el = event.target, type = ('type' in el)? el.type: '';
+                    if ((13 == event.keyCode && 'textarea' != el.nodeName.toLowerCase())
+                        || (32 == event.keyCode && ('checkbox' == type || 'radio' == type))
+                        || 'select-multiple' == type
+                    ) {
+                        qf.Validator.liveHandler(event);
+                    }
+                });
+            }
+
+            if (qf.events.test.focusinBubbles) {
+                qf.events.addListener(form, 'focusout', qf.Validator.liveHandler, true);
+            } else {
+                qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
+            }
             break;
         }
     }
