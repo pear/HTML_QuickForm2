@@ -110,8 +110,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'separator' => '</li><li>',
             'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message></div>'
         ),
-        'html_quickform2_element' => '<div class="row"><label for="{id}" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}</div></div>',
-        'html_quickform2_container_group' => '<div class="row"><label class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element group<qf:error> error</qf:error>" id="{id}"><qf:error><span class="error">{error}</span><br /></qf:error>{content}</div></div>'
+        'html_quickform2_element' => '<div class="row"><label for="{id}" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}<br /></span></qf:error>{element}</div></div>',
+        'html_quickform2_container_group' => '<div class="row"><label class="element"><qf:required><span class="required">* </span></qf:required>{label}</label><div class="element group<qf:error> error</qf:error>" id="{id}"><qf:error><span class="error">{error}<br /></span></qf:error>{content}</div></div>'
     );
 
    /**

@@ -50,54 +50,6 @@ qf.typeOf = function(value) {
     return s;
 };
 
-qf.addClass = function(element, name)
-{
-    if ('string' == qf.typeOf(name)) {
-        name = name.split(/\\s+/);
-    }
-    if (!element.className) {
-        element.className = name.join(' ');
-    } else {
-        var checkName = ' ' + element.className + ' ',
-            newName   = element.className;
-        for (var i = 0, len = name.length; i < len; i++) {
-            if (name[i] && 0 > checkName.indexOf(' ' + name[i] + ' ')) {
-                newName += ' ' + name[i];
-            }
-        }
-        element.className = newName;
-    }
-};
-
-qf.removeClass = function(element, name)
-{
-    if (!element.className) {
-        return;
-    }
-    if ('string' == qf.typeOf(name)) {
-        name = name.split(/\\s+/);
-    }
-    var className = (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ');
-    for (var i = 0, len = name.length; i < len; i++) {
-        if (name[i]) {
-            className = className.replace(' ' + name[i] + ' ', ' ');
-        }
-    }
-    element.className = className.replace(/^\s+/, '').replace(/\s+$/, '');
-};
-
-qf.hasClass = function(element, name)
-{
-    if (!element) {
-        alert(name);
-        return false;
-    }
-    if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
-        return true;
-    }
-    return false;
-};
-
 /**
  * Builds an object structure for the provided namespace path.
  *
@@ -612,6 +564,14 @@ qf.events.addListener = function(element, type, handler, capture)
     }
 };
 
+/**
+ * A na&iuml;ve wrapper around removeEventListener() and detachEvent().
+ *
+ * @param   {Element}    element
+ * @param   {String}     type
+ * @param   {function()} handler
+ * @param   {boolean}    capture
+ */
 qf.events.removeListener = function(element, type, handler, capture)
 {
     if (element.removeEventListener) {
@@ -620,7 +580,6 @@ qf.events.removeListener = function(element, type, handler, capture)
         element.detachEvent('on' + type, handler);
     }
 };
-
 
 /**
  * Adds some standard fields to (IE's) event object.
@@ -664,6 +623,77 @@ qf.events.fixEvent = function(e)
 
     return e;
 };
+
+
+/**
+ * @name qf.classes
+ * @namespace Functions for CSS classes handling
+ */
+qf.addNamespace('qf.classes');
+
+/**
+ * Adds a class or a list of classes to an element, without duplicating class names
+ *
+ * @param {Node} element            DOM node to add class(es) to
+ * @param {string|string[]} name    Class name(s) to add
+ */
+qf.classes.add = function(element, name)
+{
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    if (!element.className) {
+        element.className = name.join(' ');
+    } else {
+        var checkName = ' ' + element.className + ' ',
+            newName   = element.className;
+        for (var i = 0, len = name.length; i < len; i++) {
+            if (name[i] && 0 > checkName.indexOf(' ' + name[i] + ' ')) {
+                newName += ' ' + name[i];
+            }
+        }
+        element.className = newName;
+    }
+};
+
+/**
+ * Removes a class or a list of classes from an element
+ *
+ * @param {Node} element            DOM node to remove class(es) from
+ * @param {string|string[]} name    Class name(s) to remove
+ */
+qf.classes.remove = function(element, name)
+{
+    if (!element.className) {
+        return;
+    }
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    var className = (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ');
+    for (var i = 0, len = name.length; i < len; i++) {
+        if (name[i]) {
+            className = className.replace(' ' + name[i] + ' ', ' ');
+        }
+    }
+    element.className = className.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+/**
+ * Checks whether a given element has a given class
+ *
+ * @param   {Node} element  DOM node to check
+ * @param   {string} name   Class name to check for
+ * @returns {boolean}
+ */
+qf.classes.has = function(element, name)
+{
+    if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
+        return true;
+    }
+    return false;
+};
+
 
 /**
  * Form validator, attaches onsubmit handler that runs the given rules.
@@ -712,7 +742,10 @@ qf.Validator.submitHandler = function(event)
     }
 };
 
-
+/**
+ * Event handler for form's onblur and onchange events
+ * @param {Event} event
+ */
 qf.Validator.liveHandler = function (event)
 {
     event    = qf.events.fixEvent(event);
@@ -740,17 +773,37 @@ qf.Validator.prototype.msgPostfix = 'Please correct these fields.';
  */
 qf.Validator.prototype.onStart = function(form) 
 {
-    this.clearErrors(form);
+    this._clearErrors(form);
 };
 
-qf.Validator.prototype.clearErrors = function(element)
+/**
+ * Called on setting the element error
+ *
+ * @param {string} elementId ID attribute of an element
+ * @param {string} errorMessage
+ * @deprecated Use onFieldError() instead
+ */
+qf.Validator.prototype.onError = function(elementId, errorMessage)
 {
-    var spans = element.getElementsByTagName('span');
-    for (var i = 0, span; span = spans[i]; i++) {
-        if (qf.hasClass(span, 'error')) {
-            span.parentNode.removeChild(span);
-        }
-    }
+    this.onFieldError(elementId, errorMessage);
+};
+
+/**
+ * Called on successfully validating the form
+ * @deprecated Use onFormValid() instead
+ */
+qf.Validator.prototype.onValid = function()
+{
+    this.onFormValid();
+};
+
+/**
+ * Called on failed validation
+ * @deprecated Use onFormError() instead
+ */
+qf.Validator.prototype.onInvalid = function()
+{
+    this.onFormError();
 };
 
 /**
@@ -759,10 +812,10 @@ qf.Validator.prototype.clearErrors = function(element)
  * @param {string} elementId ID attribute of an element
  * @param {string} errorMessage
  */
-qf.Validator.prototype.onError = function(elementId, errorMessage)
+qf.Validator.prototype.onFieldError = function(elementId, errorMessage)
 {
-    var parent = this.clearValidationStatus(elementId);
-    qf.addClass(parent, 'error');
+    var parent = this._clearValidationStatus(elementId);
+    qf.classes.add(parent, 'error');
 
     var error = document.createElement('span');
     error.className = 'error';
@@ -781,36 +834,86 @@ qf.Validator.prototype.onError = function(elementId, errorMessage)
     }
 };
 
+/**
+ * Called on successfully validating the element
+ *
+ * @param {string} elementId
+ */
 qf.Validator.prototype.onFieldValid = function(elementId)
 {
-    var parent = this.clearValidationStatus(elementId);
-    qf.addClass(parent, 'valid');
-};
-
-qf.Validator.prototype.clearValidationStatus = function(elementId)
-{
-    var el = document.getElementById(elementId), parent = el;
-    while (!qf.hasClass(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
-        parent = parent.parentNode;
-    }
-    qf.removeClass(parent, ['error', 'valid']);
-
-    this.clearErrors(parent);
-
-    return parent;
+    var parent = this._clearValidationStatus(elementId);
+    qf.classes.add(parent, 'valid');
 };
 
 /**
  * Called on successfully validating the form
  */
-qf.Validator.prototype.onValid = function() {};
+qf.Validator.prototype.onFormValid = function() {};
 
 /**
  * Called on failed validation
  */
-qf.Validator.prototype.onInvalid = function()
+qf.Validator.prototype.onFormError = function()
 {
     /*alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);*/
+};
+
+/**
+ * Clears validation status and error message of a given element
+ * 
+ * @param   {string} elementId
+ * @returns {Node}              Parent element that gets 'error' / 'valid'
+ *                              classes applied
+ * @private
+ */
+qf.Validator.prototype._clearValidationStatus = function(elementId)
+{
+    var el = document.getElementById(elementId), parent = el;
+    while (!qf.classes.has(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
+        parent = parent.parentNode;
+    }
+    qf.classes.remove(parent, ['error', 'valid']);
+
+    this._clearErrors(parent);
+
+    return parent;
+};
+
+/**
+ * Removes <span> elements with "error" class that are children of a given element 
+ * 
+ * @param   {Node} element
+ * @private
+ */
+qf.Validator.prototype._clearErrors = function(element)
+{
+    var spans = element.getElementsByTagName('span');
+    for (var i = 0, span; span = spans[i]; i++) {
+        if (qf.classes.has(span, 'error')) {
+            span.parentNode.removeChild(span);
+        }
+    }
+};
+
+/**
+ * Removes error messages from owner element(s) of a given rule and chained rules
+ *
+ * @param {Array} rule
+ * @private
+ */
+qf.Validator.prototype._removeRelatedErrors = function(rule)
+{
+    if (this.errors.hasKey(rule.owner)) {
+        this.errors.remove(rule.owner);
+        this._clearValidationStatus(rule.owner);
+    }
+    if (typeof rule.chained != 'undefined') {
+        for (var i = 0; i < rule.chained.length; i++) {
+            for (var j = 0; j < rule.chained[i].length; j++) {
+                this._removeRelatedErrors(rule.chained[i][j]);
+            }
+        }
+    }
 };
 
 
@@ -832,30 +935,20 @@ qf.Validator.prototype.run = function(form)
     }
 
     if (this.errors.isEmpty()) {
-        this.onValid();
+        this.onFormValid();
         return true;
 
     } else {
-        this.onInvalid();
+        this.onFormError();
         return false;
     }
 };
 
-qf.Validator.prototype.removeRelatedErrors = function(rule)
-{
-    if (this.errors.hasKey(rule.owner)) {
-        this.errors.remove(rule.owner);
-        this.clearValidationStatus(rule.owner);
-    }
-    if (typeof rule.chained != 'undefined') {
-        for (var i = 0; i < rule.chained.length; i++) {
-            for (var j = 0; j < rule.chained[i].length; j++) {
-                this.removeRelatedErrors(rule.chained[i][j]);
-            }
-        }
-    }
-};
-
+/**
+ * Performs live validation of an element and related ones
+ *
+ * @param {Event} event     Event triggering the validation
+ */
 qf.Validator.prototype.runLive = function(event)
 {
     var testId   = ' ' + event.target.id + ' ',
@@ -872,7 +965,7 @@ qf.Validator.prototype.runLive = function(event)
             for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
                 if (-1 < testId.indexOf(' ' + trigger + ' ')) {
                     ruleHash.set(i, true);
-                    this.removeRelatedErrors(rule);
+                    this._removeRelatedErrors(rule);
                     testId += rule.triggers.join(' ') + ' ';
                     break;
                 }
@@ -921,7 +1014,7 @@ qf.Validator.prototype.validate = function(rule)
 
     if (!globalValid && rule.message && !this.errors.hasKey(rule.owner)) {
         this.errors.set(rule.owner, rule.message);
-        this.onError(rule.owner, rule.message);
+        this.onFieldError(rule.owner, rule.message);
     } else if (!this.errors.hasKey(rule.owner)) {
         this.onFieldValid(rule.owner);
     }
