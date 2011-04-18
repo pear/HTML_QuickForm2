@@ -206,5 +206,51 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $el->createRule('no-config', '', 'foo')->getConfig());
         $this->assertEquals('bar', $el->createRule('with-config', '', 'foo')->getConfig());
     }
+
+    public function testValidationTriggers()
+    {
+        $el = new HTML_QuickForm2_Element_InputText('foo', array('id' => 'foo'));
+        $rule = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($el)
+        );
+        $rule->expects($this->exactly(2))->method('getJavascriptCallback')
+             ->will($this->returnValue('a callback'));
+
+        $this->assertContains('triggers: ["foo"]', $rule->getJavascript());
+        $this->assertNotContains('triggers:', $rule->getJavascript(false));
+    }
+
+    public function testChainedValidationTriggers()
+    {
+        $foo = new HTML_QuickForm2_Element_InputText('foo', array('id' => 'foo'));
+        $bar = new HTML_QuickForm2_Element_InputText('bar', array('id' => 'bar'));
+        $baz = new HTML_QuickForm2_Element_InputText('baz', array('id' => 'baz'));
+
+        $ruleFoo = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($foo)
+        );
+        $ruleBar = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($bar)
+        );
+        $ruleBaz = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($baz)
+        );
+        $ruleFoo->expects($this->once())->method('getJavascriptCallback')
+                ->will($this->returnValue('a callback'));
+        $ruleBar->expects($this->once())->method('getJavascriptCallback')
+                ->will($this->returnValue('a callback'));
+        $ruleBar->expects($this->once())->method('getJavascriptCallback')
+                ->will($this->returnValue('a callback'));
+
+        $script = $ruleFoo->and_($ruleBar->and_($ruleBaz))->getJavascript();
+        preg_match('/triggers: \[(.+?)\]/', $script, $m);
+        $this->assertContains('foo', $m[1]);
+        $this->assertContains('bar', $m[1]);
+        $this->assertContains('baz', $m[1]);
+    }
 }
 ?>

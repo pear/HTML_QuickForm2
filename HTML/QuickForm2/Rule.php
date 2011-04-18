@@ -309,9 +309,39 @@ abstract class HTML_QuickForm2_Rule
         );
     }
 
-    protected function getLiveTriggers()
+   /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * This returns IDs that are linked to the rule itself. Live validation
+    * will be be triggered by 'blur' or 'change' event on any of the elements
+    * whose IDs are returned by this method and getChainedJavascriptTriggers()
+    *
+    * @return array
+    */
+    protected function getOwnJavascriptTriggers()
     {
         return array($this->owner->getId());
+    }
+
+   /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * This returns IDs that are linked to the chained rules. Live validation
+    * will be be triggered by 'blur' or 'change' event on any of the elements
+    * whose IDs are returned by this method and getOwnJavascriptTriggers()
+    *
+    * @return array
+    */
+    protected function getChainedJavascriptTriggers()
+    {
+        $triggers = array();
+        foreach ($this->chainedRules as $item) {
+            foreach ($item as $multiplier) {
+                $triggers = array_merge($triggers, $multiplier->getOwnJavascriptTriggers(),
+                                        $multiplier->getChainedJavascriptTriggers());
+            }
+        }
+        return $triggers;
     }
 
    /**
@@ -334,18 +364,12 @@ abstract class HTML_QuickForm2_Rule
         $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
               "\towner: '" . $this->owner->getId() . "',\n" .
               "\tmessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());
-        if ($outputTriggers) {
-            $triggers = $this->getLiveTriggers();
-        }
         if (count($this->chainedRules) > 1 || count($this->chainedRules[0]) > 0) {
             $chained = array();
             foreach ($this->chainedRules as $item) {
                 $multipliers = array();
                 foreach ($item as $multiplier) {
                     $multipliers[] = $multiplier->getJavascript(false);
-                    if ($outputTriggers) {
-                        $triggers = array_merge($triggers, $multiplier->getLiveTriggers());
-                    }
                 }
                 $chained[] = '[' . implode(",\n", $multipliers) . ']';
             }
@@ -354,7 +378,10 @@ abstract class HTML_QuickForm2_Rule
         if (!$outputTriggers) {
             $triggersStr = '';
         } else {
-            $triggers    = array_values(array_unique($triggers));
+            $triggers    = array_values(array_unique(array_merge(
+                               $this->getOwnJavascriptTriggers(),
+                               $this->getChainedJavascriptTriggers()
+                           )));
             $triggersStr = ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers);
         }
         return $js . $triggersStr . "\n}";

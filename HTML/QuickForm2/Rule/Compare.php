@@ -126,6 +126,16 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         return "function () { return {$check}; }";
     }
 
+    protected function getOwnJavascriptTriggers()
+    {
+        $config = $this->getConfig();
+        if ($config['operand'] instanceof HTML_QuickForm2_Node) {
+            return array($this->owner->getId(), $config['operand']->getId());
+        } else {
+            return parent::getOwnJavascriptTriggers();
+        }
+    }
+
    /**
     * Merges local configuration with that provided for registerRule()
     *
@@ -183,16 +193,6 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
         } else {
             return array('operator' => reset($config), 'operand' => end($config));
-        }
-    }
-
-    protected function getLiveTriggers()
-    {
-        $config = $this->getConfig();
-        if ($config['operand'] instanceof HTML_QuickForm2_Node) {
-            return array($this->owner->getId(), $config['operand']->getId());
-        } else {
-            return parent::getLiveTriggers();
         }
     }
 

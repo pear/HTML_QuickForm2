@@ -180,5 +180,17 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
         $nonEmpty->setConfig(2);
         $this->assertFalse($nonEmpty->validate());
     }
+
+    public function testContainerValidationTriggers()
+    {
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $foo = $mockContainer->addElement('text', 'foo', array('id' => 'foo'));
+        $bar = $mockContainer->addElement('text', 'bar', array('id' => 'bar'));
+
+        $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($mockContainer, 'an error');
+        $this->assertContains('triggers: ["foo","bar"]', $nonEmpty->getJavascript());
+    }
 }
 ?>

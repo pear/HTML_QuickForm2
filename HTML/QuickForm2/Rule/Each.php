@@ -110,7 +110,7 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
         return "function () { return qf.rules.each([\n\t\t" . implode(",\n\t\t", $callbacks) . "\n\t]); }";
     }
 
-    protected function getLiveTriggers()
+    protected function getOwnJavascriptTriggers()
     {
         $triggers = array();
         foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {

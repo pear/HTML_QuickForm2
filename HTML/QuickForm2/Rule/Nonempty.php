@@ -97,18 +97,6 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
         }
     }
 
-    protected function getLiveTriggers()
-    {
-        if (!$this->owner instanceof HTML_QuickForm2_Container) {
-            return parent::getLiveTriggers();
-        }
-        $triggers = array();
-        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
-            $triggers[] = $child->getId();
-        }
-        return $triggers;
-    }
-
    /**
     * Sets minimum number of nonempty values
     *
@@ -139,6 +127,17 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
         return "function() { return qf.rules.nonempty(" . $this->owner->getJavascriptValue()
                . ", " . $this->getConfig() . "); }";
     }
-}
 
+    protected function getOwnJavascriptTriggers()
+    {
+        if (!$this->owner instanceof HTML_QuickForm2_Container) {
+            return parent::getOwnJavascriptTriggers();
+        }
+        $triggers = array();
+        foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+            $triggers[] = $child->getId();
+        }
+        return $triggers;
+    }
+}
 ?>
