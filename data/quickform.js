@@ -726,7 +726,7 @@ qf.classes.has = function(element, name)
  * @param {Array} rules
  * @constructor
  */
-qf.Validator = function(form, rules, live)
+qf.Validator = function(form, rules)
 {
    /**
     * Validation rules
