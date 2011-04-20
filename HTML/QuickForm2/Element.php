@@ -127,6 +127,11 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
         return $inContainer? "'{$this->getId()}'": "qf.\$v('{$this->getId()}')";
     }
 
+    public function getJavascriptTriggers()
+    {
+        return array($this->getId());
+    }
+
     /**
      * Applies recursive and non-recursive filters on element value
      *

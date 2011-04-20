@@ -324,36 +324,35 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Returns IDs of form fields that should trigger "live" Javascript validation
     *
-    * This returns IDs that are linked to the rule itself. Live validation
-    * will be be triggered by 'blur' or 'change' event on any of the elements
-    * whose IDs are returned by this method and getChainedJavascriptTriggers()
+    * This returns IDs that are linked to the rule itself.
     *
     * @return array
     */
     protected function getOwnJavascriptTriggers()
     {
-        return array($this->owner->getId());
+        return $this->owner->getJavascriptTriggers();
     }
 
    /**
     * Returns IDs of form fields that should trigger "live" Javascript validation
     *
-    * This returns IDs that are linked to the chained rules. Live validation
-    * will be be triggered by 'blur' or 'change' event on any of the elements
-    * whose IDs are returned by this method and getOwnJavascriptTriggers()
+    * This returns IDs that are linked to the rule itself and its chained
+    * rules. Live validation will be be triggered by 'blur' or 'change' event
+    * on any of the elements whose IDs are returned by this method.
     *
     * @return array
     */
-    protected function getChainedJavascriptTriggers()
+    protected function getJavascriptTriggers()
     {
-        $triggers = array();
+        $triggers = array_flip($this->getOwnJavascriptTriggers());
         foreach ($this->chainedRules as $item) {
             foreach ($item as $multiplier) {
-                $triggers = array_merge($triggers, $multiplier->getOwnJavascriptTriggers(),
-                                        $multiplier->getChainedJavascriptTriggers());
+                foreach ($multiplier->getJavascriptTriggers() as $trigger) {
+                    $triggers[$trigger] = true;
+                }
             }
         }
-        return $triggers;
+        return array_keys($triggers);
     }
 
    /**
@@ -387,15 +386,9 @@ abstract class HTML_QuickForm2_Rule
             }
             $js .= ",\n\tchained: [" . implode(",\n", $chained) . "]";
         }
-        if (!$outputTriggers) {
-            $triggersStr = '';
-        } else {
-            $triggers    = array_values(array_unique(array_merge(
-                               $this->getOwnJavascriptTriggers(),
-                               $this->getChainedJavascriptTriggers()
-                           )));
-            $triggersStr = ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers);
-        }
+        $triggersStr = $outputTriggers && count($triggers = $this->getJavascriptTriggers())
+                       ? ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers)
+                       : '';
         return $js . $triggersStr . "\n}";
     }
 }

@@ -138,6 +138,11 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
         return '';
     }
 
+    public function getJavascriptTriggers()
+    {
+        return array();
+    }
+
    /**
     * Called when the element needs to update its value from form's data sources
     *

@@ -128,12 +128,12 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
 
     protected function getOwnJavascriptTriggers()
     {
-        $config = $this->getConfig();
+        $triggers = $this->owner->getJavascriptTriggers();
+        $config   = $this->getConfig();
         if ($config['operand'] instanceof HTML_QuickForm2_Node) {
-            return array($this->owner->getId(), $config['operand']->getId());
-        } else {
-            return parent::getOwnJavascriptTriggers();
+            $triggers = array_merge($triggers, $config['operand']->getJavascriptTriggers());
         }
+        return $triggers;
     }
 
    /**

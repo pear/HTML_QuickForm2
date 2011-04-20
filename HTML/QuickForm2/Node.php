@@ -660,6 +660,15 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     abstract public function getJavascriptValue($inContainer = false);
 
+   /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * Rules added to this element with parameter HTML_QuickForm2_Rule::LIVE_CLIENT
+    * will be run by after these form elements change or lose focus
+    *
+    * @return array
+    */
+    abstract public function getJavascriptTriggers();
 
     /**
      * Adds a filter
