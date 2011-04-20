@@ -169,8 +169,8 @@ class HTML_QuickForm2_Renderer_Default_DualSelectPlugin
 <div class="row">
     <label for="{id}-from" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>
     <div class="element<qf:error> error</qf:error>">
-        <qf:error><span class="error">{error}</span><br /></qf:error>
-        <table class="dualselect">
+        <qf:error><span class="error">{error}<br /></span></qf:error>
+        <table class="dualselect" id="{id}">
             <tr>
                 <td style="vertical-align: top;">{select_from}</td>
                 <td style="vertical-align: middle;">{button_from_to}<br />{button_to_from}</td>
@@ -287,7 +287,7 @@ $ds = $fs->addElement(
 ));
 
 $ds->addRule('required', 'Select at least two destinations', 2,
-             HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+             HTML_QuickForm2_Rule::CLIENT_SERVER);
 
 $fs->addElement('checkbox', 'doFreeze', null, array('content' => 'Freeze dualselect on form submit'));
 
