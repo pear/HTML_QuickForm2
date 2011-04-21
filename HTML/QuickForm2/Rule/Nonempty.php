@@ -128,5 +128,4 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
                . ", " . $this->getConfig() . "); }";
     }
 }
-
 ?>

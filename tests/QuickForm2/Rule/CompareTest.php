@@ -199,5 +199,21 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
         );
         $this->assertTrue($ruleAccounts->validate());
     }
+
+    public function testValidationTriggers()
+    {
+        $foo = $this->getMock(
+            'HTML_QuickForm2_Element',
+            array('getType', 'getRawValue', 'setValue', '__toString'),
+            array('foo', array('id' => 'foo'))
+        );
+        $bar = $this->getMock(
+            'HTML_QuickForm2_Element',
+            array('getType', 'getRawValue', 'setValue', '__toString'),
+            array('bar', array('id' => 'bar'))
+        );
+        $compare = new HTML_QuickForm2_Rule_Compare($foo, '...', $bar);
+        $this->assertContains('triggers: ["foo","bar"]', $compare->getJavascript());
+    }
 }
 ?>

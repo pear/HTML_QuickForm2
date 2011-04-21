@@ -490,6 +490,17 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         }
         return 'qf.$cv(' . implode(', ', $args) . ')';
     }
+
+    public function getJavascriptTriggers()
+    {
+        $triggers = array();
+        foreach ($this as $child) {
+            foreach ($child->getJavascriptTriggers() as $trigger) {
+                $triggers[$trigger] = true;
+            }
+        }
+        return array_keys($triggers);
+    }
 }
 
 /**

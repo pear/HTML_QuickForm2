@@ -10,13 +10,21 @@
 
 qf.addNamespace('qf.elements.dualselect');
 
-qf.elements.dualselect.init = function(destId)
+qf.elements.dualselect.init = function(baseId, keepSorted)
 {
-    var dest = document.getElementById(destId);
+    var dest = document.getElementById(baseId + '-to');
     qf.events.addListener(dest.form, 'submit', function() {
         for (var option, i = 0; option = dest.options[i]; i++) {
             option.selected = true;
         }
+    });
+    qf.events.addListener(document.getElementById(baseId + '-fromto'), 'click', function(event) {
+        qf.elements.dualselect.moveOptions(baseId + '-from', baseId + '-to', keepSorted);
+        qf.Validator.liveHandler(event);
+    });
+    qf.events.addListener(document.getElementById(baseId + '-tofrom'), 'click', function(event) {
+        qf.elements.dualselect.moveOptions(baseId + '-to', baseId + '-from', keepSorted);
+        qf.Validator.liveHandler(event);
     });
 };
 

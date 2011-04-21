@@ -126,6 +126,16 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
         return "function () { return {$check}; }";
     }
 
+    protected function getOwnJavascriptTriggers()
+    {
+        $triggers = $this->owner->getJavascriptTriggers();
+        $config   = $this->getConfig();
+        if ($config['operand'] instanceof HTML_QuickForm2_Node) {
+            $triggers = array_merge($triggers, $config['operand']->getJavascriptTriggers());
+        }
+        return $triggers;
+    }
+
    /**
     * Merges local configuration with that provided for registerRule()
     *

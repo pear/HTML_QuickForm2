@@ -212,5 +212,23 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
         $this->assertNotContains('staticCallback', $each->getJavascript());
     }
+
+    public function testValidationTriggers()
+    {
+        $mockContainer = $this->getMock(
+            'HTML_QuickForm2_Container', array('getType', 'setValue', '__toString')
+        );
+        $foo = $mockContainer->addElement('text', 'foo', array('id' => 'foo'));
+        $bar = $mockContainer->addElement('text', 'bar', array('id' => 'bar'));
+
+        $rule = $this->getMock(
+            'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
+            array($mockContainer, 'a message')
+        );
+        $rule->expects($this->any())->method('getJavascriptCallback')
+             ->will($this->returnValue('a callback'));
+        $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
+        $this->assertContains('triggers: ["foo","bar"]', $each->getJavascript());
+    }
 }
 ?>

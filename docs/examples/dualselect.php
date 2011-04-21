@@ -51,7 +51,7 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
                 HTML_QuickForm2_Renderer::factory('default')
                     ->setTemplateForId(
                         $this->getId(),
-                        "<table class=\"dualselect\">\n" .
+                        "<table class=\"dualselect\" id=\"{id}\">\n" .
                         "    <tr>\n" .
                         "       <td style=\"vertical-align: top;\">{select_from}</td>\n" .
                         "       <td style=\"vertical-align: middle;\">{button_from_to}<br />{button_to_from}</td>\n" .
@@ -70,14 +70,11 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
             $renderer->renderElement($this);
         } else {
             $jsBuilder = $renderer->getJavascriptBuilder();
-            foreach ($this->rules as $rule) {
-                if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
-                    $jsBuilder->addRule($rule[0]);
-                }
-            }
+            $this->renderClientRules($jsBuilder);
             $jsBuilder->addLibrary('dualselect', 'dualselect.js', 'js/',
                                    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR);
-            $jsBuilder->addElementJavascript("qf.elements.dualselect.init('{$this->getId()}-to');");
+            $keepSorted = empty($this->data['keepSorted'])? 'false': 'true';
+            $jsBuilder->addElementJavascript("qf.elements.dualselect.init('{$this->getId()}', {$keepSorted});");
             $renderer->renderDualSelect($this);
         }
         return $renderer;
@@ -111,16 +108,15 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
             }
         }
 
-        $keepSorted = empty($this->data['keepSorted'])? 'false': 'true';
         $buttonFromTo = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_fromto",
-            array('type' => 'button', 'onclick' => "qf.elements.dualselect.moveOptions('{$id}-from', '{$id}-to', {$keepSorted})") +
+            array('type' => 'button', 'id' => "{$id}-fromto") +
                 (empty($this->data['from_to']['attributes'])? array(): self::prepareAttributes($this->data['from_to']['attributes'])),
             array('content' => (empty($this->data['from_to']['content'])? ' &gt;&gt; ': $this->data['from_to']['content']))
         );
         $buttonToFrom = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_tofrom",
-            array('type' => 'button', 'onclick' => "qf.elements.dualselect.moveOptions('{$id}-to', '{$id}-from', {$keepSorted})") +
+            array('type' => 'button', 'id' => "{$id}-tofrom") +
                 (empty($this->data['to_from']['attributes'])? array(): self::prepareAttributes($this->data['to_from']['attributes'])),
             array('content' => (empty($this->data['to_from']['content'])? ' &lt;&lt; ': $this->data['to_from']['content']))
         );
@@ -149,6 +145,12 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
             return "qf.elements.dualselect.getValue('{$this->getId()}-to')";
         }
     }
+
+    public function getJavascriptTriggers()
+    {
+        $id = $this->getId();
+        return array("{$id}-from", "{$id}-to", "{$id}-fromto", "{$id}-tofrom");
+    }
 }
 
 /**
@@ -169,8 +171,8 @@ class HTML_QuickForm2_Renderer_Default_DualSelectPlugin
 <div class="row">
     <label for="{id}-from" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>
     <div class="element<qf:error> error</qf:error>">
-        <qf:error><span class="error">{error}</span><br /></qf:error>
-        <table class="dualselect">
+        <qf:error><span class="error">{error}<br /></span></qf:error>
+        <table class="dualselect" id="{id}">
             <tr>
                 <td style="vertical-align: top;">{select_from}</td>
                 <td style="vertical-align: middle;">{button_from_to}<br />{button_to_from}</td>
@@ -273,7 +275,7 @@ $fs = $form->addElement('fieldset')
 
 $ds = $fs->addElement(
     'dualselect', 'destinations',
-    array('size' => 10, 'style' => 'width: 225px; font-size: 90%'),
+    array('size' => 10, 'style' => 'width: 215px; font-size: 90%'),
     array(
         'options'    => $options,
         'keepSorted' => true,
@@ -287,7 +289,7 @@ $ds = $fs->addElement(
 ));
 
 $ds->addRule('required', 'Select at least two destinations', 2,
-             HTML_QuickForm2_Rule::SERVER | HTML_QuickForm2_Rule::CLIENT);
+             HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 $fs->addElement('checkbox', 'doFreeze', null, array('content' => 'Freeze dualselect on form submit'));
 

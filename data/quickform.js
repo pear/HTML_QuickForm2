@@ -280,17 +280,17 @@ qf.Map.prototype._cleanupKeys = function()
     var srcIndex  = 0;
     var destIndex = 0;
     var seen      = {};
-    while (srcIndex < this.keys_.length) {
-        var key = this.keys_[srcIndex];
+    while (srcIndex < this._keys.length) {
+        var key = this._keys[srcIndex];
         if (qf.Map._hasKey(this._map, key)
             && !qf.Map._hasKey(seen, key)
         ) {
-            this.keys_[destIndex++] = key;
+            this._keys[destIndex++] = key;
             seen[key] = true;
         }
         srcIndex++;
     }
-    this.keys_.length = destIndex;
+    this._keys.length = destIndex;
 };
 
 /**
@@ -538,6 +538,36 @@ qf.form.setValue = function(el, value)
 qf.addNamespace('qf.events');
 
 /**
+ * Tests for specific events support
+ *
+ * Code "inspired" by jQuery, original technique from here:
+ * http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+ *
+ * @type {Object}
+ */
+qf.events.test = (function() {
+    var test = {
+        submitBubbles: true,
+        changeBubbles: true,
+        focusinBubbles: false
+    };
+    var div = document.createElement('div');
+
+    if (div.attachEvent) {
+        for (var i in {'submit': true, 'change': true, 'focusin': true}) {
+            var eventName   = 'on' + i;
+            var isSupported = (eventName in div);
+            if (!isSupported) {
+                div.setAttribute(eventName, 'return;');
+                isSupported = (typeof div[eventName] === 'function');
+            }
+            test[i + 'Bubbles'] = isSupported;
+        }
+    }
+    return test;
+})();
+
+/**
  * A na&iuml;ve wrapper around addEventListener() and attachEvent().
  *
  * QuickForm does not need a complete framework for crossbrowser event handling
@@ -547,13 +577,31 @@ qf.addNamespace('qf.events');
  * @param   {Element}    element
  * @param   {String}     type
  * @param   {function()} handler
+ * @param   {boolean}    capture
  */
-qf.events.addListener = function(element, type, handler)
+qf.events.addListener = function(element, type, handler, capture)
 {
     if (element.addEventListener) {
-        element.addEventListener(type, handler, false);
+        element.addEventListener(type, handler, capture);
     } else {
         element.attachEvent('on' + type, handler);
+    }
+};
+
+/**
+ * A na&iuml;ve wrapper around removeEventListener() and detachEvent().
+ *
+ * @param   {Element}    element
+ * @param   {String}     type
+ * @param   {function()} handler
+ * @param   {boolean}    capture
+ */
+qf.events.removeListener = function(element, type, handler, capture)
+{
+    if (element.removeEventListener) {
+        element.removeEventListener(type, handler, capture);
+    } else {
+        element.detachEvent('on' + type, handler);
     }
 };
 
@@ -600,6 +648,77 @@ qf.events.fixEvent = function(e)
     return e;
 };
 
+
+/**
+ * @name qf.classes
+ * @namespace Functions for CSS classes handling
+ */
+qf.addNamespace('qf.classes');
+
+/**
+ * Adds a class or a list of classes to an element, without duplicating class names
+ *
+ * @param {Node} element            DOM node to add class(es) to
+ * @param {string|string[]} name    Class name(s) to add
+ */
+qf.classes.add = function(element, name)
+{
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    if (!element.className) {
+        element.className = name.join(' ');
+    } else {
+        var checkName = ' ' + element.className + ' ',
+            newName   = element.className;
+        for (var i = 0, len = name.length; i < len; i++) {
+            if (name[i] && 0 > checkName.indexOf(' ' + name[i] + ' ')) {
+                newName += ' ' + name[i];
+            }
+        }
+        element.className = newName;
+    }
+};
+
+/**
+ * Removes a class or a list of classes from an element
+ *
+ * @param {Node} element            DOM node to remove class(es) from
+ * @param {string|string[]} name    Class name(s) to remove
+ */
+qf.classes.remove = function(element, name)
+{
+    if (!element.className) {
+        return;
+    }
+    if ('string' == qf.typeOf(name)) {
+        name = name.split(/\\s+/);
+    }
+    var className = (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ');
+    for (var i = 0, len = name.length; i < len; i++) {
+        if (name[i]) {
+            className = className.replace(' ' + name[i] + ' ', ' ');
+        }
+    }
+    element.className = className.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+/**
+ * Checks whether a given element has a given class
+ *
+ * @param   {Node} element  DOM node to check
+ * @param   {string} name   Class name to check for
+ * @returns {boolean}
+ */
+qf.classes.has = function(element, name)
+{
+    if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
+        return true;
+    }
+    return false;
+};
+
+
 /**
  * Form validator, attaches onsubmit handler that runs the given rules.
  *
@@ -623,6 +742,47 @@ qf.Validator = function(form, rules)
 
     form.validator = this;
     qf.events.addListener(form, 'submit', qf.Validator.submitHandler);
+
+    for (var i = 0, rule; rule = this.rules[i]; i++) {
+        if (typeof rule.triggers != 'undefined') {
+            if (qf.events.test.changeBubbles) {
+                qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
+
+            } else {
+                // This is IE with change event not bubbling... We don't
+                // terribly need an onchange event here, only an event that
+                // fires sometime around onchange. Therefore no checks whether
+                // a value actually *changed*
+                qf.events.addListener(form, 'click', function (event) {
+                    event  = qf.events.fixEvent(event);
+                    var el = event.target;
+                    if ('select' == el.nodeName.toLowerCase() 
+                        || 'input' == el.nodeName.toLowerCase() 
+                         && ('checkbox' == el.type || 'radio' == el.type) 
+                    ) {
+                        qf.Validator.liveHandler(event);
+                    }
+                });
+                qf.events.addListener(form, 'keydown', function (event) {
+                    event  = qf.events.fixEvent(event);
+                    var el = event.target, type = ('type' in el)? el.type: '';
+                    if ((13 == event.keyCode && 'textarea' != el.nodeName.toLowerCase())
+                        || (32 == event.keyCode && ('checkbox' == type || 'radio' == type))
+                        || 'select-multiple' == type
+                    ) {
+                        qf.Validator.liveHandler(event);
+                    }
+                });
+            }
+
+            if (qf.events.test.focusinBubbles) {
+                qf.events.addListener(form, 'focusout', qf.Validator.liveHandler, true);
+            } else {
+                qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
+            }
+            break;
+        }
+    }
 };
 
 /**
@@ -635,6 +795,19 @@ qf.Validator.submitHandler = function(event)
     var form = event.target;
     if (form.validator && !form.validator.run(form)) {
         event.preventDefault();
+    }
+};
+
+/**
+ * Event handler for form's onblur and onchange events
+ * @param {Event} event
+ */
+qf.Validator.liveHandler = function (event)
+{
+    event    = qf.events.fixEvent(event);
+    var form = event.target.form;
+    if (form.validator) {
+        form.validator.runLive(event);
     }
 };
 
@@ -654,7 +827,40 @@ qf.Validator.prototype.msgPostfix = 'Please correct these fields.';
  * Called before starting the validation. May be used e.g. to clear the errors from form elements.
  * @param {HTMLFormElement} form The form being validated currently
  */
-qf.Validator.prototype.onStart = function(form) {};
+qf.Validator.prototype.onStart = function(form) 
+{
+    this._clearErrors(form);
+};
+
+/**
+ * Called on setting the element error
+ *
+ * @param {string} elementId ID attribute of an element
+ * @param {string} errorMessage
+ * @deprecated Use onFieldError() instead
+ */
+qf.Validator.prototype.onError = function(elementId, errorMessage)
+{
+    this.onFieldError(elementId, errorMessage);
+};
+
+/**
+ * Called on successfully validating the form
+ * @deprecated Use onFormValid() instead
+ */
+qf.Validator.prototype.onValid = function()
+{
+    this.onFormValid();
+};
+
+/**
+ * Called on failed validation
+ * @deprecated Use onFormError() instead
+ */
+qf.Validator.prototype.onInvalid = function()
+{
+    this.onFormError();
+};
 
 /**
  * Called on setting the element error
@@ -662,20 +868,110 @@ qf.Validator.prototype.onStart = function(form) {};
  * @param {string} elementId ID attribute of an element
  * @param {string} errorMessage
  */
-qf.Validator.prototype.onError = function(elementId, errorMessage) {};
+qf.Validator.prototype.onFieldError = function(elementId, errorMessage)
+{
+    var parent = this._clearValidationStatus(elementId);
+    qf.classes.add(parent, 'error');
+
+    var error = document.createElement('span');
+    error.className = 'error';
+    error.appendChild(document.createTextNode(errorMessage));
+    error.appendChild(document.createElement('br'));
+    if ('fieldset' != parent.nodeName.toLowerCase()) {
+        parent.insertBefore(error, parent.firstChild);
+    } else {
+        // error span should be inserted *after* legend, IE will render it before fieldset otherwise
+        var legends = parent.getElementsByTagName('legend');
+        if (0 == legends.length) {
+            parent.insertBefore(error, parent.firstChild);
+        } else {
+            legends[legends.length - 1].parentNode.insertBefore(error, legends[legends.length - 1].nextSibling);
+        }
+    }
+};
+
+/**
+ * Called on successfully validating the element
+ *
+ * @param {string} elementId
+ */
+qf.Validator.prototype.onFieldValid = function(elementId)
+{
+    var parent = this._clearValidationStatus(elementId);
+    qf.classes.add(parent, 'valid');
+};
 
 /**
  * Called on successfully validating the form
  */
-qf.Validator.prototype.onValid = function() {};
+qf.Validator.prototype.onFormValid = function() {};
 
 /**
  * Called on failed validation
  */
-qf.Validator.prototype.onInvalid = function()
+qf.Validator.prototype.onFormError = function()
 {
-    alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);
+    /*alert(this.msgPrefix + '\n - ' + this.errors.getValues().join('\n - ') + '\n' + this.msgPostfix);*/
 };
+
+/**
+ * Clears validation status and error message of a given element
+ * 
+ * @param   {string} elementId
+ * @returns {Node}              Parent element that gets 'error' / 'valid'
+ *                              classes applied
+ * @private
+ */
+qf.Validator.prototype._clearValidationStatus = function(elementId)
+{
+    var el = document.getElementById(elementId), parent = el;
+    while (!qf.classes.has(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
+        parent = parent.parentNode;
+    }
+    qf.classes.remove(parent, ['error', 'valid']);
+
+    this._clearErrors(parent);
+
+    return parent;
+};
+
+/**
+ * Removes <span> elements with "error" class that are children of a given element 
+ * 
+ * @param   {Node} element
+ * @private
+ */
+qf.Validator.prototype._clearErrors = function(element)
+{
+    var spans = element.getElementsByTagName('span');
+    for (var i = 0, span; span = spans[i]; i++) {
+        if (qf.classes.has(span, 'error')) {
+            span.parentNode.removeChild(span);
+        }
+    }
+};
+
+/**
+ * Removes error messages from owner element(s) of a given rule and chained rules
+ *
+ * @param {Array} rule
+ * @private
+ */
+qf.Validator.prototype._removeRelatedErrors = function(rule)
+{
+    if (this.errors.hasKey(rule.owner)) {
+        this.errors.remove(rule.owner);
+        this._clearValidationStatus(rule.owner);
+    }
+    if (typeof rule.chained != 'undefined') {
+        for (var i = 0; i < rule.chained.length; i++) {
+            for (var j = 0; j < rule.chained[i].length; j++) {
+                this._removeRelatedErrors(rule.chained[i][j]);
+            }
+        }
+    }
+};
+
 
 /**
  * Performs validation using the stored rules
@@ -695,12 +991,50 @@ qf.Validator.prototype.run = function(form)
     }
 
     if (this.errors.isEmpty()) {
-        this.onValid();
+        this.onFormValid();
         return true;
 
     } else {
-        this.onInvalid();
+        this.onFormError();
         return false;
+    }
+};
+
+/**
+ * Performs live validation of an element and related ones
+ *
+ * @param {Event} event     Event triggering the validation
+ */
+qf.Validator.prototype.runLive = function(event)
+{
+    var testId   = ' ' + event.target.id + ' ',
+        ruleHash = new qf.Map(),
+        length   = -1;
+
+    // first: find all rules "related" to the given element, clear their error messages
+    while (ruleHash.length() > length) {
+        length = ruleHash.length();
+        for (var i = 0, rule; rule = this.rules[i]; i++) {
+            if (typeof rule.triggers == 'undefined' || ruleHash.hasKey(i)) {
+                continue;
+            }
+            for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
+                if (-1 < testId.indexOf(' ' + trigger + ' ')) {
+                    ruleHash.set(i, true);
+                    this._removeRelatedErrors(rule);
+                    testId += rule.triggers.join(' ') + ' ';
+                    break;
+                }
+            }
+        }
+    }
+
+    // second: run all "related" rules
+    for (i = 0; rule = this.rules[i]; i++) {
+        if (!ruleHash.hasKey(i) || this.errors.hasKey(rule.owner)) {
+            continue;
+        }
+        this.validate(rule);
     }
 };
 
@@ -736,7 +1070,9 @@ qf.Validator.prototype.validate = function(rule)
 
     if (!globalValid && rule.message && !this.errors.hasKey(rule.owner)) {
         this.errors.set(rule.owner, rule.message);
-        this.onError(rule.owner, rule.message);
+        this.onFieldError(rule.owner, rule.message);
+    } else if (!this.errors.hasKey(rule.owner)) {
+        this.onFieldValid(rule.owner);
     }
 
     return globalValid;

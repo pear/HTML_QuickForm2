@@ -202,10 +202,11 @@ class HTML_QuickForm2_JavascriptBuilder
     * Adds the Rule javascript to the list of current form Rules
     *
     * @param HTML_QuickForm2_Rule
+    * @param bool   Whether rule code should contain "triggers" for live validation
     */
-    public function addRule(HTML_QuickForm2_Rule $rule)
+    public function addRule(HTML_QuickForm2_Rule $rule, $triggers = false)
     {
-        $this->rules[$this->formId][] = $rule->getJavascript();
+        $this->rules[$this->formId][] = $rule->getJavascript($triggers);
     }
 
 

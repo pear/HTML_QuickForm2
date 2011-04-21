@@ -607,7 +607,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         }
         foreach ($this->rules as $rule) {
             if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
-                $builder->addRule($rule[0]);
+                $builder->addRule($rule[0], $rule[1] & HTML_QuickForm2_Rule::ONBLUR_CLIENT);
             }
         }
     }
@@ -660,6 +660,15 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     abstract public function getJavascriptValue($inContainer = false);
 
+   /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * Rules added to this element with parameter HTML_QuickForm2_Rule::ONBLUR_CLIENT
+    * will be run by after these form elements change or lose focus
+    *
+    * @return array
+    */
+    abstract public function getJavascriptTriggers();
 
     /**
      * Adds a filter

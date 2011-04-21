@@ -64,16 +64,28 @@ abstract class HTML_QuickForm2_Rule
     const SERVER = 1;
 
    /**
-    * Constant showing that validation should be run client-side
+    * Constant showing that validation should be run client-side (on form submit)
     * @see  HTML_QuickForm2_Node::addRule()
     */
     const CLIENT = 2;
 
    /**
+    * Constant showing that validation should be run client-side (on form submit and on leaving the field)
+    * @see  HTML_QuickForm2_Node::addRule()
+    */
+    const ONBLUR_CLIENT = 6;
+
+   /**
     * A combination of SERVER and CLIENT constants
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const CLIENTSERVER = 3;
+    const CLIENT_SERVER = 3;
+
+   /**
+    * A combination of SERVER and ONBLUR_CLIENT constants
+    * @see  HTML_QuickForm2_Node::addRule()
+    */
+    const ONBLUR_CLIENT_SERVER = 7;
 
    /**
     * An element whose value will be validated by this rule
@@ -310,6 +322,40 @@ abstract class HTML_QuickForm2_Rule
     }
 
    /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * This returns IDs that are linked to the rule itself.
+    *
+    * @return array
+    */
+    protected function getOwnJavascriptTriggers()
+    {
+        return $this->owner->getJavascriptTriggers();
+    }
+
+   /**
+    * Returns IDs of form fields that should trigger "live" Javascript validation
+    *
+    * This returns IDs that are linked to the rule itself and its chained
+    * rules. Live validation will be be triggered by 'blur' or 'change' event
+    * on any of the elements whose IDs are returned by this method.
+    *
+    * @return array
+    */
+    protected function getJavascriptTriggers()
+    {
+        $triggers = array_flip($this->getOwnJavascriptTriggers());
+        foreach ($this->chainedRules as $item) {
+            foreach ($item as $multiplier) {
+                foreach ($multiplier->getJavascriptTriggers() as $trigger) {
+                    $triggers[$trigger] = true;
+                }
+            }
+        }
+        return array_keys($triggers);
+    }
+
+   /**
     * Returns the client-side representation of the Rule
     *
     * The Javascript object returned contains the following fields:
@@ -322,7 +368,7 @@ abstract class HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_Exception   if Rule or its chained Rules can only
     *                                       be run server-side
     */
-    public function getJavascript()
+    public function getJavascript($outputTriggers = true)
     {
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
@@ -334,13 +380,16 @@ abstract class HTML_QuickForm2_Rule
             foreach ($this->chainedRules as $item) {
                 $multipliers = array();
                 foreach ($item as $multiplier) {
-                    $multipliers[] = $multiplier->getJavascript();
+                    $multipliers[] = $multiplier->getJavascript(false);
                 }
                 $chained[] = '[' . implode(",\n", $multipliers) . ']';
             }
             $js .= ",\n\tchained: [" . implode(",\n", $chained) . "]";
         }
-        return $js . "\n}";
+        $triggersStr = $outputTriggers && count($triggers = $this->getJavascriptTriggers())
+                       ? ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers)
+                       : '';
+        return $js . $triggersStr . "\n}";
     }
 }
 ?>
