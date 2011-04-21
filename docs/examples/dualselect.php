@@ -289,7 +289,7 @@ $ds = $fs->addElement(
 ));
 
 $ds->addRule('required', 'Select at least two destinations', 2,
-             HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+             HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 $fs->addElement('checkbox', 'doFreeze', null, array('content' => 'Freeze dualselect on form submit'));
 

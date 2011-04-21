@@ -113,28 +113,28 @@ $repPassword = $fsPasswords->addElement('password', 'newPasswordRepeat', array('
                            ->setLabel('Repeat new password:');
 
 $username->addRule('required', 'Username is required', null,
-                   HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                   HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 $username->addRule('regex', 'Username should contain only letters', '/^[a-zA-Z]+$/',
-                   HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                   HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 // old password should be either left blank or be equal to 'qwerty'
-$oldPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER)
+$oldPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER)
             ->or_($oldPassword->createRule('callback', 'Wrong password', 'check_password'));
 
 // this behaves exactly as it reads: either "password" and "password repeat"
 // are both empty or they should be equal
-$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER)
+$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER)
             ->and_($repPassword->createRule('empty'))
             ->or_($repPassword->createRule('eq', 'The passwords do not match', $newPassword));
 
 // Either new password is not given, or old password is required
-$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER)
+$newPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER)
             ->or_($oldPassword->createRule('nonempty', 'Supply old password if you want to change it'));
 
-$newPassword->addRule('minlength', 'The password is too short', 6, HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+$newPassword->addRule('minlength', 'The password is too short', 6, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 // No sense changing the password to the same value
-$newPassword->addRule('nonempty', '', null, HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER)
+$newPassword->addRule('nonempty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER)
             ->and_($newPassword->createRule('neq', 'New password is the same as the old one', $oldPassword));
 
 //
@@ -148,7 +148,7 @@ $boxGroup->addElement('checkbox', null, array('value' => 'green'))->setContent('
 $boxGroup->addElement('checkbox', null, array('value' => 'blue'))->setContent('<span style="color: #00f;">Blue</span>');
 
 $boxGroup->addRule('required', 'Check at least two boxes', 2,
-                   HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                   HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 $friends = $fsGrouped->addElement('group', 'friends')->setLabel('Friends usernames (letters only):')
                      ->setSeparator('<br />');
@@ -158,7 +158,7 @@ $friends->addElement('text', '2', array('style' => 'width: 200px;', 'id' => 'fri
 
 $friends->addRule('each', 'Friends\' usernames should contain only letters',
                   $friends->createRule('regex', '', '/^[a-zA-Z]+$/'),
-                  HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                  HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 //
 // File uploads validation
@@ -170,10 +170,10 @@ $upload = $fsUpload->addElement('file', 'testUpload', array('style' => 'width: 2
 
 // no longer using special 'uploadedfile' rule for uploads, allow client-side validation
 $upload->addRule('required', 'Please upload picture', null,
-                 HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                 HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 // no longer using 'filename' rule for uploads, allow client-side validation
 $upload->addRule('regex', 'Allowed extensions: .gif, .jp(e)g, .png', '/\\.(gif|jpe?g|png)$/i',
-                 HTML_QuickForm2_Rule::LIVE_CLIENT_SERVER);
+                 HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 // these don't work client-side, for obvious reasons
 $upload->addRule('mimetype', 'Your browser doesn\'t think that\'s an image',
