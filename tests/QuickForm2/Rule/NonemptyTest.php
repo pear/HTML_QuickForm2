@@ -190,7 +190,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
         $bar = $mockContainer->addElement('text', 'bar', array('id' => 'bar'));
 
         $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($mockContainer, 'an error');
-        $this->assertContains('triggers: ["foo","bar"]', $nonEmpty->getJavascript());
+        $this->assertContains('["foo","bar"]', $nonEmpty->getJavascript());
     }
 }
 ?>

@@ -607,7 +607,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         }
         foreach ($this->rules as $rule) {
             if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
-                $builder->addRule($rule[0], $rule[1] & HTML_QuickForm2_Rule::ONBLUR_CLIENT);
+                $builder->addRule($rule[0], $rule[1] & (HTML_QuickForm2_Rule::ONBLUR_CLIENT ^ HTML_QuickForm2_Rule::CLIENT));
             }
         }
     }

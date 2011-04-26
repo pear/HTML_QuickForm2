@@ -541,9 +541,23 @@ Backwards compatibility issues
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
    </dir> <!-- /docs/examples -->
+   <dir name="data/js">
+    <dir name="min">
+     <file name="quickform.js" role="data">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="quickform-hierselect.js" role="data">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /data/js/min -->
+    <file name="quickform.js" role="data">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="quickform-hierselect.js" role="data">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /data/js -->
    <file name="data/quickform.css" role="data" />
-   <file name="data/quickform.js" role="data" />
-   <file name="data/quickform-hierselect.js" role="data" />
   </dir>
  </contents>
  <dependencies>
@@ -564,8 +578,10 @@ Backwards compatibility issues
  <phprelease>
   <filelist>
    <install as="quickform.css" name="data/quickform.css" />
-   <install as="quickform.js" name="data/quickform.js" />
-   <install as="quickform-hierselect.js" name="data/quickform-hierselect.js" />
+   <install as="js/quickform.js" name="data/js/quickform.js" />
+   <install as="js/quickform-hierselect.js" name="data/js/quickform-hierselect.js" />
+   <install as="js/min/quickform.js" name="data/js/min/quickform.js" />
+   <install as="js/min/quickform-hierselect.js" name="data/js/min/quickform-hierselect.js" />
    <install as="examples/controller/simple.php" name="docs/examples/controller/simple.php" />
    <install as="examples/controller/tabbed.php" name="docs/examples/controller/tabbed.php" />
    <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />

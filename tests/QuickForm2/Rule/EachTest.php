@@ -228,7 +228,7 @@ class HTML_QuickForm2_Rule_EachTest extends PHPUnit_Framework_TestCase
         $rule->expects($this->any())->method('getJavascriptCallback')
              ->will($this->returnValue('a callback'));
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
-        $this->assertContains('triggers: ["foo","bar"]', $each->getJavascript());
+        $this->assertContains('["foo","bar"]', $each->getJavascript());
     }
 }
 ?>

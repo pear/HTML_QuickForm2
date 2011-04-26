@@ -213,7 +213,7 @@ class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
             array('bar', array('id' => 'bar'))
         );
         $compare = new HTML_QuickForm2_Rule_Compare($foo, '...', $bar);
-        $this->assertContains('triggers: ["foo","bar"]', $compare->getJavascript());
+        $this->assertContains('["foo","bar"]', $compare->getJavascript());
     }
 }
 ?>

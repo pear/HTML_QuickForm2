@@ -372,9 +372,13 @@ abstract class HTML_QuickForm2_Rule
     {
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
-        $js = "{\n\tcallback: " . $this->getJavascriptCallback() . ",\n" .
-              "\towner: '" . $this->owner->getId() . "',\n" .
-              "\tmessage: " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());
+        $js = $this->getJavascriptCallback() . ",\n\t'" . $this->owner->getId()
+              . "', " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());
+
+        $js = $outputTriggers && count($triggers = $this->getJavascriptTriggers())
+              ? 'new qf.LiveRule(' . $js . ', ' . HTML_QuickForm2_JavascriptBuilder::encode($triggers)
+              : 'new qf.Rule(' . $js;
+
         if (count($this->chainedRules) > 1 || count($this->chainedRules[0]) > 0) {
             $chained = array();
             foreach ($this->chainedRules as $item) {
@@ -384,12 +388,9 @@ abstract class HTML_QuickForm2_Rule
                 }
                 $chained[] = '[' . implode(",\n", $multipliers) . ']';
             }
-            $js .= ",\n\tchained: [" . implode(",\n", $chained) . "]";
+            $js .= ",\n\t [" . implode(",\n", $chained) . "]";
         }
-        $triggersStr = $outputTriggers && count($triggers = $this->getJavascriptTriggers())
-                       ? ",\n\ttriggers: " . HTML_QuickForm2_JavascriptBuilder::encode($triggers)
-                       : '';
-        return $js . $triggersStr . "\n}";
+        return $js . ')';
     }
 }
 ?>

@@ -214,11 +214,12 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
             'HTML_QuickForm2_Rule', array('validateOwner', 'getJavascriptCallback'),
             array($el)
         );
-        $rule->expects($this->exactly(2))->method('getJavascriptCallback')
+        $rule->expects($this->any())->method('getJavascriptCallback')
              ->will($this->returnValue('a callback'));
 
-        $this->assertContains('triggers: ["foo"]', $rule->getJavascript());
-        $this->assertNotContains('triggers:', $rule->getJavascript(false));
+        $this->assertContains('qf.LiveRule', $rule->getJavascript());
+        $this->assertContains('["foo"]', $rule->getJavascript());
+        $this->assertNotContains('qf.LiveRule', $rule->getJavascript(false));
     }
 
     public function testChainedValidationTriggers()
@@ -247,10 +248,10 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
                 ->will($this->returnValue('a callback'));
 
         $script = $ruleFoo->and_($ruleBar->and_($ruleBaz))->getJavascript();
-        preg_match('/triggers: \[(.+?)\]/', $script, $m);
-        $this->assertContains('foo', $m[1]);
-        $this->assertContains('bar', $m[1]);
-        $this->assertContains('baz', $m[1]);
+        preg_match('/\[\S+\]/', $script, $m);
+        $this->assertContains('foo', $m[0]);
+        $this->assertContains('bar', $m[0]);
+        $this->assertContains('baz', $m[0]);
     }
 }
 ?>

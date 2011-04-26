@@ -1,17 +1,77 @@
 /* $Id$ */
 
 /**
- * Form validator, attaches onsubmit handler that runs the given rules.
+ * Client-side rule object
+ *
+ * @param {function()} callback
+ * @param {string}     owner
+ * @param {string}     message
+ * @param {Array}      chained
+ * @constructor
+ */
+qf.Rule = function(callback, owner, message, chained)
+{
+   /**
+    * Function performing actual validation
+    * @type {function()}
+    */
+    this.callback = callback;
+
+   /**
+    * ID of owner element
+    * @type {string}
+    */
+    this.owner    = owner;
+
+   /**
+    * Error message to set if validation fails
+    * @type {string}
+    */
+    this.message  = message;
+
+   /**
+    * Chained rules
+    * @type {Array}
+    */
+    this.chained  = chained || [[]];
+};
+
+/**
+ * Client-side rule object that should run onblur / onchange
+ *
+ * @param {function()} callback
+ * @param {string}     owner
+ * @param {string}     message
+ * @param {string[]}   triggers
+ * @param {Array}      chained
+ * @constructor
+ */
+qf.LiveRule = function(callback, owner, message, triggers, chained)
+{
+    qf.Rule.call(this, callback, owner, message, chained);
+
+   /**
+    * IDs of elements that should trigger validation
+    * @type {string[]}
+    */
+    this.triggers = triggers;
+};
+
+qf.LiveRule.prototype = new qf.Rule();
+qf.LiveRule.prototype.constructor = qf.LiveRule;
+
+/**
+ * Form validator, attaches handlers that run the given rules.
  *
  * @param {HTMLFormElement} form
- * @param {Array} rules
+ * @param {qf.Rule[]} rules
  * @constructor
  */
 qf.Validator = function(form, rules)
 {
    /**
     * Validation rules
-    * @type {Object[]}
+    * @type {qf.Rule[]}
     */
     this.rules  = rules || [];
 
@@ -25,7 +85,7 @@ qf.Validator = function(form, rules)
     qf.events.addListener(form, 'submit', qf.Validator.submitHandler);
 
     for (var i = 0, rule; rule = this.rules[i]; i++) {
-        if (typeof rule.triggers != 'undefined') {
+        if (rule instanceof qf.LiveRule) {
             if (qf.events.test.changeBubbles) {
                 qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
 
@@ -133,7 +193,8 @@ qf.Validator.prototype = (function() {
     /**
      * Removes error messages from owner element(s) of a given rule and chained rules
      *
-     * @param {Array} rule
+     * @param {qf.Map} errors
+     * @param {qf.Rule} rule
      * @private
      */
     function _removeRelatedErrors(errors, rule)
@@ -142,11 +203,9 @@ qf.Validator.prototype = (function() {
             errors.remove(rule.owner);
             _clearValidationStatus(rule.owner);
         }
-        if (typeof rule.chained != 'undefined') {
-            for (var i = 0; i < rule.chained.length; i++) {
-                for (var j = 0; j < rule.chained[i].length; j++) {
-                    _removeRelatedErrors(errors, rule.chained[i][j]);
-                }
+        for (var i = 0, item; item = rule.chained[i]; i++) {
+            for (var j = 0, multiplier; multiplier = item[j]; j++) {
+                _removeRelatedErrors(errors, multiplier);
             }
         }
     };
@@ -297,7 +356,7 @@ qf.Validator.prototype = (function() {
             while (ruleHash.length() > length) {
                 length = ruleHash.length();
                 for (var i = 0, rule; rule = this.rules[i]; i++) {
-                    if (typeof rule.triggers == 'undefined' || ruleHash.hasKey(i)) {
+                    if (!rule instanceof qf.LiveRule || ruleHash.hasKey(i)) {
                         continue;
                     }
                     for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
@@ -323,31 +382,25 @@ qf.Validator.prototype = (function() {
         /**
          * Performs validation, sets the element's error if validation fails.
          *
-         * @param   {Object} rule Validation rule, maybe with chained rules
+         * @param   {qf.Rule} rule Validation rule, maybe with chained rules
          * @returns {boolean}
          */
         validate: function(rule)
         {
-            var globalValid, localValid = rule.callback.call(this);
+            var globalValid = false, localValid = rule.callback.call(this);
 
-            if (typeof rule.chained == 'undefined') {
-                globalValid = localValid;
-
-            } else {
-                globalValid = false;
-                for (var i = 0; i < rule.chained.length; i++) {
-                    for (var j = 0; j < rule.chained[i].length; j++) {
-                        localValid = localValid && this.validate(rule.chained[i][j]);
-                        if (!localValid) {
-                            break;
-                        }
-                    }
-                    globalValid = globalValid || localValid;
-                    if (globalValid) {
+            for (var i = 0, item; item = rule.chained[i]; i++) {
+                for (var j = 0, multiplier; multiplier = item[j]; j++) {
+                    localValid = localValid && this.validate(multiplier);
+                    if (!localValid) {
                         break;
                     }
-                    localValid = true;
                 }
+                globalValid = globalValid || localValid;
+                if (globalValid) {
+                    break;
+                }
+                localValid = true;
             }
 
             if (!globalValid && rule.message && !this.errors.hasKey(rule.owner)) {
