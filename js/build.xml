@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="QuickForm2 Javascript" basedir="." default="build-all">
+
+    <property file="build.properties" />
+
+    <property name="js.src.basefirst" value="base.js" />
+    <property name="js.src.basesecond" value="map.js, form.js, classes.js, events.js, validator.js, rules.js" />
+
+    <property name="js.concat.base" value="build/quickform.js" />
+    <property name="js.concat.hs" value="build/quickform-hierselect.js" />
+    <property name="js.filelist.base" value="build/filelist.txt" />
+    <property name="js.minified.base" value="build/quickform.min.js" />
+    <property name="js.minified.hs" value="build/quickform-hierselect.min.js" />
+
+    <property name="release.concat" value="../data/js/" />
+    <property name="release.minified" value="../data/js/min/" />
+
+    <property name="closure_command" value="java -jar ${path.closure} --compilation_level SIMPLE_OPTIMIZATIONS" />
+
+    <target name="init">
+        <mkdir dir="build"/>
+        <mkdir dir="docs"/>
+    </target>
+
+    <target name="concat" depends="init" description="Build concatenated javascript files">
+       <copy file="src/${js.src.basefirst}" tofile="${js.concat.base}">
+           <filterchain>
+               <replaceregexp>
+                   <regexp pattern="@preserve\s+" replace="" />
+               </replaceregexp>
+           </filterchain>
+       </copy>
+       <append destfile="${js.concat.base}">
+           <filterchain>
+               <replaceregexp>
+                   <regexp pattern="/\*\s*\$Id[^$]*\$\s*\*/\s+" replace="" />
+               </replaceregexp>
+           </filterchain>           <filelist dir="src/" files="${js.src.basesecond}" />
+       </append>
+       <copy file="src/hierselect.js" tofile="${js.concat.hs}">
+           <filterchain>
+               <replaceregexp>
+                   <regexp pattern="@preserve\s+" replace="" />
+               </replaceregexp>
+           </filterchain>
+       </copy>
+    </target>
+
+    <target name="appendjsfile">
+        <echo append="true" file="${js.filelist.base}" message=" --js src/${srcname}" />
+    </target>
+    <target name="minify" depends="init" description="Build minified javascript files using closure compiler">
+        <available file="${path.closure}" property="has_closure" />
+        <fail unless="has_closure" message="Closure compiler is not available" />
+        <echo append="false" file="${js.filelist.base}" message=" --js src/${js.src.basefirst}" />
+        <foreach list="${js.src.basesecond}" param="srcname" target="appendjsfile" />
+        <exec logoutput="true" command="${closure_command} --js_output_file ${js.minified.base} --flagfile ${js.filelist.base}" />
+        <exec logoutput="true" command="${closure_command} --js_output_file ${js.minified.hs} --js src/hierselect.js" />
+    </target>
+
+    <target name="docs" depends="init" description="Build API documentation using JSDoc toolkit">
+        <available file="${path.jsdoc}jsrun.jar" property="has_jsdoc" />
+        <fail unless="has_jsdoc" message="JSDoc toolkit is not available" />
+        <exec logoutput="true" command="java -Djsdoc.dir=${path.jsdoc} -Djsdoc.template.dir=${path.jsdoc.template} -jar ${path.jsdoc}jsrun.jar ${path.jsdoc.app} -a -d=./docs -r=4 ./src" />
+    </target>
+
+    <target name="clean-js" description="Removes generated javascript files">
+        <delete dir="build" />
+    </target>
+    <target name="clean-docs" description="Removes generated API docs">
+        <delete dir="docs" />
+    </target>
+    <target name="clean" depends="clean-js, clean-docs" description="Removes all generated files">
+    </target>
+
+    <target name="build-all" depends="clean, concat, minify, docs" description="Builds everything" />
+
+    <target name="release" depends="clean, concat, minify" description="Builds JS files and copies them to data">
+        <copy todir="${release.concat}">
+            <mapper type="flatten" />
+            <fileset dir=".">
+                <include name="${js.concat.base}" />
+                <include name="${js.concat.hs}" />
+            </fileset>
+        </copy>
+        <copy todir="${release.minified}">
+            <mapper type="regexp" from="build.(.+)\.min\.js" to="\1.js" />
+            <fileset dir=".">
+                <include name="${js.minified.base}" />
+                <include name="${js.minified.hs}" />
+            </fileset>
+        </copy>
+    </target>
+</project>

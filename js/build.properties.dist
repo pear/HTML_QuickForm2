@@ -1,0 +1,10 @@
+# Path to closure compiler jar file
+# Download from http://code.google.com/p/closure-compiler/
+path.closure=./compiler.jar
+
+# Path to JSDoc toolkit base dir
+# Download from http://code.google.com/p/jsdoc-toolkit/
+path.jsdoc=./
+# Stuff under JSDoc dir, see its description
+path.jsdoc.app=${path.jsdoc}app/run.js
+path.jsdoc.template=${path.jsdoc}templates/jsdoc
