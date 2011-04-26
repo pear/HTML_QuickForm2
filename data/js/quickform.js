@@ -1086,7 +1086,7 @@ qf.Validator.prototype = (function() {
             while (ruleHash.length() > length) {
                 length = ruleHash.length();
                 for (var i = 0, rule; rule = this.rules[i]; i++) {
-                    if (!rule instanceof qf.LiveRule || ruleHash.hasKey(i)) {
+                    if (!(rule instanceof qf.LiveRule) || ruleHash.hasKey(i)) {
                         continue;
                     }
                     for (var j = 0, trigger; trigger = rule.triggers[j]; j++) {
