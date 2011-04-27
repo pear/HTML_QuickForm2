@@ -75,7 +75,12 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
                                    dirname(__FILE__) . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR);
             $keepSorted = empty($this->data['keepSorted'])? 'false': 'true';
             $jsBuilder->addElementJavascript("qf.elements.dualselect.init('{$this->getId()}', {$keepSorted});");
-            $renderer->renderDualSelect($this);
+            // Fall back to using the Default renderer if custom one does not have a plugin
+            if ($renderer->methodExists('renderDualSelect')) {
+                $renderer->renderDualSelect($this);
+            } else {
+                $renderer->renderElement($this);
+            }
         }
         return $renderer;
     }

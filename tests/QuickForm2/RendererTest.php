@@ -140,7 +140,11 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
 
         $renderer = HTML_Quickform2_Renderer::factory($type);
+        $this->assertTrue($renderer->methodExists('renderElement'));
+        $this->assertTrue($renderer->methodExists('sayHello'));
+        $this->assertFalse($renderer->methodExists('sayGoodbye'));
         HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_GoodbyePlugin');
+        $this->assertTrue($renderer->methodExists('sayGoodbye'));
 
         $this->assertEquals('Hello, fake!', $renderer->sayHello());
         $this->assertEquals('Goodbye, fake!', $renderer->sayGoodbye());

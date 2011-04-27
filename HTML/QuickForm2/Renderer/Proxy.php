@@ -132,12 +132,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
             $ret = call_user_func_array(array($this->_renderer, $name), $arguments);
             return $ret === $this->_renderer? $this: $ret;
         }
-        // any additional plugins since last __call()?
-        for ($i = count($this->_plugins); $i < count($this->_pluginClasses); $i++) {
-            list($className, $includeFile) = $this->_pluginClasses[$i];
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-            $this->addPlugin($i, new $className);
-        }
+        $this->updatePlugins();
         if (isset($this->_pluginMethods[$lower])) {
             return call_user_func_array(
                 array($this->_plugins[$this->_pluginMethods[$lower]], $name),
@@ -149,39 +144,69 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     }
 
    /**
-    * Adds a plugin for the current renderer instance
+    * Checks whether a method is available in this object
     *
-    * Plugin's methods are imported and can be later called as this object's own
+    * A method is considered available if this class has such a public method,
+    * if a proxied renderer publishes such a method, if some plugin has such
+    * a public method.
     *
-    * @param    HTML_QuickForm2_Renderer_Plugin     a plugin instance
+    * @param string Method name
+    * @return bool
+    */
+    public function methodExists($name)
+    {
+        $lower  = strtolower($name);
+        $exists = parent::methodExists($name) || isset($this->_rendererMethods[$lower]);
+        if (!$exists) {
+            $this->updatePlugins();
+            $exists = isset($this->_pluginMethods[$lower]);
+        }
+        return $exists;
+    }
+
+   /**
+    * Updates the list of plugins for the current renderer instance
+    *
+    * This method checks whether any new plugin classes were registered
+    * since its previous invocation and adds instances of these classes to
+    * the list. Plugins' methods are imported and can be later called as
+    * this object's own.
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException if a plugin has already
     *                   imported name
     */
-    protected function addPlugin($index, HTML_QuickForm2_Renderer_Plugin $plugin)
+    protected function updatePlugins()
     {
-        $methods    = array();
-        $reflection = new ReflectionObject($plugin);
-        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            $lower = strtolower($method->getName());
-            if ('HTML_QuickForm2_Renderer_Plugin' == $method->getDeclaringClass()->getName()) {
-                continue;
-            } elseif (isset($this->_rendererMethods[$lower])
-                      || isset($this->_pluginMethods[$lower])
-            ) {
-                throw new HTML_QuickForm2_InvalidArgumentException(
-                    'Duplicate method name: name ' . $method->getName() . ' in plugin ' .
-                    get_class($plugin) . ' already taken by ' .
-                    (isset($this->_rendererMethods[$lower])?
-                     get_class($this->_renderer):
-                     get_class($this->_plugins[$this->_pluginMethods[$lower]])
-                    )
-                );
+        for ($i = count($this->_plugins); $i < count($this->_pluginClasses); $i++) {
+            list($className, $includeFile) = $this->_pluginClasses[$i];
+            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
+
+            $methods    = array();
+            $plugin     = new $className;
+            $reflection = new ReflectionObject($plugin);
+            foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+                $lower = strtolower($method->getName());
+                if ('HTML_QuickForm2_Renderer_Plugin' == $method->getDeclaringClass()->getName()) {
+                    continue;
+                } elseif (!isset($this->_rendererMethods[$lower])
+                          && !isset($this->_pluginMethods[$lower])
+                ) {
+                    $methods[$lower] = $i;
+                } else {
+                    throw new HTML_QuickForm2_InvalidArgumentException(
+                        'Duplicate method name: name ' . $method->getName() . ' in plugin ' .
+                        get_class($plugin) . ' already taken by ' .
+                        (isset($this->_rendererMethods[$lower])?
+                         get_class($this->_renderer):
+                         get_class($this->_plugins[$this->_pluginMethods[$lower]])
+                        )
+                    );
+                }
             }
-            $methods[$lower] = $index;
+            $plugin->setRenderer($this->_renderer);
+            $this->_plugins[$i]    = $plugin;
+            $this->_pluginMethods += $methods;
         }
-        $plugin->setRenderer($this->_renderer);
-        $this->_plugins[$index]  = $plugin;
-        $this->_pluginMethods   += $methods;
     }
 
    /**#@+

@@ -216,6 +216,22 @@ abstract class HTML_QuickForm2_Renderer
     }
 
    /**
+    * Checks whether a method is available in this object
+    *
+    * @param string Method name
+    * @return bool
+    */
+    public function methodExists($name)
+    {
+        try {
+            $method = new ReflectionMethod($this, $name);
+            return $method->isPublic();
+        } catch (ReflectionException $e) {
+            return false;
+        }
+    }
+
+   /**
     * Sets the option(s) affecting renderer behaviour
     *
     * The following options are available:
