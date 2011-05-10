@@ -55,6 +55,11 @@ if (null === HTML_Common2::getOption('id_force_append_index')) {
     HTML_Common2::setOption('id_force_append_index', true);
 }
 
+// set the default language for various elements' messages
+if (null === HTML_Common2::getOption('language')) {
+    HTML_Common2::setOption('language', 'en');
+}
+
 /**
  * Exception classes for HTML_QuickForm2
  */

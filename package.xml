@@ -206,6 +206,14 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /HTML/QuickForm2/Element -->
+     <dir name="MessageProvider">
+      <file name="Default.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Strftime.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /HTML/QuickForm2/MessageProvider -->
      <dir name="Renderer">
       <file name="Array.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -284,6 +292,9 @@ Backwards compatibility issues
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Loader.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="MessageProvider.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Node.php" role="php">
