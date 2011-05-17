@@ -1,11 +1,80 @@
 <?php
+/**
+ * Provides default translations for various elements' messages
+ *
+ * PHP version 5
+ *
+ * LICENSE:
+ *
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * The names of the authors may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version    SVN: $Id$
+ * @link       http://pear.php.net/package/HTML_QuickForm2
+ */
 
+/** Interface for classes that supply (translated) messages for the elements */
 require_once 'HTML/QuickForm2/MessageProvider.php';
 
+/**
+ * Provides default translations for various elements' messages
+ *
+ * The class is a Singleton, so setting additional messages for it will make
+ * them available for all elements that use this provider.
+ *
+ * @category   HTML
+ * @package    HTML_QuickForm2
+ * @author     Alexey Borzov <avb@php.net>
+ * @author     Bertrand Mansion <golgote@mamasam.com>
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/bugs/bug.php?id=18341
+ */
 class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_MessageProvider
 {
-    private static $_instance;
+   /**
+    * Singleton instance
+    * @var HTML_QuickForm2_MessageProvider_Default
+    */
+    protected static $instance;
 
+   /**
+    * Localized messages for (currently) Date and InputFile Elements
+    *
+    * Note to potential translators: to avoid encoding problems please send
+    * your translations with "weird" letters encoded as HTML Unicode entities
+    *
+    * @var array
+    */
     protected $messages = array(
         'file' => array(
             'en' => array(
@@ -205,11 +274,21 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
         )
     );
 
-    public function get($messageId, $langId = null)
+   /**
+    * Returns the default message(s) for the given ID and language
+    *
+    * If $langId is not given, language set via
+    * <code>
+    * HTML_Common2::setOption('language', '...');
+    * </code>
+    * will be used.
+    *
+    * @param    array   Message ID
+    * @param    string  Language, will use the default if not given
+    * @return   array|string|null
+    */
+    public function get(array $messageId, $langId = null)
     {
-        if (!is_array($messageId)) {
-            $messageId = array($messageId);
-        }
         if (empty($langId)) {
             $langId = HTML_Common2::getOption('language');
         }
@@ -217,22 +296,29 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
         if (empty($this->messages[$key]) || empty($this->messages[$key][$langId])) {
             return null;
         }
-        $message =& $this->messages[$key][$langId];
+        $message = $this->messages[$key][$langId];
         while (!empty($messageId)) {
             $key = array_shift($messageId);
             if (empty($message[$key])) {
                 return null;
             }
-            $message =& $message[$key];
+            $message = $message[$key];
         }
         return $message;
     }
 
-    public function set($messageId, $langId, $message)
+   /**
+    * Sets the default message(s) for the given ID and language
+    *
+    * Note that you can give an arbitrary $messageId and thus set messages
+    * for your custom elements.
+    *
+    * @param array          Message ID
+    * @param string         Language
+    * @param string|array
+    */
+    public function set(array $messageId, $langId, $message)
     {
-        if (!is_array($messageId)) {
-            $messageId = array($messageId);
-        }
         $key = array_shift($messageId);
         if (empty($this->messages[$key])) {
             $this->messages[$key] = array();
@@ -251,22 +337,31 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
         $messageHolder = $message;
     }
 
+   /**
+    * Returns Singleton instance
+    *
+    * @return HTML_QuickForm2_MessageProvider_Default
+    */
     public static function getInstance()
     {
-        if (empty(self::$_instance)) {
-            self::$_instance = new self();
+        if (empty(self::$instance)) {
+            self::$instance = new self();
         }
-        return self::$_instance;
+        return self::$instance;
     }
 
+   /**
+    * Constructor, made protected to enforce Singleton
+    */
     protected function __construct()
     {
-
     }
 
+   /**
+    * Disallows cloning
+    */
     private function __clone()
     {
-
     }
 }
 ?>
