@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -83,9 +83,13 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * Class constructor
     *
     * Possible keys in $data array are:
-    *  - 'language': language to display error messages in, it should either be
-    *    already available in the class or provided in 'errorMessages'
-    *  - 'errorMessages': an array of error messages with the following format
+    *  - 'messageProvider': an instance of a class implementing
+    *    HTML_QuickForm2_MessageProvider interface, this will be used to get
+    *    localized error messages. Default will be used if not given.
+    *  - 'language': language to display error messages in, will be passed to
+    *    message provider.
+    *  - 'errorMessages': (DEPRECATED, use messageProvider) an array of error
+    *    messages with the following format
     *    <pre>
     *      'language code 1' => array(
     *         UPLOAD_ERR_... => 'message',
@@ -110,23 +114,28 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
-        if (isset($data['messageProvider']) && !isset($data['errorMessages'])) {
-            $this->messageProvider = $data['messageProvider'];
-        } elseif (isset($data['messageProvider']) && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "messageProvider should implement the MessageProvider interface"
-            );
-        } else {
+        // Using deprecated 'errorMessages' key, let's keep this separate to remove later
+        if (isset($data['errorMessages'])) {
             HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
             $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
-        }
-        if (isset($data['errorMessages'])) {
             // neither array_merge() nor array_merge_recursive will do
             foreach ($data['errorMessages'] as $lang => $ary) {
                 foreach ($ary as $code => $message) {
                     $this->messageProvider->set(array('file', $code), $lang, $message);
                 }
             }
+
+        } elseif (isset($data['messageProvider'])) {
+            if (!$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "messageProvider: expecting an implementation of HTML_QuickForm2_MessageProvider"
+                );
+            }
+            $this->messageProvider = $data['messageProvider'];
+
+        } else {
+            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
+            $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
         }
         if (isset($data['language'])) {
             $this->language = $data['language'];

@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2009, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -98,7 +98,12 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * Class constructor
     *
     * The following keys may appear in $data array:
-    * - 'language': date language
+    * - 'messageProvider': an instance of a class implementing
+    *   HTML_QuickForm2_MessageProvider interface, this will be used to get
+    *   localized names of months and weekdays. Some of the default ones will
+    *   be used if not given.
+    * - 'language': date language, use 'locale' to display month / weekday
+    *   names according to the current locale.
     * - 'format': Format of the date, based on PHP's date() function.
     *   The following characters are currently recognised in format string:
     *   <pre>
@@ -131,20 +136,21 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     */
     public function __construct($name = null, $attributes = null, $data = null)
     {
-        if (!isset($data['messageProvider'])) {
-            if ('locale' == $data['language']) {
+        if (isset($data['messageProvider'])) {
+            if (!$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "messageProvider: expecting an implementation of HTML_QuickForm2_MessageProvider"
+                );
+            }
+            $this->messageProvider = $data['messageProvider'];
+        } else {
+            if (isset($data['language']) && 'locale' == $data['language']) {
                 HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Strftime');
                 $this->messageProvider = new HTML_QuickForm2_MessageProvider_Strftime();
             } else {
                 HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
                 $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
             }
-        } elseif (!$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "messageProvider should implement the MessageProvider interface"
-            );
-        } else {
-            $this->messageProvider = $data['messageProvider'];
         }
         if (isset($data['language'])) {
             $this->language = $data['language'];
