@@ -55,8 +55,11 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  */
 require_once 'HTML/QuickForm2.php';
 
+/** Interface for classes that supply (translated) messages for the elements */
+require_once 'HTML/QuickForm2/MessageProvider.php';
+
 /**
- * Unit test for HTML_QuickForm2_Element_InputHidden class
+ * Unit test for HTML_QuickForm2_Element_InputFile class
  */
 class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 {
@@ -135,6 +138,39 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         ));
         $this->assertFalse($form->validate());
         $this->assertEquals('Blah-blah-blah', $local->getError());
+    }
+
+   /**
+    * @expectedException HTML_QuickForm2_InvalidArgumentException
+    */
+    public function testInvalidMessageProvider()
+    {
+        $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, array('messageProvider' => array()));
+    }
+
+    public function testCallbackMessageProvider()
+    {
+        $form   = new HTML_QuickForm2('upload', 'post', null, false);
+        $upload = $form->addFile('local', array(), array(
+            'messageProvider' => create_function('$messageId, $langId', 'return "A nasty error happened!";')
+        ));
+        $this->assertFalse($form->validate());
+        $this->assertEquals('A nasty error happened!', $upload->getError());
+    }
+
+    public function testObjectMessageProvider()
+    {
+        $mockProvider = $this->getMock('HTML_QuickForm2_MessageProvider',
+                                       array('get'));
+        $mockProvider->expects($this->once())->method('get')
+                     ->will($this->returnValue('A nasty error happened!'));
+
+        $form   = new HTML_QuickForm2('upload', 'post', null, false);
+        $upload = $form->addFile('local', array(), array(
+            'messageProvider' => $mockProvider
+        ));
+        $this->assertFalse($form->validate());
+        $this->assertEquals('A nasty error happened!', $upload->getError());
     }
 }
 ?>

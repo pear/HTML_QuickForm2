@@ -75,7 +75,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
    /**
     * Message provider for upload error messages
-    * @var  HTML_QuickForm2_MessageProvider
+    * @var  callback|HTML_QuickForm2_MessageProvider
     */
     protected $messageProvider;
 
@@ -126,9 +126,12 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
             }
 
         } elseif (isset($data['messageProvider'])) {
-            if (!$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
+            if (!is_callable($data['messageProvider'])
+                && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider
+            ) {
                 throw new HTML_QuickForm2_InvalidArgumentException(
-                    "messageProvider: expecting an implementation of HTML_QuickForm2_MessageProvider"
+                    "messageProvider: expecting a callback or an implementation"
+                    . " of HTML_QuickForm2_MessageProvider"
                 );
             }
             $this->messageProvider = $data['messageProvider'];
@@ -223,7 +226,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (isset($this->value['error']) &&
             !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE)))
         {
-            $errorMessage = $this->messageProvider->get(array('file', $this->value['error']), $this->language);
+            $errorMessage = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                            ? $this->messageProvider->get(array('file', $this->value['error']), $this->language)
+                            : call_user_func($this->messageProvider, array('file', $this->value['error']), $this->language);
             if (UPLOAD_ERR_INI_SIZE == $this->value['error']) {
                 $iniSize = ini_get('upload_max_filesize');
                 $size    = intval($iniSize);

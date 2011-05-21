@@ -90,7 +90,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
    /**
     * Message provider for option texts
-    * @var  HTML_QuickForm2_MessageProvider
+    * @var  callback|HTML_QuickForm2_MessageProvider
     */
     protected $messageProvider;
 
@@ -98,11 +98,11 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * Class constructor
     *
     * The following keys may appear in $data array:
-    * - 'messageProvider': an instance of a class implementing
+    * - 'messageProvider': a callback or an instance of a class implementing
     *   HTML_QuickForm2_MessageProvider interface, this will be used to get
     *   localized names of months and weekdays. Some of the default ones will
     *   be used if not given.
-    * - 'language': date language, use 'locale' to display month / weekday
+    * - 'language': date language, use 'locale' here to display month / weekday
     *   names according to the current locale.
     * - 'format': Format of the date, based on PHP's date() function.
     *   The following characters are currently recognised in format string:
@@ -137,9 +137,12 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     public function __construct($name = null, $attributes = null, $data = null)
     {
         if (isset($data['messageProvider'])) {
-            if (!$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider) {
+            if (!is_callable($data['messageProvider'])
+                && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider
+            ) {
                 throw new HTML_QuickForm2_InvalidArgumentException(
-                    "messageProvider: expecting an implementation of HTML_QuickForm2_MessageProvider"
+                    "messageProvider: expecting a callback or an implementation"
+                    . " of HTML_QuickForm2_MessageProvider"
                 );
             }
             $this->messageProvider = $data['messageProvider'];
@@ -173,16 +176,22 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 switch ($sign) {
                     case 'D':
                         // Sunday is 0 like with 'w' in date()
-                        $options = $this->messageProvider->get(array('date', 'weekdays_short'), $this->language);
+                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                                   ? $this->messageProvider->get(array('date', 'weekdays_short'), $this->language)
+                                   : call_user_func($this->messageProvider, array('date', 'weekdays_short'), $this->language);
                         break;
                     case 'l':
-                        $options = $this->messageProvider->get(array('date', 'weekdays_long'), $this->language);
+                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                                   ? $this->messageProvider->get(array('date', 'weekdays_long'), $this->language)
+                                   : call_user_func($this->messageProvider, array('date', 'weekdays_long'), $this->language);
                         break;
                     case 'd':
                         $options = $this->createOptionList(1, 31);
                         break;
                     case 'M':
-                        $options = $this->messageProvider->get(array('date', 'months_short'), $this->language);
+                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                                   ? $this->messageProvider->get(array('date', 'months_short'), $this->language)
+                                   : call_user_func($this->messageProvider, array('date', 'months_short'), $this->language);
                         array_unshift($options , '');
                         unset($options[0]);
                         break;
@@ -190,7 +199,9 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                         $options = $this->createOptionList(1, 12);
                         break;
                     case 'F':
-                        $options = $this->messageProvider->get(array('date', 'months_long'), $this->language);
+                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                                   ? $this->messageProvider->get(array('date', 'months_long'), $this->language)
+                                   : call_user_func($this->messageProvider, array('date', 'months_long'), $this->language);
                         array_unshift($options , '');
                         unset($options[0]);
                         break;
