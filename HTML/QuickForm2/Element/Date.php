@@ -75,7 +75,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     protected $data = array(
         'format'           => 'dMY',
         'minYear'          => 2001,
-        'maxYear'          => 2010,
+        'maxYear'          => null, // set in the constructor
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',
@@ -159,6 +159,9 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
             $this->language = $data['language'];
         }
         unset($data['messageProvider'], $data['language']);
+
+        // http://pear.php.net/bugs/bug.php?id=18171
+        $this->data['maxYear'] = date('Y');
 
         parent::__construct($name, $attributes, $data);
 
