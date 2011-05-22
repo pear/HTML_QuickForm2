@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2010, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -60,46 +60,10 @@ require_once 'HTML/QuickForm2/Element/Input.php';
 class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 {
    /**
-    * Default language for error messages
-    */
-    const DEFAULT_LANGUAGE = 'en';
-
-   /**
-    * Localized error messages for PHP's file upload errors
-    * @var  array
-    */
-    protected $errorMessages = array(
-        'en' => array(
-            UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds size permitted by PHP configuration (%d bytes)',
-            UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive in HTML form (%d bytes)',
-            UPLOAD_ERR_PARTIAL    => 'The file was only partially uploaded',
-            UPLOAD_ERR_NO_TMP_DIR => 'Server error: temporary directory is missing',
-            UPLOAD_ERR_CANT_WRITE => 'Server error: failed to write the file to disk',
-            UPLOAD_ERR_EXTENSION  => 'File upload was stopped by extension'
-        ),
-        'fr' => array(
-            UPLOAD_ERR_INI_SIZE   => 'Le fichier envoy&eacute; exc&egrave;de la taille autoris&eacute;e par la configuration de PHP (%d octets)',
-            UPLOAD_ERR_FORM_SIZE  => 'Le fichier envoy&eacute; exc&egrave;de la taille de MAX_FILE_SIZE sp&eacute;cifi&eacute;e dans le formulaire HTML (%d octets)',
-            UPLOAD_ERR_PARTIAL    => 'Le fichier n\'a &eacute;t&eacute; que partiellement t&eacute;l&eacute;charg&eacute;',
-            UPLOAD_ERR_NO_TMP_DIR => 'Erreur serveur: le r&eacute;pertoire temporaire est manquant',
-            UPLOAD_ERR_CANT_WRITE => 'Erreur serveur: &eacute;chec de l\'&eacute;criture du fichier sur le disque',
-            UPLOAD_ERR_EXTENSION  => 'L\'envoi de fichier est arr&ecirc;t&eacute; par l\'extension'
-        ),
-        'ru' => array(
-            UPLOAD_ERR_INI_SIZE   => '&#x420;&#x430;&#x437;&#x43c;&#x435;&#x440; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x435;&#x43d;&#x43d;&#x43e;&#x433;&#x43e; &#x444;&#x430;&#x439;&#x43b;&#x430; &#x43f;&#x440;&#x435;&#x432;&#x43e;&#x441;&#x445;&#x43e;&#x434;&#x438;&#x442; &#x43c;&#x430;&#x43a;&#x441;&#x438;&#x43c;&#x430;&#x43b;&#x44c;&#x43d;&#x43e; &#x440;&#x430;&#x437;&#x440;&#x435;&#x448;&#x451;&#x43d;&#x43d;&#x44b;&#x439; &#x43d;&#x430;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x43a;&#x430;&#x43c;&#x438; PHP (%d &#x431;&#x430;&#x439;&#x442;)',
-            UPLOAD_ERR_FORM_SIZE  => '&#x420;&#x430;&#x437;&#x43c;&#x435;&#x440; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x435;&#x43d;&#x43d;&#x43e;&#x433;&#x43e; &#x444;&#x430;&#x439;&#x43b;&#x430; &#x43f;&#x440;&#x435;&#x432;&#x43e;&#x441;&#x445;&#x43e;&#x434;&#x438;&#x442; &#x434;&#x438;&#x440;&#x435;&#x43a;&#x442;&#x438;&#x432;&#x443; MAX_FILE_SIZE, &#x443;&#x43a;&#x430;&#x437;&#x430;&#x43d;&#x43d;&#x443;&#x44e; &#x432; &#x444;&#x43e;&#x440;&#x43c;&#x435; (%d &#x431;&#x430;&#x439;&#x442;)',
-            UPLOAD_ERR_PARTIAL    => '&#x424;&#x430;&#x439;&#x43b; &#x431;&#x44b;&#x43b; &#x437;&#x430;&#x433;&#x440;&#x443;&#x436;&#x435;&#x43d; &#x43d;&#x435; &#x43f;&#x43e;&#x43b;&#x43d;&#x43e;&#x441;&#x442;&#x44c;&#x44e;',
-            UPLOAD_ERR_NO_TMP_DIR => '&#x41e;&#x448;&#x438;&#x431;&#x43a;&#x430; &#x43d;&#x430; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x435;: &#x43e;&#x442;&#x441;&#x443;&#x442;&#x441;&#x442;&#x432;&#x443;&#x435;&#x442; &#x43a;&#x430;&#x442;&#x430;&#x43b;&#x43e;&#x433; &#x434;&#x43b;&#x44f; &#x432;&#x440;&#x435;&#x43c;&#x435;&#x43d;&#x43d;&#x44b;&#x445; &#x444;&#x430;&#x439;&#x43b;&#x43e;&#x432;',
-            UPLOAD_ERR_CANT_WRITE => '&#x41e;&#x448;&#x438;&#x431;&#x43a;&#x430; &#x43d;&#x430; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x435;: &#x43d;&#x435; &#x443;&#x434;&#x430;&#x43b;&#x43e;&#x441;&#x44c; &#x437;&#x430;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x44c; &#x444;&#x430;&#x439;&#x43b; &#x43d;&#x430; &#x434;&#x438;&#x441;&#x43a;',
-            UPLOAD_ERR_EXTENSION  => '&#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x43a;&#x430; &#x444;&#x430;&#x439;&#x43b;&#x430; &#x431;&#x44b;&#x43b;&#x430; &#x43e;&#x441;&#x442;&#x430;&#x43d;&#x43e;&#x432;&#x43b;&#x435;&#x43d;&#x430; &#x440;&#x430;&#x441;&#x448;&#x438;&#x440;&#x435;&#x43d;&#x438;&#x435;&#x43c;'
-        )
-    );
-
-   /**
     * Language to display error messages in
     * @var  string
     */
-    protected $language;
+    protected $language = null;
 
    /**
     * Information on uploaded file, from submit data source
@@ -109,14 +73,23 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
     protected $attributes = array('type' => 'file');
 
+   /**
+    * Message provider for upload error messages
+    * @var  callback|HTML_QuickForm2_MessageProvider
+    */
+    protected $messageProvider;
 
    /**
     * Class constructor
     *
     * Possible keys in $data array are:
-    *  - 'language': language to display error messages in, it should either be
-    *    already available in the class or provided in 'errorMessages'
-    *  - 'errorMessages': an array of error messages with the following format
+    *  - 'messageProvider': an instance of a class implementing
+    *    HTML_QuickForm2_MessageProvider interface, this will be used to get
+    *    localized error messages. Default will be used if not given.
+    *  - 'language': language to display error messages in, will be passed to
+    *    message provider.
+    *  - 'errorMessages': (DEPRECATED, use messageProvider) an array of error
+    *    messages with the following format
     *    <pre>
     *      'language code 1' => array(
     *         UPLOAD_ERR_... => 'message',
@@ -141,22 +114,36 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
+        // Using deprecated 'errorMessages' key, let's keep this separate to remove later
         if (isset($data['errorMessages'])) {
+            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
+            $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
             // neither array_merge() nor array_merge_recursive will do
             foreach ($data['errorMessages'] as $lang => $ary) {
                 foreach ($ary as $code => $message) {
-                    $this->errorMessages[$lang][$code] = $message;
+                    $this->messageProvider->set(array('file', $code), $lang, $message);
                 }
             }
-            unset($data['errorMessages']);
-        }
-        if (!isset($data['language'])) {
-            $this->language = self::DEFAULT_LANGUAGE;
+
+        } elseif (isset($data['messageProvider'])) {
+            if (!is_callable($data['messageProvider'])
+                && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider
+            ) {
+                throw new HTML_QuickForm2_InvalidArgumentException(
+                    "messageProvider: expecting a callback or an implementation"
+                    . " of HTML_QuickForm2_MessageProvider"
+                );
+            }
+            $this->messageProvider = $data['messageProvider'];
+
         } else {
-            $this->language = isset($this->errorMessages[$data['language']])?
-                              $data['language']: self::DEFAULT_LANGUAGE;
-            unset($data['language']);
+            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
+            $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
         }
+        if (isset($data['language'])) {
+            $this->language = $data['language'];
+        }
+        unset($data['messageProvider'], $data['errorMessages'], $data['language']);
         parent::__construct($name, $attributes, $data);
     }
 
@@ -239,11 +226,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (isset($this->value['error']) &&
             !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE)))
         {
-            if (isset($this->errorMessages[$this->language][$this->value['error']])) {
-                $errorMessage = $this->errorMessages[$this->language][$this->value['error']];
-            } else {
-                $errorMessage = $this->errorMessages[self::DEFAULT_LANGUAGE][$this->value['error']];
-            }
+            $errorMessage = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                            ? $this->messageProvider->get(array('file', $this->value['error']), $this->language)
+                            : call_user_func($this->messageProvider, array('file', $this->value['error']), $this->language);
             if (UPLOAD_ERR_INI_SIZE == $this->value['error']) {
                 $iniSize = ini_get('upload_max_filesize');
                 $size    = intval($iniSize);
