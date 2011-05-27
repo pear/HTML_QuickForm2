@@ -54,7 +54,7 @@ Milestone 6: &quot;live&quot; validation, localization changes, moving to beta
 Major additions and changes
   * It is now possible to run client-side validation rules on changing the
     fields value / leaving the field (onchange / onblur) as well as on form
-    submit (request #5308)
+    submit (see request #5308)
   * Client-side validation errors are now displayed near the elements by
     default instead of in javascript alert() dialog. This is mostly similar 
     to behaviour of old HTML_QuickForm_DHTMLRulesTableless package.
@@ -65,6 +65,8 @@ Major additions and changes
   * Callback renderer blah-blah-blah
 
 Other features and changes
+  * Static elements can now wrap their content in a given tag having element's
+    attributes, e.g. &lt;div&gt; or &lt;img&gt; (see request #8626) 
   * Added a separate HTML_QuickForm2::isSubmitted() method, can be used to 
     check whether the form was sumbitted instead of checking an array of its
     data sources for submit one

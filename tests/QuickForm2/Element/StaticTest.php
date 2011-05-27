@@ -114,5 +114,40 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
     }
+
+    public function testCanRemoveName()
+    {
+        $foo = new HTML_QuickForm2_Element_Static('foo', array('id' => 'bar'));
+        $foo->removeAttribute('name');
+        $this->assertNull($foo->getAttribute('name'));
+
+        $bar = new HTML_QuickForm2_Element_Static('bar');
+        $bar->setName();
+        $this->assertNull($bar->getAttribute('name'));
+    }
+
+    public function testTagName()
+    {
+        $img = new HTML_QuickForm2_Element_Static(
+            'picture', array('alt' => 'foo', 'src' => 'pr0n.gif'),
+            array('tagName' => 'img', 'forceClosingTag' => false)
+        );
+        $this->assertRegexp('!<img[^<>]*alt="foo" src="pr0n.gif"[^<>]*/>!', $img->__toString());
+
+        $div = new HTML_QuickForm2_Element_Static(
+            null, array('class' => 'foo'), array('tagName' => 'div')
+        );
+        $this->assertRegexp('!<div[^<>]*class="foo"[^<>]*></div>!', $div->__toString());
+        $div->setContent('bar');
+        $this->assertRegexp('!<div[^<>]*class="foo"[^<>]*>bar</div>!', $div->__toString());
+    }
+
+   /**
+    * @expectedException HTML_QuickForm2_InvalidArgumentException
+    */
+    public function testDisallowedTagNames()
+    {
+        $static = new HTML_QuickForm2_Element_Static('foo', null, array('tagName' => 'input'));
+    }
 }
 ?>
