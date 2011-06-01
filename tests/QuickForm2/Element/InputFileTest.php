@@ -172,5 +172,31 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($form->validate());
         $this->assertEquals('A nasty error happened!', $upload->getError());
     }
+
+   /**
+    * File should check that the form has POST method, set enctype to multipart/form-data
+    * @see http://pear.php.net/bugs/bug.php?id=16807
+    */
+    public function testRequest16807()
+    {
+        $form = new HTML_QuickForm2('broken', 'get');
+
+        try {
+            $form->addFile('upload', array('id' => 'upload'));
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+
+        $group = HTML_QuickForm2_Factory::createElement('group', 'fileGroup');
+        $group->addFile('upload', array('id' => 'upload'));
+        try {
+            $form->appendChild($group);
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+
+        $post = new HTML_QuickForm2('okform', 'post');
+        $this->assertNull($post->getAttribute('enctype'));
+        $post->addFile('upload');
+        $this->assertEquals('multipart/form-data', $post->getAttribute('enctype'));
+    }
 }
 ?>

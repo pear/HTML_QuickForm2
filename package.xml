@@ -38,7 +38,7 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2011-05-30</date>
+ <date>2011-06-03</date>
  <version>
   <release>0.6.0</release>
   <api>0.6.0</api>
@@ -70,6 +70,8 @@ Other features and changes
   * It is now possible to set maximum and minimum hour in Date element's hours
     select (request #4061, works for 24-hour format) and maximum and minimum
     month in its months select (request #5957)
+  * File upload elements can no longer be added to method=&quot;get&quot; forms,
+    form's enctype attribute is automatically set (request #16807)
   * Added a separate HTML_QuickForm2::isSubmitted() method, can be used to 
     check whether the form was sumbitted instead of checking an array of its
     data sources for submit one

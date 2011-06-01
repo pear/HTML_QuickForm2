@@ -196,6 +196,26 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
     protected function updateValue()
     {
+        // request #16807: file uploads should not be added to forms with
+        // method="get", enctype should be set to multipart/form-data
+        // we cannot do this in setContainer() as the element may be added to
+        // e.g. a group first and then the group may be added to a form
+        $container = $this->getContainer();
+        while (!empty($container)) {
+            if ($container instanceof HTML_QuickForm2) {
+                if ('get' == $container->getAttribute('method')) {
+                    throw new HTML_QuickForm2_InvalidArgumentException(
+                        'File upload elements can only be added to forms with post submit method'
+                    );
+                }
+                if ('multipart/form-data' != $container->getAttribute('enctype')) {
+                    $container->setAttribute('enctype', 'multipart/form-data');
+                }
+                break;
+            }
+            $container = $container->getContainer();
+        }
+
         foreach ($this->getDataSources() as $ds) {
             if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
                 $value = $ds->getUpload($this->getName());
