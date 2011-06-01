@@ -79,8 +79,14 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',
-        'optionIncrement'  => array('i' => 1, 's' => 1)
-        );
+        'optionIncrement'  => array('i' => 1, 's' => 1),
+        // request #4061: max and min hours (only for 'H' modifier)
+        'minHour'          => 0,
+        'maxHour'          => 23,
+        // request #5957: max and min months
+        'minMonth'         => 1,
+        'maxMonth'         => 12
+    );
 
    /**
     * Language code
@@ -116,7 +122,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     *       Y => Four digit year
     *       y => Two digit year
     *       h => 12 hour format
-    *       H => 23 hour  format
+    *       H => 24 hour format
     *       i => Minutes
     *       s => Seconds
     *       a => am/pm
@@ -129,6 +135,10 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * - 'emptyOptionValue': The value passed by the empty option.
     * - 'emptyOptionText': The text displayed for the empty option.
     * - 'optionIncrement': Step to increase the option values by (works for 'i' and 's')
+    * - 'minHour': Minimum hour in hour select (only for 24 hour format!)
+    * - 'maxHour': Maximum hour in hour select (only for 24 hour format!)
+    * - 'minMonth': Minimum month in month select
+    * - 'maxMonth': Maximum month in month select
     *
     * @param    string  Element name
     * @param    mixed   Attributes (either a string or an array)
@@ -192,21 +202,22 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                         $options = $this->createOptionList(1, 31);
                         break;
                     case 'M':
-                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                                   ? $this->messageProvider->get(array('date', 'months_short'), $this->language)
-                                   : call_user_func($this->messageProvider, array('date', 'months_short'), $this->language);
-                        array_unshift($options , '');
-                        unset($options[0]);
-                        break;
                     case 'm':
-                        $options = $this->createOptionList(1, 12);
-                        break;
                     case 'F':
-                        $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                                   ? $this->messageProvider->get(array('date', 'months_long'), $this->language)
-                                   : call_user_func($this->messageProvider, array('date', 'months_long'), $this->language);
-                        array_unshift($options , '');
-                        unset($options[0]);
+                        $options = $this->createOptionList(
+                            $this->data['minMonth'],
+                            $this->data['maxMonth'],
+                            $this->data['minMonth'] > $this->data['maxMonth'] ? -1 : 1
+                        );
+                        if ('M' == $sign || 'F' == $sign) {
+                            $key   = 'M' == $sign ? 'months_short' : 'months_long';
+                            $names = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
+                                     ? $this->messageProvider->get(array('date', $key), $this->language)
+                                     : call_user_func($this->messageProvider, array('date', $key), $this->language);
+                            foreach ($options as $k => &$v) {
+                                $v = $names[$k - 1];
+                            }
+                        }
                         break;
                     case 'Y':
                         $options = $this->createOptionList(
@@ -231,7 +242,11 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                         array_walk($options, create_function('&$v,$k', '$v = intval($v);'));
                         break;
                     case 'H':
-                        $options = $this->createOptionList(0, 23);
+                        $options = $this->createOptionList(
+                            $this->data['minHour'],
+                            $this->data['maxHour'],
+                            $this->data['minHour'] > $this->data['maxHour'] ? -1 : 1
+                        );
                         break;
                     case 'i':
                         $options = $this->createOptionList(0, 59, $this->data['optionIncrement']['i']);
