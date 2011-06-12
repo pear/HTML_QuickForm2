@@ -62,7 +62,7 @@ Major additions and changes
     InputFile) are now returned by special &quot;message provider&quot; object
     or callback (request #18341). A message provider for Date element using
     current locale data is available (request #5558)
-  * Callback renderer blah-blah-blah
+  * Added a new optional renderer that uses PHP callbacks to render form elements
 
 Other features and changes
   * Static elements can now wrap their content in a given tag having element's
