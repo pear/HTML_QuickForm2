@@ -188,7 +188,8 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
             'setElementCallbackForGroupClass',
             'setElementCallbackForGroupId',
             'setHiddenGroupCallback',
-            'setRequiredNoteCallback'
+            'setRequiredNoteCallback',
+            'setLabelCallback'
         );
     }
 
