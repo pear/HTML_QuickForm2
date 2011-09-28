@@ -70,8 +70,6 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 
     public function getName() { return ''; }
     public function setName($name) { }
-    public function getId() { return ''; }
-    public function setId($id = null) { }
 
     protected function updateValue() { }
 
@@ -248,6 +246,29 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
     {
         $node = new HTML_QuickForm2_NodeImpl();
         $this->assertFalse($node->isRequired());
+    }
+
+   /**
+    * Disallow spaces in values of 'id' attributes
+    *
+    * @dataProvider invalidIdProvider
+    * @expectedException HTML_QuickForm2_InvalidArgumentException
+	* @link http://pear.php.net/bugs/17576
+    */
+    public function testRequest18683($id)
+    {
+        $node = new HTML_QuickForm2_NodeImpl();
+        $node->setId($id);
+    }
+
+    public static function invalidIdProvider()
+    {
+        return array(
+            array("\x0C"),
+            array(" foo\n"),
+            array("foo\rbar"),
+            array('bar baz')
+        );
     }
 }
 ?>

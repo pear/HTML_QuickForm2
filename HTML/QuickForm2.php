@@ -87,17 +87,13 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     */
     public function __construct($id, $method = 'post', $attributes = null, $trackSubmit = true)
     {
-        $method = ('GET' == strtoupper($method))? 'get': 'post';
-        if (empty($id)) {
-            $id          = self::generateId('');
-            $trackSubmit = false;
-        } else {
-            self::storeId($id);
-        }
+        $method      = ('GET' == strtoupper($method))? 'get': 'post';
+        $trackSubmit = empty($id) ? false : $trackSubmit;
         $this->attributes = array_merge(
                                 self::prepareAttributes($attributes),
-                                array('id' => (string)$id, 'method' => $method)
+                                array('method' => $method)
                             );
+        parent::setId(empty($id) ? null : $id);
         if (!isset($this->attributes['action'])) {
             $this->attributes['action'] = $_SERVER['PHP_SELF'];
         }

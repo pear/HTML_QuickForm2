@@ -122,7 +122,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
         $this->assertNull($foo->getAttribute('name'));
 
         $bar = new HTML_QuickForm2_Element_Static('bar');
-        $bar->setName();
+        $bar->setName(null);
         $this->assertNull($bar->getAttribute('name'));
     }
 

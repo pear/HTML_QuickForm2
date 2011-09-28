@@ -132,7 +132,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     * @param    string|null
     * @return   HTML_QuickForm2_Element_Static
     */
-    public function setName($name = null)
+    public function setName($name)
     {
         if (null !== $name) {
             return parent::setName($name);
