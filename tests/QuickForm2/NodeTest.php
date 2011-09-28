@@ -253,7 +253,7 @@ class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
     *
     * @dataProvider invalidIdProvider
     * @expectedException HTML_QuickForm2_InvalidArgumentException
-	* @link http://pear.php.net/bugs/17576
+    * @link http://pear.php.net/bugs/17576
     */
     public function testRequest18683($id)
     {
