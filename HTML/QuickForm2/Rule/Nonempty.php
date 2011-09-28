@@ -107,7 +107,7 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
     *
     * @param    int     Minimum number of nonempty values
     * @return   HTML_QuickForm2_Rule
-    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
+    * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus limit was provided
     */
     public function setConfig($config)
     {
