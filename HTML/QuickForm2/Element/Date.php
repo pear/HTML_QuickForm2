@@ -144,7 +144,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * @param    mixed   Attributes (either a string or an array)
     * @param    array   Element data (label, options and data used for element creation)
     */
-    public function __construct($name = null, $attributes = null, $data = null)
+    public function __construct($name = null, $attributes = null, array $data = array())
     {
         if (isset($data['messageProvider'])) {
             if (!is_callable($data['messageProvider'])

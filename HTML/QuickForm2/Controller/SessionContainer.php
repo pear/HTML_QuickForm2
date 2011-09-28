@@ -46,9 +46,8 @@
 /**
  * Object wrapping around session variable used to store controller data
  *
- * Unlike old HTML_QuickForm_Controller, this does not extend HTML_QuickForm2
- * but accepts an instance of that in the constructor. You need to create a
- * subclass of this class and implement its populateForm() method.
+ * This is a bit less fragile than allowing to directly manipulate the array
+ * as was done in old HTML_QuickForm_Controller package
  *
  * @category   HTML
  * @package    HTML_QuickForm2

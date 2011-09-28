@@ -105,7 +105,7 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
     * considered not empty if at least one option is selected, Container will
     * be considered not empty if at least one contained element is not empty.
     *
-    * @param    int     Maximum allowed size
+    * @param    int     Minimum number of nonempty values
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
     */

@@ -80,7 +80,7 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     */
     protected $data = array('content' => '');
 
-    public function __construct($name = null, $attributes = null, $data = null)
+    public function __construct($name = null, $attributes = null, array $data = array())
     {
         parent::__construct($name, $attributes, $data);
         // "checked" attribute should be updated on changes to "value" attribute
