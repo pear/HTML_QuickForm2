@@ -38,9 +38,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2011-06-13</date>
+ <date>2011-09-29</date>
  <version>
-  <release>0.6.0</release>
+  <release>0.6.1</release>
   <api>0.6.0</api>
  </version>
  <stability>
@@ -49,54 +49,16 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Milestone 6: &quot;live&quot; validation, localization changes, moving to beta
-
-Major additions and changes
-  * It is now possible to run client-side validation rules on changing the
-    fields value / leaving the field (onchange / onblur) as well as on form
-    submit (see request #5308)
-  * Client-side validation errors are now displayed near the elements by
-    default instead of in javascript alert() dialog. This is mostly similar 
-    to behaviour of old HTML_QuickForm_DHTMLRulesTableless package.
-  * Localization messages (month and weekday names for Date, upload errors for
-    InputFile) are now returned by special &quot;message provider&quot; object
-    or callback (request #18341). A message provider for Date element using
-    current locale data is available (request #5558)
-  * Added a new optional renderer that uses PHP callbacks to render form elements
+Bug fixes
+  * Callback renderer did not export setLabelCallback() method (bug #18833)
+  * Trying to use Static element under PHP 5.2 resulted in fatal error (bug #18874)
+  * persistentFreeze() is on by default for text and password elements
 
 Other features and changes
-  * Static elements can now wrap their content in a given tag having element's
-    attributes, e.g. &lt;div&gt; or &lt;img&gt; (see request #8626)
-  * It is now possible to set maximum and minimum hour in Date element's hours
-    select (request #4061, works for 24-hour format) and maximum and minimum
-    month in its months select (request #5957)
-  * File upload elements can no longer be added to method=&quot;get&quot; forms,
-    form's enctype attribute is automatically set (request #16807)
-  * Added a separate HTML_QuickForm2::isSubmitted() method, can be used to 
-    check whether the form was sumbitted instead of checking an array of its
-    data sources for submit one
-  * Added HTML_QuickForm2_Renderer::methodExists() method, this can be used
-    to check whether a custom renderer has a necessary method / plugin and
-    fall back to the Default renderer if it doesn't
-  * Added default 'value' attribute for radiobuttons
-  * Array renderer always returns group separator as an array of length
-    count($group) - 1, making it easier to use in templates
-  * Added CLIENT_SERVER and ONBLUR_CLIENT_SERVER constants to
-    HTML_QuickForm2_Rule, these make calls to addRule() less verbose
-  * Minified versions of javascript libraries are now provided
-
-Bug fixes
-  * Unit tests can now run under PHPUnit 3.5
-  * Required rule will throw an Exception if not given an error message (bug #18133)
-  * Default maxYear in Date element is now current year rather than 2010 (bug #18171)
-  * Group::removeChild() failed if group's name contained brackets (bug #18182)
-  * Values for elements named like 'foo[]' are now properly handled by getValue()
-
-Backwards compatibility issues
-  * Javascript libraries are now installed into js/ and js/min/ subdirectories
-    of base data directory
-  * 'errorMessages' parameter for HTML_QuickForm2_Element_InputFile is
-    deprecated and will be removed in the next release. Use message providers
+  * Added an example showing how to output the form with Twig template engine
+  * Space characters are no longer allowed in 'id' attribute values (request #18683)
+  * Added array type hinting to $data parameter in all elements' constructors
+  * Fixed copypasted PHPDoc in several places
  </notes>
  <contents>
   <dir name="/">
@@ -549,6 +511,14 @@ Backwards compatibility issues
      <file name="dualselect.js" role="doc" />
      <file name="hierselect-server.php" role="doc" />
     </dir> <!-- /docs/examples/js -->
+    <dir name="renderers">
+     <dir name="templates">
+      <file name="array-twig.tpl" role="doc" />
+     </dir> <!-- /docs/examples/renderers/templates -->
+     <file name="array-twig.php" role="doc">
+      <tasks:replace  from="@data_dir@" to="data_dir" type="pear-config" />
+     </file>
+    </dir> <!-- /docs/examples/renderers -->
     <dir name="support">
      <file name="hierselect-loader.php" role="doc" />
     </dir> <!-- /docs/examples/support -->
@@ -596,7 +566,7 @@ Backwards compatibility issues
    <package>
     <name>HTML_Common2</name>
     <channel>pear.php.net</channel>
-    <min>2.0.0beta1</min>
+    <min>2.0.0</min>
    </package>
   </required>
  </dependencies>
@@ -613,6 +583,8 @@ Backwards compatibility issues
    <install as="examples/controller/empty.gif" name="docs/examples/controller/empty.gif" />
    <install as="examples/js/dualselect.js" name="docs/examples/js/dualselect.js" />
    <install as="examples/js/hierselect-server.php" name="docs/examples/js/hierselect-server.php" />
+   <install as="examples/renderers/array-twig.php" name="docs/examples/renderers/array-twig.php" />
+   <install as="examples/renderers/templates/array-twig.tpl" name="docs/examples/renderers/templates/array-twig.tpl" />
    <install as="examples/support/hierselect-loader.php" name="docs/examples/support/hierselect-loader.php" />
    <install as="examples/basic-elements.php" name="docs/examples/basic-elements.php" />
    <install as="examples/builtin-rules.php" name="docs/examples/builtin-rules.php" />
@@ -689,6 +661,68 @@ Backwards compatibility issues
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2011-06-13</date>
+   <version>
+    <release>0.6.0</release>
+    <api>0.6.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>
+Milestone 6: &quot;live&quot; validation, localization changes, moving to beta
+
+Major additions and changes
+  * It is now possible to run client-side validation rules on changing the
+    fields value / leaving the field (onchange / onblur) as well as on form
+    submit (see request #5308)
+  * Client-side validation errors are now displayed near the elements by
+    default instead of in javascript alert() dialog. This is mostly similar 
+    to behaviour of old HTML_QuickForm_DHTMLRulesTableless package.
+  * Localization messages (month and weekday names for Date, upload errors for
+    InputFile) are now returned by special &quot;message provider&quot; object
+    or callback (request #18341). A message provider for Date element using
+    current locale data is available (request #5558)
+  * Added a new optional renderer that uses PHP callbacks to render form elements
+
+Other features and changes
+  * Static elements can now wrap their content in a given tag having element's
+    attributes, e.g. &lt;div&gt; or &lt;img&gt; (see request #8626)
+  * It is now possible to set maximum and minimum hour in Date element's hours
+    select (request #4061, works for 24-hour format) and maximum and minimum
+    month in its months select (request #5957)
+  * File upload elements can no longer be added to method=&quot;get&quot; forms,
+    form's enctype attribute is automatically set (request #16807)
+  * Added a separate HTML_QuickForm2::isSubmitted() method, can be used to 
+    check whether the form was sumbitted instead of checking an array of its
+    data sources for submit one
+  * Added HTML_QuickForm2_Renderer::methodExists() method, this can be used
+    to check whether a custom renderer has a necessary method / plugin and
+    fall back to the Default renderer if it doesn't
+  * Added default 'value' attribute for radiobuttons
+  * Array renderer always returns group separator as an array of length
+    count($group) - 1, making it easier to use in templates
+  * Added CLIENT_SERVER and ONBLUR_CLIENT_SERVER constants to
+    HTML_QuickForm2_Rule, these make calls to addRule() less verbose
+  * Minified versions of javascript libraries are now provided
+
+Bug fixes
+  * Unit tests can now run under PHPUnit 3.5
+  * Required rule will throw an Exception if not given an error message (bug #18133)
+  * Default maxYear in Date element is now current year rather than 2010 (bug #18171)
+  * Group::removeChild() failed if group's name contained brackets (bug #18182)
+  * Values for elements named like 'foo[]' are now properly handled by getValue()
+
+Backwards compatibility issues
+  * Javascript libraries are now installed into js/ and js/min/ subdirectories
+    of base data directory
+  * 'errorMessages' parameter for HTML_QuickForm2_Element_InputFile is
+    deprecated and will be removed in the next release. Use message providers
+   </notes>
+  </release>
   <release>
    <date>2010-12-09</date>
    <version>
