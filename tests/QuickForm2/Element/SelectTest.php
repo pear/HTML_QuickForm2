@@ -42,13 +42,13 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+
 /**
  * Class for <select> elements
  */
 require_once 'HTML/QuickForm2/Element/Select.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
  * Let's just make parseAttributes() public rather than copy and paste regex

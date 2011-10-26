@@ -42,13 +42,13 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+
 /**
  * Class for <input type="file" /> elements
  */
 require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
  * Class representing a HTML form

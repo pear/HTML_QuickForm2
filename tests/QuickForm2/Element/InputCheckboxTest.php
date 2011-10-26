@@ -42,6 +42,9 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+
 /**
  * Class for <input type="checkbox" /> elements
  */
@@ -51,9 +54,6 @@ require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
  * Class representing a HTML form
  */
 require_once 'HTML/QuickForm2.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
  * Unit test for HTML_QuickForm2_Element_InputCheckbox class

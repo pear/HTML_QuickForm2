@@ -43,13 +43,13 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
+
 /**
  * Javascript aggregator and builder class
  */
 require_once 'HTML/QuickForm2/JavascriptBuilder.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
  * Base class for HTML_QuickForm2 rules

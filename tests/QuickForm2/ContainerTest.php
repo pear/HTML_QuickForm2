@@ -42,6 +42,9 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
+
 /**
  * Container class
  */
@@ -61,9 +64,6 @@ require_once 'HTML/QuickForm2/Rule.php';
  * Base class for HTML_QuickForm2 renderers
  */
 require_once 'HTML/QuickForm2/Renderer.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
  * A non-abstract subclass of Element

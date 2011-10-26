@@ -42,6 +42,9 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
+
 /** Class implementing the Page Controller pattern for multipage forms */
 require_once 'HTML/QuickForm2/Controller.php';
 
@@ -50,9 +53,6 @@ require_once 'HTML/QuickForm2/Controller/Action.php';
 
 /** Class representing a HTML form */
 require_once 'HTML/QuickForm2.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
  * Unit test for HTML_QuickForm2_Controller class

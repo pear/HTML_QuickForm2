@@ -42,13 +42,13 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+
 /**
  * Data source for HTML_QuickForm2 objects based on superglobal arrays
  */
 require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
  * Unit test for superglobal-based data source

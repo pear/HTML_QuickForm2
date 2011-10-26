@@ -43,7 +43,7 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Helper for PHPUnit includes */
+/** Sets up includes */
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 require_once 'HTML/QuickForm2.php';

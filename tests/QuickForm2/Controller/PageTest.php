@@ -42,7 +42,7 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Helper for PHPUnit includes */
+/** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /** Class implementing the Page Controller pattern for multipage forms */

@@ -42,7 +42,7 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Helper for PHPUnit includes */
+/** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 /** Rule checking that the form field is not empty */
 require_once 'HTML/QuickForm2/Rule/Nonempty.php';

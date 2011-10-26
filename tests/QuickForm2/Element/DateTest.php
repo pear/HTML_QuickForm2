@@ -42,11 +42,11 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+
 /** Date element */
 require_once 'HTML/QuickForm2/Element/Date.php';
-
-/** Helper for PHPUnit includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
 {
