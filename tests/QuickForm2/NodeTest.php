@@ -77,6 +77,8 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 
     public function getJavascriptValue($inContainer = false) { return ''; }
     public function getJavascriptTriggers() { return array(); }
+
+    public function render(HTML_QuickForm2_Renderer $renderer) { }
 }
 
 /**

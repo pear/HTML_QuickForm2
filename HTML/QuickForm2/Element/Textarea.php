@@ -102,7 +102,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
             $html = $this->getIndent() . '<pre>' . $value .
                     '</pre>' . self::getOption('linebreak');
         } else {
-            $html = nl2br($value) . self::getOption('linbebreak');
+            $html = nl2br($value) . self::getOption('linebreak');
         }
         return $html . $this->getPersistentContent();
     }

@@ -766,5 +766,13 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         }
         return $value;
     }
+
+   /**
+    * Renders the element using the given renderer
+    *
+    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @return   HTML_QuickForm2_Renderer
+    */
+    abstract public function render(HTML_QuickForm2_Renderer $renderer);
 }
 ?>

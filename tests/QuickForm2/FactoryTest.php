@@ -64,6 +64,12 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
     protected $phpError;
     protected $errorHandler;
 
+    protected $nodeAbstractMethods = array(
+        'updateValue', 'getId', 'getName', 'getType', 'getRawValue', 'setId',
+        'setName', 'setValue', '__toString', 'getJavascriptValue',
+        'getJavascriptTriggers', 'render'
+    );
+
     protected function setUp()
     {
         $this->phpError     = null;
@@ -176,11 +182,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateNotRegisteredRule()
     {
-        $mockNode = $this->getMock(
-            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
-            'getType', 'getRawValue', 'setId', 'setName', 'setValue',
-            '__toString', 'getJavascriptValue', 'getJavascriptTriggers')
-        );
+        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
         try {
             $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -192,11 +194,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleNonExistingClass()
     {
-        $mockNode = $this->getMock(
-            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
-            'getType', 'getRawValue', 'setId', 'setName', 'setValue',
-            '__toString', 'getJavascriptValue', 'getJavascriptTriggers')
-        );
+        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
         HTML_QuickForm2_Factory::registerRule('foo3', 'NonexistentClass');
         try {
             $this->setErrorHandler();
@@ -211,11 +209,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleNonExistingFile()
     {
-        $mockNode = $this->getMock(
-            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
-            'getType', 'getRawValue', 'setId', 'setName', 'setValue',
-            '__toString', 'getJavascriptValue', 'getJavascriptTriggers')
-        );
+        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
         HTML_QuickForm2_Factory::registerRule('foo4', 'NonexistentClass', 'NonexistentFile.php');
         try {
             $this->setErrorHandler();
@@ -230,11 +224,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleInvalidFile()
     {
-        $mockNode = $this->getMock(
-            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
-            'getType', 'getRawValue', 'setId', 'setName', 'setValue',
-            '__toString', 'getJavascriptValue', 'getJavascriptTriggers')
-        );
+        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
         HTML_QuickForm2_Factory::registerRule('foo5', 'NonexistentClass', dirname(__FILE__) . '/_files/InvalidFile.php');
         try {
             $rule = HTML_QuickForm2_Factory::createRule('foo5', $mockNode);
@@ -247,11 +237,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleValid()
     {
-        $mockNode = $this->getMock(
-            'HTML_QuickForm2_Node', array('updateValue', 'getId', 'getName',
-            'getType', 'getRawValue', 'setId', 'setName', 'setValue',
-            '__toString', 'getJavascriptValue', 'getJavascriptTriggers')
-        );
+        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
         HTML_QuickForm2_Factory::registerRule(
             'fakerule', 'FakeRule', dirname(__FILE__) . '/_files/FakeRule.php'
         );
