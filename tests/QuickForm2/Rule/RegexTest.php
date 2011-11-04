@@ -178,5 +178,17 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
         $ruleFile = new HTML_QuickForm2_Rule_Regex($mockNoUpload, 'an error', '/\\.(jpe?g|gif|png)$/i');
         $this->assertTrue($ruleFile->validate());
     }
+
+    public function testRequest12736()
+    {
+        $mockEl = $this->getMock('HTML_QuickForm2_Element', array('getType',
+                                 'getRawValue', 'setValue', '__toString'));
+        $mockEl->expects($this->once())->method('getRawValue')
+               ->will($this->returnValue('no Cyrillic letters here'));
+        $ruleCyr = new HTML_QuickForm2_Rule_Regex($mockEl, 'an error', '/\x{0445}\x{0443}\x{0439}/ui');
+
+        $this->assertFalse($ruleCyr->validate());
+        $this->assertContains('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
+    }
 }
 ?>

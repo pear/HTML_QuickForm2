@@ -113,7 +113,7 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
     *
     * For this to work properly, slashes have to be used as regex delimiters.
     * The method takes care of transforming PHP unicode escapes in regexps to
-    * JS unicode escapes if using 'u' modifier (see bug #12376)
+    * JS unicode escapes if using 'u' modifier (see bug #12736)
     *
     * @return   string
     */
