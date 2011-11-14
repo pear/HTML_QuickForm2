@@ -127,19 +127,6 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $this->assertContains('987654', $toobig->getError());
     }
 
-    public function testErrorMessageLocalization()
-    {
-        $form  = new HTML_QuickForm2('upload', 'post', null, false);
-        $local = $form->appendChild(new HTML_QuickForm2_Element_InputFile(
-            'local', array(), array('language'      => 'zz',
-                                    'errorMessages' => array(
-                                        'zz' => array(UPLOAD_ERR_CANT_WRITE => 'Blah-blah-blah')
-                                    ))
-        ));
-        $this->assertFalse($form->validate());
-        $this->assertEquals('Blah-blah-blah', $local->getError());
-    }
-
    /**
     * @expectedException HTML_QuickForm2_InvalidArgumentException
     */

@@ -212,54 +212,12 @@ qf.Validator.prototype = (function() {
 
     return {
         /**
-         * Message prefix in alert in case of failed validation
-         * @type {String}
-         */
-        msgPrefix: 'Invalid information entered:',
-
-        /**
-         * Message postfix in alert in case of failed validation
-         * @type {String}
-         */
-        msgPostfix: 'Please correct these fields.',
-
-        /**
          * Called before starting the validation. May be used e.g. to clear the errors from form elements.
          * @param {HTMLFormElement} form The form being validated currently
          */
         onStart: function(form) 
         {
             _clearErrors(form);
-        },
-
-        /**
-         * Called on setting the element error
-         *
-         * @param {string} elementId ID attribute of an element
-         * @param {string} errorMessage
-         * @deprecated Use onFieldError() instead
-         */
-        onError: function(elementId, errorMessage)
-        {
-            this.onFieldError(elementId, errorMessage);
-        },
-
-        /**
-         * Called on successfully validating the form
-         * @deprecated Use onFormValid() instead
-         */
-        onValid: function()
-        {
-            this.onFormValid();
-        },
-
-        /**
-         * Called on failed validation
-         * @deprecated Use onFormError() instead
-         */
-        onInvalid: function()
-        {
-            this.onFormError();
         },
 
         /**

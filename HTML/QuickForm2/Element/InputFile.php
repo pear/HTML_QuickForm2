@@ -88,24 +88,6 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *    localized error messages. Default will be used if not given.
     *  - 'language': language to display error messages in, will be passed to
     *    message provider.
-    *  - 'errorMessages': (DEPRECATED, use messageProvider) an array of error
-    *    messages with the following format
-    *    <pre>
-    *      'language code 1' => array(
-    *         UPLOAD_ERR_... => 'message',
-    *         ...
-    *         UPLOAD_ERR_... => 'message'
-    *      ),
-    *      ...
-    *      'language code N' => array(
-    *         ...
-    *      )
-    *    </pre>
-    *    Note that error messages for UPLOAD_ERR_INI_SIZE and UPLOAD_ERR_FORM_SIZE
-    *    may contain '%d' placeholders that will be automatically replaced by the
-    *    appropriate size limits. Note also that you don't need to provide messages
-    *    for every possible error code in the arrays, you may e.g. override just
-    *    one error message for a particular language.
     *
     * @param    string  Element name
     * @param    mixed   Attributes (either a string or an array)
@@ -114,18 +96,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
-        // Using deprecated 'errorMessages' key, let's keep this separate to remove later
-        if (isset($data['errorMessages'])) {
-            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
-            $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
-            // neither array_merge() nor array_merge_recursive will do
-            foreach ($data['errorMessages'] as $lang => $ary) {
-                foreach ($ary as $code => $message) {
-                    $this->messageProvider->set(array('file', $code), $lang, $message);
-                }
-            }
-
-        } elseif (isset($data['messageProvider'])) {
+        if (isset($data['messageProvider'])) {
             if (!is_callable($data['messageProvider'])
                 && !$data['messageProvider'] instanceof HTML_QuickForm2_MessageProvider
             ) {
@@ -143,7 +114,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (isset($data['language'])) {
             $this->language = $data['language'];
         }
-        unset($data['messageProvider'], $data['errorMessages'], $data['language']);
+        unset($data['messageProvider'], $data['language']);
         parent::__construct($name, $attributes, $data);
     }
 
