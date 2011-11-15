@@ -49,6 +49,10 @@ require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
  * Class for static elements
  */
 require_once 'HTML/QuickForm2/Element/Static.php';
+/**
+ * Class for <input type="text" /> elements
+ */
+require_once 'HTML/QuickForm2/Element/InputText.php';
 
 
 /**
