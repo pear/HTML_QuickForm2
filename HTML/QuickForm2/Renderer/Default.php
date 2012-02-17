@@ -156,7 +156,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'setTemplateForClass',
             'setTemplateForId',
             'setErrorTemplate',
-            'setGroupedTemplateForClass',
             'setElementTemplateForGroupClass',
             'setElementTemplateForGroupId'
         );
@@ -184,7 +183,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *
     * If a template is set for an element via this method, it will be used.
     * In the other case a generic template set by {@link setTemplateForClass()}
-    * or {@link setGroupedTemplateForClass()} will be used.
+    * or {@link setElementTemplateForGroupClass()} will be used.
     *
     * @param    string  Element's id
     * @param    mixed   Template to use for rendering of that element
