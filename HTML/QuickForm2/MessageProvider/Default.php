@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** Interface for classes that supply (translated) messages for the elements */
@@ -52,12 +52,14 @@ require_once 'HTML/QuickForm2/MessageProvider.php';
  * The class is a Singleton, so setting additional messages for it will make
  * them available for all elements that use this provider.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
- * @link       http://pear.php.net/bugs/bug.php?id=18341
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
+ * @link     http://pear.php.net/bugs/bug.php?id=18341
  */
 class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_MessageProvider
 {
@@ -283,8 +285,9 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
     * </code>
     * will be used.
     *
-    * @param    array   Message ID
-    * @param    string  Language, will use the default if not given
+    * @param array  $messageId Message ID
+    * @param string $langId    Language, will use the default if not given
+    *
     * @return   array|string|null
     */
     public function get(array $messageId, $langId = null)
@@ -313,9 +316,9 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
     * Note that you can give an arbitrary $messageId and thus set messages
     * for your custom elements.
     *
-    * @param array          Message ID
-    * @param string         Language
-    * @param string|array
+    * @param array        $messageId Message ID
+    * @param string       $langId    Language
+    * @param string|array $message   Translated message
     */
     public function set(array $messageId, $langId, $message)
     {

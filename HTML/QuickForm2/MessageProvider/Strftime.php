@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** Interface for classes that supply (translated) messages for the elements */
@@ -53,12 +53,14 @@ require_once 'HTML/QuickForm2/MessageProvider.php';
  * do anything with locale itself, so be sure to set it up properly before
  * adding date elements to the form.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
- * @link       http://pear.php.net/bugs/bug.php?id=5558
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
+ * @link     http://pear.php.net/bugs/bug.php?id=5558
  */
 class HTML_QuickForm2_MessageProvider_Strftime implements HTML_QuickForm2_MessageProvider
 {
@@ -93,8 +95,9 @@ class HTML_QuickForm2_MessageProvider_Strftime implements HTML_QuickForm2_Messag
    /**
     * Returns name(s) of months and weekdays for date elements
     *
-    * @param    array   Message ID
-    * @param    string  Not used, current locale will define the language
+    * @param array  $messageId Message ID
+    * @param string $langId    Not used, current locale will define the language
+    *
     * @return   array|string|null
     * @throws   HTML_QuickForm2_InvalidArgumentException if $messageId doesn't
     *               start with 'date'

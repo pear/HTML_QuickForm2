@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,14 +34,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @author     Thomas Schulz <ths@4bconsult.de>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @author   Thomas Schulz <ths@4bconsult.de>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -121,12 +121,14 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *   - {@link toArray()}
  *   - {@link setStyleForId()}
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @author     Thomas Schulz <ths@4bconsult.de>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @author   Thomas Schulz <ths@4bconsult.de>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 {
@@ -201,7 +203,8 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
    /**
     * Creates an array with fields that are common to all elements
     *
-    * @param    HTML_QuickForm2_Node    Element being rendered
+    * @param HTML_QuickForm2_Node $element Element being rendered
+    *
     * @return   array
     */
     public function buildCommonFields(HTML_QuickForm2_Node $element)
@@ -244,7 +247,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
    /**
     * Stores an array representing "scalar" element in the form array
     *
-    * @param    array
+    * @param array $element
     */
     public function pushScalar(array $element)
     {
@@ -261,7 +264,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
    /**
     * Stores an array representing a Container in the form array
     *
-    * @param    array
+    * @param array $container
     */
     public function pushContainer(array $container)
     {
@@ -285,8 +288,9 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     * "Style" is some information that is opaque to Array Renderer but may be
     * of use to e.g. template engine that receives the resultant array.
     *
-    * @param    string|array    Element id or array ('element id' => 'style')
-    * @param    sting           Element style if $idOrStyles is not an array
+    * @param string|array $idOrStyles Element id or array ('element id' => 'style')
+    * @param mixed        $style      Element style if $idOrStyles is not an array
+    *
     * @return   HTML_QuickForm2_Renderer_Array
     */
     public function setStyleForId($idOrStyles, $style = null)

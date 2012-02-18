@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -61,11 +61,13 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *       available to the outside world.</li>
  * </ol>
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
 {
@@ -105,8 +107,8 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
    /**
     * Constructor, sets proxied renderer and its plugins
     *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance to proxy
-    * @param    array                       Plugins registered for that renderer type
+    * @param HTML_QuickForm2_Renderer $renderer       Renderer instance to proxy
+    * @param array                    &$pluginClasses Plugins registered for that renderer type
     */
     protected function __construct(HTML_QuickForm2_Renderer $renderer, array &$pluginClasses)
     {
@@ -120,8 +122,9 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
    /**
     * Magic function; call an imported method of a renderer or its plugin
     *
-    * @param    string  method name
-    * @param    array   method arguments
+    * @param string $name      method name
+    * @param array  $arguments method arguments
+    *
     * @return   mixed
     */
     public function __call($name, $arguments)
@@ -139,8 +142,10 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
                 $arguments
             );
         }
-        trigger_error("Fatal error: Call to undefined method " .
-                      get_class($this->_renderer) . "::" . $name . "()", E_USER_ERROR);
+        trigger_error(
+            "Fatal error: Call to undefined method " . get_class($this->_renderer)
+            . "::" . $name . "()", E_USER_ERROR
+        );
     }
 
    /**
@@ -150,7 +155,8 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     * if a proxied renderer publishes such a method, if some plugin has such
     * a public method.
     *
-    * @param string Method name
+    * @param string $name Method name
+    *
     * @return bool
     */
     public function methodExists($name)
@@ -280,8 +286,10 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         if (method_exists($this->_renderer, '__toString')) {
             return $this->_renderer->__toString();
         }
-        trigger_error("Fatal error: Object of class " . get_class($this->_renderer) .
-                      " could not be converted to string", E_USER_ERROR);
+        trigger_error(
+            "Fatal error: Object of class " . get_class($this->_renderer)
+            . " could not be converted to string", E_USER_ERROR
+        );
     }
 }
 ?>
