@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -54,11 +54,13 @@ require_once 'HTML/QuickForm2/Loader.php';
  * The class handles instantiation of Element and Rule objects as well as
  * registering of new Element and Rule classes.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Factory
 {
@@ -127,9 +129,9 @@ class HTML_QuickForm2_Factory
    /**
     * Registers a new element type
     *
-    * @param    string  Type name (treated case-insensitively)
-    * @param    string  Class name
-    * @param    string  File containing the class, leave empty if class already loaded
+    * @param string $type        Type name (treated case-insensitively)
+    * @param string $className   Class name
+    * @param string $includeFile File containing the class, leave empty if class already loaded
     */
     public static function registerElement($type, $className, $includeFile = null)
     {
@@ -140,7 +142,8 @@ class HTML_QuickForm2_Factory
    /**
     * Checks whether an element type is known to factory
     *
-    * @param    string  Type name (treated case-insensitively)
+    * @param string $type Type name (treated case-insensitively)
+    *
     * @return   bool
     */
     public static function isElementRegistered($type)
@@ -152,18 +155,19 @@ class HTML_QuickForm2_Factory
    /**
     * Creates a new element object of the given type
     *
-    * @param    string  Type name (treated case-insensitively)
-    * @param    mixed   Element name (passed to element's constructor)
-    * @param    mixed   Element attributes (passed to element's constructor)
-    * @param    array   Element-specific data (passed to element's constructor)
+    * @param string       $type       Type name (treated case-insensitively)
+    * @param string       $name       Element name (passed to element's constructor)
+    * @param string|array $attributes Element attributes (passed to element's constructor)
+    * @param array        $data       Element-specific data (passed to element's constructor)
+    *
     * @return   HTML_QuickForm2_Node     A created element
     * @throws   HTML_QuickForm2_InvalidArgumentException If type name is unknown
     * @throws   HTML_QuickForm2_NotFoundException If class for the element can
     *           not be found and/or loaded from file
     */
-    public static function createElement($type, $name = null, $attributes = null,
-                                         array $data = array())
-    {
+    public static function createElement(
+        $type, $name = null, $attributes = null, array $data = array()
+    ) {
         $type = strtolower($type);
         if (!isset(self::$elementTypes[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Element type '$type' is not known");
@@ -177,14 +181,15 @@ class HTML_QuickForm2_Factory
    /**
     * Registers a new rule type
     *
-    * @param    string  Rule type name (treated case-insensitively)
-    * @param    string  Class name
-    * @param    string  File containing the class, leave empty if class already loaded
-    * @param    mixed   Configuration data for rules of the given type
+    * @param string $type        Rule type name (treated case-insensitively)
+    * @param string $className   Class name
+    * @param string $includeFile File containing the class,
+    *                            leave empty if class already loaded
+    * @param mixed  $config      Configuration data for rules of the given type
     */
-    public static function registerRule($type, $className, $includeFile = null,
-                                        $config = null)
-    {
+    public static function registerRule(
+        $type, $className, $includeFile = null, $config = null
+    ) {
         self::$registeredRules[strtolower($type)] = array($className, $includeFile, $config);
     }
 
@@ -192,7 +197,8 @@ class HTML_QuickForm2_Factory
    /**
     * Checks whether a rule type is known to Factory
     *
-    * @param    string  Rule type name (treated case-insensitively)
+    * @param string $type Rule type name (treated case-insensitively)
+    *
     * @return   bool
     */
     public static function isRuleRegistered($type)
@@ -204,18 +210,19 @@ class HTML_QuickForm2_Factory
    /**
     * Creates a new Rule of the given type
     *
-    * @param    string                  Rule type name (treated case-insensitively)
-    * @param    HTML_QuickForm2_Node    Element to validate by the rule
-    * @param    string                  Message to display if validation fails
-    * @param    mixed                   Configuration data for the rule
+    * @param string               $type    Rule type name (treated case-insensitively)
+    * @param HTML_QuickForm2_Node $owner   Element to validate by the rule
+    * @param string               $message Message to display if validation fails
+    * @param mixed                $config  Configuration data for the rule
+    *
     * @return   HTML_QuickForm2_Rule    A created Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException If rule type is unknown
     * @throws   HTML_QuickForm2_NotFoundException        If class for the rule
     *           can't be found and/or loaded from file
     */
-    public static function createRule($type, HTML_QuickForm2_Node $owner,
-                                      $message = '', $config = null)
-    {
+    public static function createRule(
+        $type, HTML_QuickForm2_Node $owner, $message = '', $config = null
+    ) {
         $type = strtolower($type);
         if (!isset(self::$registeredRules[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
@@ -223,8 +230,10 @@ class HTML_QuickForm2_Factory
         list($className, $includeFile) = self::$registeredRules[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile);
         if (isset(self::$registeredRules[$type][2])) {
-            $config = call_user_func(array($className, 'mergeConfig'), $config,
-                                     self::$registeredRules[$type][2]);
+            $config = call_user_func(
+                array($className, 'mergeConfig'),
+                $config, self::$registeredRules[$type][2]
+            );
         }
         return new $className($owner, $message, $config);
     }

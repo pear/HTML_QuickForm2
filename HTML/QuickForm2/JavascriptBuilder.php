@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -51,11 +51,13 @@ require_once 'HTML/QuickForm2/Exception.php';
 /**
  * Javascript aggregator and builder class
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_JavascriptBuilder
 {
@@ -101,10 +103,11 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Constructor, sets default web path to JS library files and default filesystem path
     *
-    * @param string default web path to JS library files (to use in <script src="...">)
-    * @param string default filesystem path to JS library files (to include these
-    *               files into the page), this is set to a package subdirectory of PEAR
-    *               data_dir if not given
+    * @param string $defaultWebPath default web path to JS library files
+    *                               (to use in <script src="...">)
+    * @param string $defaultAbsPath default filesystem path to JS library files
+    *               (to inline these files into the page), this is set to a package
+    *                subdirectory of PEAR data_dir if not given
     */
     public function __construct($defaultWebPath = 'js/', $defaultAbsPath = null)
     {
@@ -115,10 +118,10 @@ class HTML_QuickForm2_JavascriptBuilder
                               . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR;
             // package was probably not installed, use relative path
             if (0 === strpos($defaultAbsPath, '@' . 'data_dir@')) {
-                $defaultAbsPath = realpath(dirname(dirname(dirname(__FILE__)))
-                                           . DIRECTORY_SEPARATOR . 'data'
-                                           . DIRECTORY_SEPARATOR . 'js')
-                                  . DIRECTORY_SEPARATOR;
+                $defaultAbsPath = realpath(
+                    dirname(dirname(dirname(__FILE__)))
+                    . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'js'
+                ) . DIRECTORY_SEPARATOR;
             }
         }
         $this->defaultAbsPath = $defaultAbsPath;
@@ -128,12 +131,12 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Adds a Javascript library file to the list
     *
-    * @param string name to reference the library by
-    * @param string file name, without path
-    * @param string path relative to web root to reference in <script src=""> tags,
-    *               $defaultWebPath will be used if not given
-    * @param string filesystem path where the file resides, used when inlining
-    *               libraries, $defaultAbsPath will be used if not given
+    * @param string $name     name to reference the library by
+    * @param string $fileName file name, without path
+    * @param string $webPath  path relative to web root to reference in <script src="">,
+    *                         $defaultWebPath will be used if not given
+    * @param string $absPath  filesystem path where the file resides, used when inlining
+    *                         libraries, $defaultAbsPath will be used if not given
     */
     public function addLibrary($name, $fileName, $webPath = null, $absPath = null)
     {
@@ -146,8 +149,10 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Returns Javascript libraries
     *
-    * @param    bool    whether to return a list of library file names or contents of files
-    * @param    bool    whether to enclose the results in <script> tags
+    * @param bool $inline        whether to return a list of library file names
+    *                            or contents of files
+    * @param bool $addScriptTags whether to enclose the results in <script> tags
+    *
     * @return   string|array
     */
     public function getLibraries($inline = false, $addScriptTags = true)
@@ -190,7 +195,7 @@ class HTML_QuickForm2_JavascriptBuilder
     * All subsequent calls to addRule() and addElementJavascript() will store
     * the scripts for that form
     *
-    * @param string
+    * @param string $formId
     */
     public function setFormId($formId)
     {
@@ -203,8 +208,9 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Adds the Rule javascript to the list of current form Rules
     *
-    * @param HTML_QuickForm2_Rule
-    * @param bool   Whether rule code should contain "triggers" for live validation
+    * @param HTML_QuickForm2_Rule $rule     Rule instance
+    * @param bool                 $triggers Whether rule code should contain
+    *                                       "triggers" for live validation
     */
     public function addRule(HTML_QuickForm2_Rule $rule, $triggers = false)
     {
@@ -215,7 +221,7 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Adds element's setup code to form's Javascript
     *
-    * @param string
+    * @param string $script
     */
     public function addElementJavascript($script)
     {
@@ -226,8 +232,9 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Returns per-form javascript (client-side validation and elements' setup)
     *
-    * @param    string  form ID, if empty returns code for all forms
-    * @param    boolean whether to enclose code in <script> tags
+    * @param string  $formId        form ID, if empty returns code for all forms
+    * @param boolean $addScriptTags whether to enclose code in <script> tags
+    *
     * @return   string
     */
     public function getFormJavascript($formId = null, $addScriptTags = true)
@@ -257,7 +264,8 @@ class HTML_QuickForm2_JavascriptBuilder
     *
     * NB: unlike json_encode() we do not enforce UTF-8 charset here
     *
-    * @param    mixed   $value
+    * @param mixed $value
+    *
     * @return   string  value as Javascript literal
     */
     public static function encode($value)
@@ -312,8 +320,9 @@ class HTML_QuickForm2_JavascriptBuilder
    /**
     * Callback for array_map used to generate name-value pairs
     *
-    * @param    mixed
-    * @param    mixed
+    * @param mixed $name
+    * @param mixed $value
+    *
     * @return   string
     */
     protected static function encodeNameValue($name, $value)

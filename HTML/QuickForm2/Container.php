@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -51,11 +51,33 @@ require_once 'HTML/QuickForm2/Node.php';
 /**
  * Abstract base class for simple QuickForm2 containers
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
+ *
+ * @method HTML_QuickForm2_Element_Button        addButton(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputCheckbox addCheckbox(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Date          addDate(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Container_Fieldset    addFieldset(string $name = '', $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Container_Group       addGroup(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputFile     addFile(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputHidden   addHidden(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Hierselect    addHierselect(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputImage    addImage(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputButton   addInputButton(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputPassword addPassword(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputRadio    addRadio(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputReset    addReset(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Script        addScript(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Select        addSelect(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Static        addStatic(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputSubmit   addSubmit(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_InputText     addText(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Textarea      addTextarea(string $name, $attributes = null, array $data = array())
  */
 abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
@@ -106,7 +128,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns the array containing child elements' values
     *
-    * @param    bool    Whether child elements should apply filters on values
+    * @param bool $filtered Whether child elements should apply filters on values
+    *
     * @return   array|null
     */
     protected function getChildValues($filtered = false)
@@ -184,8 +207,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * Merges two arrays like the PHP function array_merge_recursive does,
     * the difference being that existing integer keys will not be renumbered.
     *
-    * @param    array
-    * @param    array
+    * @param array $a
+    * @param array $b
+    *
     * @return   array   resulting array
     */
     protected static function arrayMerge($a, $b)
@@ -216,7 +240,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * If the element was previously added to the container or to another
     * container, it is first removed there.
     *
-    * @param    HTML_QuickForm2_Node     Element to add
+    * @param HTML_QuickForm2_Node $element Element to add
+    *
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     */
@@ -240,18 +265,19 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * same method. This is a convenience method to reduce typing and ease
     * porting from HTML_QuickForm.
     *
-    * @param    string|HTML_QuickForm2_Node  Either type name (treated
+    * @param string|HTML_QuickForm2_Node $elementOrType Either type name (treated
     *               case-insensitively) or an element instance
-    * @param    mixed   Element name
-    * @param    mixed   Element attributes
-    * @param    array   Element-specific data
+    * @param string                      $name          Element name
+    * @param string|array                $attributes    Element attributes
+    * @param array                       $data          Element-specific data
+    *
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException
     */
-    public function addElement($elementOrType, $name = null, $attributes = null,
-                               array $data = array())
-    {
+    public function addElement(
+        $elementOrType, $name = null, $attributes = null, array $data = array()
+    ) {
         if ($elementOrType instanceof HTML_QuickForm2_Node) {
             return $this->appendChild($elementOrType);
         } else {
@@ -266,7 +292,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * If the reference object is not given, the element will be appended.
     *
-    * @param    HTML_QuickForm2_Node     Element to remove
+    * @param HTML_QuickForm2_Node $element Element to remove
+    *
     * @return   HTML_QuickForm2_Node     Removed object
     */
     public function removeChild(HTML_QuickForm2_Node $element)
@@ -278,7 +305,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             );
         }
         $unset = false;
-        foreach ($this as $key => $child){
+        foreach ($this as $key => $child) {
             if ($child === $element) {
                 unset($this->elements[$key]);
                 $element->setContainer(null);
@@ -296,7 +323,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns an element if its id is found
     *
-    * @param    string  Element id to find
+    * @param string $id Element id to search for
+    *
     * @return   HTML_QuickForm2_Node|null
     */
     public function getElementById($id)
@@ -312,7 +340,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns an array of elements which name corresponds to element
     *
-    * @param    string  Elements name to find
+    * @param string $name Element name to search for
+    *
     * @return   array
     */
     public function getElementsByName($name)
@@ -331,8 +360,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * If the reference object is not given, the element will be appended.
     *
-    * @param    HTML_QuickForm2_Node     Element to insert
-    * @param    HTML_QuickForm2_Node     Reference to insert before
+    * @param HTML_QuickForm2_Node $element   Element to insert
+    * @param HTML_QuickForm2_Node $reference Reference to insert before
+    *
     * @return   HTML_QuickForm2_Node     Inserted element
     */
     public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
@@ -370,14 +400,15 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns a recursive iterator iterator for the container elements
     *
-    * @param    int     mode passed to RecursiveIteratorIterator
+    * @param int $mode mode passed to RecursiveIteratorIterator
+    *
     * @return   RecursiveIteratorIterator
     */
     public function getRecursiveIterator($mode = RecursiveIteratorIterator::SELF_FIRST)
     {
         return new RecursiveIteratorIterator(
-                        new HTML_QuickForm2_ContainerIterator($this), $mode
-                   );
+            new HTML_QuickForm2_ContainerIterator($this), $mode
+        );
     }
 
    /**
@@ -429,9 +460,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * The element type is deduced from the method name.
     * This is a convenience method to reduce typing.
     *
-    * @param    mixed   Element name
-    * @param    mixed   Element attributes
-    * @param    array   Element-specific data
+    * @param string $m Method name
+    * @param array  $a Method arguments
+    *
     * @return   HTML_QuickForm2_Node     Added element
     * @throws   HTML_QuickForm2_InvalidArgumentException
     * @throws   HTML_QuickForm2_NotFoundException
@@ -453,7 +484,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Renders the container using the given renderer
     *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @param HTML_QuickForm2_Renderer $renderer
+    *
     * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)
@@ -477,7 +509,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns Javascript code for getting the element's value
     *
-    * @param  bool  Whether it should return a parameter for qf.form.getContainerValue()
+    * @param bool $inContainer Whether it should return a parameter
+    *                          for qf.form.getContainerValue()
+    *
     * @return   string
     */
     public function getJavascriptValue($inContainer = false)
@@ -506,11 +540,13 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 /**
  * Implements a recursive iterator for the container elements
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator implements RecursiveIterator
 {

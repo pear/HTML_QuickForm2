@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -49,11 +49,13 @@
  * This class provides methods that allow chaining several rules together.
  * Its validate() method executes the whole rule chain starting from this rule.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 abstract class HTML_QuickForm2_Rule
 {
@@ -106,7 +108,7 @@ abstract class HTML_QuickForm2_Rule
     protected $config;
 
    /**
-    * Rules chained to this via "and" and "or" operators
+    * Rules chained to this one via "and" and "or" operators
     *
     * The contents can be described as "disjunctive normal form", where an outer
     * array represents a disjunction of conjunctive clauses represented by inner
@@ -120,9 +122,9 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Class constructor
     *
-    * @param    HTML_QuickForm2_Node    Element to validate
-    * @param    string                  Error message to display if validation fails
-    * @param    mixed                   Configuration data for the rule
+    * @param HTML_QuickForm2_Node $owner   Element to validate
+    * @param string               $message Error message to display if validation fails
+    * @param mixed                $config  Configuration data for the rule
     */
     public function __construct(HTML_QuickForm2_Node $owner, $message = '', $config = null)
     {
@@ -137,8 +139,9 @@ abstract class HTML_QuickForm2_Rule
     * Default behaviour is for global config to override local one, different
     * Rules may implement more complex merging behaviours.
     *
-    * @param    mixed   Local configuration
-    * @param    mixed   Global configuration, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
+    * @param mixed $localConfig  Local configuration
+    * @param mixed $globalConfig Global configuration, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
+    *
     * @return   mixed   Merged configuration
     */
     public static function mergeConfig($localConfig, $globalConfig)
@@ -149,7 +152,8 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Sets configuration data for the rule
     *
-    * @param    mixed   Rule configuration data (specific for a Rule)
+    * @param mixed $config Rule configuration data (specific for a Rule)
+    *
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException    in case of invalid
     *               configuration data
@@ -173,7 +177,8 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Sets the error message output by the rule
     *
-    * @param    string                  Error message to display if validation fails
+    * @param string $message Error message to display if validation fails
+    *
     * @return   HTML_QuickForm2_Rule
     */
     public function setMessage($message)
@@ -195,7 +200,8 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Sets the element that will be validated by this rule
     *
-    * @param    HTML_QuickForm2_Node    Element to validate
+    * @param HTML_QuickForm2_Node $owner Element to validate
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to set
     *       an instance of HTML_QuickForm2_Element_Static as rule owner
     */
@@ -222,7 +228,8 @@ abstract class HTML_QuickForm2_Rule
     * previous one returns false. The method is named this way because "and" is
     * a reserved word in PHP.
     *
-    * @param    HTML_QuickForm2_Rule
+    * @param HTML_QuickForm2_Rule $next
+    *
     * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
     * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
     *           a "required" rule to the chain
@@ -245,7 +252,8 @@ abstract class HTML_QuickForm2_Rule
     * previous one returns true. The method is named this way because "or" is
     * a reserved word in PHP.
     *
-    * @param    HTML_QuickForm2_Rule
+    * @param HTML_QuickForm2_Rule $next
+    *
     * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
     * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
     *           a "required" rule to the chain
@@ -358,11 +366,16 @@ abstract class HTML_QuickForm2_Rule
    /**
     * Returns the client-side representation of the Rule
     *
-    * The Javascript object returned contains the following fields:
+    * This creates an instance of either qf.Rule or qf.LiveRule (depends on
+    * $outputTriggers) with initialization parameters:
     *  - callback: {@see getJavascriptCallback()}
-    *  - elementId: element ID to set error for if validation fails
-    *  - errorMessage: error message to set if validation fails
-    *  - chained: chained rules, array of arrays like in $chainedRules property
+    *  - element ID to set error for if validation fails
+    *  - error message to set if validation fails
+    *  - triggers: {@see getJavascriptTriggers()} (only for
+    *    qf.LiveRule when $outputTriggers is true)
+    *  - chained rules, array of arrays like in $chainedRules property
+    *
+    * @param bool $outputTriggers Whether the Rule will be run onblur / onchange
     *
     * @return   string
     * @throws   HTML_QuickForm2_Exception   if Rule or its chained Rules can only

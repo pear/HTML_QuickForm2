@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** The class representing a page of a multipage form */
@@ -59,11 +59,13 @@ require_once 'HTML/QuickForm2/DataSource/Session.php';
  * it manages $_SESSION container for the form values, allows setting
  * DataSources for the form as a whole and getting its value.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Controller implements IteratorAggregate
 {
@@ -150,9 +152,11 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * Wizard forms only allow going to the next page if all the previous ones
     * are valid.
     *
-    * @param    string      Form ID
-    * @param    boolean     Whether the form is a wizard
-    * @param    boolean     Whether form's ID should be sent with GET and POST parameters
+    * @param string  $id          Form ID
+    * @param boolean $wizard      Whether the form is a wizard
+    * @param boolean $propagateId Whether form's ID should be sent with
+    *                             GET and POST parameters
+    *
     * @throws   HTML_QuickForm2_NotFoundException   if ID is not given and cannot
     *               be found in $_REQUEST, or session container is empty
     */
@@ -259,6 +263,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * This finds the page, the action to perform with it and passes the action
     * to the page's handle() method.
     *
+    * @return mixed Return value of action handler
     * @throws HTML_QuickForm2_Exception
     */
     public function run()
@@ -270,8 +275,8 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Adds a handler for a specific action
     *
-    * @param  string                            action name
-    * @param  HTML_QuickForm2_Controller_Action the handler for the action
+    * @param string                            $actionName action name
+    * @param HTML_QuickForm2_Controller_Action $action     the handler for the action
     */
     public function addHandler($actionName, HTML_QuickForm2_Controller_Action $action)
     {
@@ -285,9 +290,11 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * specific action. The method also loads and uses default handlers for
     * common actions, if specific ones were not added.
     *
-    * @param    HTML_QuickForm2_Controller_Page form page
-    * @param    string                          action name
-    * @throws   HTML_QuickForm2_NotFoundException   if handler for an action is missing
+    * @param HTML_QuickForm2_Controller_Page $page       form page
+    * @param string                          $actionName action name
+    *
+    * @return mixed Return value of action handler
+    * @throws HTML_QuickForm2_NotFoundException   if handler for an action is missing
     */
     public function handle(HTML_QuickForm2_Controller_Page $page, $actionName)
     {
@@ -310,7 +317,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Adds a new page to the form
     *
-    * @param    HTML_QuickForm2_Controller_Page
+    * @param HTML_QuickForm2_Controller_Page $page
     */
     public function addPage(HTML_QuickForm2_Controller_Page $page)
     {
@@ -327,7 +334,8 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Returns a page
     *
-    * @param  string    Page ID
+    * @param string $pageId Page ID
+    *
     * @return HTML_QuickForm2_Controller_Page
     * @throws HTML_QuickForm2_NotFoundException if there is no page with
     *           the given ID
@@ -346,7 +354,8 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Returns the page preceding the given one
     *
-    * @param    HTML_QuickForm2_Controller_Page
+    * @param HTML_QuickForm2_Controller_Page $reference
+    *
     * @return   HTML_QuickForm2_Controller_Page|null
     */
     public function previousPage(HTML_QuickForm2_Controller_Page $reference)
@@ -364,7 +373,8 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Returns the page following the given one
     *
-    * @param    HTML_QuickForm2_Controller_Page
+    * @param HTML_QuickForm2_Controller_Page $reference
+    *
     * @return   HTML_QuickForm2_Controller_Page|null
     */
     public function nextPage(HTML_QuickForm2_Controller_Page $reference)
@@ -382,8 +392,9 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Checks whether the pages of the controller are valid
     *
-    * @param  HTML_QuickForm2_Controller_Page   If given, check only the pages
-    *                                           before (not including) that page
+    * @param HTML_QuickForm2_Controller_Page $reference If given, check only
+    *                               the pages before (not including) that page
+    *
     * @return bool
     */
     public function isValid(HTML_QuickForm2_Controller_Page $reference = null)
@@ -437,13 +448,14 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * Note that Controller data sources are stored in session, so your data source
     * implementation should properly handle its (un)serialization.
     *
-    * @param    HTML_QuickForm2_DataSource  Data source
+    * @param HTML_QuickForm2_DataSource $datasource Data source
     */
     public function addDataSource(HTML_QuickForm2_DataSource $datasource)
     {
         $this->getSessionContainer()->storeDatasources(
-            array_merge($this->getSessionContainer()->getDatasources(),
-                        array($datasource))
+            array_merge(
+                $this->getSessionContainer()->getDatasources(), array($datasource)
+            )
         );
     }
 
@@ -477,8 +489,9 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * Merges two arrays like the PHP function array_merge_recursive does,
     * the difference being that existing integer keys will not be renumbered.
     *
-    * @param    array
-    * @param    array
+    * @param array $a
+    * @param array $b
+    *
     * @return   array   resulting array
     */
     protected static function arrayMerge($a, $b)

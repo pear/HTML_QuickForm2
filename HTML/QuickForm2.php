@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -56,11 +56,13 @@ require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
 /**
  * Class representing a HTML form
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2 extends HTML_QuickForm2_Container
 {
@@ -79,28 +81,30 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
    /**
     * Class constructor, form's "id" and "method" attributes can only be set here
     *
-    * @param    string  "id" attribute of <form> tag
-    * @param    string  HTTP method used to submit the form
-    * @param    mixed   Additional attributes (either a string or an array)
-    * @param    bool    Whether to track if the form was submitted by adding
-    *                   a special hidden field
+    * @param string       $id          "id" attribute of <form> tag
+    * @param string       $method      HTTP method used to submit the form
+    * @param string|array $attributes  Additional HTML attributes
+    *                                  (either a string or an array)
+    * @param bool         $trackSubmit Whether to track if the form was submitted
+    *                                  by adding a special hidden field
     */
-    public function __construct($id, $method = 'post', $attributes = null, $trackSubmit = true)
-    {
+    public function __construct(
+        $id, $method = 'post', $attributes = null, $trackSubmit = true
+    ) {
         $method      = ('GET' == strtoupper($method))? 'get': 'post';
         $trackSubmit = empty($id) ? false : $trackSubmit;
         $this->attributes = array_merge(
-                                self::prepareAttributes($attributes),
-                                array('method' => $method)
-                            );
+            self::prepareAttributes($attributes),
+            array('method' => $method)
+        );
         parent::setId(empty($id) ? null : $id);
         if (!isset($this->attributes['action'])) {
             $this->attributes['action'] = $_SERVER['PHP_SELF'];
         }
         if ($trackSubmit && isset($_REQUEST['_qf__' . $id]) ||
             !$trackSubmit && ('get' == $method && !empty($_GET) ||
-                              'post' == $method && (!empty($_POST) || !empty($_FILES))))
-        {
+                              'post' == $method && (!empty($_POST) || !empty($_FILES)))
+        ) {
             $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal(
                 $method, get_magic_quotes_gpc()
             ));
@@ -135,7 +139,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
    /**
     * Adds a new data source to the form
     *
-    * @param    HTML_QuickForm2_DataSource  Data source
+    * @param HTML_QuickForm2_DataSource $datasource Data source
     */
     public function addDataSource(HTML_QuickForm2_DataSource $datasource)
     {
@@ -146,7 +150,8 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
    /**
     * Replaces the list of form's data sources with a completely new one
     *
-    * @param    array   A new data source list
+    * @param array $datasources A new data source list
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if given array
     *               contains something that is not a valid data source
     */
@@ -214,7 +219,8 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
    /**
     * Renders the form using the given renderer
     *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @param HTML_QuickForm2_Renderer $renderer
+    *
     * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)

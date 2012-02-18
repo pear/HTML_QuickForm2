@@ -1,12 +1,12 @@
 <?php
 /**
- * Class with static methods for loading classes and files 
+ * Class with static methods for loading classes and files
  *
  * PHP version 5
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -49,13 +49,15 @@
 require_once 'HTML/QuickForm2/Exception.php';
 
 /**
- * Class with static methods for loading classes and files 
+ * Class with static methods for loading classes and files
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Loader
 {
@@ -65,15 +67,16 @@ class HTML_QuickForm2_Loader
     * If no $includeFile was provided, $className will be used with underscores
     * replaced with path separators and '.php' extension appended
     *
-    * @param    string  Class name to load
-    * @param    string  Name of the file (supposedly) containing the given class
+    * @param string $className   Class name to load
+    * @param string $includeFile Name of the file (supposedly) containing the given class
+    *
     * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
     *               loaded or doesn't contain the given class
     */
     public static function loadClass($className, $includeFile = null)
     {
         if (class_exists($className, false) || interface_exists($className, false)) {
-            return true;
+            return;
         }
 
         if (empty($includeFile)) {
@@ -99,7 +102,8 @@ class HTML_QuickForm2_Loader
    /**
     * Checks whether the file exists in the include path
     *
-    * @param    string  file name
+    * @param string $fileName file name
+    *
     * @return   bool
     */
     public static function fileExists($fileName)
@@ -121,7 +125,8 @@ class HTML_QuickForm2_Loader
     * spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
     * </code>
     *
-    * @param    string  Class name
+    * @param string $class Class name
+    *
     * @return   bool    Whether class loaded successfully
     */
     public static function autoload($class)
