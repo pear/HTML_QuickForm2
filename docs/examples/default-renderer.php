@@ -10,7 +10,7 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <style type="text/css">
       body { margin: 0; padding: 0; font: 80%/1.5 Arial,Helvetica,sans-serif; color: #111; background-color: #FFF; }
@@ -29,7 +29,7 @@
       .quickform div.errors p,
       .quickform div.errors ul { margin:0; }
       .quickform div.error input { border-color: #C00; background-color: #FEF; }
-      .quickform div.qf-checkable label, 
+      .quickform div.qf-checkable label,
       .quickform div.qf-checkable input { display: inline; float: none; }
       .quickform div.qf-checkable div,
       .quickform div.qf-message { margin-left: 170px; }
@@ -74,7 +74,7 @@ $renderer = HTML_QuickForm2_Renderer::factory('default')
         '<div class="element<qf:error> error</qf:error>"><qf:error>{error}</qf:error>' .
         '<label for="{id}" class="qf-label<qf:required> required</qf:required>">{label}</label>' .
         '{element}' .
-        '<qf:label_2><div class="qf-label-1">{label_2}</div></qf:label_2></div>' 
+        '<qf:label_2><div class="qf-label-1">{label_2}</div></qf:label_2></div>'
     );
 
 echo $form->render($renderer);

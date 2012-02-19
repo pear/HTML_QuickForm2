@@ -68,8 +68,7 @@ require_once 'HTML/QuickForm2/Element/InputImage.php';
 class HTML_QuickForm2_Controller_DefaultAction
     extends HTML_QuickForm2_Element_InputImage
 {
-    protected $attributes = array('type' => 'image', 'id' => '_qf_default',
-                                  'width' => '1', 'height' => '1');
+    protected $attributes = array('type' => 'image', 'id' => 'qf:default-action');
 
    /**
     * Disallow changing the 'id' attribute

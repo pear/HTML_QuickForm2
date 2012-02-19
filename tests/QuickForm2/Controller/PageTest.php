@@ -122,14 +122,14 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
         );
         $mockPage->setDefaultAction('foo', 'empty.gif');
 
-        $default = $mockPage->getForm()->getElementById('_qf_default');
+        $default = $mockPage->getForm()->getElementById('qf:default-action');
         $this->assertNotNull($default);
         $this->assertEquals($mockPage->getButtonName('foo'), $default->getName());
         $this->assertEquals('empty.gif', $default->getAttribute('src'));
 
         $mockPage->setDefaultAction('bar');
         $this->assertEquals($mockPage->getButtonName('bar'), $default->getName());
-        $this->assertEquals('', $default->getAttribute('src'));
+        $this->assertContains('base64', $default->getAttribute('src'));
     }
 
     public function testDefaultActionIsFirstElement()
@@ -143,7 +143,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
         $mockPage->setDefaultAction('foo', 'empty.gif');
 
         foreach ($mockPage->getForm() as $el) {
-            $this->assertEquals('_qf_default', $el->getId());
+            $this->assertEquals('qf:default-action', $el->getId());
             break;
         }
     }

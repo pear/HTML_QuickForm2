@@ -111,7 +111,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         }
         if ($trackSubmit) {
             $this->appendChild(HTML_QuickForm2_Factory::createElement(
-                'hidden', '_qf__' . $id
+                'hidden', '_qf__' . $id, array('id' => 'qf:' . $id)
             ));
         }
     }

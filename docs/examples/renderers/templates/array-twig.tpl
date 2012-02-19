@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Using Twig template engine to output the form</title>
     <style type="text/css">
@@ -26,7 +26,7 @@ body {
 <pre>
 {{ submitvalues|raw }}
 </pre>
-<hr />  
+<hr />
 {% endif %}
 
     <div class="quickform"><form{{ form.attributes|raw }}>
@@ -65,7 +65,7 @@ body {
   {% else %}
     <div class="row">
       <label for="{{ element.id }}" class="element">
-        {% if element.required %}<span class="required">* </span>{% endif %} 
+        {% if element.required %}<span class="required">* </span>{% endif %}
         {{ element.label }}
       </label>
       <div class="element {% if element.error %} error{% endif %}">

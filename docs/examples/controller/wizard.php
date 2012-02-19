@@ -34,7 +34,7 @@ class PageFirst extends HTML_QuickForm2_Controller_Page
 
         $radioGroup->addRule('required', 'Check Yes or No');
 
-        $this->setDefaultAction('next', 'empty.gif');
+        $this->setDefaultAction('next');
     }
 }
 
@@ -57,7 +57,7 @@ class PageSecond extends HTML_QuickForm2_Controller_Page
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
         $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Next >>'));
 
-        $this->setDefaultAction('next', 'empty.gif');
+        $this->setDefaultAction('next');
     }
 }
 
@@ -75,18 +75,18 @@ class PageThird extends HTML_QuickForm2_Controller_Page
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
         $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Finish'));
 
-        $this->setDefaultAction('next', 'empty.gif');
+        $this->setDefaultAction('next');
     }
 }
 
-class ActionDisplay extends HTML_QuickForm2_Controller_Action_Display
+class WizardDisplay extends HTML_QuickForm2_Controller_Action_Display
 {
     protected function renderForm(HTML_QuickForm2 $form)
     {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <style type="text/css">
 /* Set up custom font and form width */
@@ -133,7 +133,7 @@ body {
     }
 }
 
-class ActionProcess implements HTML_QuickForm2_Controller_Action
+class WizardProcess implements HTML_QuickForm2_Controller_Action
 {
     public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
@@ -155,9 +155,9 @@ $wizard->addHandler('back', new HTML_QuickForm2_Controller_Action_Back());
 $wizard->addHandler('jump', new HTML_QuickForm2_Controller_Action_Jump());
 
 // This is the action we should always define ourselves
-$wizard->addHandler('process', new ActionProcess());
+$wizard->addHandler('process', new WizardProcess());
 // We redefine 'display' handler to use the proper stylesheets
-$wizard->addHandler('display', new ActionDisplay());
+$wizard->addHandler('display', new WizardDisplay());
 
 $wizard->run();
 ?>

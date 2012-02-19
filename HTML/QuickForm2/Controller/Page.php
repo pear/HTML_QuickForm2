@@ -182,10 +182,12 @@ abstract class HTML_QuickForm2_Controller_Page
     * @param string $actionName Default action name
     * @param string $imageSrc   Path to a 1x1 transparent GIF image
     *
-    * @return object    Returns the image input used for default action
+    * @return HTML_QuickForm2_Controller_DefaultAction Returns the image input used for default action
     */
-    public function setDefaultAction($actionName, $imageSrc = '')
-    {
+    public function setDefaultAction(
+        $actionName,
+        $imageSrc = 'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+    ) {
         require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
 
         if (0 == count($this->form)) {
@@ -196,7 +198,7 @@ abstract class HTML_QuickForm2_Controller_Page
             );
 
         // replace the existing DefaultAction
-        } elseif ($image = $this->form->getElementById('_qf_default')) {
+        } elseif ($image = $this->form->getElementById('qf:default-action')) {
             $image->setName($this->getButtonName($actionName))
                 ->setAttribute('src', $imageSrc);
 
@@ -224,7 +226,7 @@ abstract class HTML_QuickForm2_Controller_Page
             if (!empty($this->controller) && $this->controller->propagateId()) {
                 $this->form->addElement(
                     'hidden', HTML_QuickForm2_Controller::KEY_ID,
-                    array('id' => HTML_QuickForm2_Controller::KEY_ID)
+                    array('id' => 'qf:controller-id')
                 )->setValue($this->controller->getId());
             }
             $this->populateForm();

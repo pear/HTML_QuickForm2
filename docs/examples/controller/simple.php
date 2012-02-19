@@ -30,12 +30,12 @@ class SimplePage extends HTML_QuickForm2_Controller_Page
            ->addRule("required", "Pretty please!");
 
         $fs->addSubmit($this->getButtonName('submit'), array('value' => 'Send'));
-        $this->setDefaultAction('submit', 'empty.gif')
+        $this->setDefaultAction('submit')
              ->setAttribute('style', 'display:none');
     }
 }
 
-class ActionProcess implements HTML_QuickForm2_Controller_Action
+class SimpleProcess implements HTML_QuickForm2_Controller_Action
 {
     public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
@@ -45,14 +45,14 @@ class ActionProcess implements HTML_QuickForm2_Controller_Action
     }
 }
 
-class ActionDisplay extends HTML_QuickForm2_Controller_Action_Display
+class SimpleDisplay extends HTML_QuickForm2_Controller_Action_Display
 {
     protected function renderForm(HTML_QuickForm2 $form)
     {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <style type="text/css">
 /* Set up custom font and form width */
@@ -92,8 +92,8 @@ body {
 }
 
 $page = new SimplePage(new HTML_QuickForm2('page1'));
-$page->addHandler('process', new ActionProcess());
-$page->addHandler('display', new ActionDisplay());
+$page->addHandler('process', new SimpleProcess());
+$page->addHandler('display', new SimpleDisplay());
 
 $controller = new HTML_QuickForm2_Controller('Simple');
 $controller->addPage($page);

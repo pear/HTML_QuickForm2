@@ -38,7 +38,7 @@ abstract class TabbedPage extends HTML_QuickForm2_Controller_Page
     {
         $this->form->addElement('submit', $this->getButtonName('submit'),
                                 array('value' => 'Big Red Button', 'class' => 'bigred'));
-        $this->setDefaultAction('submit', 'empty.gif');
+        $this->setDefaultAction('submit');
     }
 }
 
@@ -119,14 +119,14 @@ class PageBaz extends TabbedPage
     }
 }
 
-class ActionDisplay extends HTML_QuickForm2_Controller_Action_Display
+class TabbedDisplay extends HTML_QuickForm2_Controller_Action_Display
 {
     protected function renderForm(HTML_QuickForm2 $form)
     {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <style type="text/css">
 /* Set up custom font and form width */
@@ -170,7 +170,7 @@ body {
     }
 }
 
-class ActionProcess implements HTML_QuickForm2_Controller_Action
+class TabbedProcess implements HTML_QuickForm2_Controller_Action
 {
     public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
@@ -198,9 +198,9 @@ $tabbed->addHandler('submit', new HTML_QuickForm2_Controller_Action_Submit());
 $tabbed->addHandler('jump', new HTML_QuickForm2_Controller_Action_Jump());
 
 // This is the action we should always define ourselves
-$tabbed->addHandler('process', new ActionProcess());
+$tabbed->addHandler('process', new TabbedProcess());
 // We redefine 'display' handler to use the proper stylesheets
-$tabbed->addHandler('display', new ActionDisplay());
+$tabbed->addHandler('display', new TabbedDisplay());
 
 $tabbed->addDatasource(new HTML_QuickForm2_DataSource_Array(array(
     'iradYesNoMaybe' => 'M',
