@@ -48,7 +48,7 @@ qf.Map.prototype = (function(){
     function _hasKey(obj, key)
     {
         return Object.prototype.hasOwnProperty.call(obj, key);
-    };
+    }
 
     /**
      * Removes keys that are no longer in the map from the _keys array
@@ -73,7 +73,7 @@ qf.Map.prototype = (function(){
             srcIndex++;
         }
         this._keys.length = destIndex;
-    };
+    }
 
     return {
         /**
@@ -130,7 +130,7 @@ qf.Map.prototype = (function(){
         },
 
         /**
-         * Removes all key-value pairs from the map 
+         * Removes all key-value pairs from the map
          */
         clear: function()
         {
@@ -171,7 +171,7 @@ qf.Map.prototype = (function(){
             }
             return defaultVal;
         },
-        
+
         /**
          * Adds a key-value pair to the Map
          * @param {*} key
@@ -189,7 +189,7 @@ qf.Map.prototype = (function(){
         /**
          * Merges key-value pairs from another Object or Map
          * @param {Object} map
-         * @param {function(*, *)} [mergeFn] Optional function to call on values if 
+         * @param {function(*, *)} [mergeFn] Optional function to call on values if
          *      both maps have the same key. By default a value from the map being
          *      merged will be stored under that key.
          */
@@ -223,9 +223,9 @@ qf.Map.prototype = (function(){
 
 /**
  * Callback for merge(), forces to use second value.
- * 
+ *
  * This makes Map.merge() behave like PHP's array_merge() function
- * 
+ *
  * @param   {*} a Original value in map
  * @param   {*} b Value in the map being merged
  * @returns {*} second value
@@ -237,9 +237,9 @@ qf.Map.mergeReplace = function(a, b)
 
 /**
  * Callback for merge(), forces to use first value.
- * 
+ *
  * This makes Map.merge() behave like PHP's + operator for arrays
- * 
+ *
  * @param   {*} a Original value in map
  * @param   {*} b Value in the map being merged
  * @returns {*} first value
@@ -252,8 +252,8 @@ qf.Map.mergeKeep = function(a, b)
 /**
  * Callback for merge(), concatenates values.
  *
- * If the values are not arrays, they are first converted to ones. 
- * 
+ * If the values are not arrays, they are first converted to ones.
+ *
  * This callback makes Map.merge() behave somewhat like PHP's array_merge_recursive()
  *
  * @param   {*} a Original value in map

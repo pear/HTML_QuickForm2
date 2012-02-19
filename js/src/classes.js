@@ -61,10 +61,7 @@ qf.classes = {
      */
     has: function(element, name)
     {
-        if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
-            return true;
-        }
-        return false;
+        return (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' '));
     }
 };
 

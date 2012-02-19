@@ -4,7 +4,7 @@
  * http://pear.php.net/package/HTML_QuickForm2
  *
  * Copyright 2006-2011, Alexey Borzov, Bertrand Mansion
- * Licensed under new BSD license 
+ * Licensed under new BSD license
  * http://opensource.org/licenses/bsd-license.php
  */
 
@@ -43,7 +43,7 @@ qf.elements.hierselect = (function(){
                 }
             }, 1);
         };
-    };
+    }
 
     /**
      * Returns 'onload' handler for page containing hierselect.
@@ -69,13 +69,13 @@ qf.elements.hierselect = (function(){
                 qf.form.setValue(next[i], defaults[i + 1]);
             }
         };
-    };
+    }
 
     /**
      * Stores options for a select element in options object.
-     * 
+     *
      * Useful mostly for asynchronous requests.
-     * 
+     *
      * @param   {String} selectId   ID attribute of first select element
      * @param   {Array}  keys       Values of previous select elements
      * @param   {Object} options    New options
@@ -101,7 +101,7 @@ qf.elements.hierselect = (function(){
                 ary = ary[key];
             }
         }
-    };
+    }
 
     /**
      * The 'onchange' handler for selects, replaces the options of subsequent select(s).
@@ -114,7 +114,7 @@ qf.elements.hierselect = (function(){
         if (event.target.hierselect && 0 != event.target.hierselect.next.length) {
             qf.elements.hierselect.cascade.call(event.target);
         }
-    };
+    }
 
     return {
         /**
@@ -122,7 +122,7 @@ qf.elements.hierselect = (function(){
          *
          * @param {Array} selects               IDs of select elements in hierselect
          * @param {Function} optionsCallback    function that will be called to
-         *                  get missing options (presumably via AJAX)  
+         *                  get missing options (presumably via AJAX)
          */
         init: function(selects, optionsCallback)
         {
@@ -145,7 +145,7 @@ qf.elements.hierselect = (function(){
 
         /**
          * Gets the value for a hierselect element.
-         * 
+         *
          * @param   {String[]}  selects Array of selects' ID attributes
          * @returns {Array}
          */
@@ -162,9 +162,9 @@ qf.elements.hierselect = (function(){
          * Replaces options of a select element.
          *
          * Options are provided in such a way rather than as {value: text, ...} object
-         * due to the fact that browsers can iterate over an object with a 'for in' 
-         * loop in random order (see bug). 
-         * 
+         * due to the fact that browsers can iterate over an object with a 'for in'
+         * loop in random order (see bug).
+         *
          * @see     <a href="http://pear.php.net/bugs/bug.php?id=16603">PEAR bug #16603</a>
          * @param   {Element} ctl   Select element
          * @param   {Object}  options New options
@@ -191,7 +191,7 @@ qf.elements.hierselect = (function(){
 
         /**
          * Finds options for next select element in hierselect.
-         * 
+         *
          * @param   {String} selectId   ID attribute of first select element
          * @param   {Array}  keys       Values of previous select elements
          * @param   {Function} callback Function to use for loading additional options
@@ -268,7 +268,7 @@ qf.elements.hierselect = (function(){
 
         /**
          * Options cache for second and subsequent selects in hierselect. Keyed by
-         * ID attribute of first select in chain. 
+         * ID attribute of first select in chain.
          * @type {Object}
          */
         options: {},

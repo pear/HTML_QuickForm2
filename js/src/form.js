@@ -20,8 +20,8 @@ qf.form = (function() {
             }
         }
         return values;
-    };
-    
+    }
+
     /**
      * Sets the value of a select-one element.
      * @param   {Element} el
@@ -37,7 +37,7 @@ qf.form = (function() {
                 return;
             }
         }
-    };
+    }
 
     /**
      * Sets the value of a select-multiple element.
@@ -63,7 +63,7 @@ qf.form = (function() {
     return {
         /**
          * Gets the value of a form element.
-         * 
+         *
          * @param   {string|Element} el
          * @returns {string|string[]|null}
          */
@@ -118,22 +118,22 @@ qf.form = (function() {
          *
          * @param   [...] This accepts a variable number of arguments, that are either
          *      strings (considered element ID attributes), objects {name: element name,
-         *      value: element value} or instances of qf.Map, representing the contained elements 
+         *      value: element value} or instances of qf.Map, representing the contained elements
          * @returns qf.Map
          */
         getContainerSubmitValue: function()
         {
-            var map = new qf.Map();
+            var k, v, map = new qf.Map();
             for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i] instanceof qf.Map) {
                     map.merge(arguments[i], qf.Map.mergeArrayConcat);
                 } else {
                     if ('object' == qf.typeOf(arguments[i])) {
-                        var k  = arguments[i].name;
-                        var v  = arguments[i].value;
+                        k = arguments[i].name;
+                        v = arguments[i].value;
                     } else {
-                        var k = document.getElementById(arguments[i]).name;
-                        var v = qf.form.getSubmitValue(arguments[i]);
+                        k = document.getElementById(arguments[i]).name;
+                        v = qf.form.getSubmitValue(arguments[i]);
                     }
                     if (null !== v) {
                         var valueObj = {};

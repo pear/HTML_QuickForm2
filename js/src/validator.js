@@ -97,9 +97,9 @@ qf.Validator = function(form, rules)
                 qf.events.addListener(form, 'click', function (event) {
                     event  = qf.events.fixEvent(event);
                     var el = event.target;
-                    if ('select' == el.nodeName.toLowerCase() 
-                        || 'input' == el.nodeName.toLowerCase() 
-                         && ('checkbox' == el.type || 'radio' == el.type) 
+                    if ('select' == el.nodeName.toLowerCase()
+                        || 'input' == el.nodeName.toLowerCase()
+                         && ('checkbox' == el.type || 'radio' == el.type)
                     ) {
                         qf.Validator.liveHandler(event);
                     }
@@ -127,7 +127,7 @@ qf.Validator = function(form, rules)
 };
 
 /**
- * Event handler for form's onsubmit events. 
+ * Event handler for form's onsubmit events.
  * @param {Event} event
  */
 qf.Validator.submitHandler = function(event)
@@ -155,7 +155,7 @@ qf.Validator.liveHandler = function (event)
 qf.Validator.prototype = (function() {
     /**
      * Clears validation status and error message of a given element
-     * 
+     *
      * @param   {string} elementId
      * @returns {Node}              Parent element that gets 'error' / 'valid'
      *                              classes applied
@@ -172,11 +172,11 @@ qf.Validator.prototype = (function() {
         _clearErrors(parent);
 
         return parent;
-    };
+    }
 
     /**
-     * Removes <span> elements with "error" class that are children of a given element 
-     * 
+     * Removes <span> elements with "error" class that are children of a given element
+     *
      * @param   {Node} element
      * @private
      */
@@ -188,7 +188,7 @@ qf.Validator.prototype = (function() {
                 span.parentNode.removeChild(span);
             }
         }
-    };
+    }
 
     /**
      * Removes error messages from owner element(s) of a given rule and chained rules
@@ -208,14 +208,14 @@ qf.Validator.prototype = (function() {
                 _removeRelatedErrors(errors, multiplier);
             }
         }
-    };
+    }
 
     return {
         /**
          * Called before starting the validation. May be used e.g. to clear the errors from form elements.
          * @param {HTMLFormElement} form The form being validated currently
          */
-        onStart: function(form) 
+        onStart: function(form)
         {
             _clearErrors(form);
         },
