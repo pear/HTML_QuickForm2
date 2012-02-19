@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -79,11 +79,13 @@ require_once 'HTML/QuickForm2/Rule.php';
  * $meta->addRule('in_array', 'Unknown variable name', array(array('foo', 'bar', 'baz')));
  * </code>
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
 {
@@ -159,8 +161,9 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
    /**
     * Tests whether a given value is an array containing at least one of the given keys
     *
-    * @param    mixed   if not an array, method will return false
-    * @param    array   keys to test for
+    * @param mixed $search if not an array, method will return false
+    * @param array $keys   keys to test for
+    *
     * @return   bool
     */
     protected static function arrayHasSomeKeys($search, array $keys)
@@ -193,8 +196,9 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     * As usual, global config overrides local one. It is a good idea to use the
     * associative array format to prevent ambiguity.
     *
-    * @param    mixed   Local configuration
-    * @param    mixed   Global configuration
+    * @param mixed $localConfig  Local configuration
+    * @param mixed $globalConfig Global configuration
+    *
     * @return   mixed   Merged configuration
     */
     public static function mergeConfig($localConfig, $globalConfig)
@@ -210,7 +214,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
             }
             if (self::arrayHasSomeKeys($localConfig, array('callback', 'arguments', 'js_callback'))) {
                 $config += $localConfig;
-            } elseif(isset($localConfig)) {
+            } elseif (isset($localConfig)) {
                 $config += array('callback' => $localConfig, 'arguments' => $localConfig);
             }
         }
@@ -220,10 +224,11 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
    /**
     * Sets the callback to use for validation and its additional arguments
     *
-    * @param    callback|array  Callback or array ('callback' => validation callback
-    *                                              [, 'arguments' => additional arguments]
-    *                                              [, 'js_callback' => javascript callback
+    * @param callback|array $config Callback or array ('callback' => validation callback
+    *                                                  [, 'arguments' => additional arguments]
+    *                                                  [, 'js_callback' => javascript callback
     *                                                               for client-side validation])
+    *
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException if callback is missing or invalid
     *               or additional arguments is not an array

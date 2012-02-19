@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -51,11 +51,13 @@ require_once 'HTML/QuickForm2/Element/Input.php';
 /**
  * Class for <input type="file" /> elements
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 {
@@ -89,10 +91,10 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *  - 'language': language to display error messages in, will be passed to
     *    message provider.
     *
-    * @param    string  Element name
-    * @param    mixed   Attributes (either a string or an array)
-    * @param    array   Data used to set up error messages for PHP's file
-    *                   upload errors.
+    * @param string       $name       Element name
+    * @param string|array $attributes Attributes (either a string or an array)
+    * @param array        $data       Data used to set up error messages for PHP's
+    *                                 file upload errors.
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -126,8 +128,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * file somewhere and store the file info in session. This is way outside
     * the scope of this class.
     *
-    * @param    bool    Whether element should be frozen or editable. This
-    *                   parameter is ignored in case of file uploads
+    * @param bool $freeze Whether element should be frozen or editable. This
+    *                     parameter is ignored in case of file uploads
+    *
     * @return   bool    Always returns false
     */
     public function toggleFrozen($freeze = null)
@@ -147,6 +150,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
    /**
     * Alias of getRawValue(), InputFile elements do not allow filters
+    *
     * @return   array|null
     */
     public function getValue()
@@ -157,7 +161,8 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
    /**
     * File upload's value cannot be set here
     *
-    * @param     mixed    Value for file element, this parameter is ignored
+    * @param mixed $value Value for file element, this parameter is ignored
+    *
     * @return    HTML_QuickForm2_Element_InputFile
     */
     public function setValue($value)
@@ -214,9 +219,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (strlen($this->error)) {
             return false;
         }
-        if (isset($this->value['error']) &&
-            !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE)))
-        {
+        if (isset($this->value['error'])
+            && !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE))
+        ) {
             $errorMessage = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
                             ? $this->messageProvider->get(array('file', $this->value['error']), $this->language)
                             : call_user_func($this->messageProvider, array('file', $this->value['error']), $this->language);
@@ -224,9 +229,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
                 $iniSize = ini_get('upload_max_filesize');
                 $size    = intval($iniSize);
                 switch (strtoupper(substr($iniSize, -1))) {
-                    case 'G': $size *= 1024;
-                    case 'M': $size *= 1024;
-                    case 'K': $size *= 1024;
+                case 'G': $size *= 1024;
+                case 'M': $size *= 1024;
+                case 'K': $size *= 1024;
                 }
 
             } elseif (UPLOAD_ERR_FORM_SIZE == $this->value['error']) {

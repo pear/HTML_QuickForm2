@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -58,11 +58,13 @@ require_once 'HTML/QuickForm2/Rule/Nonempty.php';
  * - this Rule can only be added directly to the element and other Rules can
  *   only be added to it via and_() method
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
 {
@@ -75,7 +77,8 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
     * this will effectively mean that the field is not required anymore and the
     * visual difference is bogus.
     *
-    * @param    HTML_QuickForm2_Rule
+    * @param HTML_QuickForm2_Rule $next
+    *
     * @throws   HTML_QuickForm2_Exception
     */
     public function or_(HTML_QuickForm2_Rule $next)
@@ -92,7 +95,8 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
     * validation to succeed even if the element is empty, and that will make
     * visual difference ("* denotes required field") bogus.
     *
-    * @param    string                  Error message to display if validation fails
+    * @param string $message Error message to display if validation fails
+    *
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException
     */

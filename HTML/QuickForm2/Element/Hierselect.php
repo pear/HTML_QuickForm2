@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -67,12 +67,14 @@ require_once 'HTML/QuickForm2/Element/Script.php';
  * This element is considered as a group. Selects will be named
  * groupName[0], groupName[1], groupName[2]...
  *
- * @category    HTML
- * @package     HTML_QuickForm2
- * @author      Herim Vasquez <vasquezh@iro.umontreal.ca>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
- * @author      Alexey Borzov <avb@php.net>
- * @version     Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Herim Vasquez <vasquezh@iro.umontreal.ca>
+ * @author   Bertrand Mansion <bmansion@mamasam.com>
+ * @author   Alexey Borzov <avb@php.net>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
 {
@@ -129,9 +131,9 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     *     from size of options array or size of array passed to setValue()
     * $data is propagated to created Select elements with these keys removed.
     *
-    * @param    string  Element name
-    * @param    mixed   Attributes (either a string or an array)
-    * @param    array   Additional element data
+    * @param string       $name       Element name
+    * @param string|array $attributes Attributes (either a string or an array)
+    * @param array        $data       Additional element data
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -179,13 +181,14 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      * $sel->loadOptions(array($select1, $select2, $select3));
      * </code>
      *
-     * @param   array       Array of options defining each element
-     * @param   callback    Callback function to load additional options.
+     * @param array    $options    Array of options defining each element
+     * @param callback $callback   Callback function to load additional options.
      *      It will receive an array of keys and should return associative
      *      array ('option value' => 'option text')
-     * @param   string      Javascript function to load additional options
+     * @param string   $jsCallback Javascript function to load additional options
      *      (presumably via some sort of AJAX request). It will receive an
      *      array of keys and should return {'values': [...], 'texts': [...]}
+     *
      * @return  HTML_QuickForm2_Element_Hierselect
      * @throws  HTML_QuickForm2_InvalidArgumentException
      */
@@ -261,7 +264,8 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * This also creates missing selects and loads their options, in addition
     * to {@link HTML_QuickForm2_Container_Group::setValue()} behaviour
     *
-    * @param    array
+    * @param array $value
+    *
     * @return   HTML_QuickForm2_Element_Hierselect
     */
     public function setValue($value)
@@ -300,9 +304,11 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * convert an associative array of options to two arrays of their values
     * and texts.
     *
-    * @param    array   Options array
-    * @param    int     Depth within options array
+    * @param array $ary   Options array
+    * @param int   $depth Depth within options array
+    *
     * @link     http://pear.php.net/bugs/bug.php?id=16603
+    * @return   array   Array with separate options and texts
     */
     private function _prepareOptions($ary, $depth)
     {
@@ -366,9 +372,10 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         require_once 'HTML/QuickForm2/Renderer.php';
 
         $cr = HTML_Common2::getOption('linebreak');
-        return $this->render(HTML_QuickForm2_Renderer::factory('default')
-                                ->setTemplateForId($this->getId(), '{content}')
-                   )->__toString()
+        return $this->render(
+                    HTML_QuickForm2_Renderer::factory('default')
+                        ->setTemplateForId($this->getId(), '{content}')
+               )->__toString()
                . "<script type=\"text/javascript\">{$cr}//<![CDATA[{$cr}"
                . $this->_generateInitScript() . "{$cr}//]]>{$cr}</script>";
     }
@@ -376,7 +383,8 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
    /**
     * Renders the hierselect using the given renderer
     *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @param HTML_QuickForm2_Renderer $renderer
+    *
     * @return   HTML_QuickForm2_Renderer
     * @throws   HTML_QuickForm2_Exception   if number of selects in hierselect cannot
     *                                       be determined

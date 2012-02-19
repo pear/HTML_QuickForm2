@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -50,11 +50,13 @@
  * but accepts an instance of that in the constructor. You need to create a
  * subclass of this class and implement its populateForm() method.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 abstract class HTML_QuickForm2_Controller_Page
 {
@@ -90,7 +92,7 @@ abstract class HTML_QuickForm2_Controller_Page
    /**
     * Class constructor, accepts the form to wrap around
     *
-    * @param    HTML_QuickForm2
+    * @param HTML_QuickForm2 $form
     */
     public function __construct(HTML_QuickForm2 $form)
     {
@@ -110,7 +112,7 @@ abstract class HTML_QuickForm2_Controller_Page
    /**
     * Sets the controller owning the page
     *
-    * @param    HTML_QuickForm2_Controller  controller the page belongs to
+    * @param HTML_QuickForm2_Controller $controller controller the page belongs to
     */
     public function setController(HTML_QuickForm2_Controller $controller)
     {
@@ -130,8 +132,8 @@ abstract class HTML_QuickForm2_Controller_Page
    /**
     * Adds a handler for a specific action
     *
-    * @param  string                            action name
-    * @param  HTML_QuickForm2_Controller_Action the handler for the action
+    * @param string                            $actionName action name
+    * @param HTML_QuickForm2_Controller_Action $action     the handler for the action
     */
     public function addHandler($actionName, HTML_QuickForm2_Controller_Action $action)
     {
@@ -144,7 +146,9 @@ abstract class HTML_QuickForm2_Controller_Page
     * If the page does not contain a handler for this action, controller's
     * handle() method will be called.
     *
-    * @param    string      Name of the action
+    * @param string $actionName Name of the action
+    *
+    * @return   mixed Return value of action handler
     * @throws   HTML_QuickForm2_NotFoundException   if handler for an action is missing
     */
     public function handle($actionName)
@@ -159,7 +163,8 @@ abstract class HTML_QuickForm2_Controller_Page
    /**
     * Returns a name for a submit button that will invoke a specific action
     *
-    * @param  string  Name of the action
+    * @param string $actionName Name of the action
+    *
     * @return string  "name" attribute for a submit button
     */
     public function getButtonName($actionName)
@@ -174,8 +179,9 @@ abstract class HTML_QuickForm2_Controller_Page
     * clicking one of the named submit buttons and then no action name will
     * be passed to the script.
     *
-    * @param  string    Default action name
-    * @param  string    Path to a 1x1 transparent GIF image
+    * @param string $actionName Default action name
+    * @param string $imageSrc   Path to a 1x1 transparent GIF image
+    *
     * @return object    Returns the image input used for default action
     */
     public function setDefaultAction($actionName, $imageSrc = '')
@@ -192,7 +198,7 @@ abstract class HTML_QuickForm2_Controller_Page
         // replace the existing DefaultAction
         } elseif ($image = $this->form->getElementById('_qf_default')) {
             $image->setName($this->getButtonName($actionName))
-                  ->setAttribute('src', $imageSrc);
+                ->setAttribute('src', $imageSrc);
 
         // Inject the element to the first position to improve chances that
         // it ends up on top in the output
@@ -240,7 +246,9 @@ abstract class HTML_QuickForm2_Controller_Page
    /**
     * Stores the form values (and validation status) is session container
     *
-    * @param    bool    Whether to store validation status
+    * @param bool $validate Whether to store validation status
+    *
+    * @return   bool    Validation status for the page
     */
     public function storeValues($validate = true)
     {

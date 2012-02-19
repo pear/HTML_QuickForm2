@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -51,11 +51,13 @@ require_once 'HTML/QuickForm2/Element.php';
 /**
  * Class for static elements that only contain text or markup
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
 {
@@ -88,9 +90,9 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *   - 'forceClosingTag': whether to output closing tag in case of empty
     *     content, &lt;foo&gt;&lt;/foo&gt; vs. &lt;foo /&gt;
     *
-    * @param    string  Element name
-    * @param    mixed   Attributes (either a string or an array)
-    * @param    array   Additional element data
+    * @param string       $name       Element name
+    * @param string|array $attributes Attributes (either a string or an array)
+    * @param array        $data       Additional element data
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -110,8 +112,9 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     * Overrides parent method to allow removal of 'name' attribute on Static
     * elements
     *
-    * @param    string  Attribute name
-    * @param    string  Attribute value, null if attribute is being removed
+    * @param string $name  Attribute name
+    * @param string $value Attribute value, null if attribute is being removed
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to
     *                                   remove a required attribute
     */
@@ -129,7 +132,8 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * Passing null here will remove the name attribute
     *
-    * @param    string|null
+    * @param string|null $name
+    *
     * @return   HTML_QuickForm2_Element_Static
     */
     public function setName($name)
@@ -149,8 +153,9 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
    /**
     * Static element can not be frozen
     *
-    * @param    bool    Whether element should be frozen or editable. This
-    *                   parameter is ignored in case of static elements
+    * @param bool $freeze Whether element should be frozen or editable. This
+    *                     parameter is ignored in case of static elements
+    *
     * @return   bool    Always returns false
     */
     public function toggleFrozen($freeze = null)
@@ -161,7 +166,8 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
    /**
     * Sets the contents of the static element
     *
-    * @param    string  Static content
+    * @param string $content Static content
+    *
     * @return   HTML_QuickForm2_Element_Static
     */
     function setContent($content)
@@ -183,7 +189,8 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
    /**
     * Static element's content can also be set via this method
     *
-    * @param    mixed   Element's value, this parameter is ignored
+    * @param mixed $value
+    *
     * @return   HTML_QuickForm2_Element_Static
     */
     public function setValue($value)
@@ -239,9 +246,9 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     protected function updateValue()
     {
         foreach ($this->getDataSources() as $ds) {
-            if (!$ds instanceof HTML_QuickForm2_DataSource_Submit &&
-                null !== ($value = $ds->getValue($this->getName())))
-            {
+            if (!$ds instanceof HTML_QuickForm2_DataSource_Submit
+                && null !== ($value = $ds->getValue($this->getName()))
+            ) {
                 $this->setContent($value);
                 return;
             }
@@ -251,8 +258,9 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
    /**
     * Sets the name of the HTML tag to wrap around static element's content
     *
-    * @param string  tag name
-    * @param bool    whether to output closing tag in case of empty contents
+    * @param string $name         tag name
+    * @param bool   $forceClosing whether to output closing tag in case of empty contents
+    *
     * @throws HTML_QuickForm2_InvalidArgumentException when trying to set a tag
     *       name corresponding to a form element
     * @return HTML_QuickForm2_Element_Static

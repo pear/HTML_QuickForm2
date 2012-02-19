@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** Class for <input type="image" /> elements */
@@ -55,13 +55,15 @@ require_once 'HTML/QuickForm2/Element/InputImage.php';
  * buttons. Injecting a hidden <input type="image" /> element is about the
  * only cross-browser way to achieve this.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
- * @link       http://www.alanflavell.org.uk/www/formquestion.html
- * @link       http://muffinresearch.co.uk/archives/2005/12/08/fun-with-multiple-submit-buttons/
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
+ * @link     http://www.alanflavell.org.uk/www/formquestion.html
+ * @link     http://muffinresearch.co.uk/archives/2005/12/08/fun-with-multiple-submit-buttons/
  */
 class HTML_QuickForm2_Controller_DefaultAction
     extends HTML_QuickForm2_Element_InputImage
@@ -72,8 +74,8 @@ class HTML_QuickForm2_Controller_DefaultAction
    /**
     * Disallow changing the 'id' attribute
     *
-    * @param    string  Attribute name
-    * @param    string  Attribute value, null if attribute is being removed
+    * @param string $name  Attribute name
+    * @param string $value Attribute value, null if attribute is being removed
     */
     protected function onAttributeChange($name, $value = null)
     {
@@ -94,7 +96,8 @@ class HTML_QuickForm2_Controller_DefaultAction
     *   - render it above all other submit buttons since hidden elements
     *     are usually at the top of the form
     *
-    * @param    HTML_QuickForm2_Renderer    Renderer instance
+    * @param HTML_QuickForm2_Renderer $renderer
+    *
     * @return   HTML_QuickForm2_Renderer
     */
     public function render(HTML_QuickForm2_Renderer $renderer)

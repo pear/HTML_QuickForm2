@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -65,11 +65,13 @@ require_once 'HTML/QuickForm2/Rule.php';
  *                 $group->createRule('regex', '/^[a-z]+$/i'));
  * </code>
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {
@@ -116,7 +118,8 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     * We do not allow using Required rules here, they are able to validate
     * containers themselves without the help of Each rule.
     *
-    * @param    HTML_QuickForm2_Rule    Template Rule
+    * @param HTML_QuickForm2_Rule $config Template Rule
+    *
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException if $config is either not
     *               an instance of Rule or is an instance of Rule_Required
@@ -139,7 +142,8 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
    /**
     * Sets the element that will be validated by this rule
     *
-    * @param    HTML_QuickForm2_Container   Container to validate
+    * @param HTML_QuickForm2_Node $owner Container to validate
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if trying to use
     *           this Rule on something that isn't a Container
     */

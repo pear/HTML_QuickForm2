@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -49,11 +49,13 @@
  * This is a bit less fragile than allowing to directly manipulate the array
  * as was done in old HTML_QuickForm_Controller package
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Controller_SessionContainer
 {
@@ -69,12 +71,13 @@ class HTML_QuickForm2_Controller_SessionContainer
     * Initializes a variable in $_SESSION array, its name is based upon the
     * name of the Controller passed here
     *
-    * @param    HTML_QuickForm2_Controller
+    * @param HTML_QuickForm2_Controller $controller
     */
     public function __construct(HTML_QuickForm2_Controller $controller)
     {
-        $name = sprintf(HTML_QuickForm2_Controller::KEY_CONTAINER,
-                        $controller->getId());
+        $name = sprintf(
+            HTML_QuickForm2_Controller::KEY_CONTAINER, $controller->getId()
+        );
         if (empty($_SESSION[$name])) {
             $_SESSION[$name] = array(
                 'datasources' => array(),
@@ -88,8 +91,8 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Stores the page submit values
     *
-    * @param    string  Page ID
-    * @param    array   Page submit values
+    * @param string $pageId Page ID
+    * @param array  $values Page submit values
     */
     public function storeValues($pageId, array $values)
     {
@@ -99,8 +102,9 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Returns the page values kept in session
     *
-    * @param    string  Page ID
-    * @return   array
+    * @param string $pageId Page ID
+    *
+    * @return array
     */
     public function getValues($pageId)
     {
@@ -111,8 +115,8 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Stores the page validation status
     *
-    * @param    string  Page ID
-    * @param    bool    Whether the page is valid
+    * @param string $pageId Page ID
+    * @param bool   $status Whether the page is valid
     */
     public function storeValidationStatus($pageId, $status)
     {
@@ -122,7 +126,8 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Returns the page validation status kept in session
     *
-    * @param    string  Page ID
+    * @param string $pageId Page ID
+    *
     * @return   bool
     */
     public function getValidationStatus($pageId)
@@ -135,7 +140,8 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Stores the controller data sources
     *
-    * @param    array   A new data source list
+    * @param array $datasources A new data source list
+    *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if given array
     *               contains something that is not a valid data source
     */
@@ -165,11 +171,12 @@ class HTML_QuickForm2_Controller_SessionContainer
     * Stores some user-supplied parameter alongside controller data
     *
     * It is sometimes useful to pass some additional user data between pages
-    * of the form, thus this method. It will be removed with all the other
-    * data by {@link HTML_QuickForm2_Controller::destroySessionContainer()}
+    * of the form, thus this method. Data added by this method will be removed
+    * alongside all the other data by
+    * {@link HTML_QuickForm2_Controller::destroySessionContainer()}
     *
-    * @param    string  Parameter name
-    * @param    string  Parameter value
+    * @param string $name  Parameter name
+    * @param string $value Parameter value
     */
     public function storeOpaque($name, $value)
     {
@@ -182,7 +189,8 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Returns a user-supplied parameter
     *
-    * @param    string  Parameter name
+    * @param string $name Parameter name
+    *
     * @return   mixed
     */
     public function getOpaque($name)

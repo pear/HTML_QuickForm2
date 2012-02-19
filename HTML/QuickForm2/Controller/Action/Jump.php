@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** Interface for Controller action handlers */
@@ -49,11 +49,13 @@ require_once 'HTML/QuickForm2/Controller/Action.php';
 /**
  * This handler performs an HTTP redirect to a specific page
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Controller_Action_Jump
     implements HTML_QuickForm2_Controller_Action
@@ -61,7 +63,8 @@ class HTML_QuickForm2_Controller_Action_Jump
    /**
     * Splits (part of) the URI into path and query components
     *
-    * @param    string  String of the form 'foo?bar'
+    * @param string $uri String of the form 'foo?bar'
+    *
     * @return   array   Array of the form array('foo', '?bar)
     */
     protected static function splitUri($uri)
@@ -76,7 +79,8 @@ class HTML_QuickForm2_Controller_Action_Jump
    /**
     * Removes the '..' and '.' segments from the path component
     *
-    * @param    string  Path component of the URL, possibly with '.' and '..' segments
+    * @param string $path Path component of the URL, possibly with '.' and '..' segments
+    *
     * @return   string  Path component of the URL with '.' and '..' segments removed
     */
     protected static function normalizePath($path)
@@ -121,7 +125,8 @@ class HTML_QuickForm2_Controller_Action_Jump
     * passes the examples provided in section 5 of said RFC. Values from
     * $_SERVER array are used for calculation of "current URL"
     *
-    * @param    string  Relative URL, probably from form's action attribute
+    * @param string $url Relative URL, probably from form's action attribute
+    *
     * @return   string  Absolute URL
     */
     protected static function resolveRelativeURL($url)
@@ -198,7 +203,7 @@ class HTML_QuickForm2_Controller_Action_Jump
     * A separate method is mostly needed for creating mocks of this class
     * during testing.
     *
-    * @param    string  URL to redirect to
+    * @param string $url URL to redirect to
     */
     protected function doRedirect($url)
     {

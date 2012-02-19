@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -51,11 +51,13 @@ require_once 'HTML/QuickForm2/Element/Input.php';
 /**
  * Class for <input type="button" /> elements
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
 {
@@ -64,8 +66,9 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
    /**
     * Buttons can not be frozen
     *
-    * @param    bool    Whether element should be frozen or editable. This
-    *                   parameter is ignored in case of buttons
+    * @param bool $freeze Whether element should be frozen or editable. This
+    *                     parameter is ignored in case of buttons
+    *
     * @return   bool    Always returns false
     */
     public function toggleFrozen($freeze = null)
@@ -76,7 +79,8 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
    /**
     * Button elements cannot have any submit values
     *
-    * @param    mixed   Element's value, this parameter is ignored
+    * @param mixed $value Element's value, this parameter is ignored
+    *
     * @return   HTML_QuickForm2_Element_InputButton
     */
     public function setValue($value)
@@ -89,7 +93,7 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
     *
     * This method always returns null
     *
-    * return    string|null
+    * @return    string|null
     */
     public function getRawValue()
     {

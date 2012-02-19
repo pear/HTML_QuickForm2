@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -54,11 +54,13 @@ require_once 'HTML/QuickForm2/Element.php';
  * Note that this element was named 'xbutton' in previous version of QuickForm,
  * the name 'button' being used for current 'inputbutton' element.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
 {
@@ -84,8 +86,9 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
    /**
     * Buttons can not be frozen
     *
-    * @param    bool    Whether element should be frozen or editable. This
-    *                   parameter is ignored in case of buttons
+    * @param bool $freeze Whether element should be frozen or editable. This
+    *                     parameter is ignored in case of buttons
+    *
     * @return   bool    Always returns false
     */
     public function toggleFrozen($freeze = null)
@@ -96,7 +99,8 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
    /**
     * Sets the contents of the button element
     *
-    * @param    string  Button content (HTML to add between <button></button> tags)
+    * @param string $content Button content (HTML to add between <button></button> tags)
+    *
     * @return   HTML_QuickForm2_Element_Button
     */
     function setContent($content)
@@ -108,7 +112,8 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
    /**
     * Button's value cannot be set via this method
     *
-    * @param    mixed   Element's value, this parameter is ignored
+    * @param mixed $value Element's value, this parameter is ignored
+    *
     * @return   HTML_QuickForm2_Element_Button
     */
     public function setValue($value)
@@ -130,9 +135,9 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     */
     public function getRawValue()
     {
-        if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type']) &&
-            !$this->getAttribute('disabled'))
-        {
+        if ((empty($this->attributes['type']) || 'submit' == $this->attributes['type'])
+            && !$this->getAttribute('disabled')
+        ) {
             return $this->submitValue;
         } else {
             return null;
@@ -148,9 +153,9 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     protected function updateValue()
     {
         foreach ($this->getDataSources() as $ds) {
-            if ($ds instanceof HTML_QuickForm2_DataSource_Submit &&
-                null !== ($value = $ds->getValue($this->getName())))
-            {
+            if ($ds instanceof HTML_QuickForm2_DataSource_Submit
+                && null !== ($value = $ds->getValue($this->getName()))
+            ) {
                 $this->submitValue = $value;
                 return;
             }

@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -34,13 +34,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    SVN: $Id$
- * @link       http://pear.php.net/package/HTML_QuickForm2
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /**
@@ -69,11 +69,13 @@ require_once 'HTML/QuickForm2/Rule.php';
  * $message->addRule('maxlength', 'Your message is too verbose', 1000);
  * </code>
  *
- * @category   HTML
- * @package    HTML_QuickForm2
- * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
- * @version    Release: @package_version@
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 {
@@ -119,9 +121,10 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
    /**
     * Adds the 'min' and 'max' fields from one array to the other
     *
-    * @param    array   Rule configuration, array with 'min' and 'max' keys
-    * @param    array   Additional configuration, fields will be added to
+    * @param array $length Rule configuration, array with 'min' and 'max' keys
+    * @param array $config Additional configuration, fields will be added to
     *                   $length if it doesn't contain such a key already
+    *
     * @return   array
     */
     protected static function mergeMinMaxLength($length, $config)
@@ -164,8 +167,10 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     *
     * As usual, global configuration overrides local one.
     *
-    * @param    int|array   Local length limits
-    * @param    int|array   Global length limits, usually provided to {@link HTML_QuickForm2_Factory::registerRule()}
+    * @param int|array $localConfig  Local length limits
+    * @param int|array $globalConfig Global length limits, usually provided to
+    *                                {@link HTML_QuickForm2_Factory::registerRule()}
+    *
     * @return   int|array   Merged length limits
     */
     public static function mergeConfig($localConfig, $globalConfig)
@@ -195,7 +200,8 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     *  - array(minlength, maxlength)
     *  - array(['min' => minlength, ]['max' => maxlength])
     *
-    * @param    int|array   Length limits
+    * @param int|array $config Length limits
+    *
     * @return   HTML_QuickForm2_Rule
     * @throws   HTML_QuickForm2_InvalidArgumentException if bogus length limits
     *           were provided
@@ -206,17 +212,17 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             $config = self::mergeMinMaxLength(array(), $config)
                       + array('min' => 0, 'max' => 0);
         }
-        if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0) ||
-            !is_array($config) && $config < 0)
-        {
+        if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0)
+            || !is_array($config) && $config < 0
+        ) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Length Rule requires limits to be nonnegative, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
             );
 
-        } elseif (is_array($config) && $config['min'] == 0 && $config['max'] == 0 ||
-                  !is_array($config) && 0 == $config)
-        {
+        } elseif (is_array($config) && $config['min'] == 0 && $config['max'] == 0
+                  || !is_array($config) && 0 == $config
+        ) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Length Rule requires at least one non-zero limit, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'
