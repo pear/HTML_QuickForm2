@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -49,6 +49,21 @@ require_once dirname(__FILE__) . '/TestHelper.php';
  * Class representing a HTML form
  */
 require_once 'HTML/QuickForm2.php';
+
+
+class FormRule extends HTML_QuickForm2_Rule
+{
+    protected function validateOwner()
+    {
+        return false;
+    }
+
+    protected function setOwnerError()
+    {
+        $this->owner->getElementById('foo')->setError('an error message');
+    }
+}
+
 
 /**
  * Unit test for HTML_QuickForm2 class
@@ -169,6 +184,16 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
 
         $form2 = new HTML_QuickForm2('track', 'post');
         $this->assertTrue($form2->validate());
+    }
+
+    public function testFormRule()
+    {
+        $form = new HTML_QuickForm2('track', 'post');
+        $foo = $form->addElement('text', 'foo', array('id' => 'foo'));
+        $form->addRule(new FormRule($form));
+
+        $this->assertFalse($form->validate());
+        $this->assertEquals('an error message', $foo->getError());
     }
 }
 ?>

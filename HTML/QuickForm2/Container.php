@@ -449,6 +449,15 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             $valid = $child->validate() && $valid;
         }
         $valid = parent::validate() && $valid;
+        // additional check is needed as a Rule on Container may set errors
+        // on contained elements, see HTML_QuickForm2Test::testFormRule()
+        if ($valid) {
+            foreach ($this->getRecursiveIterator() as $item) {
+                if (0 < strlen($item->getError())) {
+                    return false;
+                }
+            }
+        }
         return $valid;
     }
 
