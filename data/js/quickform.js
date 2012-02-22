@@ -3,8 +3,8 @@
  * Package version @package_version@
  * http://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2011, Alexey Borzov, Bertrand Mansion
- * Licensed under new BSD license 
+ * Copyright 2006-2012, Alexey Borzov, Bertrand Mansion
+ * Licensed under new BSD license
  * http://opensource.org/licenses/bsd-license.php
  */
 
@@ -27,7 +27,7 @@ qf.elements = qf.elements || {};
  * like objects passed across browser windows, etc. Borrowed from closure library.
  *
  * @param   {*} value   The value to get the type of
- * @returns {string}    Type name 
+ * @returns {string}    Type name
  */
 qf.typeOf = function(value) {
     var s = typeof value;
@@ -70,7 +70,7 @@ qf.typeOf = function(value) {
  * "a.b.c" -> a = {};a.b={};a.b.c={};
  * </code>
  * Borrowed from closure library.
- * 
+ *
  * @param   {string}    ns name of the object that this file defines.
  */
 qf.addNamespace = function(ns) {
@@ -134,7 +134,7 @@ qf.Map.prototype = (function(){
     function _hasKey(obj, key)
     {
         return Object.prototype.hasOwnProperty.call(obj, key);
-    };
+    }
 
     /**
      * Removes keys that are no longer in the map from the _keys array
@@ -159,7 +159,7 @@ qf.Map.prototype = (function(){
             srcIndex++;
         }
         this._keys.length = destIndex;
-    };
+    }
 
     return {
         /**
@@ -216,7 +216,7 @@ qf.Map.prototype = (function(){
         },
 
         /**
-         * Removes all key-value pairs from the map 
+         * Removes all key-value pairs from the map
          */
         clear: function()
         {
@@ -257,7 +257,7 @@ qf.Map.prototype = (function(){
             }
             return defaultVal;
         },
-        
+
         /**
          * Adds a key-value pair to the Map
          * @param {*} key
@@ -275,7 +275,7 @@ qf.Map.prototype = (function(){
         /**
          * Merges key-value pairs from another Object or Map
          * @param {Object} map
-         * @param {function(*, *)} [mergeFn] Optional function to call on values if 
+         * @param {function(*, *)} [mergeFn] Optional function to call on values if
          *      both maps have the same key. By default a value from the map being
          *      merged will be stored under that key.
          */
@@ -309,9 +309,9 @@ qf.Map.prototype = (function(){
 
 /**
  * Callback for merge(), forces to use second value.
- * 
+ *
  * This makes Map.merge() behave like PHP's array_merge() function
- * 
+ *
  * @param   {*} a Original value in map
  * @param   {*} b Value in the map being merged
  * @returns {*} second value
@@ -323,9 +323,9 @@ qf.Map.mergeReplace = function(a, b)
 
 /**
  * Callback for merge(), forces to use first value.
- * 
+ *
  * This makes Map.merge() behave like PHP's + operator for arrays
- * 
+ *
  * @param   {*} a Original value in map
  * @param   {*} b Value in the map being merged
  * @returns {*} first value
@@ -338,8 +338,8 @@ qf.Map.mergeKeep = function(a, b)
 /**
  * Callback for merge(), concatenates values.
  *
- * If the values are not arrays, they are first converted to ones. 
- * 
+ * If the values are not arrays, they are first converted to ones.
+ *
  * This callback makes Map.merge() behave somewhat like PHP's array_merge_recursive()
  *
  * @param   {*} a Original value in map
@@ -377,8 +377,8 @@ qf.form = (function() {
             }
         }
         return values;
-    };
-    
+    }
+
     /**
      * Sets the value of a select-one element.
      * @param   {Element} el
@@ -394,7 +394,7 @@ qf.form = (function() {
                 return;
             }
         }
-    };
+    }
 
     /**
      * Sets the value of a select-multiple element.
@@ -420,7 +420,7 @@ qf.form = (function() {
     return {
         /**
          * Gets the value of a form element.
-         * 
+         *
          * @param   {string|Element} el
          * @returns {string|string[]|null}
          */
@@ -475,22 +475,22 @@ qf.form = (function() {
          *
          * @param   [...] This accepts a variable number of arguments, that are either
          *      strings (considered element ID attributes), objects {name: element name,
-         *      value: element value} or instances of qf.Map, representing the contained elements 
+         *      value: element value} or instances of qf.Map, representing the contained elements
          * @returns qf.Map
          */
         getContainerSubmitValue: function()
         {
-            var map = new qf.Map();
+            var k, v, map = new qf.Map();
             for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i] instanceof qf.Map) {
                     map.merge(arguments[i], qf.Map.mergeArrayConcat);
                 } else {
                     if ('object' == qf.typeOf(arguments[i])) {
-                        var k  = arguments[i].name;
-                        var v  = arguments[i].value;
+                        k = arguments[i].name;
+                        v = arguments[i].value;
                     } else {
-                        var k = document.getElementById(arguments[i]).name;
-                        var v = qf.form.getSubmitValue(arguments[i]);
+                        k = document.getElementById(arguments[i]).name;
+                        v = qf.form.getSubmitValue(arguments[i]);
                     }
                     if (null !== v) {
                         var valueObj = {};
@@ -607,10 +607,7 @@ qf.classes = {
      */
     has: function(element, name)
     {
-        if (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' ')) {
-            return true;
-        }
-        return false;
+        return (-1 < (' ' + element.className + ' ').replace(/[\n\t\r]/g, ' ').indexOf(' ' + name + ' '));
     }
 };
 
@@ -827,9 +824,9 @@ qf.Validator = function(form, rules)
                 qf.events.addListener(form, 'click', function (event) {
                     event  = qf.events.fixEvent(event);
                     var el = event.target;
-                    if ('select' == el.nodeName.toLowerCase() 
-                        || 'input' == el.nodeName.toLowerCase() 
-                         && ('checkbox' == el.type || 'radio' == el.type) 
+                    if ('select' == el.nodeName.toLowerCase()
+                        || 'input' == el.nodeName.toLowerCase()
+                         && ('checkbox' == el.type || 'radio' == el.type)
                     ) {
                         qf.Validator.liveHandler(event);
                     }
@@ -857,7 +854,7 @@ qf.Validator = function(form, rules)
 };
 
 /**
- * Event handler for form's onsubmit events. 
+ * Event handler for form's onsubmit events.
  * @param {Event} event
  */
 qf.Validator.submitHandler = function(event)
@@ -885,7 +882,7 @@ qf.Validator.liveHandler = function (event)
 qf.Validator.prototype = (function() {
     /**
      * Clears validation status and error message of a given element
-     * 
+     *
      * @param   {string} elementId
      * @returns {Node}              Parent element that gets 'error' / 'valid'
      *                              classes applied
@@ -893,32 +890,37 @@ qf.Validator.prototype = (function() {
      */
     function _clearValidationStatus(elementId)
     {
-        var el = document.getElementById(elementId), parent = el;
-        while (!qf.classes.has(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
-            parent = parent.parentNode;
-        }
+        var parent = _findParent(elementId);
         qf.classes.remove(parent, ['error', 'valid']);
 
-        _clearErrors(parent);
-
-        return parent;
-    };
-
-    /**
-     * Removes <span> elements with "error" class that are children of a given element 
-     * 
-     * @param   {Node} element
-     * @private
-     */
-    function _clearErrors(element)
-    {
-        var spans = element.getElementsByTagName('span');
-        for (var i = 0, span; span = spans[i]; i++) {
-            if (qf.classes.has(span, 'error')) {
-                span.parentNode.removeChild(span);
+        var spans = parent.getElementsByTagName('span');
+        for (var i = spans.length - 1; i >= 0; i--) {
+            if (qf.classes.has(spans[i], 'error')) {
+                spans[i].parentNode.removeChild(spans[i]);
             }
         }
-    };
+
+        return parent;
+    }
+
+    /**
+     * Returns the first ancestor of an element that is either a fieldset or has class "element"
+     *
+     * @param   {string} elementId
+     * @returns {Node}
+     *
+     * @private
+     */
+    function _findParent(elementId)
+    {
+        var parent = document.getElementById(elementId);
+        while (!qf.classes.has(parent, 'element')
+               && 'fieldset' != parent.nodeName.toLowerCase()
+        ) {
+            parent = parent.parentNode;
+        }
+        return parent;
+    }
 
     /**
      * Removes error messages from owner element(s) of a given rule and chained rules
@@ -929,67 +931,25 @@ qf.Validator.prototype = (function() {
      */
     function _removeRelatedErrors(errors, rule)
     {
-        if (errors.hasKey(rule.owner)) {
-            errors.remove(rule.owner);
-            _clearValidationStatus(rule.owner);
-        }
+        errors.remove(rule.owner);
+        _clearValidationStatus(rule.owner);
         for (var i = 0, item; item = rule.chained[i]; i++) {
             for (var j = 0, multiplier; multiplier = item[j]; j++) {
                 _removeRelatedErrors(errors, multiplier);
             }
         }
-    };
+    }
 
     return {
-        /**
-         * Message prefix in alert in case of failed validation
-         * @type {String}
-         */
-        msgPrefix: 'Invalid information entered:',
-
-        /**
-         * Message postfix in alert in case of failed validation
-         * @type {String}
-         */
-        msgPostfix: 'Please correct these fields.',
-
         /**
          * Called before starting the validation. May be used e.g. to clear the errors from form elements.
          * @param {HTMLFormElement} form The form being validated currently
          */
-        onStart: function(form) 
+        onStart: function(form)
         {
-            _clearErrors(form);
-        },
-
-        /**
-         * Called on setting the element error
-         *
-         * @param {string} elementId ID attribute of an element
-         * @param {string} errorMessage
-         * @deprecated Use onFieldError() instead
-         */
-        onError: function(elementId, errorMessage)
-        {
-            this.onFieldError(elementId, errorMessage);
-        },
-
-        /**
-         * Called on successfully validating the form
-         * @deprecated Use onFormValid() instead
-         */
-        onValid: function()
-        {
-            this.onFormValid();
-        },
-
-        /**
-         * Called on failed validation
-         * @deprecated Use onFormError() instead
-         */
-        onInvalid: function()
-        {
-            this.onFormError();
+            for (var i = 0, rule; rule = this.rules[i]; i++) {
+                _removeRelatedErrors(this.errors, rule);
+            }
         },
 
         /**
@@ -1000,7 +960,7 @@ qf.Validator.prototype = (function() {
          */
         onFieldError: function(elementId, errorMessage)
         {
-            var parent = _clearValidationStatus(elementId);
+            var parent = _findParent(elementId);
             qf.classes.add(parent, 'error');
 
             var error = document.createElement('span');
@@ -1027,8 +987,7 @@ qf.Validator.prototype = (function() {
          */
         onFieldValid: function(elementId)
         {
-            var parent = _clearValidationStatus(elementId);
-            qf.classes.add(parent, 'valid');
+            qf.classes.add(_findParent(elementId), 'valid');
         },
 
         /**

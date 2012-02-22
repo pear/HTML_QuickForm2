@@ -163,31 +163,36 @@ qf.Validator.prototype = (function() {
      */
     function _clearValidationStatus(elementId)
     {
-        var el = document.getElementById(elementId), parent = el;
-        while (!qf.classes.has(parent, 'element') && 'fieldset' != parent.nodeName.toLowerCase()) {
-            parent = parent.parentNode;
-        }
+        var parent = _findParent(elementId);
         qf.classes.remove(parent, ['error', 'valid']);
 
-        _clearErrors(parent);
+        var spans = parent.getElementsByTagName('span');
+        for (var i = spans.length - 1; i >= 0; i--) {
+            if (qf.classes.has(spans[i], 'error')) {
+                spans[i].parentNode.removeChild(spans[i]);
+            }
+        }
 
         return parent;
     }
 
     /**
-     * Removes <span> elements with "error" class that are children of a given element
+     * Returns the first ancestor of an element that is either a fieldset or has class "element"
      *
-     * @param   {Node} element
+     * @param   {string} elementId
+     * @returns {Node}
+     *
      * @private
      */
-    function _clearErrors(element)
+    function _findParent(elementId)
     {
-        var spans = element.getElementsByTagName('span');
-        for (var i = 0, span; span = spans[i]; i++) {
-            if (qf.classes.has(span, 'error')) {
-                span.parentNode.removeChild(span);
-            }
+        var parent = document.getElementById(elementId);
+        while (!qf.classes.has(parent, 'element')
+               && 'fieldset' != parent.nodeName.toLowerCase()
+        ) {
+            parent = parent.parentNode;
         }
+        return parent;
     }
 
     /**
@@ -199,10 +204,8 @@ qf.Validator.prototype = (function() {
      */
     function _removeRelatedErrors(errors, rule)
     {
-        if (errors.hasKey(rule.owner)) {
-            errors.remove(rule.owner);
-            _clearValidationStatus(rule.owner);
-        }
+        errors.remove(rule.owner);
+        _clearValidationStatus(rule.owner);
         for (var i = 0, item; item = rule.chained[i]; i++) {
             for (var j = 0, multiplier; multiplier = item[j]; j++) {
                 _removeRelatedErrors(errors, multiplier);
@@ -217,7 +220,9 @@ qf.Validator.prototype = (function() {
          */
         onStart: function(form)
         {
-            _clearErrors(form);
+            for (var i = 0, rule; rule = this.rules[i]; i++) {
+                _removeRelatedErrors(this.errors, rule);
+            }
         },
 
         /**
@@ -228,7 +233,7 @@ qf.Validator.prototype = (function() {
          */
         onFieldError: function(elementId, errorMessage)
         {
-            var parent = _clearValidationStatus(elementId);
+            var parent = _findParent(elementId);
             qf.classes.add(parent, 'error');
 
             var error = document.createElement('span');
@@ -255,8 +260,7 @@ qf.Validator.prototype = (function() {
          */
         onFieldValid: function(elementId)
         {
-            var parent = _clearValidationStatus(elementId);
-            qf.classes.add(parent, 'valid');
+            qf.classes.add(_findParent(elementId), 'valid');
         },
 
         /**

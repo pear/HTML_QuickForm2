@@ -3,8 +3,8 @@
  * Package version @package_version@
  * http://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2011, Alexey Borzov, Bertrand Mansion
- * Licensed under new BSD license 
+ * Copyright 2006-2012, Alexey Borzov, Bertrand Mansion
+ * Licensed under new BSD license
  * http://opensource.org/licenses/bsd-license.php
  */
 
@@ -27,7 +27,7 @@ qf.elements = qf.elements || {};
  * like objects passed across browser windows, etc. Borrowed from closure library.
  *
  * @param   {*} value   The value to get the type of
- * @returns {string}    Type name 
+ * @returns {string}    Type name
  */
 qf.typeOf = function(value) {
     var s = typeof value;
@@ -70,7 +70,7 @@ qf.typeOf = function(value) {
  * "a.b.c" -> a = {};a.b={};a.b.c={};
  * </code>
  * Borrowed from closure library.
- * 
+ *
  * @param   {string}    ns name of the object that this file defines.
  */
 qf.addNamespace = function(ns) {
