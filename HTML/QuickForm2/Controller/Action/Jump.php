@@ -61,6 +61,12 @@ class HTML_QuickForm2_Controller_Action_Jump
     implements HTML_QuickForm2_Controller_Action
 {
    /**
+    * Whether to trust $_SERVER entries coming from proxies
+    * @var bool
+    */
+    protected $trustProxy = false;
+
+   /**
     * Splits (part of) the URI into path and query components
     *
     * @param string $uri String of the form 'foo?bar'
@@ -119,6 +125,19 @@ class HTML_QuickForm2_Controller_Action_Jump
     }
 
    /**
+    * Constructor, sets $trustProxy flag
+    *
+    * @param bool $trustProxy Whether to trust $_SERVER entries
+    *             (specifically HTTP_X_FORWARDED_HOST) coming from proxies.
+    *             Should be set to true if application is hosted behind a
+    *             reverse proxy that you manage.
+    */
+    public function __construct($trustProxy = false)
+    {
+        $this->trustProxy = (bool)$trustProxy;
+    }
+
+   /**
     * Resolves relative URL using current page's URL as base
     *
     * The method follows procedure described in section 4 of RFC 1808 and
@@ -129,7 +148,7 @@ class HTML_QuickForm2_Controller_Action_Jump
     *
     * @return   string  Absolute URL
     */
-    protected static function resolveRelativeURL($url)
+    protected function resolveRelativeURL($url)
     {
         $https  = !empty($_SERVER['HTTPS']) && ('off' != strtolower($_SERVER['HTTPS']));
         $scheme = ($https? 'https:': 'http:');
@@ -137,9 +156,22 @@ class HTML_QuickForm2_Controller_Action_Jump
             return $scheme . $url;
 
         } else {
-            $host   = $scheme . '//' . $_SERVER['SERVER_NAME'] .
-                      (($https && 443 == $_SERVER['SERVER_PORT'] ||
-                        !$https && 80 == $_SERVER['SERVER_PORT'])? '': ':' . $_SERVER['SERVER_PORT']);
+            if ($this->trustProxy && !empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+                $parts = explode(',', $_SERVER['HTTP_X_FORWARDED_HOST']);
+                $host  = trim(end($parts));
+            } else {
+                $host  = '';
+                foreach (array('HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR') as $key) {
+                    if (!empty($_SERVER[$key])) {
+                        $host = $_SERVER[$key];
+                        break;
+                    }
+                }
+            }
+            $host = $scheme . '//' . preg_replace('/:\d+$/', '', $host)
+                    . (($https && 443 == $_SERVER['SERVER_PORT']
+                        || !$https && 80 == $_SERVER['SERVER_PORT'])
+                       ? '' : ':' . $_SERVER['SERVER_PORT']);
             if ('' == $url) {
                 return $host . $_SERVER['REQUEST_URI'];
 
@@ -175,7 +207,7 @@ class HTML_QuickForm2_Controller_Action_Jump
         $action = $page->getForm()->getAttribute('action');
         // Bug #13087: RFC 2616 requires an absolute URI in Location header
         if (!preg_match('@^([a-z][a-z0-9.+-]*):@i', $action)) {
-            $action = self::resolveRelativeURL($action);
+            $action = $this->resolveRelativeURL($action);
         }
 
         if (!$page->getController()->propagateId()) {

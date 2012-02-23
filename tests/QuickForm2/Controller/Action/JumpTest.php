@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -71,7 +71,7 @@ class HTML_QuickForm2_Controller_Action_JumpTest
              ->will($this->returnArgument(0));
 
         // see RFC 3986, section 5.4
-        $_SERVER['SERVER_NAME'] = 'a';
+        $_SERVER['HTTP_HOST']   = 'a';
         $_SERVER['SERVER_PORT'] = 80;
         $_SERVER['REQUEST_URI'] = '/b/c/d;p?q';
     }
@@ -231,6 +231,75 @@ class HTML_QuickForm2_Controller_Action_JumpTest
         $mockPage->getForm()->setAttribute('action', '/foo');
 
         $this->assertNotRegexp('/^https:/i', $mockPage->handle('jump'));
+    }
+
+   /**
+    * Use HTTP_HOST as the default, falling back to SERVER_NAME (and SERVER_ADDR)
+    *
+    * @link http://pear.php.net/bugs/bug.php?id=19216
+    */
+    public function testBug19216()
+    {
+        $controller = new HTML_QuickForm2_Controller('bug19216');
+        $mockPage   = $this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('testhost'))
+        );
+        $controller->addPage($mockPage);
+        $controller->addHandler('jump', $this->mockJump);
+        $mockPage->getForm()->setAttribute('action', '/foo');
+
+        $_SERVER['HTTP_HOST']   = 'example.org';
+        $_SERVER['SERVER_NAME'] = 'example.com';
+        $_SERVER['SERVER_ADDR'] = '1.2.3.4';
+        $this->assertStringStartsWith('http://example.org/foo?', $mockPage->handle('jump'));
+
+        $_SERVER['HTTP_HOST'] = '';
+        $this->assertStringStartsWith('http://example.com/foo?', $mockPage->handle('jump'));
+
+        $_SERVER['SERVER_NAME'] = '';
+        $this->assertStringStartsWith('http://1.2.3.4/foo?', $mockPage->handle('jump'));
+    }
+
+    public function testHttpHostWithPortNumber()
+    {
+        $controller = new HTML_QuickForm2_Controller('weirdhost');
+        $mockPage   = $this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('weirdhost'))
+        );
+        $controller->addPage($mockPage);
+        $controller->addHandler('jump', $this->mockJump);
+        $mockPage->getForm()->setAttribute('action', '/foo');
+
+        $_SERVER['HTTP_HOST'] = 'example.org:80';
+        $this->assertStringStartsWith('http://example.org/foo?', $mockPage->handle('jump'));
+    }
+
+    public function testHttpXForwardedHost()
+    {
+        $_SERVER['HTTP_X_FORWARDED_HOST'] = 'example.org, example.com';
+        $_SERVER['HTTP_HOST']             = 'localhost';
+
+        $controller = new HTML_QuickForm2_Controller('forwarded');
+        $mockPage   = $this->getMock(
+            'HTML_QuickForm2_Controller_Page', array('populateForm'),
+            array(new HTML_QuickForm2('forwarded'))
+        );
+        $controller->addPage($mockPage);
+        $controller->addHandler('jump', $this->mockJump);
+        $mockPage->getForm()->setAttribute('action', '/foo');
+
+        $this->assertStringStartsWith('http://localhost/foo?', $mockPage->handle('jump'));
+
+        $trustingJump = $this->getMock(
+            'HTML_QuickForm2_Controller_Action_Jump', array('doRedirect'), array(true)
+        );
+        $trustingJump->expects($this->atLeastOnce())->method('doRedirect')
+            ->will($this->returnArgument(0));
+        $controller->addHandler('jump', $trustingJump);
+
+        $this->assertStringStartsWith('http://example.com/foo?', $mockPage->handle('jump'));
     }
 }
 ?>
