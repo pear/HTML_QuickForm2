@@ -117,7 +117,6 @@ require_once 'HTML/QuickForm2/Renderer.php';
  * exportMethods()) will be available to renderer plugins only.
  *
  * The following methods are published:
- *   - {@link reset()}
  *   - {@link toArray()}
  *   - {@link setStyleForId()}
  *

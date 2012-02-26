@@ -203,6 +203,9 @@ Other features and changes
       <file name="Proxy.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="Stub.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
      </dir> <!-- /HTML/QuickForm2/Renderer -->
      <dir name="Rule">
       <file name="Callback.php" role="php">
@@ -400,6 +403,9 @@ Other features and changes
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="DefaultTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="StubTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir>

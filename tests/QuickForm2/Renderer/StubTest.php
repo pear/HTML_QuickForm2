@@ -37,45 +37,66 @@
  * @category   HTML
  * @package    HTML_QuickForm2
  * @author     Alexey Borzov <avb@php.net>
- * @author     Bertrand Mansion <golgote@mamasam.com>
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  * @version    SVN: $Id$
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'QuickForm2_Renderer_AllTests::main');
-}
+/** Sets up includes */
+require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+/** Renderer base class */
+require_once 'HTML/QuickForm2/Renderer.php';
+/** Class representing a HTML form */
+require_once 'HTML/QuickForm2.php';
 
-require_once dirname(__FILE__) . '/DefaultTest.php';
-require_once dirname(__FILE__) . '/ArrayTest.php';
-require_once dirname(__FILE__) . '/CallbackTest.php';
-require_once dirname(__FILE__) . '/StubTest.php';
-
-class QuickForm2_Renderer_AllTests
+/**
+ * Unit test for HTML_QuickForm2_Renderer_Stub class
+ */
+class HTML_QuickForm2_Renderer_StubTest extends PHPUnit_Framework_TestCase
 {
-    public static function main()
+    public function testHasRequired()
     {
-        if (!function_exists('phpunit_autoload')) {
-            require_once 'PHPUnit/TextUI/TestRunner.php';
-        }
-        PHPUnit_TextUI_TestRunner::run(self::suite());
+        $form     = new HTML_QuickForm2('testHasRequired');
+        $text     = $form->addText('anElement');
+        $renderer = HTML_QuickForm2_Renderer::factory('stub');
+
+        $form->render($renderer);
+        $this->assertFalse($renderer->hasRequired());
+
+        $text->addRule('required', 'element is required');
+        $form->render($renderer);
+        $this->assertTrue($renderer->hasRequired());
     }
 
-    public static function suite()
+    public function testGroupErrors()
     {
-        $suite = new PHPUnit_Framework_TestSuite('HTML_QuickForm2 package - QuickForm2 - Renderer');
+        $form     = new HTML_QuickForm2('testGroupErrors');
+        $text     = $form->addText('anElement', array('id' => 'anElement'))
+                        ->setError('an error');
+        $renderer = HTML_QuickForm2_Renderer::factory('stub');
 
-        $suite->addTestSuite('HTML_QuickForm2_Renderer_DefaultTest');
-        $suite->addTestSuite('HTML_QuickForm2_Renderer_ArrayTest');
-        $suite->addTestSuite('HTML_QuickForm2_Renderer_CallbackTest');
-        $suite->addTestSuite('HTML_QuickForm2_Renderer_StubTest');
+        $renderer->setOption('group_errors', false);
+        $form->render($renderer);
+        $this->assertEquals(array(), $renderer->getErrors());
 
-        return $suite;
+        $renderer->setOption('group_errors', true);
+        $form->render($renderer);
+        $this->assertEquals(array('anElement' => 'an error'), $renderer->getErrors());
     }
-}
 
-if (PHPUnit_MAIN_METHOD == 'QuickForm2_Renderer_AllTests::main') {
-    QuickForm2_Renderer_AllTests::main();
+    public function testGroupHiddens()
+    {
+        $form     = new HTML_QuickForm2('testGroupHiddens', 'post', null, false);
+        $hidden   = $form->addHidden('aHiddenElement');
+        $renderer = HTML_QuickForm2_Renderer::factory('stub');
+
+        $renderer->setOption('group_hiddens', false);
+        $form->render($renderer);
+        $this->assertEquals(array(), $renderer->getHidden());
+
+        $renderer->setOption('group_hiddens', true);
+        $form->render($renderer);
+        $this->assertEquals(array($hidden->__toString()), $renderer->getHidden());
+    }
 }
 ?>

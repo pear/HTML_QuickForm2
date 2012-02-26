@@ -78,7 +78,8 @@ abstract class HTML_QuickForm2_Renderer
     private static $_types = array(
         'callback' => array('HTML_QuickForm2_Renderer_Callback', null),
         'default'  => array('HTML_QuickForm2_Renderer_Default', null),
-        'array'    => array('HTML_QuickForm2_Renderer_Array', null)
+        'array'    => array('HTML_QuickForm2_Renderer_Array', null),
+        'stub'     => array('HTML_QuickForm2_Renderer_Stub', null)
     );
 
    /**
@@ -88,7 +89,8 @@ abstract class HTML_QuickForm2_Renderer
     private static $_pluginClasses = array(
         'callback' => array(),
         'default'  => array(),
-        'array'    => array()
+        'array'    => array(),
+        'stub'     => array()
     );
 
    /**
