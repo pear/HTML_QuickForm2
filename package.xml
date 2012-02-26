@@ -645,6 +645,7 @@ Other features and changes
    <install as="QuickForm2/Renderer/ArrayTest.php" name="tests/QuickForm2/Renderer/ArrayTest.php" />
    <install as="QuickForm2/Renderer/CallbackTest.php" name="tests/QuickForm2/Renderer/CallbackTest.php" />
    <install as="QuickForm2/Renderer/DefaultTest.php" name="tests/QuickForm2/Renderer/DefaultTest.php" />
+   <install as="QuickForm2/Renderer/StubTest.php" name="tests/QuickForm2/Renderer/StubTest.php" />
    <install as="QuickForm2/Rule/AllTests.php" name="tests/QuickForm2/Rule/AllTests.php" />
    <install as="QuickForm2/Rule/CallbackTest.php" name="tests/QuickForm2/Rule/CallbackTest.php" />
    <install as="QuickForm2/Rule/CompareTest.php" name="tests/QuickForm2/Rule/CompareTest.php" />
