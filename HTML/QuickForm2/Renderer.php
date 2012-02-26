@@ -330,6 +330,16 @@ abstract class HTML_QuickForm2_Renderer
     }
 
    /**
+    * Resets the accumulated data
+    *
+    * This method is called automatically by startForm() method, but should
+    * be called manually before calling other rendering methods separately.
+    *
+    * @return HTML_QuickForm2_Renderer
+    */
+    abstract public function reset();
+
+   /**
     * Renders a generic element
     *
     * @param HTML_QuickForm2_Node $element Element being rendered

@@ -140,7 +140,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
    /**
     * Array with references to 'elements' fields of currently processed containers
-    * @var unknown_type
+    * @var array
     */
     public $containers = array();
 
@@ -167,7 +167,6 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     protected function exportMethods()
     {
         return array(
-            'reset',
             'toArray',
             'setStyleForId'
         );

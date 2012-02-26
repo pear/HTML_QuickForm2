@@ -183,7 +183,6 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     protected function exportMethods()
     {
         return array(
-            'reset',
             'setCallbackForClass',
             'setCallbackForId',
             'setErrorGroupCallback',

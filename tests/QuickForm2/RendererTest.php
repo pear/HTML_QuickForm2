@@ -70,6 +70,7 @@ class HTML_QuickForm2_FakeRenderer extends HTML_QuickForm2_Renderer
     public function finishContainer(HTML_QuickForm2_Node $container) {}
     public function startGroup(HTML_QuickForm2_Node $group) {}
     public function finishGroup(HTML_QuickForm2_Node $group) {}
+    public function reset() {}
 }
 
 /**

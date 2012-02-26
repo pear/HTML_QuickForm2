@@ -154,7 +154,6 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     protected function exportMethods()
     {
         return array(
-            'reset',
             'setTemplateForClass',
             'setTemplateForId',
             'setErrorTemplate',

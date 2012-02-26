@@ -240,6 +240,12 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         return $this;
     }
 
+    public function reset()
+    {
+        $this->_renderer->reset();
+        return $this;
+    }
+
     public function renderElement(HTML_QuickForm2_Node $element)
     {
         $this->_renderer->renderElement($element);
