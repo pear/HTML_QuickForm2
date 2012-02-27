@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -270,6 +270,19 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('third value', $e3->getValue());
         $this->assertEquals('fourth value', $e4->getValue());
         $this->assertEquals('fifth value', $e5->getValue());
+    }
+
+   /**
+    * Should be possible to use setValue() fluently
+    *
+    * @link https://pear.php.net/bugs/bug.php?id=19307
+    */
+    public function testBug19307()
+    {
+        $foo = new HTML_QuickForm2_Container_Group('foo');
+        $foo->addText('bar');
+
+        $this->assertSame($foo, $foo->setValue(array('bar' => 'a value')));
     }
 
     public function testGetValue()

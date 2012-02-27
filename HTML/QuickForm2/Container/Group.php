@@ -171,6 +171,8 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
                 }
             }
         }
+
+        return $this;
     }
 
 
