@@ -2,7 +2,7 @@
  *
  * Default stylesheet for HTML_QuickForm2 forms.
  *
- * Based on stylesheet from HTML_QuickForm_Renderer_Tableless package 
+ * Based on stylesheet from HTML_QuickForm_Renderer_Tableless package
  * by Mark Wiesemann <wiesemann at php dot net>
  *
  * $Id$
@@ -30,6 +30,14 @@
 .quickform label {
     margin: 0 0 0 0.5em;
 }
+.quickform p.label {
+    float: left;
+    width: 30%;
+    padding: 0;
+    margin: 0.7em 0 0 0;
+    text-align: right;
+}
+/* deprecated, used pre-2.0.0beta1 */
 .quickform label.element {
     display: block;
     float: left;
@@ -55,15 +63,15 @@
 .quickform div.element {
     display: inline;
     float: left;
-    margin: 0.5em 0 0 1em;
+    margin: 0.5em 0 0.2em 1em;
     padding: 0;
 }
 .quickform div.reqnote {
     clear: both;
-    font-size: 80%; 
+    font-size: 80%;
     margin: 0.5em 0 0 1em;
 }
-.quickform span.error, .quickform span.required {
+.quickform span.error, .quickform span.required, .quickform div.reqnote em {
     color: red;
 }
 .quickform div.error {
