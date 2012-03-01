@@ -237,8 +237,8 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
                 if (empty($container)) {
                     $token = 0;
                 } else {
-                    $keys  = array_keys($container);
-                    $token = end($keys);
+                    $keys  = array_filter(array_keys($container), 'is_numeric');
+                    $token = empty($keys) ? 0 : end($keys);
                     while (isset($container[$token])) {
                         $token++;
                     }
