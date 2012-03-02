@@ -99,3 +99,37 @@ qf.rules.nonempty = function(value, minValid)
     }
 };
 
+/**
+ * Tests that a given value is in a commonly used email address format.
+ *
+ * @param   {*} value The email address to test
+ * @returns {boolean}
+ */
+qf.rules.email = function(value)
+{
+    var i = 0;
+    if (qf.rules.empty(value)) {
+        return true;
+    }
+    var parts = value.split("@");
+    if (parts.length != 2) {
+        return false;
+    }
+    if (parts[0].length > 64) {
+        return false;
+    }
+    if (parts[1].length < 4 && parts[1].length > 255) {
+        return false;
+    }
+    var locals = parts[0].split(".");
+    for (i = 0; i < locals.length; i++) {
+        var local = locals[i];
+        if (!(/^[a-z0-9\_\+\-]+$/i.test(local))) {
+            return false;
+        }
+    }
+    if (!(/^([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])(\.([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])){0,10}\.([a-z]{2,}){1}$/i.test(parts[1]))) {
+        return false;
+    }
+    return true;
+};

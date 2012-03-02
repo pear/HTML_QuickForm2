@@ -122,7 +122,8 @@ class HTML_QuickForm2_Factory
         'mimetype'      => array('HTML_QuickForm2_Rule_MimeType', null),
         'each'          => array('HTML_QuickForm2_Rule_Each', null),
         'notcallback'   => array('HTML_QuickForm2_Rule_NotCallback', null),
-        'notregex'      => array('HTML_QuickForm2_Rule_NotRegex', null)
+        'notregex'      => array('HTML_QuickForm2_Rule_NotRegex', null),
+        'email'         => array('HTML_QuickForm2_Rule_Email', null)
     );
 
 
