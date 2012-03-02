@@ -59,6 +59,7 @@ require_once dirname(__FILE__) . '/MimeTypeTest.php';
 require_once dirname(__FILE__) . '/EachTest.php';
 require_once dirname(__FILE__) . '/NotCallbackTest.php';
 require_once dirname(__FILE__) . '/NotRegexTest.php';
+require_once dirname(__FILE__) . '/EmailTest.php';
 
 class QuickForm2_Rule_AllTests
 {
@@ -86,6 +87,7 @@ class QuickForm2_Rule_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Rule_EachTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_NotCallbackTest');
         $suite->addTestSuite('HTML_QuickForm2_Rule_NotRegexTest');
+        $suite->addTestSuite('HTML_QuickForm2_Rule_EmailTest');
 
         return $suite;
     }
