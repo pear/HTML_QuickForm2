@@ -44,7 +44,7 @@ qf.events = {
      * @param   {Element}    element
      * @param   {String}     type
      * @param   {function()} handler
-     * @param   {boolean}    capture
+     * @param   {boolean}    [capture]
      */
     addListener: function(element, type, handler, capture)
     {
@@ -113,6 +113,58 @@ qf.events = {
         }
 
         return e;
+    },
+
+    /**
+     * Attaches cross-browser "change" and "blur" handlers to form object
+     *
+     * @param {HTMLFormElement} form
+     * @param {function()}      handler
+     */
+    addLiveValidationHandler: function(form, handler)
+    {
+        if (this.test.changeBubbles) {
+            this.addListener(form, 'change', handler, true);
+
+        } else {
+            // Simulated bubbling change event for IE. Based on jQuery code,
+            // works by on-demand attaching of onchange handlers to form elements
+            // with a special case for checkboxes and radios
+            this.addListener(form, 'beforeactivate', function(event) {
+                var el = qf.events.fixEvent(event).target;
+
+                if (/^(?:textarea|input|select)$/i.test(el.nodeName) && !el._onchange_attached) {
+                    if (el.type !== 'checkbox' && el.type !== 'radio') {
+                        qf.events.addListener(el, 'change', handler);
+
+                    } else {
+                        // IE doesn't fire onchange on checkboxes and radios until blur
+                        // so we fire a fake change onclick after "checked" property
+                        // was changed
+                        qf.events.addListener(el, 'propertychange', function(event) {
+                            if (qf.events.fixEvent(event).propertyName === 'checked') {
+                                this._checked_changed = true;
+                            }
+                        });
+                        qf.events.addListener(el, 'click', function(event) {
+                            if (this._checked_changed) {
+                                event = qf.events.fixEvent(event);
+                                event._type = 'change';
+                                this._checked_changed = false;
+                                handler(event);
+                            }
+                        });
+                    }
+                    el._onchange_attached = true;
+                }
+            });
+        }
+
+        if (qf.events.test.focusinBubbles) {
+            this.addListener(form, 'focusout', handler, true);
+        } else {
+            this.addListener(form, 'blur', handler, true);
+        }
     }
 };
 

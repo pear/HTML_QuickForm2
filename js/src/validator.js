@@ -88,6 +88,7 @@ qf.Validator = function(form, rules)
     this.classes = {
         error:    'error',
         valid:    'valid',
+        message:  'error',
         ancestor: 'element'
     };
 
@@ -96,41 +97,7 @@ qf.Validator = function(form, rules)
 
     for (var i = 0, rule; rule = this.rules[i]; i++) {
         if (rule instanceof qf.LiveRule) {
-            if (qf.events.test.changeBubbles) {
-                qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
-
-            } else {
-                // This is IE with change event not bubbling... We don't
-                // terribly need an onchange event here, only an event that
-                // fires sometime around onchange. Therefore no checks whether
-                // a value actually *changed*
-                qf.events.addListener(form, 'click', function (event) {
-                    event  = qf.events.fixEvent(event);
-                    var el = event.target;
-                    if ('select' == el.nodeName.toLowerCase()
-                        || 'input' == el.nodeName.toLowerCase()
-                         && ('checkbox' == el.type || 'radio' == el.type)
-                    ) {
-                        qf.Validator.liveHandler(event);
-                    }
-                });
-                qf.events.addListener(form, 'keydown', function (event) {
-                    event  = qf.events.fixEvent(event);
-                    var el = event.target, type = ('type' in el)? el.type: '';
-                    if ((13 == event.keyCode && 'textarea' != el.nodeName.toLowerCase())
-                        || (32 == event.keyCode && ('checkbox' == type || 'radio' == type))
-                        || 'select-multiple' == type
-                    ) {
-                        qf.Validator.liveHandler(event);
-                    }
-                });
-            }
-
-            if (qf.events.test.focusinBubbles) {
-                qf.events.addListener(form, 'focusout', qf.Validator.liveHandler, true);
-            } else {
-                qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
-            }
+            qf.events.addLiveValidationHandler(form, qf.Validator.liveHandler);
             break;
         }
     }
@@ -158,7 +125,13 @@ qf.Validator.liveHandler = function (event)
     event    = qf.events.fixEvent(event);
     var form = event.target.form;
     if (form.validator) {
-        form.validator.runLive(event);
+        var id   = event.target.id,
+            type = event._type || event.type;
+        // Prevent duplicate validation run on blur event fired immediately after change
+        if ('change' === type || !form.validator._lastTarget || id !== form.validator._lastTarget) {
+            form.validator.runLive(event);
+        }
+        form.validator._lastTarget = id;
     }
 };
 
@@ -186,7 +159,7 @@ qf.Validator.prototype = {
         qf.classes.add(parent, this.classes.error);
 
         var error = document.createElement('span');
-        error.className = this.classes.error;
+        error.className = this.classes.message;
         error.appendChild(document.createTextNode(errorMessage));
         error.appendChild(document.createElement('br'));
         if ('fieldset' != parent.nodeName.toLowerCase()) {
@@ -354,7 +327,7 @@ qf.Validator.prototype = {
 
         var spans = parent.getElementsByTagName('span');
         for (i = spans.length - 1; i >= 0; i--) {
-            if (qf.classes.has(spans[i], this.classes.error)) {
+            if (qf.classes.has(spans[i], this.classes.message)) {
                 spans[i].parentNode.removeChild(spans[i]);
             }
         }

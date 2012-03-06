@@ -51,12 +51,14 @@
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
 Feature additions
-  * Test suite now properly runs from SVN checkout and under PHPUnit 3.6
+  * Added 'email' Rule (request #16906)
   * Added Stub Renderer which does minimal form processing. Useful for forms
     containing Javascript that are output manually.
   * It is easier to customize client-side validation: all methods of
     qf.Validator are public, CSS class names for validation status are kept in
     validator's property.
+  * Test suite now properly runs from SVN checkout and under PHPUnit 3.6
+  * PHPDoc cleanup, added @method annotations to Container
 
 Bug fixes
   * Fixed running tests for elements separately (bug #19039)
@@ -69,9 +71,9 @@ Bug fixes
   * Container::validate() will now return false if any contained element
     has an error message set
   * Added abstract render() method to Node and abstract reset() to Renderer
-  * PHPDoc cleanup, added @method annotations to Container
   * DefaultAction element no longer contains invalid 'width' and 'height'
     attributes, 'src' attribute defaults to 'data:' URL
+  * 'Live' client-side rules run only once on changing the form field
 
 Backwards compatibility issues
   * Items marked deprecated in version 0.6.0 are now removed
@@ -231,6 +233,9 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Each.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Email.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="Empty.php" role="php">
@@ -436,6 +441,9 @@ Backwards compatibility issues
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="EachTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="EmailTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
       <file name="EmptyTest.php" role="test">
@@ -666,6 +674,7 @@ Backwards compatibility issues
    <install as="QuickForm2/Rule/CallbackTest.php" name="tests/QuickForm2/Rule/CallbackTest.php" />
    <install as="QuickForm2/Rule/CompareTest.php" name="tests/QuickForm2/Rule/CompareTest.php" />
    <install as="QuickForm2/Rule/EachTest.php" name="tests/QuickForm2/Rule/EachTest.php" />
+   <install as="QuickForm2/Rule/EmailTest.php" name="tests/QuickForm2/Rule/EmailTest.php" />
    <install as="QuickForm2/Rule/EmptyTest.php" name="tests/QuickForm2/Rule/EmptyTest.php" />
    <install as="QuickForm2/Rule/LengthTest.php" name="tests/QuickForm2/Rule/LengthTest.php" />
    <install as="QuickForm2/Rule/MaxFileSizeTest.php" name="tests/QuickForm2/Rule/MaxFileSizeTest.php" />

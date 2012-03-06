@@ -101,7 +101,7 @@ qf.form = (function() {
             if (typeof el == 'string') {
                 el = document.getElementById(el);
             }
-            if (!el || (!'type' in el) || el.disabled) {
+            if (!el || !('type' in el) || el.disabled) {
                 return null;
             }
             switch (el.type.toLowerCase()) {

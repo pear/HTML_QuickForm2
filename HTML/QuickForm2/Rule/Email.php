@@ -52,19 +52,19 @@ require_once 'HTML/QuickForm2/Rule.php';
  * Validates email address
  *
  * There are many different ways to validate an email address.
- * Our goal is not to fully be RFC822 compatible, if this is your need, 
+ * Our goal is not to fully be RFC822 compatible, if this is your need,
  * you can try the PHP Filter function with FILTER_VALIDATE_EMAIL.
- * Our method was designed with registration forms in mind, where a user 
+ * Our method was designed with registration forms in mind, where a user
  * usually enters her email address in order to receive a newsletter or
  * a confirmation, for example.
- * So unlike FILTER_VALIDATE_EMAIL, we do not consider addresses like 
- * root@[127.0.0.1] or root@[IPv6:::] valid. We also do not accept addresses 
+ * So unlike FILTER_VALIDATE_EMAIL, we do not consider addresses like
+ * root@[127.0.0.1] or root@[IPv6:::] valid. We also do not accept addresses
  * with comments, quotes, escapes. We only accept the following
- * special characters +_-. As recommended in the RFC, the local part must 
- * not be longer than 64 characters and the domain part 255. This means 
- * that the address can be up to 320 characters long. The number of 
- * subdomains is arbitrary limited to 10. You can use the maxlength rule in 
- * conjunction if you need to enforce shorter addresses. A length of 100 
+ * special characters +_-. As recommended in the RFC, the local part must
+ * not be longer than 64 characters and the domain part 255. This means
+ * that the address can be up to 320 characters long. The number of
+ * subdomains is arbitrary limited to 10. You can use the maxlength rule in
+ * conjunction if you need to enforce shorter addresses. A length of 100
  * for the whole address is usually far enough.
  *
  * @category HTML
@@ -98,7 +98,7 @@ class HTML_QuickForm2_Rule_Email extends HTML_QuickForm2_Rule
             return false;
         }
         $domainlen = $len - $locallen;
-        if ($domainlen < 4 && $domainlen > 255) {
+        if ($domainlen < 4 || $domainlen > 255) {
             return false;
         }
         $locals = explode('.', $parts[0]);

@@ -5,11 +5,11 @@
  */
 qf.rules = qf.rules || {};
 
-// NB: we do not overwrite qf.rules namespace because some custom rules may be already added 
+// NB: we do not overwrite qf.rules namespace because some custom rules may be already added
 
 /**
  * Returns true if all the given callbacks return true, false otherwise.
- * 
+ *
  * Client-side implementation of HTML_QuickForm2_Rule_Each, consult PHPDoc
  * description there.
  *
@@ -28,7 +28,7 @@ qf.rules.each = function(callbacks)
 
 /**
  * Tests that a given value is empty.
- * 
+ *
  * A scalar value is empty if it either null, undefined or an empty string. An
  * array is empty if it contains only empty values.
  *
@@ -94,7 +94,7 @@ qf.rules.nonempty = function(value, minValid)
         return valid >= minValid;
 
     } else {
-        // in Javascript (null != '') is true! 
+        // in Javascript (null != '') is true!
         return '' != value && 'undefined' != qf.typeOf(value) && 'null' != qf.typeOf(value);
     }
 };
@@ -107,7 +107,6 @@ qf.rules.nonempty = function(value, minValid)
  */
 qf.rules.email = function(value)
 {
-    var i = 0;
     if (qf.rules.empty(value)) {
         return true;
     }
@@ -118,18 +117,14 @@ qf.rules.email = function(value)
     if (parts[0].length > 64) {
         return false;
     }
-    if (parts[1].length < 4 && parts[1].length > 255) {
+    if (parts[1].length < 4 || parts[1].length > 255) {
         return false;
     }
     var locals = parts[0].split(".");
-    for (i = 0; i < locals.length; i++) {
-        var local = locals[i];
-        if (!(/^[a-z0-9\_\+\-]+$/i.test(local))) {
+    for (var i = 0; i < locals.length; i++) {
+        if (!(/^[a-z0-9_\+\-]+$/i.test(locals[i]))) {
             return false;
         }
     }
-    if (!(/^([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])(\.([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])){0,10}\.([a-z]{2,}){1}$/i.test(parts[1]))) {
-        return false;
-    }
-    return true;
+    return /^([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])(\.([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])){0,10}\.([a-z]{2,}){1}$/i.test(parts[1]);
 };

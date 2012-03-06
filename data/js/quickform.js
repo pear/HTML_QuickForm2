@@ -458,7 +458,7 @@ qf.form = (function() {
             if (typeof el == 'string') {
                 el = document.getElementById(el);
             }
-            if (!el || (!'type' in el) || el.disabled) {
+            if (!el || !('type' in el) || el.disabled) {
                 return null;
             }
             switch (el.type.toLowerCase()) {
@@ -655,7 +655,7 @@ qf.events = {
      * @param   {Element}    element
      * @param   {String}     type
      * @param   {function()} handler
-     * @param   {boolean}    capture
+     * @param   {boolean}    [capture]
      */
     addListener: function(element, type, handler, capture)
     {
@@ -724,6 +724,58 @@ qf.events = {
         }
 
         return e;
+    },
+
+    /**
+     * Attaches cross-browser "change" and "blur" handlers to form object
+     *
+     * @param {HTMLFormElement} form
+     * @param {function()}      handler
+     */
+    addLiveValidationHandler: function(form, handler)
+    {
+        if (this.test.changeBubbles) {
+            this.addListener(form, 'change', handler, true);
+
+        } else {
+            // Simulated bubbling change event for IE. Based on jQuery code,
+            // works by on-demand attaching of onchange handlers to form elements
+            // with a special case for checkboxes and radios
+            this.addListener(form, 'beforeactivate', function(event) {
+                var el = qf.events.fixEvent(event).target;
+
+                if (/^(?:textarea|input|select)$/i.test(el.nodeName) && !el._onchange_attached) {
+                    if (el.type !== 'checkbox' && el.type !== 'radio') {
+                        qf.events.addListener(el, 'change', handler);
+
+                    } else {
+                        // IE doesn't fire onchange on checkboxes and radios until blur
+                        // so we fire a fake change onclick after "checked" property
+                        // was changed
+                        qf.events.addListener(el, 'propertychange', function(event) {
+                            if (qf.events.fixEvent(event).propertyName === 'checked') {
+                                this._checked_changed = true;
+                            }
+                        });
+                        qf.events.addListener(el, 'click', function(event) {
+                            if (this._checked_changed) {
+                                event = qf.events.fixEvent(event);
+                                event._type = 'change';
+                                this._checked_changed = false;
+                                handler(event);
+                            }
+                        });
+                    }
+                    el._onchange_attached = true;
+                }
+            });
+        }
+
+        if (qf.events.test.focusinBubbles) {
+            this.addListener(form, 'focusout', handler, true);
+        } else {
+            this.addListener(form, 'blur', handler, true);
+        }
     }
 };
 
@@ -815,6 +867,7 @@ qf.Validator = function(form, rules)
     this.classes = {
         error:    'error',
         valid:    'valid',
+        message:  'error',
         ancestor: 'element'
     };
 
@@ -823,41 +876,7 @@ qf.Validator = function(form, rules)
 
     for (var i = 0, rule; rule = this.rules[i]; i++) {
         if (rule instanceof qf.LiveRule) {
-            if (qf.events.test.changeBubbles) {
-                qf.events.addListener(form, 'change', qf.Validator.liveHandler, true);
-
-            } else {
-                // This is IE with change event not bubbling... We don't
-                // terribly need an onchange event here, only an event that
-                // fires sometime around onchange. Therefore no checks whether
-                // a value actually *changed*
-                qf.events.addListener(form, 'click', function (event) {
-                    event  = qf.events.fixEvent(event);
-                    var el = event.target;
-                    if ('select' == el.nodeName.toLowerCase()
-                        || 'input' == el.nodeName.toLowerCase()
-                         && ('checkbox' == el.type || 'radio' == el.type)
-                    ) {
-                        qf.Validator.liveHandler(event);
-                    }
-                });
-                qf.events.addListener(form, 'keydown', function (event) {
-                    event  = qf.events.fixEvent(event);
-                    var el = event.target, type = ('type' in el)? el.type: '';
-                    if ((13 == event.keyCode && 'textarea' != el.nodeName.toLowerCase())
-                        || (32 == event.keyCode && ('checkbox' == type || 'radio' == type))
-                        || 'select-multiple' == type
-                    ) {
-                        qf.Validator.liveHandler(event);
-                    }
-                });
-            }
-
-            if (qf.events.test.focusinBubbles) {
-                qf.events.addListener(form, 'focusout', qf.Validator.liveHandler, true);
-            } else {
-                qf.events.addListener(form, 'blur', qf.Validator.liveHandler, true);
-            }
+            qf.events.addLiveValidationHandler(form, qf.Validator.liveHandler);
             break;
         }
     }
@@ -885,7 +904,13 @@ qf.Validator.liveHandler = function (event)
     event    = qf.events.fixEvent(event);
     var form = event.target.form;
     if (form.validator) {
-        form.validator.runLive(event);
+        var id   = event.target.id,
+            type = event._type || event.type;
+        // Prevent duplicate validation run on blur event fired immediately after change
+        if ('change' === type || !form.validator._lastTarget || id !== form.validator._lastTarget) {
+            form.validator.runLive(event);
+        }
+        form.validator._lastTarget = id;
     }
 };
 
@@ -913,7 +938,7 @@ qf.Validator.prototype = {
         qf.classes.add(parent, this.classes.error);
 
         var error = document.createElement('span');
-        error.className = this.classes.error;
+        error.className = this.classes.message;
         error.appendChild(document.createTextNode(errorMessage));
         error.appendChild(document.createElement('br'));
         if ('fieldset' != parent.nodeName.toLowerCase()) {
@@ -1081,7 +1106,7 @@ qf.Validator.prototype = {
 
         var spans = parent.getElementsByTagName('span');
         for (i = spans.length - 1; i >= 0; i--) {
-            if (qf.classes.has(spans[i], this.classes.error)) {
+            if (qf.classes.has(spans[i], this.classes.message)) {
                 spans[i].parentNode.removeChild(spans[i]);
             }
         }
@@ -1097,11 +1122,11 @@ qf.Validator.prototype = {
  */
 qf.rules = qf.rules || {};
 
-// NB: we do not overwrite qf.rules namespace because some custom rules may be already added 
+// NB: we do not overwrite qf.rules namespace because some custom rules may be already added
 
 /**
  * Returns true if all the given callbacks return true, false otherwise.
- * 
+ *
  * Client-side implementation of HTML_QuickForm2_Rule_Each, consult PHPDoc
  * description there.
  *
@@ -1120,7 +1145,7 @@ qf.rules.each = function(callbacks)
 
 /**
  * Tests that a given value is empty.
- * 
+ *
  * A scalar value is empty if it either null, undefined or an empty string. An
  * array is empty if it contains only empty values.
  *
@@ -1186,8 +1211,37 @@ qf.rules.nonempty = function(value, minValid)
         return valid >= minValid;
 
     } else {
-        // in Javascript (null != '') is true! 
+        // in Javascript (null != '') is true!
         return '' != value && 'undefined' != qf.typeOf(value) && 'null' != qf.typeOf(value);
     }
 };
 
+/**
+ * Tests that a given value is in a commonly used email address format.
+ *
+ * @param   {*} value The email address to test
+ * @returns {boolean}
+ */
+qf.rules.email = function(value)
+{
+    if (qf.rules.empty(value)) {
+        return true;
+    }
+    var parts = value.split("@");
+    if (parts.length != 2) {
+        return false;
+    }
+    if (parts[0].length > 64) {
+        return false;
+    }
+    if (parts[1].length < 4 || parts[1].length > 255) {
+        return false;
+    }
+    var locals = parts[0].split(".");
+    for (var i = 0; i < locals.length; i++) {
+        if (!(/^[a-z0-9_\+\-]+$/i.test(locals[i]))) {
+            return false;
+        }
+    }
+    return /^([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])(\.([a-z0-9][a-z0-9\-]*[a-z0-9]|[a-z0-9])){0,10}\.([a-z]{2,}){1}$/i.test(parts[1]);
+};
