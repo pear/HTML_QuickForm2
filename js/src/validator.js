@@ -120,18 +120,19 @@ qf.Validator.submitHandler = function(event)
  * Event handler for form's onblur and onchange events
  * @param {Event} event
  */
-qf.Validator.liveHandler = function (event)
+qf.Validator.liveHandler = function(event)
 {
-    event    = qf.events.fixEvent(event);
-    var form = event.target.form;
-    if (form.validator) {
-        var id   = event.target.id,
-            type = event._type || event.type;
+    event = qf.events.fixEvent(event);
+    // need to check that target has a form property: http://news.php.net/php.pear.general/31445
+    if (event.target.form && event.target.form.validator) {
+        var id        = event.target.id,
+            type      = event._type || event.type,
+            validator = event.target.form.validator;
         // Prevent duplicate validation run on blur event fired immediately after change
-        if ('change' === type || !form.validator._lastTarget || id !== form.validator._lastTarget) {
-            form.validator.runLive(event);
+        if ('change' === type || !validator._lastTarget || id !== validator._lastTarget) {
+            validator.runLive(event);
         }
-        form.validator._lastTarget = id;
+        validator._lastTarget = id;
     }
 };
 
