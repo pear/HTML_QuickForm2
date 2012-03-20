@@ -122,7 +122,7 @@ qf.rules.email = function(value)
     }
     var locals = parts[0].split(".");
     for (var i = 0; i < locals.length; i++) {
-        if (!(/^[a-z0-9_\+\-]+$/i.test(locals[i]))) {
+        if (!(/^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+$/.test(locals[i]))) {
             return false;
         }
     }

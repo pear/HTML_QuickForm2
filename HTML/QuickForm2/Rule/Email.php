@@ -51,16 +51,23 @@ require_once 'HTML/QuickForm2/Rule.php';
 /**
  * Validates email address
  *
- * There are many different ways to validate an email address.
- * Our goal is not to fully be RFC822 compatible, if this is your need,
- * you can try the PHP Filter function with FILTER_VALIDATE_EMAIL.
- * Our method was designed with registration forms in mind, where a user
- * usually enters her email address in order to receive a newsletter or
- * a confirmation, for example.
- * So unlike FILTER_VALIDATE_EMAIL, we do not consider addresses like
- * root@[127.0.0.1] or root@[IPv6:::] valid. We also do not accept addresses
- * with comments, quotes, escapes. We only accept the following
- * special characters +_-. As recommended in the RFC, the local part must
+ * Email address format as defined in RFCs 822, 2822 and 5322 is quite complex
+ * and has many uncommon features. This rule was designed with registration
+ * forms in mind, where a user usually enters her email address
+ * in order to receive a newsletter or a confirmation. So it currently
+ * supports a most common subset of email address format, disallowing
+ *  - domain literals like root@[127.0.0.1] or root@[IPv6:::]
+ *  - quoted strings in local part "John Doe"@example.com
+ *
+ * Support for these may be added in the future, until then you may consider
+ * using PHP filter_var() function with FILTER_VALIDATE_EMAIL. Note also that
+ * the characters "-", "_", "+", "!", "#", "$", "%", "&", "'", "*", "/",  "=",
+ * "?", "^", "`", "{", "|", "}", "~" are valid in the local part of email
+ * address according to RFC, though most of these are highly improbable in any
+ * reallife address. We may add a means of limiting this list in the future,
+ * for now you may use the 'notregex' rule to disallow some of these if needed.
+ *
+ * As recommended in the RFC, the local part must
  * not be longer than 64 characters and the domain part 255. This means
  * that the address can be up to 320 characters long. The number of
  * subdomains is arbitrary limited to 10. You can use the maxlength rule in
@@ -101,9 +108,8 @@ class HTML_QuickForm2_Rule_Email extends HTML_QuickForm2_Rule
         if ($domainlen < 4 || $domainlen > 255) {
             return false;
         }
-        $locals = explode('.', $parts[0]);
-        foreach ($locals as $local) {
-            if (!preg_match('/^[a-z0-9\_\+\-]+$/iD', $local)) {
+        foreach (explode('.', $parts[0]) as $local) {
+            if (!preg_match('/^[A-Za-z0-9!#$%&\'*+\\/=?^_`{|}~-]+$/D', $local)) {
                 return false;
             }
         }

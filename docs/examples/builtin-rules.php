@@ -101,6 +101,8 @@ $form->addElement('hidden', 'MAX_FILE_SIZE')->setValue('102400');
 $fsAuth = $form->addElement('fieldset')->setLabel('Auth credentials');
 $username = $fsAuth->addElement('text', 'testUsername', array('style' => 'width: 200px;'))
                    ->setLabel('Username (letters only):');
+$email = $fsAuth->addElement('text', 'testEmail', array('style' => 'width: 200px'))
+                ->setLabel('Email:');
 
 $fsPasswords = $fsAuth->addElement('fieldset')
                       ->setLabel('Supply password only if you want to change it');
@@ -116,6 +118,8 @@ $username->addRule('required', 'Username is required', null,
                    HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 $username->addRule('regex', 'Username should contain only letters', '/^[a-zA-Z]+$/',
                    HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
+$email->addRule('email', 'Email address is invalid', null,
+                HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 // old password should be either left blank or be equal to 'qwerty'
 $oldPassword->addRule('empty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER)

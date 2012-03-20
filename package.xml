@@ -26,6 +26,8 @@
      HTML_QuickForm_Renderer_Tableless)
    * Renderer plugins for elements with complex rendering needs
    * Ability to chain validation rules with 'and' and 'or'
+   * Client-side validation can run &quot;live&quot; on changing the form fields,
+     validation errors are displayed near the fields instead of in alert()
  </description>
  <lead>
   <name>Alexey Borzov</name>
@@ -39,7 +41,7 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2012-03-31</date>
+ <date>2012-03-20</date>
  <version>
   <release>2.0.0beta1</release>
   <api>2.0.0</api>
@@ -73,7 +75,8 @@ Bug fixes
   * Added abstract render() method to Node and abstract reset() to Renderer
   * DefaultAction element no longer contains invalid 'width' and 'height'
     attributes, 'src' attribute defaults to 'data:' URL
-  * 'Live' client-side rules run only once on changing the form field
+  * 'Live' client-side rules run only once on changing the form field,
+    prevent errors when form HTML contains links
 
 Backwards compatibility issues
   * Items marked deprecated in version 0.6.0 are now removed

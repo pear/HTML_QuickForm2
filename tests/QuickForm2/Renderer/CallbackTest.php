@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2011, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -86,7 +86,7 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
 
     public static function _renderTestElementWithError($renderer, $element)
     {
-        if (($error = $element->getError()) && $error && 
+        if (($error = $element->getError()) && $error &&
             !$renderer->getOption('group_errors')) {
             return 'an error!'.$element.$error;
         } else {
@@ -334,16 +334,16 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
         $class= get_class($this);
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForClass(
-                'HTML_QuickForm2_Element_InputText', 
+                'HTML_QuickForm2_Element_InputText',
                 array($class, '_renderGroupInputText')
             )->setElementCallbackForGroupClass(
                 'HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input',
                 array($class, '_renderGroupInput')
             )->setElementCallbackForGroupId(
-                'testRenderGroup', 'HTML_QuickForm2_Element', 
+                'testRenderGroup', 'HTML_QuickForm2_Element',
                 array($class, '_renderGroup')
             )->setCallbackForId(
-                'testRenderGroupedElement', 
+                'testRenderGroupedElement',
                 array($class, '_renderGroupedElement')
             );
 
