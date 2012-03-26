@@ -133,42 +133,53 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
         foreach ($value as $k => $v) {
             $val = array($k => $v);
-            $found = null;
             foreach ($elements as $i => $tokens) {
                 do {
                     $token = array_shift($tokens);
                     $numeric = false;
                     if ($token == "") {
+                        // special case for a group of checkboxes
+                        if (empty($tokens) && is_array($val)
+                            && $this->elements[$i] instanceof HTML_QuickForm2_Element_InputCheckbox
+                        ) {
+                            if (in_array($this->elements[$i]->getAttribute('value'),
+                                array_map('strval', $val), true)
+                            ) {
+                                $this->elements[$i]->setAttribute('checked');
+                                // don't want to remove 'checked' on next iteration
+                                unset($elements[$i]);
+                            } else {
+                                $this->elements[$i]->removeAttribute('checked');
+                            }
+                            continue 2;
+                        }
                         // Deal with numeric indexes in values
                         $token = $index;
                         $numeric = true;
                     }
-                    if (isset($val[$token])) {
+                    if (!isset($val[$token])) {
+                        // Not found, skip next iterations
+                        continue 2;
+
+                    } else {
                         // Found a value
                         $val = $val[$token];
-                        $found = $val;
                         if ($numeric) {
                             $index += 1;
                         }
-                    } else {
-                        // Not found, skip next iterations
-                        $found = null;
-                        break;
                     }
 
                 } while (!empty($tokens));
 
-                if (!is_null($found)) {
-                    // Found a value corresponding to element name
-                    $child = $this->elements[$i];
-                    $child->setValue($val);
-                    unset($val);
-                    if (!($child instanceof HTML_QuickForm2_Container_Group)) {
-                        // Speed up next iterations
-                        unset($elements[$i]);
-                    }
-                    break;
+                // Found a value corresponding to element name
+                $child = $this->elements[$i];
+                $child->setValue($val);
+                unset($val);
+                if (!($child instanceof HTML_QuickForm2_Container_Group)) {
+                    // Speed up next iterations
+                    unset($elements[$i]);
                 }
+                break;
             }
         }
 

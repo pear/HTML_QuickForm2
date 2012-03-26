@@ -399,5 +399,20 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $group->removeChild($el2);
         $this->assertEquals('baz', $el2->getName());
     }
+
+   /**
+    * Similar to bug #16806, properly set value for group of checkboxes having names like foo[]
+    * @link http://pear.php.net/bugs/bug.php?id=16806
+    */
+    public function testCheckboxGroupSetValue()
+    {
+        $group = new HTML_QuickForm2_Container_Group('boxGroup');
+        $group->addCheckbox('', array('value' => 'red'));
+        $group->addCheckbox('', array('value' => 'green'));
+        $group->addCheckbox('', array('value' => 'blue'));
+
+        $group->setValue(array('red', 'blue'));
+        $this->assertEquals(array('red', 'blue'), $group->getValue());
+    }
 }
 ?>
