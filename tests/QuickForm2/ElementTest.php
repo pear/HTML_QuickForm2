@@ -253,5 +253,15 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
         $this->testUniqueIdsGenerated();
     }
+
+    /**
+     * Prevent generating ids like "0-0" for (grouped) elements named "0"
+     * @see http://news.php.net/php.pear.general/31496
+     */
+    public function testGeneratedIdsShouldNotStartWithNumbers()
+    {
+        $el = new HTML_QuickForm2_ElementImpl('0');
+        $this->assertNotRegExp('/^\d/', $el->getId());
+    }
 }
 ?>

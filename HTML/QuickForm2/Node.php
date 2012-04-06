@@ -232,6 +232,10 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
         do {
             $token = array_shift($tokens);
+            // prevent generated ids starting with numbers
+            if ('' == $id && is_numeric($token)) {
+                $token = 'qf' . $token;
+            }
             // Handle the 'array[]' names
             if ('' === $token) {
                 if (empty($container)) {

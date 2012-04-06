@@ -127,5 +127,17 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
         );
         $boxHtml = $box->__toString();
     }
+
+   /**
+    * Explicitly setting value to 0 resulted in value="1"
+    * @see http://news.php.net/php.pear.general/31496
+    */
+    public function testValue0()
+    {
+        $box = new HTML_QuickForm2_Element_InputCheckbox(
+            'testBox', array('value' => 0)
+        );
+        $this->assertContains('value="0"', $box->__toString());
+    }
 }
 ?>
