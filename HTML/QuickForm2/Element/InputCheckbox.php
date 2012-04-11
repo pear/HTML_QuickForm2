@@ -96,6 +96,10 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
                 return;
             }
         }
+        // if *some* data sources were searched and we did not find a value -> uncheck the box
+        if (!empty($ds)) {
+            $this->removeAttribute('checked');
+        }
     }
 }
 ?>
