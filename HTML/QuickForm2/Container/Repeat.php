@@ -237,16 +237,16 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * XXX: is it good to call parent::validate() here? Need to think some more
      * @return bool
      */
     protected function validate()
     {
         $backup = $this->backupChildAttributes();
+        $valid  = true;
         $this->childErrors = array();
         foreach ($this->rowIndexes as $index) {
             $this->replaceIndexTemplates($index);
-            $this->getPrototype()->validate();
+            $valid = $this->getPrototype()->validate() && $valid;
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
                 if (strlen($error = $child->getError())) {
@@ -255,7 +255,15 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             }
             $this->restoreChildAttributes($backup);
         }
-        return parent::validate() && empty($this->childErrors);
+        foreach ($this->rules as $rule) {
+            if (strlen($this->error)) {
+                break;
+            }
+            if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
+                $rule[0]->validate();
+            }
+        }
+        return !strlen($this->error) && $valid;
     }
 
     /**
