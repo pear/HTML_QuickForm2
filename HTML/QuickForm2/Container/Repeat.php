@@ -155,8 +155,10 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                 $child->setId($id . '_' . self::INDEX_KEY);
             }
             $name = $child->getName();
-            // checkboxes and radios can have index inside "value" attribute instead
+            // checkboxes and radios can have index inside "value" attribute instead,
+            // group names should not be touched
             if (strlen($name) && false === strpos($name, self::INDEX_KEY)
+                && (!$child instanceof HTML_QuickForm2_Container || !$child->prependsName())
                 && (!$child instanceof HTML_QuickForm2_Element_InputCheckable
                     || false === strpos($child->getAttribute('value'), self::INDEX_KEY))
             ) {
@@ -229,7 +231,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         foreach ($this->rowIndexes as $index) {
             $this->replaceIndexTemplates($index);
             $values = self::arrayMerge(
-                $values, $this->getPrototype()->getChildValues($filtered)
+                $values, parent::getChildValues($filtered)
             );
             $this->restoreChildAttributes($backup);
         }
