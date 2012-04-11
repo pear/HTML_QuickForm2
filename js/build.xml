@@ -8,9 +8,11 @@
 
     <property name="js.concat.base" value="build/quickform.js" />
     <property name="js.concat.hs" value="build/quickform-hierselect.js" />
+    <property name="js.concat.repeat" value="build/quickform-repeat.js" />
     <property name="js.filelist.base" value="build/filelist.txt" />
     <property name="js.minified.base" value="build/quickform.min.js" />
     <property name="js.minified.hs" value="build/quickform-hierselect.min.js" />
+    <property name="js.minified.repeat" value="build/quickform-repeat.min.js" />
 
     <property name="release.concat" value="../data/js/" />
     <property name="release.minified" value="../data/js/min/" />
@@ -35,9 +37,17 @@
                <replaceregexp>
                    <regexp pattern="/\*\s*\$Id[^$]*\$\s*\*/\s+" replace="" />
                </replaceregexp>
-           </filterchain>           <filelist dir="src/" files="${js.src.basesecond}" />
+           </filterchain>
+           <filelist dir="src/" files="${js.src.basesecond}" />
        </append>
        <copy file="src/hierselect.js" tofile="${js.concat.hs}">
+           <filterchain>
+               <replaceregexp>
+                   <regexp pattern="@preserve\s+" replace="" />
+               </replaceregexp>
+           </filterchain>
+       </copy>
+       <copy file="src/repeat.js" tofile="${js.concat.repeat}">
            <filterchain>
                <replaceregexp>
                    <regexp pattern="@preserve\s+" replace="" />
@@ -56,6 +66,7 @@
         <foreach list="${js.src.basesecond}" param="srcname" target="appendjsfile" />
         <exec logoutput="true" command="${closure_command} --js_output_file ${js.minified.base} --flagfile ${js.filelist.base}" />
         <exec logoutput="true" command="${closure_command} --js_output_file ${js.minified.hs} --js src/hierselect.js" />
+        <exec logoutput="true" command="${closure_command} --js_output_file ${js.minified.repeat} --js src/repeat.js" />
     </target>
 
     <target name="docs" depends="init" description="Build API documentation using JSDoc toolkit">
@@ -81,6 +92,7 @@
             <fileset dir=".">
                 <include name="${js.concat.base}" />
                 <include name="${js.concat.hs}" />
+                <include name="${js.concat.repeat}" />
             </fileset>
         </copy>
         <copy todir="${release.minified}">
@@ -88,6 +100,7 @@
             <fileset dir=".">
                 <include name="${js.minified.base}" />
                 <include name="${js.minified.hs}" />
+                <include name="${js.minified.repeat}" />
             </fileset>
         </copy>
     </target>
