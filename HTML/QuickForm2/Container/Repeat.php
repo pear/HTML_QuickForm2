@@ -11,11 +11,6 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     const INDEX_KEY = ':idx:';
 
     /**
-     * @var HTML_QuickForm2_Container
-     */
-    protected $prototype = null;
-
-    /**
      * @var string
      */
     protected $identityField;
@@ -59,11 +54,11 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 
     public function setPrototype(HTML_QuickForm2_Container $prototype)
     {
-        if ($this->prototype) {
-            $this->prototype->setContainer(null);
+        if (!empty($this->elements[0])) {
+            parent::removeChild($this->elements[0]);
+            $this->elements = array();
         }
-        $prototype->setContainer($this);
-        $this->prototype = $prototype;
+        parent::appendChild($prototype);
         return $this;
     }
 
@@ -74,22 +69,17 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     */
     public function getPrototype()
     {
-        if (empty($this->prototype)) {
+        if (empty($this->elements[0])) {
             throw new HTML_QuickForm2_NotFoundException(
-                "Repeat element needs a prototype"
+                "Repeat element needs a prototype, use setPrototype()"
             );
         }
-        return $this->prototype;
+        return $this->elements[0];
     }
 
     //
     // The following methods just proxy prototype's
     //
-
-    public function getElements()
-    {
-        return $this->getPrototype()->getElements();
-    }
 
     public function appendChild(HTML_QuickForm2_Node $element)
     {
@@ -115,23 +105,6 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null
     ) {
         return $this->getPrototype()->insertBefore($element, $reference);
-    }
-
-    public function getIterator()
-    {
-        return new HTML_QuickForm2_ContainerIterator($this->getPrototype());
-    }
-
-    public function getRecursiveIterator($mode = RecursiveIteratorIterator::SELF_FIRST)
-    {
-        return new RecursiveIteratorIterator(
-            new HTML_QuickForm2_ContainerIterator($this->getPrototype()), $mode
-        );
-    }
-
-    public function count()
-    {
-        return count($this->prototype);
     }
 
     //
@@ -199,9 +172,10 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     {
         $this->appendIndexTemplates();
         $backup = array();
+        $key    = 0;
         /* @var HTML_QuickForm2_Node $child */
-        foreach ($this->getRecursiveIterator() as $key => $child) {
-            $backup[$key] = array(
+        foreach ($this->getRecursiveIterator() as $child) {
+            $backup[$key++] = array(
                 'name'  => $child->getName(),
                 'id'    => $child->getId(),
                 'value' => $child->getAttribute('value'),
@@ -214,8 +188,9 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     protected function restoreChildAttributes(array $backup)
     {
         $this->passDataSources = false;
+        $key = 0;
         /* @var HTML_QuickForm2_Node $child */
-        foreach ($this->getRecursiveIterator() as $key => $child) {
+        foreach ($this->getRecursiveIterator() as $child) {
             $child->setId($backup[$key]['id']);
             if (strlen($backup[$key]['name'])) {
                 $child->setName($backup[$key]['name']);
@@ -226,6 +201,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             if (strlen($backup[$key]['error'])) {
                 $child->setError($backup[$key]['error']);
             }
+            $key++;
         }
     }
 
@@ -293,9 +269,9 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $renderer->startContainer($this);
 
         // first, render a (hidden) prototype
-        $this->prototype->addClass('repeatPrototype');
-        $this->prototype->render($renderer);
-        $this->prototype->removeClass('repeatPrototype');
+        $this->getPrototype()->addClass('repeatPrototype');
+        $this->getPrototype()->render($renderer);
+        $this->getPrototype()->removeClass('repeatPrototype');
 
         // next, render all available rows
         foreach ($this->rowIndexes as $index) {
@@ -306,7 +282,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                     $child->setError($this->childErrors[$id]);
                 }
             }
-            $this->prototype->render($renderer);
+            $this->getPrototype()->render($renderer);
             $this->restoreChildAttributes($backup);
         }
         $this->renderClientRules($renderer->getJavascriptBuilder());
