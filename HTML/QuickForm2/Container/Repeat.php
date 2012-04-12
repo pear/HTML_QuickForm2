@@ -229,7 +229,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * @return HTML_QuickForm2_Container prototype
      * @throws HTML_QuickForm2_NotFoundException if prototype was not set
      */
-    public function getPrototype()
+    protected function getPrototype()
     {
         if (empty($this->elements[0])) {
             throw new HTML_QuickForm2_NotFoundException(
@@ -330,6 +330,18 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     protected function updateValue()
     {
+        // check that we are not added to another Repeat
+        // done here instead of in setContainer() for reasons outlined in InputFile
+        $container = $this->getContainer();
+        while (!empty($container)) {
+            if ($container instanceof self) {
+                throw new HTML_QuickForm2_Exception(
+                    "Repeat element cannot be added to another Repeat element"
+                );
+            }
+            $container = $container->getContainer();
+        }
+
         /* @var HTML_QuickForm2_DataSource $ds */
         foreach (parent::getDataSources() as $ds) {
             if (null !== ($value = $ds->getValue($this->identityField))) {
