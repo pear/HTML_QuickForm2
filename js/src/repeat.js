@@ -150,6 +150,10 @@ qf.Repeat.prototype = {
             if (element.htmlFor) {
                 element.htmlFor = element.htmlFor.replace(':idx:', index);
             }
+            // inline script found, eval() 'em
+            if ('script' == element.nodeName.toLowerCase()) {
+                eval(element.innerHTML.replace(/:idx:/g, index));
+            }
             if (qf.classes.has(element, 'repeatAdd')) {
                 qf.events.addListener(element, 'click', qf.Repeat.handleAdd);
             }
