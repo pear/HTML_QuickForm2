@@ -5,6 +5,51 @@
 
 /** Base class for all HTML_QuickForm2 containers */
 require_once 'HTML/QuickForm2/Container.php';
+/** Javascript aggregator and builder class */
+require_once 'HTML/QuickForm2/JavascriptBuilder.php';
+
+/**
+ * A JS builder that returns form code as JS string for later eval()
+ */
+class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
+    extends HTML_QuickForm2_JavascriptBuilder
+{
+   /**
+    * Fake "current form" ID
+    * @var string
+    */
+    protected $formId = 'repeat';
+
+   /**
+    * @return array
+    */
+    public function getFormJavascriptAsStrings()
+    {
+        return array(
+            self::encode(
+                empty($this->rules['repeat'])
+                ? '' : "[\n" . implode(",\n", $this->rules['repeat']) . "\n]"
+            ),
+            self::encode(
+                empty($this->scripts['repeat'])
+                ? '' : implode("\n", $this->scripts['repeat'])
+            )
+        );
+    }
+
+    public function passLibraries(HTML_QuickForm2_JavascriptBuilder $recipient)
+    {
+        foreach ($this->libraries as $name => $library) {
+            if ('base' != $name) {
+                $recipient->addLibrary(
+                    $name, $library['file'], $library['webPath'], $library['absPath']
+                );
+            }
+        }
+    }
+}
+
+
 
 class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 {
@@ -281,12 +326,18 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return !strlen($this->error) && $valid;
     }
 
-    private function _generateInitScript()
-    {
-        $myId    = HTML_QuickForm2_JavascriptBuilder::encode($this->getId());
-        $protoId = HTML_QuickForm2_JavascriptBuilder::encode($this->getPrototype()->getId());
+    private function _generateInitScript(
+        HTML_QuickForm2_Container_Repeat_JavascriptBuilder $evalBuilder
+    ) {
+        $myId     = HTML_QuickForm2_JavascriptBuilder::encode($this->getId());
+        $protoId  = HTML_QuickForm2_JavascriptBuilder::encode($this->getPrototype()->getId());
+        $triggers = HTML_QuickForm2_JavascriptBuilder::encode(
+            $this->getJavascriptTriggers()
+        );
+        list ($rules, $scripts) = $evalBuilder->getFormJavascriptAsStrings();
 
-        return "new qf.Repeat(document.getElementById({$myId}), {$protoId});";
+        return "new qf.Repeat(document.getElementById({$myId}), {$protoId}, {$triggers},\n"
+               . $rules . ",\n" . $scripts . "\n);";
     }
 
     /**
@@ -294,15 +345,23 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $hiddens = $renderer->getOption('group_hiddens');
-        $backup = $this->backupChildAttributes();
-        $renderer->setOption('group_hiddens', false);
-        $renderer->startContainer($this);
+        $backup      = $this->backupChildAttributes();
+        $hiddens     = $renderer->getOption('group_hiddens');
+        $jsBuilder   = $renderer->getJavascriptBuilder();
+        $evalBuilder = new HTML_QuickForm2_Container_Repeat_JavascriptBuilder();
+
+        $renderer->setJavascriptBuilder($evalBuilder)
+            ->setOption('group_hiddens', false)
+            ->startContainer($this);
 
         // first, render a (hidden) prototype
         $this->getPrototype()->addClass('repeatItem repeatPrototype');
         $this->getPrototype()->render($renderer);
         $this->getPrototype()->removeClass('repeatPrototype');
+
+        // restore original JS builder
+        $evalBuilder->passLibraries($jsBuilder);
+        $renderer->setJavascriptBuilder($jsBuilder);
 
         // next, render all available rows
         foreach ($this->rowIndexes as $index) {
@@ -317,9 +376,8 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         }
         $this->restoreChildAttributes($backup);
 
-        $jsBuilder = $renderer->getJavascriptBuilder();
         $jsBuilder->addLibrary('repeat', 'quickform-repeat.js');
-        $jsBuilder->addElementJavascript($this->_generateInitScript());
+        $jsBuilder->addElementJavascript($this->_generateInitScript($evalBuilder));
         $this->renderClientRules($jsBuilder);
 
         $renderer->finishContainer($this);

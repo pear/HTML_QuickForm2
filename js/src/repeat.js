@@ -10,31 +10,18 @@
 
 /* $Id$ */
 
-qf.Repeat = function(container, itemId)
+qf.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
 {
     container.repeat = this;
 
-    this.container       = container;
+    this.form            = null;
     this.repeatPrototype = null;
+
+    this.container       = container;
     this.itemId          = itemId;
-
-    if (document.getElementsByClassName) {
-        this.getElementsByClass = function(className, node) {
-            return node.getElementsByClassName(className);
-        };
-    } else {
-        this.getElementsByClass = function(className, node) {
-            var list   = node.getElementsByTagName('*'),
-                result = [];
-
-            for (var i = 0, child; child = list[i]; i++) {
-                if (qf.classes.has(child, className)) {
-                    result.push(child);
-                }
-            }
-            return result;
-        };
-    }
+    this.rulesTpl        = rulesTpl;
+    this.scriptsTpl      = scriptsTpl;
+    this.triggers        = triggers;
 
     // find all elements with class repeatAdd inside container...
     var adders = this.getElementsByClass('repeatAdd', container);
@@ -81,33 +68,67 @@ qf.Repeat.handleRemove = function(event)
 };
 
 qf.Repeat.prototype = {
+    getElementsByClass: (function() {
+        if (document.getElementsByClassName) {
+            return function(className, node) {
+                return node.getElementsByClassName(className);
+            };
+        } else {
+            return function(className, node) {
+                var list   = node.getElementsByTagName('*'),
+                    result = [];
+
+                for (var i = 0, child; child = list[i]; i++) {
+                    if (qf.classes.has(child, className)) {
+                        result.push(child);
+                    }
+                }
+                return result;
+            };
+        }
+    })(),
+    findIndex: function(item)
+    {
+        var itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '(\\d+?)') + '$'),
+            m;
+
+        if (item.id && (m = itemRegexp.exec(item.id))) {
+            // item has the needed id itself (fieldset case)
+            return m[1];
+        } else {
+            // search for item with a needed id (group case)
+            var elements = item.getElementsByTagName('*');
+            for (var i = 0, element; element = elements[i]; i++) {
+                if (element.id && (m = itemRegexp.exec(element.id))) {
+                    return m[1];
+                }
+            }
+        }
+    },
+    findForm: function()
+    {
+        var parent = this.container;
+        while (parent && 'form' !== parent.nodeName.toLowerCase()) {
+            parent = parent.parentNode;
+        }
+        return parent;
+    },
     add: function()
     {
         if (!this.repeatPrototype) {
             this.repeatPrototype = this.getElementsByClass('repeatPrototype', this.container)[0];
         }
 
-        var items      = this.getElementsByClass('repeatItem', this.container),
-            lastItem   = items[items.length - 1],
-            itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '(\\d+?)') + '$'),
-            clone      = this.repeatPrototype.cloneNode(true),
-            index, m, elements, i, element;
+        var items    = this.getElementsByClass('repeatItem', this.container),
+            lastItem = items[items.length - 1],
+            clone    = this.repeatPrototype.cloneNode(true),
+            index;
 
         if (qf.classes.has(lastItem, 'repeatPrototype')) {
             // last item *is* prototype -> use 0 as index
             index = 0;
-        } else if (lastItem.id && (m = itemRegexp.exec(lastItem.id))) {
-            // last item has the needed id (fieldset case)
-            index = m[1] - (-1);
         } else {
-            // search for item with a needed id
-            elements = lastItem.getElementsByTagName('*');
-            for (i = 0; element = elements[i]; i++) {
-                if (element.id && (m = itemRegexp.exec(element.id))) {
-                    index = m[1] - (-1);
-                    break;
-                }
-            }
+            index = this.findIndex(lastItem) - (-1);
         }
 
         qf.classes.remove(clone, 'repeatPrototype');
@@ -115,8 +136,8 @@ qf.Repeat.prototype = {
             clone.id = clone.id.replace(':idx:', index);
         }
         // maybe get rid of this and mangle innerHTML instead?
-        elements = clone.getElementsByTagName('*');
-        for (i = 0; element = elements[i]; i++) {
+        var elements = clone.getElementsByTagName('*');
+        for (var i = 0, element; element = elements[i]; i++) {
             if (element.id) {
                 element.id = element.id.replace(':idx:', index);
             }
@@ -137,14 +158,47 @@ qf.Repeat.prototype = {
             }
         }
 
-        if (lastItem.nextSibling) {
-            lastItem.parentNode.insertBefore(clone, lastItem.nextSibling);
-        } else {
-            lastItem.parentNode.appendChild(clone);
+        lastItem.parentNode.insertBefore(clone, lastItem.nextSibling);
+
+        if (this.scriptsTpl) {
+            eval(this.scriptsTpl.replace(/:idx:/g, index));
+        }
+        if (this.rulesTpl) {
+            if (!this.form) {
+                this.form = this.findForm();
+            }
+            if (this.form.validator) {
+                var rules = eval(this.rulesTpl.replace(/:idx:/g, index)),
+                    rule;
+                for (i = 0; rule = rules[i]; i++) {
+                    this.form.validator.rules.push(rule);
+                }
+            }
         }
     },
     remove: function(item)
     {
+        if (this.rulesTpl) {
+            if (!this.form) {
+                this.form = this.findForm();
+            }
+            if (this.form.validator) {
+                var check = new qf.Map(),
+                    index = this.findIndex(item),
+                    rules = this.form.validator.rules,
+                    trigger, rule, i;
+                for (i = 0; trigger = this.triggers[i]; i++) {
+                    check.set(trigger.replace(':idx:', index), true);
+                }
+                for (i = rules.length - 1; rule = rules[i]; i--) {
+                    // repeated IDs are unlikely to appear in rule.triggers
+                    // without appearing in rule.owner, so we check only owner
+                    if (check.hasKey(rule.owner)) {
+                        rules.splice(i, 1);
+                    }
+                }
+            }
+        }
         item.parentNode.removeChild(item);
     }
 };
