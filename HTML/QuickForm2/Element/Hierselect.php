@@ -278,6 +278,22 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         return $this;
     }
 
+    /**
+     * Sets the element's name
+     *
+     * Need to override group's implementation due to overridden updateValue()
+     *
+     * @param string $name
+     *
+     * @return HTML_QuickForm2_Element_Hierselect
+     */
+    public function setName($name)
+    {
+        parent::setName($name);
+        $this->updateValue();
+        return $this;
+    }
+
    /**
     * Called when the element needs to update its value from form's data sources
     *

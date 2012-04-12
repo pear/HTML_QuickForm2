@@ -62,6 +62,7 @@ require_once dirname(__FILE__) . '/ButtonTest.php';
 require_once dirname(__FILE__) . '/InputFileTest.php';
 require_once dirname(__FILE__) . '/StaticTest.php';
 require_once dirname(__FILE__) . '/DateTest.php';
+require_once dirname(__FILE__) . '/HierselectTest.php';
 
 class QuickForm2_Element_AllTests
 {
@@ -92,6 +93,7 @@ class QuickForm2_Element_AllTests
         $suite->addTestSuite('HTML_QuickForm2_Element_InputFileTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_StaticTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_DateTest');
+        $suite->addTestSuite('HTML_QuickForm2_Element_HierselectTest');
 
         return $suite;
     }
