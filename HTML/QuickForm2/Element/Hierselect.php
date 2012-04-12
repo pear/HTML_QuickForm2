@@ -367,19 +367,6 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
                . (empty($this->jsCallback)? '': ", {$this->jsCallback}") . ');';
     }
 
-    public function __toString()
-    {
-        require_once 'HTML/QuickForm2/Renderer.php';
-
-        $cr = HTML_Common2::getOption('linebreak');
-        return $this->render(
-                    HTML_QuickForm2_Renderer::factory('default')
-                        ->setTemplateForId($this->getId(), '{content}')
-               )->__toString()
-               . "<script type=\"text/javascript\">{$cr}//<![CDATA[{$cr}"
-               . $this->_generateInitScript() . "{$cr}//]]>{$cr}</script>";
-    }
-
    /**
     * Renders the hierselect using the given renderer
     *

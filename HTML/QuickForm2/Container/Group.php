@@ -349,12 +349,14 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
     public function __toString()
     {
-        require_once 'HTML/QuickForm2/Renderer.php';
+        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
-        return $this->render(
+        $renderer = $this->render(
             HTML_QuickForm2_Renderer::factory('default')
                 ->setTemplateForId($this->getId(), '{content}')
-        )->__toString();
+        );
+        return $renderer->__toString()
+               . $renderer->getJavascriptBuilder()->getSetupCode(null, true);
     }
 }
 ?>
