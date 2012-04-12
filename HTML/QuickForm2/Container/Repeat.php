@@ -1,6 +1,46 @@
 <?php
 /**
- * Repeats the given (prototype) Container
+ * Handles a Container that can be repeated multiple times in the form
+ *
+ * PHP version 5
+ *
+ * LICENSE:
+ *
+ * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
+ *                          Bertrand Mansion <golgote@mamasam.com>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * The names of the authors may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  SVN: $Id$
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
 /** Base class for all HTML_QuickForm2 containers */
@@ -9,20 +49,43 @@ require_once 'HTML/QuickForm2/Container.php';
 require_once 'HTML/QuickForm2/JavascriptBuilder.php';
 
 /**
- * A JS builder that returns form code as JS string for later eval()
+ * Javascript builder used when rendering a repeat prototype
+ *
+ * Instead of returning form setup code and client-side rules as normal
+ * Javascript code, it returns them as Javascript string literals. These are
+ * expected to be eval()'d when adding a new repeat item.
+ *
+ * This class is not intended for normal use.
+ *
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
     extends HTML_QuickForm2_JavascriptBuilder
 {
-   /**
-    * Fake "current form" ID
-    * @var string
-    */
+    /**
+     * Fake "current form" ID
+     * @var string
+     */
     protected $formId = 'repeat';
 
-   /**
-    * @return array
-    */
+    /**
+     * Empty list of javascript libraries, base one(s) are in original builder
+     * @var array
+     */
+    protected $libraries = array();
+
+
+    /**
+     * Returns rules and element setup code as Javascript string literals
+     *
+     * @return array array('rules', 'setup code')
+     */
     public function getFormJavascriptAsStrings()
     {
         return array(
@@ -37,40 +100,86 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
         );
     }
 
+    /**
+     * Passes Javascript libraries added by repeat prototype
+     *
+     * @param HTML_QuickForm2_JavascriptBuilder $recipient original Javascript builder
+     */
     public function passLibraries(HTML_QuickForm2_JavascriptBuilder $recipient)
     {
         foreach ($this->libraries as $name => $library) {
-            if ('base' != $name) {
-                $recipient->addLibrary(
-                    $name, $library['file'], $library['webPath'], $library['absPath']
-                );
-            }
+            $recipient->addLibrary(
+                $name, $library['file'], $library['webPath'], $library['absPath']
+            );
         }
     }
 }
 
 
 
+/**
+ * Handles a Container that can be repeated multiple times in the form
+ *
+ * This element accepts a Container (a Fieldset, a Group, but not another
+ * Repeat) serving as a "prototype" and repeats it several times. Repeated
+ * items can be dynamically added / removed via Javascript, with the benefit
+ * that server-side part automatically knows about these changes and that
+ * server-side and client-side validation can be easily leveraged.
+ *
+ * Example:
+ * <code>
+ * $group  = new HTML_QuickForm2_Container_Group()
+ * $repeat = $form->addRepeat('related');
+ *                ->setPrototype($group);
+ * // repeat indexes will be automatically appended to elements in prototype
+ * $group->addHidden('related_id');
+ * $group->addText('related_title');
+ * // this is identical to $group->addCheckbox('related_active');
+ * $repeat->addCheckbox('related_active');
+ *
+ * // value of this field will be used to find the number of repeated items
+ * $repeat->setIdentityField('related_id');
+ * </code>
+ *
+ * @category HTML
+ * @package  HTML_QuickForm2
+ * @author   Alexey Borzov <avb@php.net>
+ * @author   Bertrand Mansion <golgote@mamasam.com>
+ * @license  http://opensource.org/licenses/bsd-license.php New BSD License
+ * @version  Release: @package_version@
+ * @link     http://pear.php.net/package/HTML_QuickForm2
+ */
 class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 {
+    /**
+     * Key to replace by actual item index in elements' names / ids / values
+     */
     const INDEX_KEY = ':idx:';
 
     /**
+     * Field used to search for available indexes
      * @var string
      */
     protected $identityField;
 
     /**
+     * Available indexes
      * @var array
      */
-    protected $rowIndexes = array();
+    protected $itemIndexes = array();
 
     /**
+     * Errors for (repeated) child elements set during validate() call
      * @var array
      */
     protected $childErrors = array();
 
     /**
+     * Whether getDataSources() should return Container's data sources
+     *
+     * This is done to prevent useless updateValue() activity in child
+     * elements when their values are not going to be needed.
+     *
      * @var bool
      */
     protected $passDataSources = false;
@@ -86,17 +195,24 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * Sets the element's value
+     * Sets the element's value (not implemented)
      *
-     * @param mixed $value
+     * @param mixed $value element's value
      *
-     * @return   HTML_QuickForm2_Node
+     * @throws HTML_QuickForm2_Exception
      */
     public function setValue($value)
     {
         throw new HTML_QuickForm2_Exception('Not implemented');
     }
 
+    /**
+     * Sets the Container that will be used as a prototype for repeating
+     *
+     * @param HTML_QuickForm2_Container $prototype prototype container
+     *
+     * @return HTML_QuickForm2_Container_Repeat
+     */
     public function setPrototype(HTML_QuickForm2_Container $prototype)
     {
         if (!empty($this->elements[0])) {
@@ -107,11 +223,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return $this;
     }
 
-   /**
-    *
-    * @return HTML_QuickForm2_Container
-    * @throws HTML_QuickForm2_NotFoundException
-    */
+    /**
+     * Returns the prototype Container
+     *
+     * @return HTML_QuickForm2_Container prototype
+     * @throws HTML_QuickForm2_NotFoundException if prototype was not set
+     */
     public function getPrototype()
     {
         if (empty($this->elements[0])) {
@@ -122,40 +239,60 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return $this->elements[0];
     }
 
-    //
-    // The following methods just proxy prototype's
-    //
-
+    /**
+     * Appends an element to the prototype container
+     *
+     * Elements are kept in the prototype rather than directly in repeat
+     *
+     * @param HTML_QuickForm2_Node $element Element to add
+     *
+     * @return   HTML_QuickForm2_Node     Added element
+     * @throws   HTML_QuickForm2_InvalidArgumentException
+     */
     public function appendChild(HTML_QuickForm2_Node $element)
     {
         return $this->getPrototype()->appendChild($element);
     }
 
+    /**
+     * Removes the element from the prototype container
+     *
+     * Elements are kept in the prototype rather than directly in repeat
+     *
+     * @param HTML_QuickForm2_Node $element Element to remove
+     *
+     * @return   HTML_QuickForm2_Node     Removed object
+     * @throws   HTML_QuickForm2_NotFoundException
+     */
     public function removeChild(HTML_QuickForm2_Node $element)
     {
         return $this->getPrototype()->removeChild($element);
     }
 
-    public function getElementById($id)
-    {
-        return $this->getPrototype()->getElementById($id);
-    }
 
-    public function getElementsByName($name)
-    {
-        return $this->getPrototype()->getElementsByName($name);
-    }
-
+    /**
+     * Inserts an element to the prototype container
+     *
+     * Elements are kept in the prototype rather than directly in repeat
+     *
+     * @param HTML_QuickForm2_Node $element   Element to insert
+     * @param HTML_QuickForm2_Node $reference Reference to insert before
+     *
+     * @return   HTML_QuickForm2_Node     Inserted element
+     */
     public function insertBefore(
         HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null
     ) {
         return $this->getPrototype()->insertBefore($element, $reference);
     }
 
-    //
-    // End of methods that just proxy prototype's
-    //
 
+    /**
+     * Returns the data sources for this element
+     *
+     * @return array
+     * @see $passDataSources
+     */
     protected function getDataSources()
     {
         if (!$this->passDataSources) {
@@ -166,8 +303,16 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * XXX: currently will not work without this, maybe use the first field if not given explicitly?
-     * @param string $field
+     * Sets a field to check for available indexes
+     *
+     * Form data sources will be searched for this field's value, indexes present
+     * in the array will be used for repeated elements. Use the field that will be
+     * always present in submit data: checkboxes, multiple selects and fields that
+     * may be disabled are bad choices
+     *
+     * @param string $field field name
+     *
+     * @todo currently will not work without this, maybe use the first field if not given explicitly?
      */
     public function setIdentityField($field)
     {
@@ -176,7 +321,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * Same as Element::updateValue(), but we just need used indexes, not values
+     * Called when the element needs to update its value from form's data sources
+     *
+     * Behaves similar to Element::updateValue(), the field's value is used to
+     * deduce indexes taken by repeat items.
+     *
+     * @see setIdentityField()
      */
     protected function updateValue()
     {
@@ -184,12 +334,23 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         foreach (parent::getDataSources() as $ds) {
             if (null !== ($value = $ds->getValue($this->identityField))) {
                 unset($value[self::INDEX_KEY]);
-                $this->rowIndexes = array_map('intval', array_keys($value));
+                $this->itemIndexes = array_map('intval', array_keys($value));
                 return;
             }
         }
     }
 
+    /**
+     * Appends the template to elements' names and ids that will be later replaced by index
+     *
+     * Default behaviour is to append '[:idx:]' to element names and '_:idx:' to
+     * element ids. If the string ':idx:' is already present in the attribute,
+     * then it will not be changed.
+     *
+     * Checkboxes and radios may contain ':idx:' in their 'value' attribute,
+     * in this case their 'name' attribute is left alone. Names of groups are
+     * also not touched.
+     */
     protected function appendIndexTemplates()
     {
         $this->passDataSources = true;
@@ -213,7 +374,9 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * @return array
+     * Backs up child attributes
+     *
+     * @return array backup array
      */
     protected function backupChildAttributes()
     {
@@ -232,6 +395,13 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return $backup;
     }
 
+    /**
+     * Restores child attributes from backup array
+     *
+     * @param array $backup backup array
+     *
+     * @see backupChildAttributes()
+     */
     protected function restoreChildAttributes(array $backup)
     {
         $key = 0;
@@ -256,6 +426,14 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $this->passDataSources = false;
     }
 
+    /**
+     * Replaces a template in elements' attributes by a numeric index
+     *
+     * @param int   $index  numeric index
+     * @param array $backup backup array, contains attributes with templates
+     *
+     * @see backupChildAttributes()
+     */
     protected function replaceIndexTemplates($index, array $backup)
     {
         $this->passDataSources = true;
@@ -282,11 +460,20 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         }
     }
 
+    /**
+     * Returns the array containing child elements' values
+     *
+     * Iterates over all available repeat indexes to get values
+     *
+     * @param bool $filtered Whether child elements should apply filters on values
+     *
+     * @return   array|null
+     */
     protected function getChildValues($filtered = false)
     {
         $backup = $this->backupChildAttributes();
         $values = array();
-        foreach ($this->rowIndexes as $index) {
+        foreach ($this->itemIndexes as $index) {
             $this->replaceIndexTemplates($index, $backup);
             $values = self::arrayMerge(
                 $values, parent::getChildValues($filtered)
@@ -297,14 +484,19 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * @return bool
+     * Performs the server-side validation
+     *
+     * Iterates over all available repeat indexes and calls validate() on
+     * prototype container.
+     *
+     * @return   boolean Whether the repeat and all repeated items are valid
      */
     protected function validate()
     {
         $backup = $this->backupChildAttributes();
         $valid  = true;
         $this->childErrors = array();
-        foreach ($this->rowIndexes as $index) {
+        foreach ($this->itemIndexes as $index) {
             $this->replaceIndexTemplates($index, $backup);
             $valid = $this->getPrototype()->validate() && $valid;
             /* @var HTML_QuickForm2_Node $child */
@@ -326,6 +518,14 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return !strlen($this->error) && $valid;
     }
 
+    /**
+     * Generates Javascript code to initialize repeat behaviour
+     *
+     * @param HTML_QuickForm2_Container_Repeat_JavascriptBuilder $evalBuilder
+     *        Javascript builder returning JS string literals
+     *
+     * @return string javascript
+     */
     private function _generateInitScript(
         HTML_QuickForm2_Container_Repeat_JavascriptBuilder $evalBuilder
     ) {
@@ -341,7 +541,14 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
-     * XXX: Javascript for contained elements doesn't work!
+     * Renders the container using the given renderer
+     *
+     * Container will be output N + 1 times, where N are visible items and 1 is
+     * the hidden prototype used by Javascript code to create new items.
+     *
+     * @param HTML_QuickForm2_Renderer $renderer renderer to use
+     *
+     * @return   HTML_QuickForm2_Renderer
      */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
@@ -364,7 +571,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $renderer->setJavascriptBuilder($jsBuilder);
 
         // next, render all available rows
-        foreach ($this->rowIndexes as $index) {
+        foreach ($this->itemIndexes as $index) {
             $this->replaceIndexTemplates($index, $backup);
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
@@ -385,3 +592,4 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         return $renderer;
     }
 }
+?>
