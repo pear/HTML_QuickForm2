@@ -10,32 +10,80 @@
 
 /* $Id$ */
 
+/**
+ * Sets repeat properties and attaches handlers for adding and removing items
+ *
+ * @param {HTMLElement} container
+ * @param {String} itemId
+ * @param {String[]} triggers
+ * @param {String} rulesTpl
+ * @param {String} scriptsTpl
+ * @constructor
+ */
 qf.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
 {
     container.repeat = this;
 
+    /**
+     * Form containing the repeat element
+     * @type {HTMLFormElement}
+     */
     this.form            = null;
+
+    /**
+     * Prototype item which will be cloned in add()
+     * @type {HTMLElement}
+     */
     this.repeatPrototype = null;
 
+    /**
+     * HTML element containing all repeated items
+     * @type {HTMLElement}
+     */
     this.container       = container;
+
+    /**
+     * Id of repeated items, used to deduce index
+     * @type {String}
+     */
     this.itemId          = itemId;
+
+    /**
+     * String containing validation code template, will be eval()'d
+     * @type {String}
+     */
     this.rulesTpl        = rulesTpl;
+
+    /**
+     * String containing elements setup code template, will be eval()'d
+     * @type {String}
+     */
     this.scriptsTpl      = scriptsTpl;
+
+    /**
+     * Templates for element's id attributes, used to remove rules on removing repeated item
+     * @type {String[]}
+     */
     this.triggers        = triggers;
 
     // find all elements with class repeatAdd inside container...
     var adders = this.getElementsByClass('repeatAdd', container);
     for (var i = 0, element; element = adders[i]; i++) {
-        qf.events.addListener(element, 'click', qf.Repeat.handleAdd);
+        qf.events.addListener(element, 'click', qf.Repeat.addHandler);
     }
     // find all elements with class repeatRemove inside container...
     var removers = this.getElementsByClass('repeatRemove', container);
     for (i = 0; element = removers[i]; i++) {
-        qf.events.addListener(element, 'click', qf.Repeat.handleRemove);
+        qf.events.addListener(element, 'click', qf.Repeat.removeHandler);
     }
 };
 
-qf.Repeat.handleAdd = function(event)
+/**
+ * Event handler for "add item" onclick events, added automatically on elements with class 'repeatAdd'
+ *
+ * @param {Event} event
+ */
+qf.Repeat.addHandler = function(event)
 {
     event = qf.events.fixEvent(event);
 
@@ -49,7 +97,12 @@ qf.Repeat.handleAdd = function(event)
     event.preventDefault();
 };
 
-qf.Repeat.handleRemove = function(event)
+/**
+ * Event handler for "remove item" onclick events, added automatically on elements with class 'repeatRemove'
+ *
+ * @param {Event} event
+ */
+qf.Repeat.removeHandler = function(event)
 {
     event = qf.events.fixEvent(event);
 
@@ -68,6 +121,17 @@ qf.Repeat.handleRemove = function(event)
 };
 
 qf.Repeat.prototype = {
+    /**
+     * Finds elements by CSS class name
+     *
+     * Wraps around native getElementsByClassName() if available, uses a custom
+     * implementation if not.
+     *
+     * @function
+     * @param {String} className
+     * @param {Node} node
+     * @returns {Node[]}
+     */
     getElementsByClass: (function() {
         if (document.getElementsByClassName) {
             return function(className, node) {
@@ -87,6 +151,12 @@ qf.Repeat.prototype = {
             };
         }
     })(),
+    /**
+     * Finds a numeric index for a given repeat item
+     *
+     * @param {Node} item
+     * @returns {Number}
+     */
     findIndex: function(item)
     {
         var itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '(\\d+?)') + '$'),
@@ -105,6 +175,11 @@ qf.Repeat.prototype = {
             }
         }
     },
+    /**
+     * Finds a form containing repeat element
+     *
+     * @returns {HTMLFormElement}
+     */
     findForm: function()
     {
         var parent = this.container;
@@ -113,6 +188,9 @@ qf.Repeat.prototype = {
         }
         return parent;
     },
+    /**
+     * Adds a new repeated item to the repeat element
+     */
     add: function()
     {
         if (!this.repeatPrototype) {
@@ -155,10 +233,10 @@ qf.Repeat.prototype = {
                 eval(element.innerHTML.replace(/:idx:/g, index));
             }
             if (qf.classes.has(element, 'repeatAdd')) {
-                qf.events.addListener(element, 'click', qf.Repeat.handleAdd);
+                qf.events.addListener(element, 'click', qf.Repeat.addHandler);
             }
             if (qf.classes.has(element, 'repeatRemove')) {
-                qf.events.addListener(element, 'click', qf.Repeat.handleRemove);
+                qf.events.addListener(element, 'click', qf.Repeat.removeHandler);
             }
         }
 
@@ -180,6 +258,11 @@ qf.Repeat.prototype = {
             }
         }
     },
+    /**
+     * Removes an item from repeat element
+     *
+     * @param {Node} item
+     */
     remove: function(item)
     {
         if (this.rulesTpl) {
