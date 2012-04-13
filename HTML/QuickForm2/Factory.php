@@ -81,6 +81,7 @@ class HTML_QuickForm2_Factory
         'inputbutton'   => array('HTML_QuickForm2_Element_InputButton', null),
         'password'      => array('HTML_QuickForm2_Element_InputPassword', null),
         'radio'         => array('HTML_QuickForm2_Element_InputRadio', null),
+        'repeat'        => array('HTML_QuickForm2_Container_Repeat', null),
         'reset'         => array('HTML_QuickForm2_Element_InputReset', null),
         'script'        => array('HTML_QuickForm2_Element_Script', null),
         'select'        => array('HTML_QuickForm2_Element_Select', null),

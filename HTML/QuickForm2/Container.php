@@ -71,6 +71,7 @@ require_once 'HTML/QuickForm2/Node.php';
  * @method HTML_QuickForm2_Element_InputButton   addInputButton(string $name, $attributes = null, array $data = array())
  * @method HTML_QuickForm2_Element_InputPassword addPassword(string $name, $attributes = null, array $data = array())
  * @method HTML_QuickForm2_Element_InputRadio    addRadio(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Container_Repeat      addRepeat(string $name = '', $attributes = null, array $data = array())
  * @method HTML_QuickForm2_Element_InputReset    addReset(string $name, $attributes = null, array $data = array())
  * @method HTML_QuickForm2_Element_Script        addScript(string $name = '', $attributes = null, array $data = array())
  * @method HTML_QuickForm2_Element_Select        addSelect(string $name, $attributes = null, array $data = array())

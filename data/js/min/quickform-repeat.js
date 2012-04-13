@@ -1,0 +1,16 @@
+/*
+ HTML_QuickForm2: support functions for repeat elements
+ Package version @package_version@
+ http://pear.php.net/package/HTML_QuickForm2
+
+ Copyright 2006-2012, Alexey Borzov, Bertrand Mansion
+ Licensed under new BSD license
+ http://opensource.org/licenses/bsd-license.php
+*/
+qf.Repeat=function(a,b,d,e,f){a.repeat=this;this.repeatPrototype=this.form=null;this.container=a;this.itemId=b;this.rulesTpl=e;this.scriptsTpl=f;this.triggers=d;e=this.getElementsByClass("repeatAdd",a);for(b=0;d=e[b];b++)qf.events.addListener(d,"click",qf.Repeat.addHandler);a=this.getElementsByClass("repeatRemove",a);for(b=0;d=a[b];b++)qf.events.addListener(d,"click",qf.Repeat.removeHandler)};
+qf.Repeat.addHandler=function(a){for(var a=qf.events.fixEvent(a),b=a.target;b&&!qf.classes.has(b,"repeat");)b=b.parentNode;b&&b.repeat&&b.repeat.add();a.preventDefault()};qf.Repeat.removeHandler=function(a){for(var a=qf.events.fixEvent(a),b=a.target,d;b&&!qf.classes.has(b,"repeat");)qf.classes.has(b,"repeatItem")&&(d=b),b=b.parentNode;b&&b.repeat&&b.repeat.remove(d);a.preventDefault()};
+qf.Repeat.prototype={getElementsByClass:function(){return document.getElementsByClassName?function(a,b){return b.getElementsByClassName(a)}:function(a,b){for(var d=b.getElementsByTagName("*"),e=[],f=0,c;c=d[f];f++)qf.classes.has(c,a)&&e.push(c);return e}}(),findIndex:function(a){var b=RegExp("^"+this.itemId.replace(":idx:","([a-zA-Z0-9_]+?)")+"$"),d;if(a.id&&(d=b.exec(a.id)))return d[1];for(var a=a.getElementsByTagName("*"),e=0,f;f=a[e];e++)if(f.id&&(d=b.exec(f.id)))return d[1]},findForm:function(){for(var a=
+this.container;a&&"form"!==a.nodeName.toLowerCase();)a=a.parentNode;return a},generateIndex:function(){var a;do a="add"+Math.round(1E4*Math.random());while(document.getElementById(this.itemId.replace(":idx:",a)));return a},add:function(){this.repeatPrototype||(this.repeatPrototype=this.getElementsByClass("repeatPrototype",this.container)[0]);var a=this.getElementsByClass("repeatItem",this.container),b=a[a.length-1],d=this.repeatPrototype.cloneNode(!0),e=this.generateIndex();qf.classes.remove(d,"repeatPrototype");
+d.id&&(d.id=d.id.replace(":idx:",e));for(var f=d.getElementsByTagName("*"),a=0,c;c=f[a];a++){c.id&&(c.id=c.id.replace(":idx:",e));c.name&&(c.name=c.name.replace(":idx:",e));if(c.type&&("checkbox"==c.type||"radio"==c.type))c.value=c.value.replace(":idx:",e);c.htmlFor&&(c.htmlFor=c.htmlFor.replace(":idx:",e));"script"==c.nodeName.toLowerCase()&&eval(c.innerHTML.replace(/:idx:/g,e));qf.classes.has(c,"repeatAdd")&&qf.events.addListener(c,"click",qf.Repeat.addHandler);qf.classes.has(c,"repeatRemove")&&
+qf.events.addListener(c,"click",qf.Repeat.removeHandler)}b.parentNode.insertBefore(d,b.nextSibling);this.scriptsTpl&&eval(this.scriptsTpl.replace(/:idx:/g,e));if(this.rulesTpl&&(this.form||(this.form=this.findForm()),this.form.validator)){b=eval(this.rulesTpl.replace(/:idx:/g,e));for(a=0;d=b[a];a++)this.form.validator.rules.push(d)}},remove:function(a){if(this.rulesTpl&&(this.form||(this.form=this.findForm()),this.form.validator)){var b=new qf.Map,d=this.findIndex(a),e=this.form.validator.rules,f,
+c;for(c=0;f=this.triggers[c];c++)b.set(f.replace(":idx:",d),!0);for(c=e.length-1;d=e[c];c--)b.hasKey(d.owner)&&e.splice(c,1)}a.parentNode.removeChild(a)}};
