@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <fieldset> elements
- */
-require_once 'HTML/QuickForm2/Container/Fieldset.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_Fieldset class
  */
 class HTML_QuickForm2_Element_FieldsetTest extends PHPUnit_Framework_TestCase

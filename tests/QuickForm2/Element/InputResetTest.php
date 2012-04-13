@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="reset" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputReset.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputReset class
  */
 class HTML_QuickForm2_Element_InputResetTest extends PHPUnit_Framework_TestCase

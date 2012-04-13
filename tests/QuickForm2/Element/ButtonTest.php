@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <button> elements
- */
-require_once 'HTML/QuickForm2/Element/Button.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_Button class
  */
 class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase

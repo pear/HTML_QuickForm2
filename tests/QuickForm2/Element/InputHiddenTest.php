@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="hidden" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputHidden.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputHidden class
  */
 class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit_Framework_TestCase

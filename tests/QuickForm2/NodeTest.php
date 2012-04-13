@@ -46,16 +46,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Element class
- */
-require_once 'HTML/QuickForm2/Node.php';
-
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
  * A non-abstract subclass of Node
  *
  * We can't instantiate the class directly and thus need to "implement" its

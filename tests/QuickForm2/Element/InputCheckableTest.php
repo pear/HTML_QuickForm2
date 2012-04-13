@@ -46,21 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Base class for radios and checkboxes
- */
-require_once 'HTML/QuickForm2/Element/InputCheckable.php';
-
-/**
- * Array-based data source for HTML_QuickForm2 objects
- */
-require_once 'HTML/QuickForm2/DataSource/Array.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputCheckable class
  */
 class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestCase

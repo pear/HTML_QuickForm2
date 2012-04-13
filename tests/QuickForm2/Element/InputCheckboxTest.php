@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="checkbox" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputCheckbox class
  */
 class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCase

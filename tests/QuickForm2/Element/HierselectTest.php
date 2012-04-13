@@ -44,10 +44,6 @@
 
 /** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
-/** Hierarchical select element */
-require_once 'HTML/QuickForm2/Element/Hierselect.php';
-/** Class representing a HTML form  */
-require_once 'HTML/QuickForm2.php';
 
 /**
  * Unit test for HTML_QuickForm2_Element_Hierselect class

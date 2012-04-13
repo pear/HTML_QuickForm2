@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input> elements
- */
-require_once 'HTML/QuickForm2/Element/Input.php';
-
-/**
  * We need to set the element's type
  */
 class HTML_QuickForm2_Element_InputImpl extends HTML_QuickForm2_Element_Input

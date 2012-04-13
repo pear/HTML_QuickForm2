@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking the value via a callback function (method)
- */
-require_once 'HTML/QuickForm2/Rule/Callback.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Callback class
  */
 class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase

@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking that uploaded file is of the correct MIME type
- */
-require_once 'HTML/QuickForm2/Rule/MimeType.php';
-
-/**
- * Class for <input type="file" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_MimeType class
  */
 class HTML_QuickForm2_Rule_MimeTypeTest extends PHPUnit_Framework_TestCase

@@ -46,16 +46,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Renderer base class
- */
-require_once 'HTML/QuickForm2/Renderer.php';
-
-/**
- * Renderer plugin interface
- */
-require_once 'HTML/QuickForm2/Renderer/Plugin.php';
-
-/**
  * An "implementation" of renderer, to be able to create an instance
  */
 class HTML_QuickForm2_FakeRenderer extends HTML_QuickForm2_Renderer

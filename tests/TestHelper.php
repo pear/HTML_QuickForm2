@@ -55,6 +55,8 @@ if ('@' . 'package_version@' == '@package_version@') {
     }
 }
 
+require_once 'HTML/QuickForm2/Loader.php';
+spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
 
 $phpunitVersion = PHPUnit_Runner_Version::id();
 if ($phpunitVersion == '@' . 'package_version@' || !version_compare($phpunitVersion, '3.7', '<=')) {

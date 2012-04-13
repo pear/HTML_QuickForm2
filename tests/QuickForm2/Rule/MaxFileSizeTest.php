@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking that uploaded file size does not exceed the given limit
- */
-require_once 'HTML/QuickForm2/Rule/MaxFileSize.php';
-
-/**
- * Class for <input type="file" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_MaxFileSize class
  */
 class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase

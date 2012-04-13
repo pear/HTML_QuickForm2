@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Checks that the element's value does not match a regular expression
- */
-require_once 'HTML/QuickForm2/Rule/NotRegex.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_NotRegex class
  */
 class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase

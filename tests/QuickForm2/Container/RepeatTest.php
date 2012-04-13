@@ -44,17 +44,6 @@
 
 /** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
-/** Handles a Container that can be repeated multiple times in the form */
-require_once 'HTML/QuickForm2/Container/Repeat.php';
-/** Class for <fieldset> elements */
-require_once 'HTML/QuickForm2/Container/Fieldset.php';
-/** Class for <input type="text" /> elements */
-require_once 'HTML/QuickForm2/Element/InputText.php';
-/** Class representing a HTML form  */
-require_once 'HTML/QuickForm2.php';
-/** Base class for HTML_QuickForm2 renderers */
-require_once 'HTML/QuickForm2/Renderer.php';
-
 
 /**
  * Unit test for HTML_QuickForm2_Container_Repeat class

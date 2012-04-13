@@ -47,16 +47,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Factory class
- */
-require_once 'HTML/QuickForm2/Factory.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Node.php';
-
-/**
  * Unit test for HTML_QuickForm2_Factory class
  */
 class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase

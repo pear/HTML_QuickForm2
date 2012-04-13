@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking that the form field is not empty
- */
-require_once 'HTML/QuickForm2/Rule/Compare.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Compare class
  */
 class HTML_QuickForm2_Rule_CompareTest extends PHPUnit_Framework_TestCase
