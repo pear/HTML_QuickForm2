@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="submit" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputSubmit.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputSubmit class
  */
 class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase

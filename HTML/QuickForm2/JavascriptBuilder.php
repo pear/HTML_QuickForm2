@@ -181,11 +181,7 @@ class HTML_QuickForm2_JavascriptBuilder
                               : $path . $library['file'];
             }
         }
-        if ($inline && '' != $ret && $addScriptTags) {
-            $ret = "<script type=\"text/javascript\">\n//<![CDATA[\n"
-                   . $ret  . "\n//]]>\n</script>";
-        }
-        return $ret;
+        return ($inline && $addScriptTags) ? $this->wrapScript($ret) : $ret;
     }
 
 
@@ -239,25 +235,69 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public function getFormJavascript($formId = null, $addScriptTags = true)
     {
+        $js  = $this->getValidator($formId, false);
+        $js .= ('' == $js ? '' : "\n") . $this->getSetupCode($formId, false);
+        return $addScriptTags ? $this->wrapScript($js) : $js;
+    }
+
+
+    /**
+     * Returns setup code for form elements
+     *
+     * @param string $formId        form ID, if empty returns code for all forms
+     * @param bool   $addScriptTags whether to enclose code in <script> tags
+     *
+     * @return string
+     */
+    public function getSetupCode($formId = null, $addScriptTags = false)
+    {
         $js = '';
-        foreach ($this->rules as $id => $rules) {
-            if ((null === $formId || $id == $formId) && !empty($rules)) {
-                $js .= ('' == $js? '': "\n") . "new qf.Validator(document.getElementById('{$id}'), [\n"
-                       . implode(",\n", $rules) . "\n]);";
-            }
-        }
         foreach ($this->scripts as $id => $scripts) {
             if ((null === $formId || $id == $formId) && !empty($scripts)) {
                 $js .= ('' == $js? '': "\n") . implode("\n", $scripts);
             }
         }
-        if ('' != $js && $addScriptTags) {
+        return $addScriptTags ? $this->wrapScript($js) : $js;
+    }
+
+
+    /**
+     * Returns client-side validation code
+     *
+     * @param string $formId        form ID, if empty returns code for all forms
+     * @param bool   $addScriptTags whether to enclose code in <script> tags
+     *
+     * @return string
+     */
+    public function getValidator($formId = null, $addScriptTags = false)
+    {
+        $js = '';
+        foreach ($this->rules as $id => $rules) {
+            if ((null === $formId || $id == $formId) && !empty($rules)) {
+                $js .= ('' == $js ? '' : "\n")
+                       . "new qf.Validator(document.getElementById('{$id}'), [\n"
+                       . implode(",\n", $rules) . "\n]);";
+            }
+        }
+        return $addScriptTags ? $this->wrapScript($js) : $js;
+    }
+
+    /**
+     * Wraps the given Javascript code in <script> tags
+     *
+     * @param string $js Javascript code
+     *
+     * @return string code wrapped in <script></script> tags,
+     *                empty string if $js is empty
+     */
+    protected function wrapScript($js)
+    {
+        if ('' != $js) {
             $js = "<script type=\"text/javascript\">\n//<![CDATA[\n"
                   . $js . "\n//]]>\n</script>";
         }
         return $js;
     }
-
 
    /**
     * Encodes a value for use as Javascript literal

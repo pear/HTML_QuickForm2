@@ -45,15 +45,6 @@
 /** Sets up includes */
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
-/** Class implementing the Page Controller pattern for multipage forms */
-require_once 'HTML/QuickForm2/Controller.php';
-
-/** Interface for Controller action handlers */
-require_once 'HTML/QuickForm2/Controller/Action.php';
-
-/** Class representing a HTML form */
-require_once 'HTML/QuickForm2.php';
-
 /**
  * Unit test for HTML_QuickForm2_Controller class
  */

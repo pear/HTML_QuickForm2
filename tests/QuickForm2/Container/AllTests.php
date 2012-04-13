@@ -49,6 +49,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 
 require_once dirname(__FILE__) . '/FieldsetTest.php';
 require_once dirname(__FILE__) . '/GroupTest.php';
+require_once dirname(__FILE__) . '/RepeatTest.php';
 
 class QuickForm2_Container_AllTests
 {
@@ -66,6 +67,7 @@ class QuickForm2_Container_AllTests
 
         $suite->addTestSuite('HTML_QuickForm2_Element_FieldsetTest');
         $suite->addTestSuite('HTML_QuickForm2_Element_GroupTest');
+        $suite->addTestSuite('HTML_QuickForm2_Container_RepeatTest');
 
         return $suite;
     }

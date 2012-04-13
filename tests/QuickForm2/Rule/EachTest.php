@@ -44,12 +44,6 @@
 
 /** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
-/** Validates all elements in a Container using a template Rule */
-require_once 'HTML/QuickForm2/Rule/Each.php';
-/** Element class */
-require_once 'HTML/QuickForm2/Element.php';
-/** Container class */
-require_once 'HTML/QuickForm2/Container.php';
 
 /**
  * Unit test for HTML_QuickForm2_Rule_Each class

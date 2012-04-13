@@ -46,19 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="file" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/** Interface for classes that supply (translated) messages for the elements */
-require_once 'HTML/QuickForm2/MessageProvider.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputFile class
  */
 class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase

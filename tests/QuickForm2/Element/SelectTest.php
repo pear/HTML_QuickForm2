@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <select> elements
- */
-require_once 'HTML/QuickForm2/Element/Select.php';
-
-/**
  * Let's just make parseAttributes() public rather than copy and paste regex
  */
 abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_Common2

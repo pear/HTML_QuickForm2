@@ -290,11 +290,10 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Removes the element from this container
     *
-    * If the reference object is not given, the element will be appended.
-    *
     * @param HTML_QuickForm2_Node $element Element to remove
     *
     * @return   HTML_QuickForm2_Node     Removed object
+    * @throws   HTML_QuickForm2_NotFoundException
     */
     public function removeChild(HTML_QuickForm2_Node $element)
     {
@@ -510,9 +509,11 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function __toString()
     {
-        require_once 'HTML/QuickForm2/Renderer.php';
+        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
-        return $this->render(HTML_QuickForm2_Renderer::factory('default'))->__toString();
+        $renderer = $this->render(HTML_QuickForm2_Renderer::factory('default'));
+        return $renderer->__toString()
+               . $renderer->getJavascriptBuilder()->getSetupCode(null, true);
     }
 
    /**

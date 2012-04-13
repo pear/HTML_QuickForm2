@@ -47,16 +47,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Factory class
- */
-require_once 'HTML/QuickForm2/Factory.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Node.php';
-
-/**
  * Unit test for HTML_QuickForm2_Factory class
  */
 class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
@@ -160,6 +150,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
     public function testCreateElementValid()
     {
         HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', dirname(__FILE__) . '/_files/FakeElement.php');
+        /* @var $el FakeElement */
         $el = HTML_QuickForm2_Factory::createElement('fakeelement',
                 'fake', 'attributes', array('options' => '', 'label' => 'fake label'));
         $this->assertInstanceOf('FakeElement', $el);
@@ -241,6 +232,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Factory::registerRule(
             'fakerule', 'FakeRule', dirname(__FILE__) . '/_files/FakeRule.php'
         );
+        /* @var $rule FakeRule */
         $rule = HTML_QuickForm2_Factory::createRule(
             'fakerule', $mockNode, 'An error message', 'Some options'
         );

@@ -46,13 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking that the form field is not empty
- */
-require_once 'HTML/QuickForm2/Rule/Email.php';
-
-require_once 'HTML/QuickForm2/Element/InputText.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Email class
  */
 class HTML_QuickForm2_Rule_EmailTest extends PHPUnit_Framework_TestCase

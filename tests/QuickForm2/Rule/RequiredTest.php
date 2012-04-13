@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule for required form fields
- */
-require_once 'HTML/QuickForm2/Rule/Required.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Node.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Required class
  */
 class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase

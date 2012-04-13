@@ -46,49 +46,28 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Unit test for HTML_QuickForm2_Element_Button class
+ * Unit test for HTML_QuickForm2_Element_Hierselect class
  */
-class HTML_QuickForm2_Element_ButtonTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_HierselectTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    public function testUpdateValueOnNameChange()
     {
-        $_POST = array(
-            'foo' => 'A button clicked',
-            'bar' => 'Another button clicked'
+        $primary   = array(1 => 'one', 2 => 'two');
+        $secondary = array(
+            1 => array(11 => 'one-one', 12 => 'one-two'),
+            2 => array(21 => 'two-one', 22 => 'two-two')
         );
-    }
 
-    public function testConstructorSetsContent()
-    {
-        $button = new HTML_QuickForm2_Element_Button('foo', null, array('content' => 'Some string'));
-        $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
-    }
-
-    public function testCannotBeFrozen()
-    {
-        $button = new HTML_QuickForm2_Element_Button('foo');
-        $this->assertFalse($button->toggleFrozen(true));
-        $this->assertFalse($button->toggleFrozen());
-    }
-
-    public function testSetValueFromSubmitDataSource()
-    {
-        $form = new HTML_QuickForm2('buttons', 'post', null, false);
-        $foo = $form->appendChild(new HTML_QuickForm2_Element_Button('foo', array('type' => 'submit')));
-        $bar = $form->appendChild(new HTML_QuickForm2_Element_Button('bar', array('type' => 'button')));
-        $baz = $form->appendChild(new HTML_QuickForm2_Element_Button('baz', array('type' => 'submit')));
-
+        $form = new HTML_QuickForm2('testHierselectForm');
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'foo' => 'Default for foo',
-            'bar' => 'Default for bar',
-            'baz' => 'Default for baz'
+            'foo' => array(1, 12),
+            'bar' => array(2, 21)
         )));
-        $this->assertEquals('A button clicked', $foo->getValue());
-        $this->assertNull($bar->getValue());
-        $this->assertNull($baz->getValue());
+        $hs   = $form->addHierselect('foo')->loadOptions(array($primary, $secondary));
+        $this->assertEquals(array(1, 12), $hs->getValue());
 
-        $foo->setAttribute('disabled');
-        $this->assertNull($foo->getValue());
+        $hs->setName('bar');
+        $this->assertEquals(array(2, 21), $hs->getValue());
     }
 }
 ?>

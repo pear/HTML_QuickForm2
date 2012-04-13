@@ -46,10 +46,6 @@
 /** Sets up includes */
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Element/InputCheckable.php';
-require_once 'HTML/QuickForm2/Element/Select.php';
-
 class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
 {
     public function getType() { return 'concrete'; }

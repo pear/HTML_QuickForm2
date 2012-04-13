@@ -46,17 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking the value via a callback function (method) with logical negation
- */
-require_once 'HTML/QuickForm2/Rule/NotCallback.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-
-/**
  * Unit test for HTML_QuickForm2_Rule_NotCallback class
  */
 class HTML_QuickForm2_Rule_NotCallbackTest extends PHPUnit_Framework_TestCase

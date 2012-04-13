@@ -46,26 +46,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Container class
- */
-require_once 'HTML/QuickForm2/Container.php';
-
-/**
- * Base class for "scalar" elements
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
- * Base class for HTML_QuickForm2 renderers
- */
-require_once 'HTML/QuickForm2/Renderer.php';
-
-/**
  * A non-abstract subclass of Element
  *
  * Element class is still abstract, we should "implement" the remaining methods.

@@ -47,22 +47,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Container class
- */
-require_once 'HTML/QuickForm2/Container.php';
-
-/**
- * Base class for "scalar" elements
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
- * Base class for "checkbox" elements, used in tests
- */
-require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
-
-
-/**
  * Unit test for HTML_QuickForm2_Container overloaded methods
  */
 class HTML_QuickForm2_ContainerOverloadTest extends PHPUnit_Framework_TestCase

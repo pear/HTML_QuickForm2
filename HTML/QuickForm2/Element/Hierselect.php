@@ -278,6 +278,22 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         return $this;
     }
 
+    /**
+     * Sets the element's name
+     *
+     * Need to override group's implementation due to overridden updateValue()
+     *
+     * @param string $name
+     *
+     * @return HTML_QuickForm2_Element_Hierselect
+     */
+    public function setName($name)
+    {
+        parent::setName($name);
+        $this->updateValue();
+        return $this;
+    }
+
    /**
     * Called when the element needs to update its value from form's data sources
     *
@@ -365,19 +381,6 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         }
         return 'qf.elements.hierselect.init(' . HTML_QuickForm2_JavascriptBuilder::encode($ids)
                . (empty($this->jsCallback)? '': ", {$this->jsCallback}") . ');';
-    }
-
-    public function __toString()
-    {
-        require_once 'HTML/QuickForm2/Renderer.php';
-
-        $cr = HTML_Common2::getOption('linebreak');
-        return $this->render(
-                    HTML_QuickForm2_Renderer::factory('default')
-                        ->setTemplateForId($this->getId(), '{content}')
-               )->__toString()
-               . "<script type=\"text/javascript\">{$cr}//<![CDATA[{$cr}"
-               . $this->_generateInitScript() . "{$cr}//]]>{$cr}</script>";
     }
 
    /**

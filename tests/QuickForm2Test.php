@@ -45,12 +45,6 @@
 /** Sets up includes */
 require_once dirname(__FILE__) . '/TestHelper.php';
 
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-
 class FormRule extends HTML_QuickForm2_Rule
 {
     protected function validateOwner()

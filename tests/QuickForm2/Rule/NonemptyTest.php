@@ -44,14 +44,6 @@
 
 /** Sets up includes */
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
-/** Rule checking that the form field is not empty */
-require_once 'HTML/QuickForm2/Rule/Nonempty.php';
-/** Class for <input type="file" /> elements */
-require_once 'HTML/QuickForm2/Element/InputFile.php';
-/** Classes for <select> elements */
-require_once 'HTML/QuickForm2/Element/Select.php';
-/** Container class */
-require_once 'HTML/QuickForm2/Container.php';
 
 /**
  * Unit test for HTML_QuickForm2_Rule_Nonempty class

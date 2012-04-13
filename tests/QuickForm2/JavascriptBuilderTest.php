@@ -47,23 +47,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Javascript aggregator and builder class
- */
-require_once 'HTML/QuickForm2/JavascriptBuilder.php';
-
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
-
-/**
- * Class for <input type="text" /> elements
- *
- * We need a subclass of Node that can be instantiated
- */
-require_once 'HTML/QuickForm2/Element/InputText.php';
-
-/**
  * Unit test for HTML_QuickForm2_JavascriptBuilder class
  */
 class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase

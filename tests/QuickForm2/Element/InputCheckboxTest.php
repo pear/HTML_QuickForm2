@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="checkbox" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputCheckbox.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputCheckbox class
  */
 class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCase
@@ -138,6 +128,30 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
             'testBox', array('value' => 0)
         );
         $this->assertContains('value="0"', $box->__toString());
+    }
+
+    /**
+     * If a form contained only non-submit data sources, 'checked' attribute was unlikely to be ever cleared
+     */
+    public function testCheckedAttributeShouldBeCleared()
+    {
+        $formNoSubmit = new HTML_QuickForm2('neverSubmitted');
+        $box1 = new HTML_QuickForm2_Element_InputCheckbox('box1', 'checked');
+        $box2 = new HTML_QuickForm2_Element_InputCheckbox('box2');
+        $formNoSubmit->appendChild($box1);
+        $formNoSubmit->appendChild($box2);
+
+        $this->assertNotNull($box1->getAttribute('checked'));
+        $this->assertNull($box2->getAttribute('checked'));
+
+        $formNoSubmit->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'box2' => true
+        )));
+        $this->assertNotNull($box2->getAttribute('checked'));
+        $this->assertNull($box1->getAttribute('checked'));
+
+        $box2->setName('box3');
+        $this->assertNull($box2->getAttribute('checked'));
     }
 }
 ?>

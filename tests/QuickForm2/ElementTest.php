@@ -46,16 +46,6 @@
 require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
 
 /**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * A non-abstract subclass of Element
  *
  * Element class is still abstract, we should "implement" the remaining methods.

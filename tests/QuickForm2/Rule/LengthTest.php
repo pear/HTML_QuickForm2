@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking the value's length
- */
-require_once 'HTML/QuickForm2/Rule/Length.php';
-
-/**
- * Element class
- */
-require_once 'HTML/QuickForm2/Element.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Length class
  */
 class HTML_QuickForm2_Rule_LengthTest extends PHPUnit_Framework_TestCase

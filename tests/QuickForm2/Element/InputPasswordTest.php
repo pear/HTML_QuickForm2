@@ -46,11 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <input type="password" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputPassword.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_InputCheckbox class
  */
 class HTML_QuickForm2_Element_InputPasswordTest extends PHPUnit_Framework_TestCase

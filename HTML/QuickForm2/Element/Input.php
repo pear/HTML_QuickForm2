@@ -84,7 +84,7 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
 
     public function setValue($value)
     {
-        $this->setAttribute('value', $value);
+        $this->setAttribute('value', (string)$value);
         return $this;
     }
 

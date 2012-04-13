@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Rule checking that the form field is empty
- */
-require_once 'HTML/QuickForm2/Rule/Empty.php';
-
-/**
- * Class for <input type="file" /> elements
- */
-require_once 'HTML/QuickForm2/Element/InputFile.php';
-
-/**
  * Unit test for HTML_QuickForm2_Rule_Empty class
  */
 class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase

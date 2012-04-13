@@ -112,7 +112,8 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             'suffix'    => '</li></ul><qf:message><p>{message}</p></qf:message></div>'
         ),
         'html_quickform2_element' => '<div class="row"><p class="label"><qf:required><span class="required">*</span></qf:required><qf:label><label for="{id}">{label}</label></qf:label></p><div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}<br /></span></qf:error>{element}</div></div>',
-        'html_quickform2_container_group' => '<div class="row"><p class="label"><qf:required><span class="required">*</span></qf:required><qf:label><label>{label}</label></qf:label></p><div class="element group<qf:error> error</qf:error>" id="{id}"><qf:error><span class="error">{error}<br /></span></qf:error>{content}</div></div>'
+        'html_quickform2_container_group' => '<div class="row {class}"><p class="label"><qf:required><span class="required">*</span></qf:required><qf:label><label>{label}</label></qf:label></p><div class="element group<qf:error> error</qf:error>" id="{id}"><qf:error><span class="error">{error}<br /></span></qf:error>{content}</div></div>',
+        'html_quickform2_container_repeat' => '<div class="row repeat" id="{id}"><qf:label><p>{label}</p></qf:label>{content}<br /><a href="#" class="repeatAdd">Add...</a></div>'
     );
 
    /**
@@ -364,8 +365,9 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function finishGroup(HTML_QuickForm2_Node $group)
     {
         $gTpl = str_replace(
-            array('{attributes}', '{id}'),
-            array($group->getAttributes(true), array_pop($this->groupId)),
+            array('{attributes}', '{id}', '{class}'),
+            array($group->getAttributes(true), array_pop($this->groupId),
+                  $group->getAttribute('class')),
             $this->prepareTemplate($this->findTemplate($group, '{content}'), $group)
         );
 

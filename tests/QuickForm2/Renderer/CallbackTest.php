@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Renderer base class
- */
-require_once 'HTML/QuickForm2/Renderer.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Renderer_Callback class
  */
 class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase

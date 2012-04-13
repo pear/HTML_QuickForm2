@@ -46,16 +46,6 @@
 require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
 
 /**
- * Class for <group> elements
- */
-require_once 'HTML/QuickForm2/Container/Group.php';
-
-/**
- * Class representing a HTML form
- */
-require_once 'HTML/QuickForm2.php';
-
-/**
  * Unit test for HTML_QuickForm2_Element_Group class
  */
 class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
