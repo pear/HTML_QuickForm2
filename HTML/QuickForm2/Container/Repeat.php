@@ -462,9 +462,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     /**
      * Backs up child attributes
      *
+     * @param bool $backupId    whether to backup id attribute
+     * @param bool $backupError whether to backup error message
+     *
      * @return array backup array
      */
-    protected function backupChildAttributes()
+    protected function backupChildAttributes($backupId = false, $backupError = false)
     {
         $this->appendIndexTemplates();
         $backup = array();
@@ -472,10 +475,17 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
             $backup[$key++] = array(
-                'name'  => $child->getName(),
-                'id'    => $child->getId(),
-                'value' => $child->getAttribute('value'),
-                'error' => $child->getError()
+                'name' => $child->getName(),
+            ) + (
+                $child instanceof HTML_QuickForm2_Element_InputCheckable
+                ? array('valueAttr' => $child->getAttribute('value')) : array()
+            ) + (
+                $child instanceof HTML_QuickForm2_Container
+                ? array() : array('value' => $child->getValue())
+            ) + (
+                $backupId ? array('id' => $child->getId()) : array()
+            ) + (
+                $backupError ? array('error' => $child->getError()) : array()
             );
         }
         return $backup;
@@ -493,13 +503,16 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $key = 0;
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
+            if (array_key_exists('value', $backup[$key])) {
+                $child->setValue($backup[$key]['value']);
+            }
             if (false !== strpos($backup[$key]['name'], self::INDEX_KEY)) {
                 $child->setName($backup[$key]['name']);
             }
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable
-                && false !== strpos($backup[$key]['value'], self::INDEX_KEY)
+                && false !== strpos($backup[$key]['valueAttr'], self::INDEX_KEY)
             ) {
-                $child->setAttribute('value', $backup[$key]['value']);
+                $child->setAttribute('value', $backup[$key]['valueAttr']);
             }
             if (array_key_exists('id', $backup[$key])) {
                 $child->setId($backup[$key]['id']);
@@ -530,10 +543,10 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                 $child->setName(str_replace(self::INDEX_KEY, $index, $backup[$key]['name']));
             }
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable
-                && false !== strpos($backup[$key]['value'], self::INDEX_KEY)
+                && false !== strpos($backup[$key]['valueAttr'], self::INDEX_KEY)
             ) {
                 $child->setAttribute(
-                    'value', str_replace(self::INDEX_KEY, $index, $backup[$key]['value'])
+                    'value', str_replace(self::INDEX_KEY, $index, $backup[$key]['valueAttr'])
                 );
             }
             if (array_key_exists('id', $backup[$key])) {
@@ -579,7 +592,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     protected function validate()
     {
-        $backup = $this->backupChildAttributes();
+        $backup = $this->backupChildAttributes(false, true);
         $valid  = true;
         $this->childErrors = array();
         foreach ($this->itemIndexes as $index) {
@@ -638,7 +651,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
-        $backup      = $this->backupChildAttributes();
+        $backup      = $this->backupChildAttributes(true, true);
         $hiddens     = $renderer->getOption('group_hiddens');
         $jsBuilder   = $renderer->getJavascriptBuilder();
         $evalBuilder = new HTML_QuickForm2_Container_Repeat_JavascriptBuilder();
