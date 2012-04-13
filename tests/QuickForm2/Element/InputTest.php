@@ -94,6 +94,14 @@ class HTML_QuickForm2_Element_InputTest extends PHPUnit_Framework_TestCase
         $this->assertNull($obj->getValue());
     }
 
+    public function testSetNullValue()
+    {
+        $obj = new HTML_QuickForm2_Element_InputImpl();
+        $obj->setValue(null);
+
+        $this->assertEquals('', $obj->getValue());
+    }
+
     public function testHtmlGeneration()
     {
         $obj = new HTML_QuickForm2_Element_InputImpl();
