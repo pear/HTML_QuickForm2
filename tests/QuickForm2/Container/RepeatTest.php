@@ -175,5 +175,32 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
         $fieldset->addText('blergh');
         $this->assertEquals(array('foo', 'bar'), $repeat->getIndexes());
     }
+
+    public function testGetValue()
+    {
+        $values = array(
+            'foo' => array('a' => 'a value', 'b' => 'b value', 'c' => 'c value'),
+            'bar' => array(
+                'baz' => array('a' => 'aa', 'b' => 'bb', 'c' => 'cc')
+            )
+        );
+
+        $form   = new HTML_QuickForm2('repeatValue');
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array($values));
+        $form->appendChild($repeat);
+
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat->setPrototype($fieldset);
+
+        $fieldset->addText('foo');
+        $fieldset->addText('bar[baz]');
+
+        $this->assertEquals($values, $repeat->getValue());
+
+        $repeat->setIndexes(array('a', 'c'));
+        unset($values['foo']['b'], $values['bar']['baz']['b']);
+        $this->assertEquals($values, $repeat->getValue());
+    }
 }
 ?>

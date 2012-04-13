@@ -572,7 +572,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     {
         $backup = $this->backupChildAttributes();
         $values = array();
-        foreach ($this->itemIndexes as $index) {
+        foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
             $values = self::arrayMerge(
                 $values, parent::getChildValues($filtered)
@@ -595,7 +595,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $backup = $this->backupChildAttributes(false, true);
         $valid  = true;
         $this->childErrors = array();
-        foreach ($this->itemIndexes as $index) {
+        foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
             $valid = $this->getPrototype()->validate() && $valid;
             /* @var HTML_QuickForm2_Node $child */
@@ -670,7 +670,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $renderer->setJavascriptBuilder($jsBuilder);
 
         // next, render all available rows
-        foreach ($this->itemIndexes as $index) {
+        foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
