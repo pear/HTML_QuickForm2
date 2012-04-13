@@ -159,7 +159,7 @@ qf.Repeat.prototype = {
      */
     findIndex: function(item)
     {
-        var itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '(\\d+?)') + '$'),
+        var itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '([a-zA-Z0-9_]+?)') + '$'),
             m;
 
         if (item.id && (m = itemRegexp.exec(item.id))) {
@@ -189,6 +189,21 @@ qf.Repeat.prototype = {
         return parent;
     },
     /**
+     * Generates a new index for item being added to the repeat
+     *
+     * @returns {String}
+     */
+    generateIndex: function()
+    {
+        var index;
+
+        do {
+            // 10000 will be enough for everybody!
+            index = 'add' + Math.round(Math.random() * 10000);
+        } while (document.getElementById(this.itemId.replace(':idx:', index)));
+        return index;
+    },
+    /**
      * Adds a new repeated item to the repeat element
      */
     add: function()
@@ -200,14 +215,7 @@ qf.Repeat.prototype = {
         var items    = this.getElementsByClass('repeatItem', this.container),
             lastItem = items[items.length - 1],
             clone    = this.repeatPrototype.cloneNode(true),
-            index;
-
-        if (qf.classes.has(lastItem, 'repeatPrototype')) {
-            // last item *is* prototype -> use 0 as index
-            index = 0;
-        } else {
-            index = this.findIndex(lastItem) - (-1);
-        }
+            index    = this.generateIndex();
 
         qf.classes.remove(clone, 'repeatPrototype');
         if (clone.id) {

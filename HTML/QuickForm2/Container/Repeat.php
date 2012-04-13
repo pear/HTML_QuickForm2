@@ -137,8 +137,8 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
  * // this is identical to $group->addCheckbox('related_active');
  * $repeat->addCheckbox('related_active');
  *
- * // value of this field will be used to find the number of repeated items
- * $repeat->setIdentityField('related_id');
+ * // value of this field will be used to find the indexes of repeated items
+ * $repeat->setIndexField('related_id');
  * </code>
  *
  * @category HTML
@@ -157,10 +157,15 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     const INDEX_KEY = ':idx:';
 
     /**
+     * Regular expression used to check for valid indexes
+     */
+    const INDEX_REGEXP = '/^[a-zA-Z0-9_]+$/';
+
+    /**
      * Field used to search for available indexes
      * @var string
      */
-    protected $identityField;
+    protected $indexField = null;
 
     /**
      * Available indexes
@@ -311,13 +316,80 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * may be disabled are bad choices
      *
      * @param string $field field name
-     *
-     * @todo currently will not work without this, maybe use the first field if not given explicitly?
      */
-    public function setIdentityField($field)
+    public function setIndexField($field)
     {
-        $this->identityField = $field;
+        $this->indexField = $field;
         $this->updateValue();
+    }
+
+    /**
+     * Tries to guess a field name to use for getting indexes of repeated items
+     *
+     * @return bool Whether we were able to guess something
+     * @see setIndexField()
+     */
+    private function _guessIndexField()
+    {
+        $this->appendIndexTemplates();
+        $this->passDataSources = false;
+        /* @var $child HTML_QuickForm2_Node */
+        foreach ($this->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
+            $name = $child->getName();
+            if (false === ($pos = strpos($name, '[' . self::INDEX_KEY . ']'))
+                || $child->getAttribute('disabled')
+            ) {
+                continue;
+            }
+            // The list is somewhat future-proof for HTML5 input elements
+            if ($child instanceof HTML_QuickForm2_Element_Input
+                && !($child instanceof HTML_QuickForm2_Element_InputButton
+                     || $child instanceof HTML_QuickForm2_Element_InputCheckable
+                     || $child instanceof HTML_QuickForm2_Element_InputFile
+                     || $child instanceof HTML_QuickForm2_Element_InputImage
+                     || $child instanceof HTML_QuickForm2_Element_InputReset
+                     || $child instanceof HTML_QuickForm2_Element_InputSubmit)
+                || ($child instanceof HTML_QuickForm2_Element_Select
+                    && !$child->getAttribute('multiple'))
+                || $child instanceof HTML_QuickForm2_Element_Textarea
+            ) {
+                $this->indexField = substr($name, 0, $pos);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the indexes for repeated items
+     *
+     * @return array
+     */
+    public function getIndexes()
+    {
+        if (null === $this->indexField && $this->_guessIndexField()) {
+            $this->updateValue();
+        }
+        return $this->itemIndexes;
+    }
+
+    /**
+     * Sets the indexes for repeated items
+     *
+     * As is the case with elements' values, the indexes will be updated
+     * from data sources, so use this after all possible updates were done.
+     *
+     * @param array $indexes
+     */
+    public function setIndexes(array $indexes)
+    {
+        $hash = array();
+        foreach ($indexes as $index) {
+            if (preg_match(self::INDEX_REGEXP, $index)) {
+                $hash[$index] = true;
+            }
+        }
+        $this->itemIndexes = array_keys($hash);
     }
 
     /**
@@ -326,7 +398,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * Behaves similar to Element::updateValue(), the field's value is used to
      * deduce indexes taken by repeat items.
      *
-     * @see setIdentityField()
+     * @see setIndexField()
      */
     protected function updateValue()
     {
@@ -342,11 +414,13 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             $container = $container->getContainer();
         }
 
+        if (null === $this->indexField && !$this->_guessIndexField()) {
+            return;
+        }
         /* @var HTML_QuickForm2_DataSource $ds */
         foreach (parent::getDataSources() as $ds) {
-            if (null !== ($value = $ds->getValue($this->identityField))) {
-                unset($value[self::INDEX_KEY]);
-                $this->itemIndexes = array_map('intval', array_keys($value));
+            if (null !== ($value = $ds->getValue($this->indexField))) {
+                $this->setIndexes(array_keys($value));
                 return;
             }
         }

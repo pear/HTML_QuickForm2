@@ -107,5 +107,73 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
         $repeat->removeChild($textOne);
         $this->assertNull($textOne->getContainer());
     }
+
+    public function testSetIndexesExplicitly()
+    {
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $repeat->setIndexes(array('foo', 'bar', 'baz', 'qu\'ux', 'baz', 25));
+        $this->assertEquals(array('foo', 'bar', 'baz', 25), $repeat->getIndexes());
+    }
+
+    public function testSetIndexFieldExplicitly()
+    {
+        $form = new HTML_QuickForm2('testIndexField');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'blah' => array(
+                'blergh'    => 'a',
+                'blurgh'    => 'b',
+                'ba-a-a-ah' => 'c',
+                42          => 'd'
+            ),
+            'argh' => array(
+                'a'    => 'e',
+                'b\'c' => 'f',
+                'd'    => 'g'
+            )
+        )));
+
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $repeat->setIndexField('blah');
+        $repeat->setIndexes(array('foo', 'bar'));
+        $form->appendChild($repeat);
+        $this->assertEquals(array('blergh', 'blurgh', 42), $repeat->getIndexes());
+
+        $repeat->setIndexField('argh');
+        $this->assertEquals(array('a', 'd'), $repeat->getIndexes());
+    }
+
+    public function testGuessIndexField()
+    {
+        $form = new HTML_QuickForm2('guessIndexField');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'blah'   => array('foo' => 1),
+            'bzz'    => array('bar' => array('a', 'b')),
+            'aaargh' => array('foo' => ''),
+            'blergh' => array('foo' => '', 'bar' => 'bar value')
+        )));
+
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $form->appendChild($repeat);
+
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat->setPrototype($fieldset);
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $fieldset->addCheckbox('blah');
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $fieldset->addSelect('bzz', array('multiple'));
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $fieldset->addText('aaargh', array('disabled'));
+        $this->assertEquals(array(), $repeat->getIndexes());
+
+        $fieldset->addText('blergh');
+        $this->assertEquals(array('foo', 'bar'), $repeat->getIndexes());
+    }
 }
 ?>
