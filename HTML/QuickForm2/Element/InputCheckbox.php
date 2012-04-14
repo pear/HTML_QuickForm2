@@ -64,8 +64,8 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
     protected $attributes = array('type' => 'checkbox');
 
     protected $frozenHtml = array(
-        'checked'   => '<tt>[x]</tt>',
-        'unchecked' => '<tt>[&nbsp;]</tt>'
+        'checked'   => '<code>[x]</code>',
+        'unchecked' => '<code>[&nbsp;]</code>'
     );
 
     public function __construct($name = null, $attributes = null, array $data = array())

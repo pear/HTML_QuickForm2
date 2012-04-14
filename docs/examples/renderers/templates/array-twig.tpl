@@ -48,10 +48,10 @@ body {
     </fieldset>
   {% elseif element.elements is defined %}
     <div class="row">
-      <label class="element">
-        {% if element.required %}<span class="required">* </span>{% endif %}
-        {{ element.label }}
-      </label>
+      <p class="label">
+        {% if element.required %}<span class="required">*</span>{% endif %}
+        {% if element.label %}<label>{{ element.label }}</label>{% endif %}
+      </p>
       <div class="element group {% if element.error %} error{% endif %}">
         {% if element.error %}<span class="error">{{ element.error }}<br /></span>{% endif %}
         {% for child in element.elements %}

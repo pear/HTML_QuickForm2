@@ -46,12 +46,12 @@ class PageSecond extends HTML_QuickForm2_Controller_Page
 
         $nameGroup = $fs->addElement('group', 'name', array('id' => 'nameGrp'))
                         ->setLabel('Name:')
-                        ->setSeparator(',&nbsp;');
+                        ->setSeparator('<span class="separator">,</span>');
         $nameGroup->addElement('text', 'last', array('size' => 20))
                   ->setLabel('Last')
                   ->addRule('required', 'Last name is required');
         $nameGroup->addElement('text', 'first', array('size' => 20))
-                  ->setLabel('first');
+                  ->setLabel('First');
 
         $buttonGroup = $fs->addElement('group');
         $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
@@ -102,6 +102,11 @@ body {
     width: 560px;
 }
 
+.separator {
+    float: left;
+    margin: 0.7em 0 0 0.1em;
+}
+
 /* Use default styles included with the package */
 
 <?php
@@ -123,7 +128,7 @@ body {
         '<div class="element<qf:error> error</qf:error>"><qf:error><span class="error">{error}</span><br /></qf:error>{element}<br /><label for="{id}"><qf:required><span class="required">* </span></qf:required>{label}</label></div>'
     );
     $renderer->setTemplateForId(
-        'nameGrp', '<div class="row"><label class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>{content}</div>'
+        'nameGrp', '<div class="row"><p class="label"><qf:required><span class="required">*</span></qf:required><qf:label><label>{label}</label></qf:label></p>{content}</div>'
     );
     echo $form->render($renderer);
 ?>

@@ -64,8 +64,8 @@ class HTML_QuickForm2_Element_InputRadio extends HTML_QuickForm2_Element_InputCh
     protected $attributes = array('type' => 'radio', 'value' => 'on');
 
     protected $frozenHtml = array(
-        'checked'   => '<tt>(x)</tt>',
-        'unchecked' => '<tt>(&nbsp;)</tt>'
+        'checked'   => '<code>(x)</code>',
+        'unchecked' => '<code>(&nbsp;)</code>'
     );
 }
 ?>
