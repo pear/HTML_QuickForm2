@@ -561,6 +561,9 @@ Bug fixes
     <file name="hierselect-ajax.php" role="doc">
      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
     </file>
+    <file name="repeat.php" role="doc">
+     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+    </file>
    </dir> <!-- /docs/examples -->
    <dir name="data/js">
     <dir name="min">
@@ -624,6 +627,7 @@ Bug fixes
    <install as="examples/default-renderer.php" name="docs/examples/default-renderer.php" />
    <install as="examples/dualselect.php" name="docs/examples/dualselect.php" />
    <install as="examples/hierselect-ajax.php" name="docs/examples/hierselect-ajax.php" />
+   <install as="examples/repeat.php" name="docs/examples/repeat.php" />
 
    <install as="AllTests.php" name="tests/AllTests.php" />
    <install as="QuickForm2Test.php" name="tests/QuickForm2Test.php" />

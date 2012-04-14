@@ -91,7 +91,7 @@ qf.Repeat.addHandler = function(event)
     while (parent && !qf.classes.has(parent, 'repeat')) {
         parent = parent.parentNode;
     }
-    if (parent && parent.repeat) {
+    if (parent && parent.repeat && parent.repeat.onBeforeAdd()) {
         parent.repeat.add();
     }
     event.preventDefault();
@@ -114,7 +114,7 @@ qf.Repeat.removeHandler = function(event)
         }
         parent = parent.parentNode;
     }
-    if (parent && parent.repeat) {
+    if (parent && parent.repeat && parent.repeat.onBeforeRemove(item)) {
         parent.repeat.remove(item);
     }
     event.preventDefault();
@@ -265,6 +265,7 @@ qf.Repeat.prototype = {
                 }
             }
         }
+        this.onChange();
     },
     /**
      * Removes an item from repeat element
@@ -295,5 +296,35 @@ qf.Repeat.prototype = {
             }
         }
         item.parentNode.removeChild(item);
+        this.onChange();
+    },
+    /**
+     * Called before adding a repeated item.
+     *
+     * If this method returns false, no item will be added
+     *
+     * @returns {Boolean}
+     */
+    onBeforeAdd: function()
+    {
+        return true;
+    },
+    /**
+     * Called before removing a repeated item.
+     *
+     * If this method returns false, the item will not be removed
+     *
+     * @param {Node} item
+     * @returns {Boolean}
+     */
+    onBeforeRemove: function(item)
+    {
+        return true;
+    },
+    /**
+     * Called after adding or deleting the item
+     */
+    onChange: function()
+    {
     }
 };

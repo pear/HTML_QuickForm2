@@ -92,12 +92,13 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
 
     public function testElementsAreAddedToPrototype()
     {
-        $repeat   = new HTML_QuickForm2_Container_Repeat();
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat   = new HTML_QuickForm2_Container_Repeat(
+            null, null, array('prototype' => $fieldset)
+        );
         $textOne  = new HTML_QuickForm2_Element_InputText('firstText');
         $textTwo  = new HTML_QuickForm2_Element_InputText('secondText');
 
-        $repeat->setPrototype($fieldset);
         $repeat->appendChild($textOne);
         $this->assertSame($textOne->getContainer(), $fieldset);
 
@@ -201,6 +202,15 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
         $repeat->setIndexes(array('a', 'c'));
         unset($values['foo']['b'], $values['bar']['baz']['b']);
         $this->assertEquals($values, $repeat->getValue());
+    }
+
+    public function testFrozenRepeatShouldNotContainJavascript()
+    {
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $repeat->setPrototype(new HTML_QuickForm2_Container_Fieldset());
+        $repeat->toggleFrozen(true);
+
+        $this->assertNotContains('<script', $repeat->__toString());
     }
 }
 ?>

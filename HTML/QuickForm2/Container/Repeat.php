@@ -212,6 +212,25 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
+     * Class constructor
+     *
+     * Repeat element can understand the following keys in $data parameter:
+     *   - 'prototype': a Container to be repeated. Passed to {@link setPrototype()}.
+     *
+     * @param string       $name       Element name
+     * @param string|array $attributes Attributes (either a string or an array)
+     * @param array        $data       Additional element data
+     */
+    public function __construct($name = null, $attributes = null, array $data = array())
+    {
+        if (!empty($data['prototype'])) {
+            $this->setPrototype($data['prototype']);
+        }
+        unset($data['prototype']);
+        parent::__construct($name, $attributes, $data);
+    }
+
+    /**
      * Sets the Container that will be used as a prototype for repeating
      *
      * @param HTML_QuickForm2_Container $prototype prototype container
@@ -316,11 +335,14 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * may be disabled are bad choices
      *
      * @param string $field field name
+     *
+     * @return HTML_QuickForm2_Container_Repeat
      */
     public function setIndexField($field)
     {
         $this->indexField = $field;
         $this->updateValue();
+        return $this;
     }
 
     /**
@@ -380,6 +402,8 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * from data sources, so use this after all possible updates were done.
      *
      * @param array $indexes
+     *
+     * @return HTML_QuickForm2_Container_Repeat
      */
     public function setIndexes(array $indexes)
     {
@@ -390,6 +414,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             }
         }
         $this->itemIndexes = array_keys($hash);
+        return $this;
     }
 
     /**
@@ -682,9 +707,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         }
         $this->restoreChildAttributes($backup);
 
-        $jsBuilder->addLibrary('repeat', 'quickform-repeat.js');
-        $jsBuilder->addElementJavascript($this->_generateInitScript($evalBuilder));
-        $this->renderClientRules($jsBuilder);
+        // only add javascript if not frozen
+        if (!$this->toggleFrozen()) {
+            $jsBuilder->addLibrary('repeat', 'quickform-repeat.js');
+            $jsBuilder->addElementJavascript($this->_generateInitScript($evalBuilder));
+            $this->renderClientRules($jsBuilder);
+        }
 
         $renderer->finishContainer($this);
         $renderer->setOption('group_hiddens', $hiddens);
