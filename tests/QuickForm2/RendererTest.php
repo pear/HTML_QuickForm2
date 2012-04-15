@@ -113,17 +113,6 @@ class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('HTML_QuickForm2_Renderer', $renderer);
     }
 
-    public function testRegisterOnlyOnce()
-    {
-        try {
-            HTML_Quickform2_Renderer::register('default', 'HTML_QuickForm2_FakeRenderer');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/already registered/', $e->getMessage());
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-    }
-
     public function testRegisterPlugin()
     {
         $type = 'fake' . mt_rand();

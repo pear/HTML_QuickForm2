@@ -162,11 +162,6 @@ abstract class HTML_QuickForm2_Renderer
     final public static function register($type, $className, $includeFile = null)
     {
         $type = strtolower($type);
-        if (!empty(self::$_types[$type])) {
-            throw new HTML_QuickForm2_InvalidArgumentException(
-                "Renderer type '$type' is already registered"
-            );
-        }
         self::$_types[$type] = array($className, $includeFile);
         if (empty(self::$_pluginClasses[$type])) {
             self::$_pluginClasses[$type] = array();

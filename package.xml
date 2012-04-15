@@ -69,6 +69,8 @@ Bug fixes
   * Hierselect's value is properly updated when its name changes
   * Unit tests use autoloader instead of explicit 'require_once', all tests now
     can be run separately
+  * HTML_QuickForm2_Renderer::register() allows overriding an existing renderer
+    type, similar to elements and rules
  </notes>
  <contents>
   <dir name="/">
