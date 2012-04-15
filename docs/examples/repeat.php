@@ -49,7 +49,7 @@ $country = $repeatFs->addSelect('country')->loadOptions($countries)->setLabel('C
 $repeatFs->addText('region', array('style' => 'width: 20em;'))->setLabel('Region:');
 $street  = $repeatFs->addText('street', array('style' => 'width: 20em;'))->setLabel('Street address:');
 $repeatFs->addCheckbox('default')->setContent('default shipping address');
-// button to remove a repeated item from a repeat
+// button to remove a repeated item from a repeat, enabled automatically
 $repeatFs->addButton('remove', array('type' => 'button'))
          ->setContent('remove this address')
          ->addClass('repeatRemove');
@@ -78,10 +78,30 @@ $repeatGroup->addRadio('main', array('value' => 'yes_:idx:'))->setContent('main'
 $repeatGroup->addButton('remove', array('type' => 'button'))
             ->setContent('X')
             ->addClass('repeatRemove');
+// a button for adding repeated elements, with an explicit onclick
+$fsTwo->addButton('add', array(
+    'type'    => 'button',
+    'onclick' => "document.getElementById('repeat-group').repeat.add(); return false;"
+))->setContent('Add another link');
+
 
 $form->addSubmit('submit', array('value' => 'Send this form'));
 
+/* @var $renderer HTML_QuickForm2_Renderer_Default */
 $renderer = HTML_QuickForm2_Renderer::factory('default');
+// a custom template for first repeat element, a link for adding repeated
+// elements there will be automatically made active due to repeatAdd class
+$renderer->setTemplateForId(
+    'repeat-fieldset',
+    <<<HTML
+<div class="row repeat" id="{id}">
+ <qf:label><p>{label}</p></qf:label>
+ {content}<br />
+ <a class="repeatAdd" href="#">Add another address...</a>
+</div>
+HTML
+);
+
 $form->render($renderer);
 
 ?>

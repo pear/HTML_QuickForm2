@@ -114,7 +114,7 @@ qf.Repeat.removeHandler = function(event)
         }
         parent = parent.parentNode;
     }
-    if (parent && parent.repeat && parent.repeat.onBeforeRemove(item)) {
+    if (parent && item && parent.repeat && parent.repeat.onBeforeRemove(item)) {
         parent.repeat.remove(item);
     }
     event.preventDefault();
@@ -152,12 +152,12 @@ qf.Repeat.prototype = {
         }
     })(),
     /**
-     * Finds a numeric index for a given repeat item
+     * Finds an index for a given repeat item
      *
      * @param {Node} item
-     * @returns {Number}
+     * @returns {String}
      */
-    findIndex: function(item)
+    findIndexByItem: function(item)
     {
         var itemRegexp = new RegExp('^' + this.itemId.replace(':idx:', '([a-zA-Z0-9_]+?)') + '$'),
             m;
@@ -174,6 +174,24 @@ qf.Repeat.prototype = {
                 }
             }
         }
+        return null;
+    },
+    /**
+     * Finds a repeat item for a given index
+     *
+     * @param {String} index
+     * @returns {Node}
+     */
+    findItemByIndex: function(index)
+    {
+        var id = this.itemId.replace(':idx:', index),
+            el = document.getElementById(id);
+        if (el && !qf.classes.has(el, 'repeatItem')) {
+            do {
+                el = el.parentNode;
+            } while (el && !qf.classes.has(el, 'repeatItem'));
+        }
+        return el;
     },
     /**
      * Finds a form containing repeat element
@@ -270,19 +288,28 @@ qf.Repeat.prototype = {
     /**
      * Removes an item from repeat element
      *
-     * @param {Node} item
+     * @param {Node|String} item
      */
     remove: function(item)
     {
+        var index;
+        if (typeof item == 'string') {
+            index = item;
+            if (!(item = this.findItemByIndex(index))) {
+                return;
+            }
+        }
         if (this.rulesTpl) {
             if (!this.form) {
                 this.form = this.findForm();
             }
             if (this.form.validator) {
                 var check = new qf.Map(),
-                    index = this.findIndex(item),
                     rules = this.form.validator.rules,
                     trigger, rule, i;
+                if (!index) {
+                    index = this.findIndexByItem(item);
+                }
                 for (i = 0; trigger = this.triggers[i]; i++) {
                     check.set(trigger.replace(':idx:', index), true);
                 }
