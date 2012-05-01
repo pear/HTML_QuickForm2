@@ -64,10 +64,10 @@ body {
     {{ element.html|raw }}
   {% else %}
     <div class="row">
-      <label for="{{ element.id }}" class="element">
-        {% if element.required %}<span class="required">* </span>{% endif %}
-        {{ element.label }}
-      </label>
+      <p class="label">
+        {% if element.required %}<span class="required">*</span>{% endif %}
+        {% if element.label %}<label for="{{ element.id }}">{{ element.label }}</label>{% endif %}
+      </p>
       <div class="element {% if element.error %} error{% endif %}">
           {% if element.error %}<span class="error">{{ element.error }}<br /></span>{% endif %}
           {{ element.html|raw }}
