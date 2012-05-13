@@ -233,13 +233,22 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
         if (isset($this->styles[$ary['id']])) {
             $ary['style'] = $this->styles[$ary['id']];
         }
-        if (!$element instanceof HTML_QuickForm2_Container) {
-            $ary['html']       = $element->__toString();
-        } else {
-            $ary['elements']   = array();
-            $ary['attributes'] = $element->getAttributes(true);
-        }
         return $ary;
+    }
+
+    /**
+     * Creates an array with fields that are common to all Containers
+     *
+     * @param HTML_QuickForm2_Node $container Container being rendered
+     *
+     * @return array
+     */
+    public function buildCommonContainerFields(HTML_QuickForm2_Node $container)
+    {
+        return $this->buildCommonFields($container) + array(
+            'elements'   => array(),
+            'attributes' => $container->getAttributes(true)
+        );
     }
 
    /**
@@ -307,6 +316,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     public function renderElement(HTML_QuickForm2_Node $element)
     {
         $ary = $this->buildCommonFields($element) + array(
+            'html'     => $element->__toString(),
             'value'    => $element->getValue(),
             'type'     => $element->getType(),
             'required' => $element->isRequired(),
@@ -327,7 +337,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     {
         $this->reset();
 
-        $this->array = $this->buildCommonFields($form);
+        $this->array = $this->buildCommonContainerFields($form);
         if ($this->options['group_errors']) {
             $this->array['errors'] = array();
         }
@@ -348,7 +358,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     public function startContainer(HTML_QuickForm2_Node $container)
     {
-        $ary = $this->buildCommonFields($container) + array(
+        $ary = $this->buildCommonContainerFields($container) + array(
             'required' => $container->isRequired(),
             'type'     => $container->getType()
         );
@@ -362,9 +372,10 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     public function startGroup(HTML_QuickForm2_Node $group)
     {
-        $ary = $this->buildCommonFields($group) + array(
+        $ary = $this->buildCommonContainerFields($group) + array(
             'required' => $group->isRequired(),
-            'type'     => $group->getType()
+            'type'     => $group->getType(),
+            'class'    => $group->getAttribute('class')
         );
         if ($separator = $group->getSeparator()) {
             $ary['separator'] = array();
