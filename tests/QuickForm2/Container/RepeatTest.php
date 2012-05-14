@@ -212,5 +212,36 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotContains('<script', $repeat->__toString());
     }
+
+    public function testServerSideValidationErrors()
+    {
+        $ds = new HTML_QuickForm2_DataSource_Session(array(
+            'foo' => array('', 'blah', '')
+        ));
+        $form = new HTML_QuickForm2('repeatValidate');
+        $form->addDataSource($ds);
+
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $text     = new HTML_QuickForm2_Element_InputText('foo');
+        $repeat   = new HTML_QuickForm2_Container_Repeat(
+            null, null, array('prototype' => $fieldset)
+        );
+        $fieldset->appendChild($text);
+        $form->appendChild($repeat);
+
+        $text->addRule('required', 'a message');
+        $this->assertFalse($form->validate());
+
+        $ary = $repeat->render(HTML_QuickForm2_Renderer::factory('array'))->toArray();
+        $this->assertEquals('a message', $ary['elements'][1]['elements'][0]['error']);
+        $this->assertArrayNotHasKey('error', $ary['elements'][2]['elements'][0]);
+        $this->assertEquals('a message', $ary['elements'][3]['elements'][0]['error']);
+
+        $text->setId('blah-:idx:');
+        $ary = $repeat->render(HTML_QuickForm2_Renderer::factory('array'))->toArray();
+        $this->assertEquals('a message', $ary['elements'][1]['elements'][0]['error']);
+        $this->assertArrayNotHasKey('error', $ary['elements'][2]['elements'][0]);
+        $this->assertEquals('a message', $ary['elements'][3]['elements'][0]['error']);
+    }
 }
 ?>

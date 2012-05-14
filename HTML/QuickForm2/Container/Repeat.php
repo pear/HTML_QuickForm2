@@ -424,6 +424,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * deduce indexes taken by repeat items.
      *
      * @see setIndexField()
+     * @throws HTML_QuickForm2_Exception
      */
     protected function updateValue()
     {
@@ -626,7 +627,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
                 if (strlen($error = $child->getError())) {
-                    $this->childErrors[$child->getId()] = $error;
+                    $this->childErrors[spl_object_hash($child)][$index] = $error;
                 }
             }
         }
@@ -699,8 +700,10 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             $this->replaceIndexTemplates($index, $backup);
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
-                if (isset($this->childErrors[$id = $child->getId()])) {
-                    $child->setError($this->childErrors[$id]);
+                if (isset($this->childErrors[$hash = spl_object_hash($child)])
+                    && isset($this->childErrors[$hash][$index])
+                ) {
+                    $child->setError($this->childErrors[$hash][$index]);
                 }
             }
             $this->getPrototype()->render($renderer);
