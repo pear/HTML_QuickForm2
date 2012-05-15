@@ -174,7 +174,10 @@ class HTML_QuickForm2_Renderer_Default_DualSelectPlugin
         if (empty($this->renderer->templatesForClass['html_quickform2_element_dualselect'])) {
             $this->renderer->templatesForClass['html_quickform2_element_dualselect'] = <<<TPL
 <div class="row">
-    <label for="{id}-from" class="element"><qf:required><span class="required">* </span></qf:required>{label}</label>
+    <p class="label">
+        <qf:required><span class="required">* </span></qf:required>
+        <qf:label><label for="{id}-from" class="element">{label}</label></qf:label>
+    </p>
     <div class="element<qf:error> error</qf:error>">
         <qf:error><span class="error">{error}<br /></span></qf:error>
         <table class="dualselect" id="{id}">
