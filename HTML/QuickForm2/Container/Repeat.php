@@ -661,8 +661,8 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         );
         list ($rules, $scripts) = $evalBuilder->getFormJavascriptAsStrings();
 
-        return "new qf.Repeat(document.getElementById({$myId}), {$protoId}, {$triggers},\n"
-               . $rules . ",\n" . $scripts . "\n);";
+        return "new qf.elements.Repeat(document.getElementById({$myId}), {$protoId}, "
+               . "{$triggers},\n{$rules},\n{$scripts}\n);";
     }
 
     /**

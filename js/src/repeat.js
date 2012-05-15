@@ -20,7 +20,7 @@
  * @param {String} scriptsTpl
  * @constructor
  */
-qf.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
+qf.elements.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
 {
     container.repeat = this;
 
@@ -69,12 +69,12 @@ qf.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
     // find all elements with class repeatAdd inside container...
     var adders = this.getElementsByClass('repeatAdd', container);
     for (var i = 0, element; element = adders[i]; i++) {
-        qf.events.addListener(element, 'click', qf.Repeat.addHandler);
+        qf.events.addListener(element, 'click', qf.elements.Repeat.addHandler);
     }
     // find all elements with class repeatRemove inside container...
     var removers = this.getElementsByClass('repeatRemove', container);
     for (i = 0; element = removers[i]; i++) {
-        qf.events.addListener(element, 'click', qf.Repeat.removeHandler);
+        qf.events.addListener(element, 'click', qf.elements.Repeat.removeHandler);
     }
 };
 
@@ -83,7 +83,7 @@ qf.Repeat = function(container, itemId, triggers, rulesTpl, scriptsTpl)
  *
  * @param {Event} event
  */
-qf.Repeat.addHandler = function(event)
+qf.elements.Repeat.addHandler = function(event)
 {
     event = qf.events.fixEvent(event);
 
@@ -102,7 +102,7 @@ qf.Repeat.addHandler = function(event)
  *
  * @param {Event} event
  */
-qf.Repeat.removeHandler = function(event)
+qf.elements.Repeat.removeHandler = function(event)
 {
     event = qf.events.fixEvent(event);
 
@@ -120,7 +120,7 @@ qf.Repeat.removeHandler = function(event)
     event.preventDefault();
 };
 
-qf.Repeat.prototype = {
+qf.elements.Repeat.prototype = {
     /**
      * Finds elements by CSS class name
      *
@@ -259,10 +259,10 @@ qf.Repeat.prototype = {
                 eval(element.innerHTML.replace(/:idx:/g, index));
             }
             if (qf.classes.has(element, 'repeatAdd')) {
-                qf.events.addListener(element, 'click', qf.Repeat.addHandler);
+                qf.events.addListener(element, 'click', qf.elements.Repeat.addHandler);
             }
             if (qf.classes.has(element, 'repeatRemove')) {
-                qf.events.addListener(element, 'click', qf.Repeat.removeHandler);
+                qf.events.addListener(element, 'click', qf.elements.Repeat.removeHandler);
             }
         }
 
@@ -355,3 +355,10 @@ qf.Repeat.prototype = {
     {
     }
 };
+
+/**
+ * Alias for qf.elements.Repeat, in case someone managed to rely on that name
+ * @deprecated will be removed in the next release
+ * @type {Function}
+ */
+qf.Repeat = qf.elements.Repeat;
