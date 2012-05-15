@@ -189,5 +189,18 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $this->assertFalse($form->validate());
         $this->assertEquals('an error message', $foo->getError());
     }
+
+    /**
+     * Do not return values for automatically added elements from getValue()
+     * @link http://pear.php.net/bugs/bug.php?id=19403
+     */
+    public function testRequest19403()
+    {
+        $_POST = array('_qf__track' => '');
+        $form  = new HTML_QuickForm2('track');
+
+        $this->assertArrayHasKey('_qf__track', $form->getRawValue());
+        $this->assertArrayNotHasKey('_qf__track', $form->getValue());
+    }
 }
 ?>

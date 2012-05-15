@@ -468,42 +468,11 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     {
         $values = array();
         foreach (array_keys($this->pages) as $id) {
-            $pageValues = $this->getSessionContainer()->getValues($id);
-            // skip elements representing actions
-            foreach ($pageValues as $key => $value) {
-                if (0 !== strpos($key, '_qf')) {
-                    if (isset($values[$key]) && is_array($value)) {
-                        $values[$key] = self::arrayMerge($values[$key], $value);
-                    } else {
-                        $values[$key] = $value;
-                    }
-                }
-            }
+            $values = HTML_QuickForm2_Container::arrayMerge(
+                $values, $this->getSessionContainer()->getValues($id)
+            );
         }
         return $values;
-    }
-
-   /**
-    * Merges two arrays
-    *
-    * Merges two arrays like the PHP function array_merge_recursive does,
-    * the difference being that existing integer keys will not be renumbered.
-    *
-    * @param array $a
-    * @param array $b
-    *
-    * @return   array   resulting array
-    */
-    protected static function arrayMerge($a, $b)
-    {
-        foreach ($b as $k => $v) {
-            if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {
-                $a[$k] = $v;
-            } else {
-                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: array(), $v);
-            }
-        }
-        return $a;
     }
 
    /**

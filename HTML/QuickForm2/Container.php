@@ -213,7 +213,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @return   array   resulting array
     */
-    protected static function arrayMerge($a, $b)
+    public static function arrayMerge($a, $b)
     {
         foreach ($b as $k => $v) {
             if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {

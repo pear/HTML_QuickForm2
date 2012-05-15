@@ -114,6 +114,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
                 'hidden', '_qf__' . $id, array('id' => 'qf:' . $id)
             ));
         }
+        $this->addFilter(array($this, 'skipInternalFields'));
     }
 
     protected function onAttributeChange($name, $value = null)
@@ -233,6 +234,24 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         $this->renderClientRules($renderer->getJavascriptBuilder());
         $renderer->finishForm($this);
         return $renderer;
+    }
+
+    /**
+     * Filter for form's getValue() removing internal fields' values from the array
+     *
+     * @param array $value
+     *
+     * @return array
+     * @link http://pear.php.net/bugs/bug.php?id=19403
+     */
+    protected function skipInternalFields($value)
+    {
+        foreach (array_keys($value) as $key) {
+            if ('_qf' === substr($key, 0, 3)) {
+                unset($value[$key]);
+            }
+        }
+        return $value;
     }
 }
 ?>
