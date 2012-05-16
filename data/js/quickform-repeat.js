@@ -223,17 +223,22 @@ qf.elements.Repeat.prototype = {
     },
     /**
      * Adds a new repeated item to the repeat element
+     *
+     * @param {String} [index] Explicit index to use, will be generated if not given
+     * @return {String} Added element's index
      */
-    add: function()
+    add: function(index)
     {
         if (!this.repeatPrototype) {
             this.repeatPrototype = this.getElementsByClass('repeatPrototype', this.container)[0];
         }
+        if (0 == arguments.length || !/^[a-zA-Z0-9_]+$/.test(index)) {
+            index = this.generateIndex();
+        }
 
         var items    = this.getElementsByClass('repeatItem', this.container),
             lastItem = items[items.length - 1],
-            clone    = this.repeatPrototype.cloneNode(true),
-            index    = this.generateIndex();
+            clone    = this.repeatPrototype.cloneNode(true);
 
         qf.classes.remove(clone, 'repeatPrototype');
         if (clone.id) {
@@ -284,6 +289,8 @@ qf.elements.Repeat.prototype = {
             }
         }
         this.onChange();
+
+        return index;
     },
     /**
      * Removes an item from repeat element
