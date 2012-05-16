@@ -41,9 +41,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2012-04-18</date>
+ <date>2012-05-31</date>
  <version>
-  <release>2.0.0beta2</release>
+  <release>2.0.0RC1</release>
   <api>2.0.0</api>
  </version>
  <stability>
@@ -52,27 +52,23 @@
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Feature additions
-  * Repeat element: given 'prototype' Container (either fieldset or group)
-    is repeated multiple times, with possibility to add / remove repeated items
-    via Javascript. Full support for validation of repeated items.
-  * JavascriptBuilder now has separate getSetupCode() and getValidator()
-    methods in addition to combined getFormJavascript()
-
 Bug fixes
-  * Generated 'id' attributes no longer can start with numbers
-  * Group::setValue() works properly for a group containing checkboxes named 'foo[]'
-  * 'checked' attribute for a checkbox is removed if form has data sources and
-     none of them contains a value for that checkbox
-  * Explicitly given value=&quot;0&quot; for a checkbox is not replaced by value=&quot;1&quot;
-  * setValue(null) no longer causes value=&quot;value&quot; in some &lt;input&gt; elements
-  * Hierselect's value is properly updated when its name changes
-  * Unit tests use autoloader instead of explicit 'require_once', all tests now
-    can be run separately
-  * HTML_QuickForm2_Renderer::register() allows overriding an existing renderer
-    type, similar to elements and rules
-  * Frozen HTML for checkboxes and radios no longer uses &lt;tt&gt; tags
-  * Fixed markup in controller/wizard.php and renderers/array-twig.php examples
+  * Server-side validation errors for elements inside Repeats are properly
+    displayed
+  * Javascript for Repeat elements moved to a more proper qf.elements.Repeat
+    namespace, old qf.Repeat is kept as an alias but is deprecated
+  * Fixed markup in usage examples (related to bug #19097)
+
+Changes
+  * HTML_QuickForm2::getValue() no longer returns values for internal form
+    fields (request #19403)
+  * add() method of qf.elements.Repeat can accept an explicit index for a new
+    item, returns the index for added item
+  * Array Renderer: changes to buildCommonFields() make it easier to use by
+    Renderer plugins, arrays built for groups contain 'class' attribute
+
+Backwards compatibility issues
+  * Items marked deprecated will be removed in release 2.0.0
  </notes>
  <contents>
   <dir name="/">
@@ -710,6 +706,42 @@ Bug fixes
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2012-04-18</date>
+   <version>
+    <release>2.0.0beta2</release>
+    <api>2.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>
+Feature additions
+  * Repeat element: given 'prototype' Container (either fieldset or group)
+    is repeated multiple times, with possibility to add / remove repeated items
+    via Javascript. Full support for validation of repeated items.
+  * JavascriptBuilder now has separate getSetupCode() and getValidator()
+    methods in addition to combined getFormJavascript()
+
+Bug fixes
+  * Generated 'id' attributes no longer can start with numbers
+  * Group::setValue() works properly for a group containing checkboxes named 'foo[]'
+  * 'checked' attribute for a checkbox is removed if form has data sources and
+    none of them contains a value for that checkbox
+  * Explicitly given value=&quot;0&quot; for a checkbox is not replaced by value=&quot;1&quot;
+  * setValue(null) no longer causes value=&quot;value&quot; in some &lt;input&gt; elements
+  * Hierselect's value is properly updated when its name changes
+  * Unit tests use autoloader instead of explicit 'require_once', all tests now
+    can be run separately
+  * HTML_QuickForm2_Renderer::register() allows overriding an existing renderer
+    type, similar to elements and rules
+  * Frozen HTML for checkboxes and radios no longer uses &lt;tt&gt; tags
+  * Fixed markup in controller/wizard.php and renderers/array-twig.php examples
+   </notes>
+  </release>
+
   <release>
    <date>2012-03-20</date>
    <version>

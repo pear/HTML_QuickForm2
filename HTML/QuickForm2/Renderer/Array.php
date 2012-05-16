@@ -102,6 +102,8 @@ require_once 'HTML/QuickForm2/Renderer.php';
  *
  *   // if element is a Container
  *   'attributes' => container attributes (string)
+ *   // if element is a Group
+ *   'class'      => element's 'class' attribute
  *   // only for groups, if separator is set:
  *   'separator'  => separator for group elements (array),
  *   'elements'   => array(
