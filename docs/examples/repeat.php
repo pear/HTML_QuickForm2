@@ -102,6 +102,17 @@ $renderer->setTemplateForId(
 HTML
 );
 
+/* 
+// Use this with the callback renderer
+$renderer->setCallbackForId(
+    'repeat-fieldset', function ($renderer, $repeat) {
+        return sprintf(
+            '<div class="row repeat" id="%s"><p>%s</p><br /><a class="repeatAdd" href="#">Add another address...</a></div>',
+            $repeat->getId(), $repeat->getLabel(), implode(array_pop($renderer->html))
+        );
+    });
+*/
+
 $form->render($renderer);
 
 ?>

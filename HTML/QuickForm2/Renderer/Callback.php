@@ -158,7 +158,8 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         'html_quickform2_element_inputhidden' => array('HTML_QuickForm2_Renderer_Callback', '_renderHidden'),
         'html_quickform2_container'           => array('HTML_QuickForm2_Renderer_Callback', '_renderContainer'),
         'html_quickform2_container_group'     => array('HTML_QuickForm2_Renderer_Callback', '_renderGroup'),
-        'html_quickform2_container_fieldset'  => array('HTML_QuickForm2_Renderer_Callback', '_renderFieldset')
+        'html_quickform2_container_fieldset'  => array('HTML_QuickForm2_Renderer_Callback', '_renderFieldset'),
+        'html_quickform2_container_repeat'    => array('HTML_QuickForm2_Renderer_Callback', '_renderRepeat')
     );
 
     /**
@@ -171,7 +172,11 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * Array of callbacks defined using a group class
     * @var  array
     */
-    public $elementCallbacksForGroupClass = array();
+    public $elementCallbacksForGroupClass = array(
+        'html_quickform2_container' => array(
+            'html_quickform2_element' => array('HTML_QuickForm2_Renderer_Callback', '_renderGroupedElement')
+        )
+    );
 
    /**
     * Array containing IDs of the groups being rendered
@@ -197,10 +202,10 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
         $break = HTML_Common2::getOption('linebreak');
-        $html[] = '<div class="quickform">';
-        $html[] = call_user_func($renderer->errorGroupCallback, $renderer, $form);
-        $html[] = '<form'.$form->getAttributes(true).'><div>';
-        $html[] = call_user_func($renderer->hiddenGroupCallback, $renderer, $form);
+        $html[] = '<div class="quickform">' .
+            call_user_func($renderer->errorGroupCallback, $renderer, $form) .
+            '<form'.$form->getAttributes(true).'><div>' .
+            call_user_func($renderer->hiddenGroupCallback, $renderer, $form);
         $html[] = implode($break, array_pop($renderer->html));
         $html[] = '</div></form>';
         $html[] = call_user_func($renderer->requiredNoteCallback, $renderer, $form);
@@ -232,6 +237,12 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         $html[] = '</div>';
         $html[] = '</div>';
         return implode("", $html);
+    }
+
+    public static function _renderGroupedElement(
+        HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Element $element
+    ) {
+        return $element->__toString();
     }
 
     public static function _renderErrorsGroup(
@@ -301,18 +312,19 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Container_Group $group
     ) {
         $break = HTML_Common2::getOption('linebreak');
-        $html[] = '<div class="row">';
+        $class = $group->getAttribute('class');
+        $html[] = '<div class="row'.(!empty($class) ? ' '.$class : '').'">';
         $html[] = $renderer->renderLabel($group);
         $error = $group->getError();
         if ($error) {
-            $html[] = '<div class="element group error">';
+            $html[] = '<div class="element group error" id="'.$group->getId().'">';
             if ($renderer->getOption('group_errors')) {
                 $renderer->errors[] = $error;
             } else {
                 $html[] = '<span class="error">'.$error.'</span><br />';
             }
         } else {
-            $html[] = '<div class="element group">';
+            $html[] = '<div class="element group" id="'.$group->getId().'">';
         }
 
         $separator = $group->getSeparator();
@@ -329,6 +341,26 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         }
         $html[] = $content;
         $html[] = '</div>';
+        $html[] = '</div>';
+        return implode($break, $html) . $break;
+    }
+
+    public static function _renderRepeat(
+        HTML_QuickForm2_Renderer $renderer,
+        HTML_QuickForm2_Container_Repeat $repeat
+    ) {
+        $break = HTML_Common2::getOption('linebreak');
+        $html[] = '<div class="row repeat" id="'.$repeat->getId().'">';
+        $label = $repeat->getLabel();
+        if (!is_array($label)) {
+            $label = array($label);
+        }
+        if (!empty($label[0])) {
+            $html[] = '<p>'.array_shift($label).'</p>';
+        }
+        $elements  = array_pop($renderer->html);
+        $content = implode($break, $elements);
+        $html[] = $content;
         $html[] = '</div>';
         return implode($break, $html) . $break;
     }
@@ -363,18 +395,20 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         if ($node->isRequired()) {
             $renderer->hasRequired = true;
         }
+        $html[] = '<p class="label">';
         if (!empty($label[0])) {
-            if ($node instanceof HTML_QuickForm2_Container) {
-                $html[] = '<label class="element">';
-            } else {
-                $html[] = '<label for="'.$node->getId().'" class="element">';
-            }
             if ($node->isRequired()) {
-                $html[] = '<span class="required">* </span>';
+                $html[] = '<span class="required">*</span>';
+            }
+            if ($node instanceof HTML_QuickForm2_Container) {
+                $html[] = '<label>';
+            } else {
+                $html[] = '<label for="'.$node->getId().'">';
             }
             $html[] = array_shift($label);
             $html[] = '</label>';
         }
+        $html[] = '</p>';
         return implode('', $html);
     }
 
