@@ -58,6 +58,9 @@ Bug fixes
   * Javascript for Repeat elements moved to a more proper qf.elements.Repeat
     namespace, old qf.Repeat is kept as an alias but is deprecated
   * Fixed markup in usage examples (related to bug #19097)
+  * Callback renderer now generates the same markup as Default renderer out of
+    the box, this addresses bug #19097 and allows correct behaviour of
+    client-side validation and Repeat elements
 
 Changes
   * HTML_QuickForm2::getValue() no longer returns values for internal form
