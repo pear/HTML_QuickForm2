@@ -936,6 +936,9 @@ qf.Validator.prototype = {
     onFieldError: function(elementId, errorMessage)
     {
         var parent = this.findAncestor(elementId);
+        if (!parent) {
+            return
+        }
         qf.classes.add(parent, this.classes.error);
 
         var error = document.createElement('span');
@@ -962,7 +965,10 @@ qf.Validator.prototype = {
      */
     onFieldValid: function(elementId)
     {
-        qf.classes.add(this.findAncestor(elementId), this.classes.valid);
+        var ancestor = this.findAncestor(elementId);
+        if (ancestor) {
+            qf.classes.add(ancestor, this.classes.valid);
+        }
     },
 
     /**
@@ -1083,6 +1089,10 @@ qf.Validator.prototype = {
     findAncestor: function(elementId)
     {
         var parent = document.getElementById(elementId);
+        // prevent setting anything on hidden elements
+        if (parent.type && 'hidden' === parent.type) {
+            return null;
+        }
         while (!qf.classes.has(parent, this.classes.ancestor)
                && 'fieldset' != parent.nodeName.toLowerCase()
                && 'form' != parent.nodeName.toLowerCase()
@@ -1103,12 +1113,14 @@ qf.Validator.prototype = {
             parent = this.findAncestor(rule.owner);
 
         this.errors.remove(rule.owner);
-        qf.classes.remove(parent, [this.classes.error, this.classes.valid]);
+        if (parent) {
+            qf.classes.remove(parent, [this.classes.error, this.classes.valid]);
 
-        var spans = parent.getElementsByTagName('span');
-        for (i = spans.length - 1; i >= 0; i--) {
-            if (qf.classes.has(spans[i], this.classes.message)) {
-                spans[i].parentNode.removeChild(spans[i]);
+            var spans = parent.getElementsByTagName('span');
+            for (i = spans.length - 1; i >= 0; i--) {
+                if (qf.classes.has(spans[i], this.classes.message)) {
+                    spans[i].parentNode.removeChild(spans[i]);
+                }
             }
         }
         for (i = 0; item = rule.chained[i]; i++) {
