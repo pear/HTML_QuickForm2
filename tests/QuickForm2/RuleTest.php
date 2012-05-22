@@ -241,5 +241,28 @@ class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
         $this->assertContains('bar', $m[0]);
         $this->assertContains('baz', $m[0]);
     }
+
+    public function testCannotSetErrorsOnHiddenElements()
+    {
+        $hidden = new HTML_QuickForm2_Element_InputHidden('noError');
+        $text   = new HTML_QuickForm2_Element_InputText('canHaveError');
+
+        try {
+            $rule = $this->getMock(
+                'HTML_QuickForm2_Rule', array('validateOwner'),
+                array($hidden, 'an error message')
+            );
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+
+        try {
+            $rule = $this->getMock(
+                'HTML_QuickForm2_Rule', array('validateOwner'),
+                array($text, 'an error message')
+            );
+            $rule->setOwner($hidden);
+            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
+    }
 }
 ?>

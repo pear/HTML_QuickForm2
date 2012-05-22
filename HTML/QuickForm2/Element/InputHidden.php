@@ -76,6 +76,24 @@ class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
         return false;
     }
 
+    /**
+     * Disallows setting an error message on hidden elements
+     *
+     * @param string|null $error
+     *
+     * @return HTML_QuickForm2_Element_InputHidden
+     * @throws HTML_QuickForm2_InvalidArgumentException if $error is not empty
+     */
+    public function setError($error = null)
+    {
+        if (strlen($error)) {
+            throw new HTML_QuickForm2_InvalidArgumentException(
+                "Hidden elements cannot have validation errors"
+            );
+        }
+        return parent::setError($error);
+    }
+
     public function render(HTML_QuickForm2_Renderer $renderer)
     {
         $renderer->renderHidden($this);

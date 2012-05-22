@@ -56,5 +56,14 @@ class HTML_QuickForm2_Element_InputHiddenTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($hidden->toggleFrozen(true));
         $this->assertFalse($hidden->toggleFrozen());
     }
+
+    /**
+     * @expectedException HTML_QuickForm2_InvalidArgumentException
+     */
+    public function testCannotSetError()
+    {
+        $hidden = new HTML_QuickForm2_Element_InputHidden('noError');
+        $hidden->setError('a message');
+    }
 }
 ?>
