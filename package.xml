@@ -41,7 +41,7 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2012-05-31</date>
+ <date>2012-05-22</date>
  <version>
   <release>2.0.0RC1</release>
   <api>2.0.0</api>
@@ -65,6 +65,8 @@ Bug fixes
 Changes
   * HTML_QuickForm2::getValue() no longer returns values for internal form
     fields (request #19403)
+  * It is no longer possible to set validation errors on hidden elements or
+    create Rules that set such errors, doing this will result in an Exception
   * add() method of qf.elements.Repeat can accept an explicit index for a new
     item, returns the index for added item
   * Array Renderer: changes to buildCommonFields() make it easier to use by
