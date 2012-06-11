@@ -860,17 +860,6 @@ qf.Validator = function(form, rules)
     */
     this.errors = new qf.Map();
 
-   /**
-    * CSS classes to use when marking validation status
-    * @type {Object}
-    */
-    this.classes = {
-        error:    'error',
-        valid:    'valid',
-        message:  'error',
-        ancestor: 'element'
-    };
-
     form.validator = this;
     qf.events.addListener(form, 'submit', qf.Validator.submitHandler);
 
@@ -916,6 +905,17 @@ qf.Validator.liveHandler = function(event)
 };
 
 qf.Validator.prototype = {
+    /**
+     * CSS classes to use when marking validation status
+     * @type {Object}
+     */
+    classes: {
+        error:      'error',
+        valid:      'valid',
+        message:    'error',
+        ancestor:   'element'
+    },
+
     /**
      * Called before starting the validation. May be used e.g. to clear the errors from form elements.
      * @param {HTMLFormElement} form The form being validated currently
