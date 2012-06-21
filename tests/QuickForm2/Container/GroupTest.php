@@ -404,5 +404,18 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $group->setValue(array('red', 'blue'));
         $this->assertEquals(array('red', 'blue'), $group->getValue());
     }
+
+    /**
+     * Renaming groups with names like 'foo[foo]' or '1[1]' resulted in wrong names for grouped elements
+     * @link http://pear.php.net/bugs/bug.php?id=19477
+     */
+    public function testBug19477()
+    {
+        $group = new HTML_QuickForm2_Container_Group('foo[foo]');
+        $text  = $group->addElement(new HTML_QuickForm2_Element_InputText('bar'));
+        $group->setName('test[foo][foo]');
+
+        $this->assertEquals('test[foo][foo][bar]', $text->getName());
+    }
 }
 ?>
