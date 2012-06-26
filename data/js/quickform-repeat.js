@@ -362,10 +362,3 @@ qf.elements.Repeat.prototype = {
     {
     }
 };
-
-/**
- * Alias for qf.elements.Repeat, in case someone managed to rely on that name
- * @deprecated will be removed in the next release
- * @type {Function}
- */
-qf.Repeat = qf.elements.Repeat;

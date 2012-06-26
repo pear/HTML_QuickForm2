@@ -37,15 +37,6 @@
     margin: 0.7em 0 0 0;
     text-align: right;
 }
-/* deprecated, used pre-2.0.0beta1 */
-.quickform label.element {
-    display: block;
-    float: left;
-    width: 30%;
-    padding: 0;
-    margin: 0.5em 0 0 0;
-    text-align: right;
-}
 .quickform input, .quickform textarea, .quickform select {
     width: auto;
 }

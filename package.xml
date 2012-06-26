@@ -41,39 +41,22 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2012-05-22</date>
+ <date>2012-06-26</date>
  <version>
-  <release>2.0.0RC1</release>
+  <release>2.0.0</release>
   <api>2.0.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
-Bug fixes
-  * Server-side validation errors for elements inside Repeats are properly
-    displayed
-  * Javascript for Repeat elements moved to a more proper qf.elements.Repeat
-    namespace, old qf.Repeat is kept as an alias but is deprecated
-  * Fixed markup in usage examples (related to bug #19097)
-  * Callback renderer now generates the same markup as Default renderer out of
-    the box, this addresses bug #19097 and allows correct behaviour of
-    client-side validation and Repeat elements
-
-Changes
-  * HTML_QuickForm2::getValue() no longer returns values for internal form
-    fields (request #19403)
-  * It is no longer possible to set validation errors on hidden elements or
-    create Rules that set such errors, doing this will result in an Exception
-  * add() method of qf.elements.Repeat can accept an explicit index for a new
-    item, returns the index for added item
-  * Array Renderer: changes to buildCommonFields() make it easier to use by
-    Renderer plugins, arrays built for groups contain 'class' attribute
-
-Backwards compatibility issues
-  * Items marked deprecated will be removed in release 2.0.0
+ * Leftover 'foo' no longer stays in grouped element's name when renaming group
+   named 'foo[foo]' (bug #19477)
+ * 'classes' property of qf.Validator moved to its prototype, making it easier
+   to override
+ * Items marked deprecated previously are removed
  </notes>
  <contents>
   <dir name="/">
@@ -711,6 +694,42 @@ Backwards compatibility issues
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2012-05-22</date>
+   <version>
+    <release>2.0.0RC1</release>
+    <api>2.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>
+Bug fixes
+  * Server-side validation errors for elements inside Repeats are properly
+    displayed
+  * Javascript for Repeat elements moved to a more proper qf.elements.Repeat
+    namespace, old qf.Repeat is kept as an alias but is deprecated
+  * Fixed markup in usage examples (related to bug #19097)
+  * Callback renderer now generates the same markup as Default renderer out of
+    the box, this addresses bug #19097 and allows correct behaviour of
+    client-side validation and Repeat elements
+
+Changes
+  * HTML_QuickForm2::getValue() no longer returns values for internal form
+    fields (request #19403)
+  * It is no longer possible to set validation errors on hidden elements or
+    create Rules that set such errors, doing this will result in an Exception
+  * add() method of qf.elements.Repeat can accept an explicit index for a new
+    item, returns the index for added item
+  * Array Renderer: changes to buildCommonFields() make it easier to use by
+    Renderer plugins, arrays built for groups contain 'class' attribute
+
+Backwards compatibility issues
+  * Items marked deprecated will be removed in release 2.0.0
+   </notes>
+  </release>
   <release>
    <date>2012-04-18</date>
    <version>
