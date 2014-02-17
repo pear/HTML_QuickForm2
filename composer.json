@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "HTML_QuickForm2": "./"
+            "HTML": "./"
         }
     },
     "description": "Provides methods to create, validate and render HTML forms in PHP.",
@@ -28,7 +28,8 @@
     },
     "type": "library",
     "require": {
-        "pear/pear_exception": "*"
+        "pear/pear_exception": "*",
+        "pear/html_common2": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
