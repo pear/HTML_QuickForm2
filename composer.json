@@ -1,0 +1,37 @@
+{
+    "authors": [
+        {
+            "email": "avb@php.net",
+            "name": "Alexey Borzov",
+            "role": "Lead"
+        },
+        {
+            "email": "golgote@mamasam.com",
+            "name": "Bertrand Mansion",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "HTML": "./"
+        }
+    },
+    "description": "Provides methods to create, validate and render HTML forms in PHP.",
+    "include-path": [
+        "./"
+    ],
+    "license": "BSD",
+    "name": "pear/html_quickform2",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2",
+        "source": "https://github.com/pear/HTML_QuickForm2"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*",
+        "pear/html_common2": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
