@@ -337,8 +337,8 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * Tries to convert the given value to a usable date before setting the
     * element value
     *
-    * @param int|string|array $value A timestamp, a string compatible with strtotime()
-    *                                or an array that fits the element names
+    * @param int|string|array|DateTime $value A timestamp, a DateTime object,
+    *   a string compatible with strtotime() or an array that fits the element names
     *
     * @return HTML_QuickForm2_Element_Date
     */
@@ -346,12 +346,20 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     {
         if (empty($value)) {
             $value = array();
-        } elseif (is_scalar($value)) {
-            if (!is_numeric($value)) {
-                $value = strtotime($value);
+
+        } elseif (is_array($value)) {
+            $value = array_map(array($this, 'trimLeadingZeros'), $value);
+
+        } elseif (is_scalar($value) || $value instanceof DateTime) {
+            if ($value instanceof DateTime) {
+                $arr = explode('-', $value->format('w-j-n-Y-g-G-i-s-a-A-W'));
+            } else {
+                if (!is_numeric($value)) {
+                    $value = strtotime($value);
+                }
+                // might be a unix epoch, then we fill all possible values
+                $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));
             }
-            // might be a unix epoch, then we fill all possible values
-            $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));
             $value = array(
                 'D' => $arr[0],
                 'l' => $arr[0],
@@ -370,8 +378,6 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 'A' => $arr[9],
                 'W' => $this->trimLeadingZeros($arr[10])
             );
-        } else {
-            $value = array_map(array($this, 'trimLeadingZeros'), $value);
         }
         return parent::setValue($value);
     }

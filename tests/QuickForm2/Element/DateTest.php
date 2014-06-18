@@ -110,5 +110,12 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
         $this->assertRegexp('!October.+March!is', $date->__toString());
         $this->assertNotContains('January', $date->__toString());
     }
+
+    public function testSetValueAcceptsDateTime()
+    {
+        $date = new HTML_QuickForm2_Element_Date('DateTimeTest', null, array('format' => 'Ymd'));
+        $date->setValue(new DateTime('2012-06-26'));
+        $this->assertEquals(array('Y' => 2012, 'm' => 6, 'd' => 26), $date->getValue());
+    }
 }
 ?>
