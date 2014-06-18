@@ -43,7 +43,11 @@
  */
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'HTML_QuickForm2_AllTests::main');
+    if (strpos($_SERVER['argv'][0], 'phpunit') === false) {
+        define('PHPUnit_MAIN_METHOD', 'HTML_QuickForm2_AllTests::main');
+    } else {
+        define('PHPUnit_MAIN_METHOD', false);
+    }
 }
 
 require_once dirname(__FILE__) . '/QuickForm2/AllTests.php';
@@ -53,7 +57,7 @@ class HTML_QuickForm2_AllTests
 {
     public static function main()
     {
-        if (!function_exists('phpunit_autoload')) {
+        if (!class_exists('PHPUnit_TextUI_TestRunner', true)) {
             require_once 'PHPUnit/TextUI/TestRunner.php';
         }
         PHPUnit_TextUI_TestRunner::run(self::suite());
