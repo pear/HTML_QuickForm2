@@ -15,7 +15,7 @@ Features:
    'and' and 'or' for complex validation scenarios. Client-side validation can be run on changing the form field and
    on submitting the form.
  * Client-side validation and Javascript-backed elements use a small self-contained JS library, there is no
-   dependendency on JS frameworks.
+   dependency on JS frameworks.
  * Multipage forms (tabbed forms and wizards) are possible.
  * Pluggable elements, rules, renderers and renderer plugins.
 
