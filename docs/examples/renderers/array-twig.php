@@ -8,8 +8,6 @@
  * $ pear channel-discover pear.twig-project.org
  * $ pear install twig/Twig
  * </code>
- *
- * $Id$
  */
 
 require_once 'HTML/QuickForm2.php';

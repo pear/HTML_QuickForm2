@@ -4,8 +4,6 @@
  *
  * The example demonstrates how the default renderer can be used and abused.
  * It also provides a default stylesheet.
- *
- * $Id$
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

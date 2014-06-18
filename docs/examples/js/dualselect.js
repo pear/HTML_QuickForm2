@@ -4,8 +4,6 @@
  * Contains methods for moving options between selects and also for selecting
  * all options of 'to' select on form submit. This is necessary since
  * unselected options obviously won't send any values.
- *
- * $Id$
  */
 
 qf.elements.dualselect = (function() {

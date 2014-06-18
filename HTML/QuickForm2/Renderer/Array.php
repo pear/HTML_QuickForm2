@@ -6,7 +6,7 @@
  *
  * LICENSE:
  *
- * Copyright (c) 2006-2012, Alexey Borzov <avb@php.net>,
+ * Copyright (c) 2006-2014, Alexey Borzov <avb@php.net>,
  *                          Bertrand Mansion <golgote@mamasam.com>
  * All rights reserved.
  *
@@ -40,7 +40,6 @@
  * @author   Bertrand Mansion <golgote@mamasam.com>
  * @author   Thomas Schulz <ths@4bconsult.de>
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
- * @version  SVN: $Id$
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 

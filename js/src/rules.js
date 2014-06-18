@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * @namespace Client-side implementations of Rules that are a bit too complex to inline
  */

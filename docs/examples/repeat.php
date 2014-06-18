@@ -1,8 +1,6 @@
 <?php
 /**
  * Usage example for HTML_QuickForm2 package: repeat element
- *
- * $Id$
  */
 
 require_once 'HTML/QuickForm2.php';

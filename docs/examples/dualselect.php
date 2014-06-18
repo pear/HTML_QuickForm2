@@ -8,8 +8,6 @@
  *
  * It also demonstrates how to plug in element's javascript and how to use
  * client-side validation with custom element.
- *
- * $Id$
  */
 
 require_once 'HTML/QuickForm2.php';

@@ -1,8 +1,6 @@
 <?php
 /**
  * Usage example for HTML_QuickForm2 package: AJAX-backed hierselect element, AJAX server
- *
- * $Id$
  */
 
 require_once 'HTML/AJAX/Server.php';

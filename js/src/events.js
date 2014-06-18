@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * @namespace Minor fixes to JS events to make them a bit more crossbrowser
  */

@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * @namespace Helper functions for working with form values
  */

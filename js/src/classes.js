@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * @namespace Functions for CSS classes handling
  */

@@ -3,8 +3,6 @@
  * Usage example for HTML_QuickForm2 package: AJAX-backed hierselect element.
  *
  * NB: This usage example requires HTML_AJAX package to work.
- *
- * $Id$
  */
 
 require_once 'HTML/QuickForm2.php';

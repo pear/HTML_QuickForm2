@@ -1,8 +1,6 @@
 <?php
 /**
  * Usage example for HTML_QuickForm2 package: basic elements
- *
- * $Id$
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"

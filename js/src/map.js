@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /**
  * Class for Hash Map datastructure.
  *

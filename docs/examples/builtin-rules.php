@@ -4,8 +4,6 @@
  *
  * The example uses all Rule classes provided with HTML_QuickForm2 and also
  * showcases rule chaining.
- *
- * $Id$
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
