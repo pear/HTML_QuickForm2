@@ -499,19 +499,22 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $key    = 0;
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
-            $backup[$key++] = array(
-                'name' => $child->getName(),
-            ) + (
-                $child instanceof HTML_QuickForm2_Element_InputCheckable
-                ? array('valueAttr' => $child->getAttribute('value')) : array()
-            ) + (
-                $child instanceof HTML_QuickForm2_Container
-                ? array() : array('value' => $child->getValue())
-            ) + (
-                $backupId ? array('id' => $child->getId()) : array()
-            ) + (
-                $backupError ? array('error' => $child->getError()) : array()
-            );
+            $backup[$key] = array('name' => $child->getName());
+            if ($child instanceof HTML_QuickForm2_Element_InputCheckable) {
+                $backup[$key]['valueAttr'] = $child->getAttribute('value');
+            }
+            if (!($child instanceof HTML_QuickForm2_Container)
+                && !($child instanceof HTML_QuickForm2_Element_Static)
+            ) {
+                $backup[$key]['value'] = $child->getValue();
+            }
+            if ($backupId) {
+                $backup[$key]['id'] = $child->getId();
+            }
+            if ($backupError) {
+                $backup[$key]['error'] = $child->getError();
+            }
+            $key++;
         }
         return $backup;
     }
@@ -599,9 +602,9 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $values = array();
         foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
-            $values = self::arrayMerge(
-                $values, parent::getChildValues($filtered)
-            );
+            if (null !== ($itemValues = parent::getChildValues($filtered))) {
+                $values = self::arrayMerge($values, $itemValues);
+            }
         }
         $this->restoreChildAttributes($backup);
         return empty($values) ? null : $values;

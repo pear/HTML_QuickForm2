@@ -242,5 +242,40 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('error', $ary['elements'][2]['elements'][0]);
         $this->assertEquals('a message', $ary['elements'][3]['elements'][0]['error']);
     }
+
+    public function testForeachWarningOnGetValue()
+    {
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat   = new HTML_QuickForm2_Container_Repeat(
+            null, null, array('prototype' => $fieldset)
+        );
+        $fieldset->addText('foo');
+        $repeat->setIndexes(array(1));
+
+        $this->assertEquals(null, $repeat->getValue());
+    }
+
+    /**
+     * Contents of static elements within repeat erroneously cleared
+     * @link http://pear.php.net/bugs/bug.php?id=19802
+     */
+    public function testBug19802()
+    {
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat   = new HTML_QuickForm2_Container_Repeat(
+            null, null, array('prototype' => $fieldset)
+        );
+        $fieldset->addStatic()
+            ->setContent('Content of static element')
+            ->setTagName('p');
+
+        $arrayOne = $repeat->render(HTML_QuickForm2_Renderer::factory('array'))->toArray();
+        $arrayTwo = $repeat->render(HTML_QuickForm2_Renderer::factory('array'))->toArray();
+
+        $this->assertEquals(
+            $arrayOne['elements'][0]['elements'][0]['html'],
+            $arrayTwo['elements'][0]['elements'][0]['html']
+        );
+    }
 }
 ?>
