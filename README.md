@@ -1,5 +1,7 @@
 # HTML_QuickForm2
 
+[![Build Status](https://travis-ci.org/pear/HTML_QuickForm2.svg?branch=trunk)](https://travis-ci.org/pear/HTML_QuickForm2)
+
 This is a repository for [PEAR HTML_QuickForm2] package that has been migrated from [PEAR SVN].
 
 HTML_QuickForm2 provides methods to create, validate and render HTML forms. It is a PHP5 rewrite of [PEAR HTML_QuickForm]

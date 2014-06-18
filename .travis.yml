@@ -4,6 +4,5 @@ php:
   - 5.3
   - 5.4
   - 5.5
-  - hhvm
 install: pear install HTML_Common2
 script: phpunit tests
