@@ -453,6 +453,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             // The <select> is not multiple, but several options are to be
             // selected. At least IE and Mozilla select the last selected
             // option in this case, we should do the same
+            $lastValue = null;
             foreach ($this->optionContainer->getRecursiveIterator() as $child) {
                 if (is_array($child) && in_array($child['attr']['value'], $values)) {
                     $lastValue = $child['attr']['value'];
@@ -547,7 +548,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function addOption($text, $value, $attributes = null)
     {
-        return $this->optionContainer->addOption($text, $value, $attributes);
+        $this->optionContainer->addOption($text, $value, $attributes);
     }
 
    /**
@@ -570,6 +571,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             parent::updateValue();
         } else {
             $name = $this->getName();
+            /* @var $ds HTML_QuickForm2_DataSource */
             foreach ($this->getDataSources() as $ds) {
                 if (null !== ($value = $ds->getValue($name))
                     || $ds instanceof HTML_QuickForm2_DataSource_Submit
@@ -579,6 +581,16 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
                 }
             }
         }
+    }
+
+    /**
+     * Get the select's option container, e.g. for rendering purposes.
+     *
+     * @return HTML_QuickForm2_Element_Select_OptionContainer
+     */
+    public function getOptionContainer()
+    {
+        return $this->optionContainer;
     }
 }
 ?>
