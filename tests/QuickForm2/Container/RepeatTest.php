@@ -277,5 +277,29 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
             $arrayTwo['elements'][0]['elements'][0]['html']
         );
     }
+
+    /**
+     * If defaults contain null values, previous values are reused
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form = new HTML_QuickForm2('repeat-bug');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'buggy' => array(
+                'name'  => array(1 => 'First', 2 => 'Second'),
+                'extra' => array(1 => 'Has extra', 2 => null)
+            )
+        )));
+
+        $group = new HTML_QuickForm2_Container_Group('buggy');
+        $group->addText('name');
+        $group->addText('extra');
+
+        $repeat = $form->addRepeat(null, array('id' => 'buggy-repeat'), array('prototype' => $group));
+
+        $value = $repeat->getValue();
+        $this->assertEquals('', $value['buggy']['extra'][2]);
+    }
 }
 ?>

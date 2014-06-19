@@ -554,6 +554,29 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     }
 
     /**
+     * Restores child values from backup
+     *
+     * Need to do this on each iteration to prevent values from previous items
+     * appearing in subsequent ones.
+     *
+     * @param array $backup backup array
+     *
+     * @see backupChildAttributes()
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    protected function restoreChildValues(array $backup)
+    {
+        $key = 0;
+        /* @var HTML_QuickForm2_Node $child */
+        foreach ($this->getRecursiveIterator() as $child) {
+            if (array_key_exists('value', $backup[$key])) {
+                $child->setValue($backup[$key]['value']);
+            }
+            $key++;
+        }
+    }
+
+    /**
      * Replaces a template in elements' attributes by a numeric index
      *
      * @param int   $index  numeric index
@@ -605,6 +628,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             if (null !== ($itemValues = parent::getChildValues($filtered))) {
                 $values = self::arrayMerge($values, $itemValues);
             }
+            $this->restoreChildValues($backup);
         }
         $this->restoreChildAttributes($backup);
         return empty($values) ? null : $values;
@@ -632,6 +656,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                     $this->childErrors[spl_object_hash($child)][$index] = $error;
                 }
             }
+            $this->restoreChildValues($backup);
         }
         $this->restoreChildAttributes($backup);
         foreach ($this->rules as $rule) {
@@ -709,6 +734,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                 }
             }
             $this->getPrototype()->render($renderer);
+            $this->restoreChildValues($backup);
         }
         $this->restoreChildAttributes($backup);
 
