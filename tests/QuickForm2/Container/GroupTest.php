@@ -416,5 +416,28 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('test[foo][foo][bar]', $text->getName());
     }
+
+    /**
+     * Special case for a setValue() on a group of radiobuttons
+     * @link http://pear.php.net/bugs/bug.php?id=20103
+     */
+    public function testRadioGroupSetValue()
+    {
+        $group = new HTML_QuickForm2_Container_Group();
+        $group->addRadio('request20103', array('value' => 'first'));
+        $group->addRadio('request20103', array('value' => 'second'));
+        $group->addRadio('request20103', array('value' => 'third'));
+
+        $group->setValue(array('request20103' => 'second'));
+        $this->assertEquals(array('request20103' => 'second'), $group->getValue());
+
+        $namedGroup = new HTML_QuickForm2_Container_Group('named');
+        $namedGroup->addRadio('request20103[sub]', array('value' => 'first'));
+        $namedGroup->addRadio('request20103[sub]', array('value' => 'second'));
+        $namedGroup->addRadio('request20103[sub]', array('value' => 'third'));
+
+        $namedGroup->setValue(array('request20103' => array('sub' => 'third')));
+        $this->assertEquals(array('request20103' => array('sub' => 'third')), $namedGroup->getValue());
+    }
 }
 ?>

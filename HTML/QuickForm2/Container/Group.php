@@ -131,8 +131,8 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         $index = 0;
 
         foreach ($value as $k => $v) {
-            $val = array($k => $v);
             foreach ($elements as $i => $tokens) {
+                $val = array($k => $v);
                 do {
                     $token = array_shift($tokens);
                     $numeric = false;
@@ -178,7 +178,9 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
                     // Speed up next iterations
                     unset($elements[$i]);
                 }
-                break;
+                if (!($child instanceof HTML_QuickForm2_Element_InputRadio)) {
+                    break;
+                }
             }
         }
 
