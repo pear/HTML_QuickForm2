@@ -1,6 +1,6 @@
 <?php
 /**
- * Array-based data source for HTML_QuickForm2 objects
+ * Interface for data sources that may contain explicit null values
  *
  * PHP version 5
  *
@@ -45,10 +45,16 @@
 /**
  * Interface for data sources used by HTML_QuickForm2 objects
  */
-require_once 'HTML/QuickForm2/DataSource/NullAware.php';
+require_once 'HTML/QuickForm2/DataSource.php';
 
 /**
- * Array-based data source for HTML_QuickForm2 objects
+ * Interface for data sources that may contain explicit null values
+ *
+ * getValue() was designed to return null for missing values, unfortunately that
+ * led to bugs when data source contained values explicitly set to null,
+ * see {@link http://pear.php.net/bugs/bug.php?id=20295}. This interface defines
+ * a method that may be used by elements to check whether a value is available,
+ * even if that value is null.
  *
  * @category HTML
  * @package  HTML_QuickForm2
@@ -57,68 +63,19 @@ require_once 'HTML/QuickForm2/DataSource/NullAware.php';
  * @license  http://opensource.org/licenses/bsd-license.php New BSD License
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
+ * @since    Release 2.0.1
  */
-class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_NullAware
+interface HTML_QuickForm2_DataSource_NullAware extends HTML_QuickForm2_DataSource
 {
-   /**
-    * Array containing elements' values
-    * @var array
-    */
-    protected $values;
-
-   /**
-    * Class constructor, initializes the values array
-    *
-    * @param array $values Array containing the elements' values
-    */
-    public function __construct(array $values = array())
-    {
-        $this->values = $values;
-    }
-
-    public function getValue($name)
-    {
-        if (empty($this->values)) {
-            return null;
-        }
-        if (strpos($name, '[')) {
-            $tokens = explode('[', str_replace(']', '', $name));
-            $value = $this->values;
-            do {
-                $token = array_shift($tokens);
-                if (!is_array($value) || !isset($value[$token])) {
-                    return null;
-                }
-                $value = $value[$token];
-            } while (!empty($tokens));
-            return $value;
-        } elseif (isset($this->values[$name])) {
-            return $this->values[$name];
-        } else {
-            return null;
-        }
-    }
-
-    public function hasValue($name)
-    {
-        if (empty($this->values)) {
-            return false;
-
-        } elseif (!strpos($name, '[')) {
-            return array_key_exists($name, $this->values);
-
-        } else {
-            $tokens = explode('[', str_replace(']', '', $name));
-            $value  = $this->values;
-            do {
-                $token = array_shift($tokens);
-                if (!is_array($value) || !array_key_exists($token, $value)) {
-                    return false;
-                }
-                $value = $value[$token];
-            } while (!empty($tokens));
-            return true;
-        }
-    }
+    /**
+     * Checks whether a value for the element with a given name is available
+     *
+     * Will return true even if the value is null, similar to array_key_exists()
+     *
+     * @param string $name Element's name
+     *
+     * @return bool
+     */
+    public function hasValue($name);
 }
 ?>

@@ -60,7 +60,8 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
         $this->ds = new HTML_QuickForm2_DataSource_Array(array(
             'foo' => 'some value',
             'bar' => array(
-                'key' => 'some other value'
+                'key'     => 'some other value',
+                'nullkey' => null
             ),
             'baz' => array(
                 'key1' => array(
@@ -70,7 +71,8 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
             'escape' => array(
                 'o\'really' => 'yes',
                 'oh\\no' => 'no'
-            )
+            ),
+            'quux' => null
         ));
     }
 
@@ -86,7 +88,7 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('some value', $this->ds->getValue('foo'));
         $this->assertEquals(
-            array('key' => 'some other value'),
+            array('key' => 'some other value', 'nullkey' => null),
             $this->ds->getValue('bar')
         );
         $this->assertEquals('some other value', $this->ds->getValue('bar[key]'));
@@ -100,6 +102,19 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('yes', $this->ds->getValue('escape[o\'really]'));
         $this->assertEquals('no', $this->ds->getValue('escape[oh\\no]'));
+    }
+
+    public function testHasValue()
+    {
+        $this->assertTrue($this->ds->hasValue('foo'));
+        $this->assertTrue($this->ds->hasValue('quux'));
+        $this->assertFalse($this->ds->hasValue('something'));
+        $this->assertFalse($this->ds->hasValue('foo[key]'));
+
+        $this->assertTrue($this->ds->hasValue('bar'));
+        $this->assertTrue($this->ds->hasValue('bar[key]'));
+        $this->assertTrue($this->ds->hasValue('bar[nullkey]'));
+        $this->assertFalse($this->ds->hasValue('bar[missing]'));
     }
 }
 ?>
