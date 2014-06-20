@@ -1,5 +1,5 @@
 # Path to closure compiler jar file
-# Download from http://code.google.com/p/closure-compiler/
+# Download from https://github.com/google/closure-compiler
 path.closure=./compiler.jar
 
 # Path to JSDoc toolkit base dir
