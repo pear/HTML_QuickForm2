@@ -366,5 +366,27 @@ class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
         $selectMultiple->setValue(array('two', 'three'));
         $this->assertEquals(array('two', 'three'), $selectMultiple->getValue());
     }
+
+    /**
+     * If data source contains explicitly provided null values, those should be used
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form = new HTML_QuickForm2('bug20295');
+        $ms   = $form->addSelect('multiselect', array('multiple'))
+                    ->loadOptions(array('one' => 'First option', 'two' => 'Second option'))
+                    ->setValue(array('two'));
+
+        // data source searching should stop on finding this null
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'multiselect' => null
+        )));
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'multiselect' => array('one')
+        )));
+
+        $this->assertNull($ms->getValue());
+    }
 }
 ?>

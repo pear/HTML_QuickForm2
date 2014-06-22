@@ -97,7 +97,9 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
     {
         $name = $this->getName();
         foreach ($this->getDataSources() as $ds) {
-            if (null !== ($value = $ds->getValue($name))) {
+            if (null !== ($value = $ds->getValue($name))
+                || $ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name)
+            ) {
                 $this->setValue($value);
                 return;
             }

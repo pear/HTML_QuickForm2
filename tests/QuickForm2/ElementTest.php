@@ -252,5 +252,21 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $el = new HTML_QuickForm2_ElementImpl('0');
         $this->assertNotRegExp('/^\d/', $el->getId());
     }
+
+    /**
+     * If data source contains explicitly provided null values, those should be used
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form = new HTML_QuickForm2('bug20295');
+        $el = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
+        $el->setValue('not empty');
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => null
+        )));
+        $this->assertNull($el->getValue());
+    }
 }
 ?>

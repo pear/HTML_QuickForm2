@@ -152,5 +152,25 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
         $box2->setName('box3');
         $this->assertNull($box2->getAttribute('checked'));
     }
+
+    /**
+     * If data source contains explicitly provided null values, those should be used
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form = new HTML_QuickForm2('bug20295');
+        $box  = $form->addCheckbox('box', array('value' => 'yep', 'checked' => 'checked'));
+
+        // data source searching should stop on finding this null
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'box' => null
+        )));
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'box' => 'yep'
+        )));
+
+        $this->assertNull($box->getValue());
+    }
 }
 ?>

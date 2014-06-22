@@ -84,6 +84,7 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
         foreach ($this->getDataSources() as $ds) {
             if (null !== ($value = $ds->getValue($name))
                 || $ds instanceof HTML_QuickForm2_DataSource_Submit
+                || ($ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name))
             ) {
                 if (!is_array($value)) {
                     $this->setValue($value);

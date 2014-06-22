@@ -571,12 +571,13 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             parent::updateValue();
         } else {
             $name = $this->getName();
-            /* @var $ds HTML_QuickForm2_DataSource */
+            /* @var $ds HTML_QuickForm2_DataSource_NullAware */
             foreach ($this->getDataSources() as $ds) {
                 if (null !== ($value = $ds->getValue($name))
                     || $ds instanceof HTML_QuickForm2_DataSource_Submit
+                    || ($ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name))
                 ) {
-                    $this->setValue(null === $value? array(): $value);
+                    $this->setValue((array)$value);
                     return;
                 }
             }

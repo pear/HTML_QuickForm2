@@ -142,5 +142,20 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     {
         $static = new HTML_QuickForm2_Element_Static('foo', null, array('tagName' => 'input'));
     }
+
+    /**
+     * If data source contains explicitly provided null values, those should be used
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form   = new HTML_QuickForm2('bug20295');
+        $static = $form->addStatic('foo', array(), array('content' => 'not empty'));
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'foo' => null
+        )));
+        $this->assertNull($static->getContent());
+    }
 }
 ?>
