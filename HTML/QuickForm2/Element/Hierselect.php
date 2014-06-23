@@ -231,6 +231,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     {
         $idx           = 0;
         $this->_values = array();
+        /* @var $select HTML_QuickForm2_Element_Select */
         foreach ($this as $select) {
             if (empty($this->options[$idx])) {
                 $this->options[$idx] = array();
@@ -303,8 +304,11 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     protected function updateValue()
     {
         $name = $this->getName();
+        /* @var $ds HTML_QuickForm2_DataSource_NullAware */
         foreach ($this->getDataSources() as $ds) {
-            if (null !== ($value = $ds->getValue($name))) {
+            if (null !== ($value = $ds->getValue($name))
+                || $ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name)
+            ) {
                 $this->setValue($value);
                 return;
             }
@@ -375,6 +379,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $ids = array();
+        /* @var $element HTML_QuickForm2_Element */
         foreach ($this as $element) {
             $ids[] = $element->getId();
         }

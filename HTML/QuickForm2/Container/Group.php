@@ -112,26 +112,27 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     public function setValue($value)
     {
         // Prepare a mapper for element names as array
+        $prefixLength = $this->prependsName() ? substr_count($this->getName(), '[') + 1 : 0;
+        $nameParts = $groupValues = array();
 
-        if ($this->prependsName()) {
-            $prefix = explode('[', str_replace(']', '', $this->getName()));
-        }
-
-        $elements = array();
-        foreach ($this as $child) {
+        /* @var $child HTML_QuickForm2_Node */
+        foreach ($this as $i => $child) {
             $tokens = explode('[', str_replace(']', '', $child->getName()));
-            if (!empty($prefix)) {
-                $tokens = array_slice($tokens, count($prefix));
+            if ($prefixLength) {
+                $tokens = array_slice($tokens, $prefixLength);
             }
-            $elements[] = $tokens;
+            $nameParts[] = $tokens;
+            if ($child instanceof self) {
+                $groupValues[$i] = array();
+            }
         }
 
         // Iterate over values to find corresponding element
 
         $index = 0;
 
-        foreach ($value as $k => $v) {
-            foreach ($elements as $i => $tokens) {
+        foreach ((array)$value as $k => $v) {
+            foreach ($nameParts as $i => $tokens) {
                 $val = array($k => $v);
                 do {
                     $token = array_shift($tokens);
@@ -146,7 +147,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
                             ) {
                                 $this->elements[$i]->setAttribute('checked');
                                 // don't want to remove 'checked' on next iteration
-                                unset($elements[$i]);
+                                unset($nameParts[$i]);
                             } else {
                                 $this->elements[$i]->removeAttribute('checked');
                             }
@@ -156,7 +157,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
                         $token = $index;
                         $numeric = true;
                     }
-                    if (!isset($val[$token])) {
+                    if (!is_array($val) || !isset($val[$token])) {
                         // Not found, skip next iterations
                         continue 2;
 
@@ -172,16 +173,20 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
                 // Found a value corresponding to element name
                 $child = $this->elements[$i];
-                $child->setValue($val);
-                unset($val);
-                if (!($child instanceof HTML_QuickForm2_Container_Group)) {
+                if ($child instanceof self) {
+                    $groupValues[$i] += (array)$val;
+                } else {
+                    $child->setValue($val);
                     // Speed up next iterations
-                    unset($elements[$i]);
+                    unset($nameParts[$i]);
                 }
                 if (!($child instanceof HTML_QuickForm2_Element_InputRadio)) {
                     break;
                 }
             }
+        }
+        foreach (array_keys($nameParts) as $i) {
+            $this->elements[$i]->setValue(isset($groupValues[$i]) ? $groupValues[$i] : null);
         }
 
         return $this;

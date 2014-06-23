@@ -117,5 +117,22 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
         $date->setValue(new DateTime('2012-06-26'));
         $this->assertEquals(array('Y' => 2012, 'm' => 6, 'd' => 26), $date->getValue());
     }
+
+    /**
+     * If data source contains explicitly provided null values, those should be used
+     * @link http://pear.php.net/bugs/bug.php?id=20295
+     */
+    public function testBug20295()
+    {
+        $form = new HTML_QuickForm2('bug20295');
+        $date = $form->addDate('aDate', null, array('format' => 'Ymd'))
+                    ->setValue('today');
+
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+            'aDate' => null
+        )));
+
+        $this->assertNull($date->getValue());
+    }
 }
 ?>

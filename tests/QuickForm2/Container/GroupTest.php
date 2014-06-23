@@ -439,5 +439,29 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $namedGroup->setValue(array('request20103' => array('sub' => 'third')));
         $this->assertEquals(array('request20103' => array('sub' => 'third')), $namedGroup->getValue());
     }
+
+    public function testScalarValueBug()
+    {
+        $group = new HTML_QuickForm2_Container_Group();
+        $text  = $group->addText('foo[bar]');
+        $group->setValue(array('foo' => 'foo value'));
+
+        $this->assertEquals('', $text->getValue());
+    }
+
+    public function testSetValueUpdatesAllElements()
+    {
+        $group = new HTML_QuickForm2_Container_Group();
+        $foo   = $group->addText('foo')->setValue('foo value');
+        $bar   = $group->addText('bar')->setValue('bar value');
+
+        $group->setValue(array('foo' => 'new foo value'));
+        $this->assertEquals('new foo value', $foo->getValue());
+        $this->assertEquals('', $bar->getValue());
+
+        $group->setValue(null);
+        $this->assertEquals('', $foo->getValue());
+        $this->assertEquals('', $bar->getValue());
+    }
 }
 ?>

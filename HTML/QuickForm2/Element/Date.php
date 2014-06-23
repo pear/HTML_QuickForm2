@@ -144,6 +144,8 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * @param string       $name       Element name
     * @param string|array $attributes Attributes (either a string or an array)
     * @param array        $data       Element data (label, options and data used for element creation)
+    *
+    * @throws HTML_QuickForm2_InvalidArgumentException
     */
     public function __construct($name = null, $attributes = null, array $data = array())
     {
@@ -187,6 +189,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 $separator .= $sign;
             } else {
                 $loadSelect = true;
+                $options    = array();
                 switch ($sign) {
                 case 'D':
                     // Sunday is 0 like with 'w' in date()
@@ -391,8 +394,11 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     protected function updateValue()
     {
         $name = $this->getName();
+        /* @var $ds HTML_QuickForm2_DataSource_NullAware */
         foreach ($this->getDataSources() as $ds) {
-            if (null !== ($value = $ds->getValue($name))) {
+            if (null !== ($value = $ds->getValue($name))
+                || $ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name)
+            ) {
                 $this->setValue($value);
                 return;
             }
