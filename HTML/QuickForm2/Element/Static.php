@@ -167,7 +167,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @param string $content Static content
     *
-    * @return   HTML_QuickForm2_Element_Static
+    * @return $this
     */
     function setContent($content)
     {
@@ -190,7 +190,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @param mixed $value
     *
-    * @return   HTML_QuickForm2_Element_Static
+    * @return $this
     */
     public function setValue($value)
     {
@@ -264,7 +264,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @throws HTML_QuickForm2_InvalidArgumentException when trying to set a tag
     *       name corresponding to a form element
-    * @return HTML_QuickForm2_Element_Static
+    * @return $this
     */
     public function setTagName($name, $forceClosing = true)
     {

@@ -87,7 +87,7 @@ class HTML_QuickForm2_Element_InputSubmit extends HTML_QuickForm2_Element_Input
     *
     * @param mixed $value Element's value, this parameter is ignored
     *
-    * @return   HTML_QuickForm2_Element_InputSubmit
+    * @return $this
     */
     public function setValue($value)
     {

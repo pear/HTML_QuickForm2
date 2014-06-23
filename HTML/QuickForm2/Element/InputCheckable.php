@@ -111,7 +111,7 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     *
     * @param string $content
     *
-    * @return   HTML_QuickForm2_Element_InputCheckable
+    * @return $this
     */
     public function setContent($content)
     {

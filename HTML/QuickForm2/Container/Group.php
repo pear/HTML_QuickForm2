@@ -311,7 +311,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     * @param string|array $separator Use a string for one separator, array for
     *                                alternating separators
     *
-    * @return   HTML_QuickForm2_Container_Group
+    * @return $this
     */
     public function setSeparator($separator)
     {

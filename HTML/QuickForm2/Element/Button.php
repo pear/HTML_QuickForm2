@@ -100,7 +100,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     *
     * @param string $content Button content (HTML to add between <button></button> tags)
     *
-    * @return   HTML_QuickForm2_Element_Button
+    * @return $this
     */
     function setContent($content)
     {
@@ -113,7 +113,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     *
     * @param mixed $value Element's value, this parameter is ignored
     *
-    * @return   HTML_QuickForm2_Element_Button
+    * @return $this
     */
     public function setValue($value)
     {

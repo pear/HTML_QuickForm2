@@ -153,7 +153,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param mixed $config Rule configuration data (specific for a Rule)
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException    in case of invalid
     *               configuration data
     */
@@ -178,7 +178,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param string $message Error message to display if validation fails
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return $this
     * @throws HTML_QuickForm2_InvalidArgumentException if trying to validate
     *       HTML_QuickForm2_Element_InputHidden with a non-empty error message
     *       (e.g. not in Rule chain)
@@ -248,7 +248,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param HTML_QuickForm2_Rule $next
     *
-    * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
+    * @return   $this    first rule in the chain (i.e. $this)
     * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
     *           a "required" rule to the chain
     */
@@ -272,7 +272,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @param HTML_QuickForm2_Rule $next
     *
-    * @return   HTML_QuickForm2_Rule    first rule in the chain (i.e. $this)
+    * @return   $this    first rule in the chain (i.e. $this)
     * @throws   HTML_QuickForm2_InvalidArgumentException    when trying to add
     *           a "required" rule to the chain
     */

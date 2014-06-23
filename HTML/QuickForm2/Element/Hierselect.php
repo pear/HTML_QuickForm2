@@ -188,7 +188,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      *      (presumably via some sort of AJAX request). It will receive an
      *      array of keys and should return {'values': [...], 'texts': [...]}
      *
-     * @return  HTML_QuickForm2_Element_Hierselect
+     * @return  $this
      * @throws  HTML_QuickForm2_InvalidArgumentException
      */
     public function loadOptions(array $options, $callback = null, $jsCallback = null)
@@ -266,7 +266,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     *
     * @param array $value
     *
-    * @return   HTML_QuickForm2_Element_Hierselect
+    * @return $this
     */
     public function setValue($value)
     {
@@ -285,7 +285,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      *
      * @param string $name
      *
-     * @return HTML_QuickForm2_Element_Hierselect
+     * @return $this
      */
     public function setName($name)
     {

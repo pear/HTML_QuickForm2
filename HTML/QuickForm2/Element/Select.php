@@ -501,7 +501,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * @param array $options
     *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
-    * @return   HTML_QuickForm2_Element_Select
+    * @return   $this
     */
     public function loadOptions(array $options)
     {

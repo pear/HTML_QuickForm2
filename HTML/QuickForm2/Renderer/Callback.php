@@ -543,7 +543,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param callback|null $callback PHP callback
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setLabelCallback($callback)
     {
@@ -558,7 +558,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param callback|null $callback PHP callback
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setHiddenGroupCallback($callback)
     {
@@ -573,7 +573,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param callback|null $callback PHP callback
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setRequiredNoteCallback($callback)
     {
@@ -593,7 +593,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * @param string        $className Class name
     * @param callback|null $callback  Callback to use for elements of that class
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setCallbackForClass($className, $callback)
     {
@@ -613,7 +613,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * @param string        $id       Element's id
     * @param callback|null $callback Callback to use for rendering of that element
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setCallbackForId($id, $callback)
     {
@@ -630,7 +630,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     *
     * @param callback|null $callback Callback for validation errors
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setErrorGroupCallback($callback)
     {
@@ -652,7 +652,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * @param string        $elementClass Element class name
     * @param callback|null $callback     Callback
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setElementCallbackForGroupClass($groupClass, $elementClass, $callback)
     {
@@ -674,7 +674,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * @param string        $elementClass Element class name
     * @param callback|null $callback     Callback
     *
-    * @return   HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function setElementCallbackForGroupId($groupId, $elementClass, $callback)
     {
@@ -690,7 +690,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     * This method is called automatically by startForm() method, but should
     * be called manually before calling other rendering methods separately.
     *
-    * @return HTML_QuickForm2_Renderer_Callback
+    * @return $this
     */
     public function reset()
     {

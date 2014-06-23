@@ -80,7 +80,7 @@ class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
     *
     * @param mixed $value Element's value, this parameter is ignored
     *
-    * @return   HTML_QuickForm2_Element_InputButton
+    * @return $this
     */
     public function setValue($value)
     {

@@ -178,7 +178,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     * This method is called automatically by startForm() method, but should
     * be called manually before calling other rendering methods separately.
     *
-    * @return HTML_QuickForm2_Renderer_Array
+    * @return $this
     */
     public function reset()
     {
@@ -299,7 +299,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     * @param string|array $idOrStyles Element id or array ('element id' => 'style')
     * @param mixed        $style      Element style if $idOrStyles is not an array
     *
-    * @return   HTML_QuickForm2_Renderer_Array
+    * @return $this
     */
     public function setStyleForId($idOrStyles, $style = null)
     {

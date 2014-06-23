@@ -234,7 +234,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      *
      * @param HTML_QuickForm2_Container $prototype prototype container
      *
-     * @return HTML_QuickForm2_Container_Repeat
+     * @return $this
      */
     public function setPrototype(HTML_QuickForm2_Container $prototype)
     {
@@ -335,7 +335,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      *
      * @param string $field field name
      *
-     * @return HTML_QuickForm2_Container_Repeat
+     * @return $this
      */
     public function setIndexField($field)
     {
@@ -402,7 +402,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      *
      * @param array $indexes
      *
-     * @return HTML_QuickForm2_Container_Repeat
+     * @return $this
      */
     public function setIndexes(array $indexes)
     {

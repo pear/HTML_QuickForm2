@@ -162,7 +162,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     *
     * @param mixed $value Value for file element, this parameter is ignored
     *
-    * @return    HTML_QuickForm2_Element_InputFile
+    * @return $this
     */
     public function setValue($value)
     {

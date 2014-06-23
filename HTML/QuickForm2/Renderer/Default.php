@@ -171,7 +171,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param string $className Class name
     * @param mixed  $template  Template to use for elements of that class
     *
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function setTemplateForClass($className, $template)
     {
@@ -189,7 +189,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param string $id       Element's id
     * @param mixed  $template Template to use for rendering of that element
     *
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function setTemplateForId($id, $template)
     {
@@ -206,7 +206,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     *
     * @param array $template Template for validation errors
     *
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function setErrorTemplate(array $template)
     {
@@ -225,7 +225,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param string $elementClass Element class name
     * @param mixed  $template     Template
     *
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function setElementTemplateForGroupClass($groupClass, $elementClass, $template)
     {
@@ -245,7 +245,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * @param string $elementClass Element class name
     * @param mixed  $template     Template
     *
-    * @return   HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function setElementTemplateForGroupId($groupId, $elementClass, $template)
     {
@@ -259,7 +259,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     * This method is called automatically by startForm() method, but should
     * be called manually before calling other rendering methods separately.
     *
-    * @return HTML_QuickForm2_Renderer_Default
+    * @return $this
     */
     public function reset()
     {

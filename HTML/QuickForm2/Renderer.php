@@ -252,7 +252,7 @@ abstract class HTML_QuickForm2_Renderer
     * @param string|array $nameOrOptions option name or array ('option name' => 'option value')
     * @param mixed        $value         parameter value if $nameOrConfig is not an array
     *
-    * @return   HTML_QuickForm2_Renderer
+    * @return   $this
     * @throws   HTML_QuickForm2_NotFoundException in case of unknown option
     */
     public function setOption($nameOrOptions, $value = null)
@@ -317,7 +317,7 @@ abstract class HTML_QuickForm2_Renderer
     *
     * @param    HTML_QuickForm2_JavascriptBuilder $builder
     *
-    * @return   HTML_QuickForm2_Renderer
+    * @return $this
     */
     public function setJavascriptBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
     {
@@ -331,7 +331,7 @@ abstract class HTML_QuickForm2_Renderer
     * This method is called automatically by startForm() method, but should
     * be called manually before calling other rendering methods separately.
     *
-    * @return HTML_QuickForm2_Renderer
+    * @return $this
     */
     abstract public function reset();
 
