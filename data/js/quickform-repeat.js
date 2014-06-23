@@ -3,12 +3,10 @@
  * Package version @package_version@
  * http://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2012, Alexey Borzov, Bertrand Mansion
+ * Copyright 2006-2014, Alexey Borzov, Bertrand Mansion
  * Licensed under new BSD license
  * http://opensource.org/licenses/bsd-license.php
  */
-
-/* $Id$ */
 
 /**
  * Sets repeat properties and attaches handlers for adding and removing items

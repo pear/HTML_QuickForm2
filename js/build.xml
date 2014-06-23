@@ -32,12 +32,7 @@
                </replaceregexp>
            </filterchain>
        </copy>
-       <append destfile="${js.concat.base}">
-           <filterchain>
-               <replaceregexp>
-                   <regexp pattern="/\*\s*\$Id[^$]*\$\s*\*/\s+" replace="" />
-               </replaceregexp>
-           </filterchain>
+       <append destFile="${js.concat.base}">
            <filelist dir="src/" files="${js.src.basesecond}" />
        </append>
        <copy file="src/hierselect.js" tofile="${js.concat.hs}">

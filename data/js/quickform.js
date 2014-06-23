@@ -3,12 +3,10 @@
  * Package version @package_version@
  * http://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2012, Alexey Borzov, Bertrand Mansion
+ * Copyright 2006-2014, Alexey Borzov, Bertrand Mansion
  * Licensed under new BSD license
  * http://opensource.org/licenses/bsd-license.php
  */
-
-/* $Id$ */
 
 /**
  * @namespace Base namespace for QuickForm, we no longer define our stuff in global namespace
@@ -1103,28 +1101,37 @@ qf.Validator.prototype = {
     },
 
     /**
+     * Removes the error message for the given element
+     *
+     * @param {string} elementId
+     */
+    removeErrorMessage: function(elementId)
+    {
+        var parent = this.findAncestor(elementId);
+
+        this.errors.remove(elementId);
+        if (parent) {
+            qf.classes.remove(parent, [this.classes.error, this.classes.valid]);
+
+            var spans = parent.getElementsByTagName('span');
+            for (var i = spans.length - 1; i >= 0; i--) {
+                if (qf.classes.has(spans[i], this.classes.message)) {
+                    spans[i].parentNode.removeChild(spans[i]);
+                }
+            }
+        }
+    },
+
+    /**
      * Removes error messages from owner element(s) of a given rule and chained rules
      *
      * @param {qf.Rule} rule
      */
     removeRelatedErrors: function(rule)
     {
-        var i, j, item, multiplier,
-            parent = this.findAncestor(rule.owner);
-
-        this.errors.remove(rule.owner);
-        if (parent) {
-            qf.classes.remove(parent, [this.classes.error, this.classes.valid]);
-
-            var spans = parent.getElementsByTagName('span');
-            for (i = spans.length - 1; i >= 0; i--) {
-                if (qf.classes.has(spans[i], this.classes.message)) {
-                    spans[i].parentNode.removeChild(spans[i]);
-                }
-            }
-        }
-        for (i = 0; item = rule.chained[i]; i++) {
-            for (j = 0; multiplier = item[j]; j++) {
+        this.removeErrorMessage(rule.owner);
+        for (var i = 0, item; item = rule.chained[i]; i++) {
+            for (var j = 0, multiplier; multiplier = item[j]; j++) {
                 this.removeRelatedErrors(multiplier);
             }
         }
