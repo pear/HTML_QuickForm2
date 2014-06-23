@@ -658,13 +658,45 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     ) {
         $myId     = HTML_QuickForm2_JavascriptBuilder::encode($this->getId());
         $protoId  = HTML_QuickForm2_JavascriptBuilder::encode($this->getPrototype()->getId());
-        $triggers = HTML_QuickForm2_JavascriptBuilder::encode(
-            $this->getJavascriptTriggers()
-        );
+
+        $triggers = array();
+        /* @var $child HTML_QuickForm2_Node */
+        foreach ($this->getRecursiveIterator() as $child) {
+            $triggers[] = $child->getId();
+        }
+        $triggers = HTML_QuickForm2_JavascriptBuilder::encode($triggers);
+
         list ($rules, $scripts) = $evalBuilder->getFormJavascriptAsStrings();
 
         return "new qf.elements.Repeat(document.getElementById({$myId}), {$protoId}, "
                . "{$triggers},\n{$rules},\n{$scripts}\n);";
+    }
+
+    /**
+     * Adds element's client-side validation rules to a builder object
+     *
+     * This will also call forceValidator() if the repeat does not contain
+     * any (visible) items but some of the child elements define client-side rules
+     *
+     * @param HTML_QuickForm2_JavascriptBuilder $builder
+     */
+    protected function renderClientRules(HTML_QuickForm2_JavascriptBuilder $builder)
+    {
+        if ($this->toggleFrozen()) {
+            return;
+        }
+        if (!$this->getIndexes()) {
+            $fakeBuilder = new HTML_QuickForm2_JavascriptBuilder();
+            /* @var $child HTML_QuickForm2_Node */
+            foreach ($this->getRecursiveIterator() as $child) {
+                $child->renderClientRules($fakeBuilder);
+            }
+            if ($fakeBuilder->getValidator()) {
+                $builder->forceValidator();
+            }
+        }
+
+        parent::renderClientRules($builder);
     }
 
     /**

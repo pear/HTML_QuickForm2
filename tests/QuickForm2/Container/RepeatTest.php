@@ -301,5 +301,23 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
         $value = $repeat->getValue();
         $this->assertEquals('', $value['buggy']['extra'][2]);
     }
+
+    public function testValidatorAlwaysPresentWhenClientRulesAdded()
+    {
+        $fieldset = new HTML_QuickForm2_Container_Fieldset();
+        $repeat   = new HTML_QuickForm2_Container_Repeat(
+            null, null, array('prototype' => $fieldset)
+        );
+
+        $fieldset->addText('foo')
+            ->addRule('required', 'Required!', null, HTML_QuickForm2_Rule::CLIENT_SERVER);
+
+        $repeat->setIndexes(array());
+        $renderer = HTML_QuickForm2_Renderer::factory('array');
+        $renderer->getJavascriptBuilder()->setFormId('fake-repeat');
+        $repeat->render($renderer);
+
+        $this->assertContains('new qf.Validator', $renderer->getJavascriptBuilder()->getValidator());
+    }
 }
 ?>

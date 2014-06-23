@@ -73,6 +73,15 @@ class HTML_QuickForm2_JavascriptBuilder
     protected $scripts = array();
 
    /**
+    * Whether to generate a validator object for the form if no rules are present
+    *
+    * Needed when the form contains an empty repeat element
+    *
+    * @var array
+    */
+    protected $forceValidator = array();
+
+    /**
     * Javascript libraries
     * @var array
     */
@@ -195,8 +204,9 @@ class HTML_QuickForm2_JavascriptBuilder
     public function setFormId($formId)
     {
         $this->formId = $formId;
-        $this->rules[$this->formId]   = array();
-        $this->scripts[$this->formId] = array();
+        $this->rules[$this->formId]          = array();
+        $this->scripts[$this->formId]        = array();
+        $this->forceValidator[$this->formId] = false;
     }
 
 
@@ -221,6 +231,15 @@ class HTML_QuickForm2_JavascriptBuilder
     public function addElementJavascript($script)
     {
         $this->scripts[$this->formId][] = $script;
+    }
+
+
+   /**
+    * Enables generating a validator for the current form even if no rules are present
+    */
+    public function forceValidator()
+    {
+        $this->forceValidator[$this->formId] = true;
     }
 
 
@@ -272,7 +291,9 @@ class HTML_QuickForm2_JavascriptBuilder
     {
         $js = '';
         foreach ($this->rules as $id => $rules) {
-            if ((null === $formId || $id == $formId) && !empty($rules)) {
+            if ((null === $formId || $id == $formId)
+                && (!empty($rules) || !empty($this->forceValidator[$id]))
+            ) {
                 $js .= ('' == $js ? '' : "\n")
                        . "new qf.Validator(document.getElementById('{$id}'), [\n"
                        . implode(",\n", $rules) . "\n]);";
