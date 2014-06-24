@@ -53,16 +53,17 @@
  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
  <notes>
 Bug fixes
- * HTML_QuickForm2_DataSource_Array and its descendants now differentiate
-   between "no value available for an element" and "explicit null value
-   available for an element" (see bug #20295). Custom DataSources may implement
+ * When using HTML_QuickForm2_DataSource_Array and its descendants elements'
+   updateValue() implementations now differentiate between "no value available
+   for an element" and "explicit null value provided for an element"
+   (see bug #20295). Custom DataSources may implement the new
    HTML_QuickForm2_DataSource_NullAware interface to achieve the same.
  * Contents of Static elements added to Repeat are no longer cleared (bug #19802)
  * Client-side rules for containers within Repeat are correctly removed when
    removing a repeated item (bug #19803)
  * Client-side validator is always generated for a form with a Repeat having
    some client-side rules on its child elements, even if Repeat is empty
- * Unit tests updated to work with newer phpunit, prevent running tests twice
+ * Unit tests updated to work with newer PHPUnit, prevent running tests twice
    under some circumstances (see bug #19038)
 
 Other features and changes
@@ -74,6 +75,8 @@ Other features and changes
  * HTML_QuickForm2_Container_Group::setValue() properly handles a group of radio
    elements (request #20103)
  * HTML_QuickForm2_Element_Date::setValue() can accept an instance of DateTime
+ * Extracted removeErrorMessage() from removeRelatedErrors() of qf.Validator
+   for easier customizing of client-side errors output
  </notes>
  <contents>
   <dir name="/">
