@@ -157,5 +157,15 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
         )));
         $this->assertNull($static->getContent());
     }
+
+    public function testErroneousContentRemovalAfterFixForBug20295()
+    {
+        $form = new HTML_QuickForm2('afterbug20295');
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array());
+
+        $static = $form->addStatic('foo', array(), array('content' => 'not empty'));
+
+        $this->assertEquals('not empty', $static->getContent());
+    }
 }
 ?>

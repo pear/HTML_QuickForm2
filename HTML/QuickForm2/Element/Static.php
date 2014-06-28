@@ -245,9 +245,10 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     protected function updateValue()
     {
         $name = $this->getName();
+        /* @var $ds HTML_QuickForm2_DataSource_NullAware */
         foreach ($this->getDataSources() as $ds) {
             if (!$ds instanceof HTML_QuickForm2_DataSource_Submit
-                && (null === ($value = $ds->getValue($name))
+                && (null !== ($value = $ds->getValue($name))
                     || $ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name))
             ) {
                 $this->setContent($value);
