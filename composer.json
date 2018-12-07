@@ -32,6 +32,6 @@
         "pear/html_common2": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "^5"
     }
 }
