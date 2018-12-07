@@ -21,6 +21,6 @@ matrix:
     - php: "nightly"
     - php: "master"
     - php: "hhvm"
-    
-install: pear install HTML_Common2
-script: phpunit tests
+
+install: composer install
+script: vendor/bin/phpunit
