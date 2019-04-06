@@ -236,14 +236,14 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                         $this->data['maxYear'],
                         $this->data['minYear'] > $this->data['maxYear']? -1: 1
                     );
-                    array_walk($options, create_function('&$v,$k', '$v = substr($v,-2);'));
+                    array_walk($options, array($this, '_shortYearCallback'));
                     break;
                 case 'h':
                     $options = $this->createOptionList(1, 12);
                     break;
                 case 'g':
                     $options = $this->createOptionList(1, 12);
-                    array_walk($options, create_function('&$v,$k', '$v = intval($v);'));
+                    array_walk($options, array($this, '_shortHourCallback'));
                     break;
                 case 'H':
                     $options = $this->createOptionList(
@@ -300,6 +300,28 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         }
         $separators[] = $separator . ($backslash? '\\': '');
         $this->setSeparator($separators);
+    }
+
+    /**
+     * Callback for creating two-digit year list, formerly via create_function()
+     *
+     * @param string $v
+     * @param string $k
+     */
+    private function _shortYearCallback(&$v, $k)
+    {
+        $v = substr($v,-2);
+    }
+
+    /**
+     * Callback for creating hour list without leading zeroes, formerly via create_function()
+     *
+     * @param $v
+     * @param $k
+     */
+    private function _shortHourCallback(&$v, $k)
+    {
+        $v = intval($v);
     }
 
    /**

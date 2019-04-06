@@ -121,11 +121,16 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, array('messageProvider' => array()));
     }
 
+    public static function callbackMessageProvider($messageId, $langId)
+    {
+        return "A nasty error happened!";
+    }
+
     public function testCallbackMessageProvider()
     {
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
         $upload = $form->addFile('local', array(), array(
-            'messageProvider' => create_function('$messageId, $langId', 'return "A nasty error happened!";')
+            'messageProvider' => array(__CLASS__, 'callbackMessageProvider')
         ));
         $this->assertFalse($form->validate());
         $this->assertEquals('A nasty error happened!', $upload->getError());

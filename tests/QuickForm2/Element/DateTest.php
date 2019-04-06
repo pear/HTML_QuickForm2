@@ -54,14 +54,16 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
         $invalid = new HTML_QuickForm2_Element_Date('invalid', null, array('messageProvider' => array()));
     }
 
+    public static function callbackMessageProvider($messageId, $langId)
+    {
+        return array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday');
+    }
+
     public function testCallbackMessageProvider()
     {
         $date = new HTML_QuickForm2_Element_Date('callback', null, array(
             'format'          => 'l',
-            'messageProvider' => create_function(
-                '$messageId, $langId',
-                "return array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday');"
-            )
+            'messageProvider' => array(__CLASS__, 'callbackMessageProvider')
         ));
         $this->assertContains('<option value="6">Caturday</option>', $date->__toString());
     }

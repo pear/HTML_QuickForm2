@@ -93,19 +93,20 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     */
     protected function validateOwner()
     {
-        $value  = $this->owner->getValue();
-        $config = $this->getConfig();
-        if (!in_array($config['operator'], array('===', '!=='))) {
-            $compareFn = create_function(
-                '$a, $b', 'return floatval($a) ' . $config['operator'] . ' floatval($b);'
-            );
-        } else {
-            $compareFn = create_function(
-                '$a, $b', 'return strval($a) ' . $config['operator'] . ' strval($b);'
-            );
+        $value   = $this->owner->getValue();
+        $config  = $this->getConfig();
+        $operand = $config['operand'] instanceof HTML_QuickForm2_Node
+                   ? $config['operand']->getValue(): $config['operand'];
+
+        switch ($config['operator']) {
+        case '===': return strval($value) === strval($operand);
+        case '!==': return strval($value) !== strval($operand);
+        case '>':   return floatval($value) > floatval($operand);
+        case '>=':  return floatval($value) >= floatval($operand);
+        case '<':   return floatval($value) < floatval($operand);
+        case '<=':  return floatval($value) <= floatval($operand);
+        default:    return false;
         }
-        return $compareFn($value, $config['operand'] instanceof HTML_QuickForm2_Node
-                                  ? $config['operand']->getValue(): $config['operand']);
     }
 
     protected function getJavascriptCallback()
