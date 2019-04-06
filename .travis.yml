@@ -29,7 +29,7 @@ install:
     fi
 script:
   - |
-    if [[ $PHP52SUCKS == true]]; then
+    if [[ $PHP52SUCKS == true ]]; then
       phpunit tests
     else
       ./vendor/bin/phpunit tests
