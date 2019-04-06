@@ -506,7 +506,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
         if (!empty($groupId)) {
             if (!empty($this->elementTemplatesForGroupId[$groupId])) {
-                while (list($elClass) = each($elementClasses)) {
+                foreach (array_keys($elementClasses) as $elClass) {
                     if (!empty($this->elementTemplatesForGroupId[$groupId][$elClass])) {
                         return $this->elementTemplatesForGroupId[$groupId][$elClass];
                     }
@@ -517,8 +517,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             $grClass = strtolower(get_class($group));
             do {
                 if (!empty($this->elementTemplatesForGroupClass[$grClass])) {
-                    reset($elementClasses);
-                    while (list($elClass) = each($elementClasses)) {
+                    foreach (array_keys($elementClasses) as $elClass) {
                         if (!empty($this->elementTemplatesForGroupClass[$grClass][$elClass])) {
                             return $this->elementTemplatesForGroupClass[$grClass][$elClass];
                         }

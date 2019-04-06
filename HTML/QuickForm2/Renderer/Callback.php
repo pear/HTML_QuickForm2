@@ -747,7 +747,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
 
         if (!empty($groupId)) {
             if (!empty($this->elementCallbacksForGroupId[$groupId])) {
-                while (list($elClass) = each($elementClasses)) {
+                foreach (array_keys($elementClasses) as $elClass) {
                     if (!empty($this->elementCallbacksForGroupId[$groupId][$elClass])) {
                         return $this->elementCallbacksForGroupId[$groupId][$elClass];
                     }
@@ -758,8 +758,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
             $grClass = strtolower(get_class($group));
             do {
                 if (!empty($this->elementCallbacksForGroupClass[$grClass])) {
-                    reset($elementClasses);
-                    while (list($elClass) = each($elementClasses)) {
+                    foreach (array_keys($elementClasses) as $elClass) {
                         if (!empty($this->elementCallbacksForGroupClass[$grClass][$elClass])) {
                             return $this->elementCallbacksForGroupClass[$grClass][$elClass];
                         }
