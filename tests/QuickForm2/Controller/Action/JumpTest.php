@@ -188,6 +188,9 @@ class HTML_QuickForm2_Controller_Action_JumpTest
         if ('' != session_id()) {
             $this->markTestSkipped('This test cannot be run with session started');
         }
+        if (version_compare(phpversion(), '7.2', '>=')) {
+            $this->markTestSkipped('Cannot change session config in PHP 7.2+ after headers are sent');
+        }
 
         $old = ini_set('session.use_only_cookies', false);
         define('SID', 'mysessionid=foobar');
