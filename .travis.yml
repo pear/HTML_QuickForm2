@@ -17,6 +17,9 @@ matrix:
     - php: "7.2"
 
 install:
+  - pear channel-update pear.php.net
   - pear install HTML_Common2
   - if [[ $SKIPCOMPOSER != true ]]; then composer install; fi
-script: phpunit tests
+script:
+  - if [[ $SKIPCOMPOSER == true ]]; then phpunit tests; fi
+  - if [[ $SKIPCOMPOSER != true ]]; then ./vendor/bin/phpunit tests; fi
