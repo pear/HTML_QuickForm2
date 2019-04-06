@@ -52,21 +52,21 @@ class HTML_QuickForm2_Controller_Action_SubmitTest
 {
     public function testProcessIfValid()
     {
-        $mockForm = $this->getMock(
-            'HTML_QuickForm2', array('validate', 'getValue'),
-            array('valid')
-        );
+        $mockForm = $this->getMockBuilder('HTML_QuickForm2')
+            ->setMethods(array('validate', 'getValue'))
+            ->setConstructorArgs(array('valid'))
+            ->getMock();
         $mockForm->expects($this->once())->method('validate')
                  ->will($this->returnValue(true));
         $mockForm->expects($this->once())->method('getValue')
                  ->will($this->returnValue(array('foo' => 'bar')));
-        $mockPage = $this->getMock(
-            'HTML_QuickForm2_Controller_Page', array('populateForm'),
-            array($mockForm)
-        );
-        $mockProcess = $this->getMock(
-            'HTML_QuickForm2_Controller_Action', array('perform')
-        );
+        $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
+            ->setMethods(array('populateForm'))
+            ->setConstructorArgs(array($mockForm))
+            ->getMock();
+        $mockProcess = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
+            ->setMethods(array('perform'))
+            ->getMock();
         $mockProcess->expects($this->once())->method('perform')
                     ->will($this->returnValue('do processing'));
         $mockPage->addHandler('process', $mockProcess);
@@ -79,21 +79,21 @@ class HTML_QuickForm2_Controller_Action_SubmitTest
 
     public function testDisplayIfInvalid()
     {
-        $mockForm = $this->getMock(
-            'HTML_QuickForm2', array('validate', 'getValue'),
-            array('invalid')
-        );
+        $mockForm = $this->getMockBuilder('HTML_QuickForm2')
+            ->setMethods(array('validate', 'getValue'))
+            ->setConstructorArgs(array('invalid'))
+            ->getMock();
         $mockForm->expects($this->once())->method('validate')
                  ->will($this->returnValue(false));
         $mockForm->expects($this->once())->method('getValue')
                  ->will($this->returnValue(array('foo' => 'bar')));
-        $mockPage = $this->getMock(
-            'HTML_QuickForm2_Controller_Page', array('populateForm'),
-            array($mockForm)
-        );
-        $mockDisplay = $this->getMock(
-            'HTML_QuickForm2_Controller_Action', array('perform')
-        );
+        $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
+            ->setMethods(array('populateForm'))
+            ->setConstructorArgs(array($mockForm))
+            ->getMock();
+        $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
+            ->setMethods(array('perform'))
+            ->getMock();
         $mockDisplay->expects($this->once())->method('perform')
                     ->will($this->returnValue('display form'));
         $mockPage->addHandler('display', $mockDisplay);
@@ -106,22 +106,23 @@ class HTML_QuickForm2_Controller_Action_SubmitTest
 
     public function testRedirectToInvalidPage()
     {
-        $pageFirst = $this->getMock(
-            'HTML_QuickForm2_Controller_Page', array('populateForm'),
-            array(new HTML_QuickForm2('first'))
-        );
-        $formSecond = $this->getMock(
-            'HTML_QuickForm2', array('validate'), array('second')
-        );
+        $pageFirst = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
+            ->setMethods(array('populateForm'))
+            ->setConstructorArgs(array(new HTML_QuickForm2('first')))
+            ->getMock();
+        $formSecond = $this->getMockBuilder('HTML_QuickForm2')
+            ->setMethods(array('validate'))
+            ->setConstructorArgs(array('second'))
+            ->getMock();
         $formSecond->expects($this->once())->method('validate')
                    ->will($this->returnValue(true));
-        $pageSecond = $this->getMock(
-            'HTML_QuickForm2_Controller_Page', array('populateForm'),
-            array($formSecond)
-        );
-        $mockJump = $this->getMock(
-            'HTML_QuickForm2_Controller_Action', array('perform')
-        );
+        $pageSecond = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
+            ->setMethods(array('populateForm'))
+            ->setConstructorArgs(array($formSecond))
+            ->getMock();
+        $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
+            ->setMethods(array('perform'))
+            ->getMock();
         $mockJump->expects($this->once())->method('perform')
                  ->will($this->returnValue('jump to first'));
         $pageFirst->addHandler('jump', $mockJump);

@@ -172,7 +172,9 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateNotRegisteredRule()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+            ->setMethods($this->nodeAbstractMethods)
+            ->getMock();
         try {
             $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -184,7 +186,9 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleNonExistingClass()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+            ->setMethods($this->nodeAbstractMethods)
+            ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo3', 'NonexistentClass');
         try {
             $this->setErrorHandler();
@@ -199,7 +203,9 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleNonExistingFile()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+            ->setMethods($this->nodeAbstractMethods)
+            ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo4', 'NonexistentClass', 'NonexistentFile.php');
         try {
             $this->setErrorHandler();
@@ -214,7 +220,9 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleInvalidFile()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+            ->setMethods($this->nodeAbstractMethods)
+            ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo5', 'NonexistentClass', dirname(__FILE__) . '/_files/InvalidFile.php');
         try {
             $rule = HTML_QuickForm2_Factory::createRule('foo5', $mockNode);
@@ -227,7 +235,9 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRuleValid()
     {
-        $mockNode = $this->getMock('HTML_QuickForm2_Node', $this->nodeAbstractMethods);
+        $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
+            ->setMethods($this->nodeAbstractMethods)
+            ->getMock();
         HTML_QuickForm2_Factory::registerRule(
             'fakerule', 'FakeRule', dirname(__FILE__) . '/_files/FakeRule.php'
         );

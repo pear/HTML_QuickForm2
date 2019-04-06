@@ -133,8 +133,9 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 
     public function testObjectMessageProvider()
     {
-        $mockProvider = $this->getMock('HTML_QuickForm2_MessageProvider',
-                                       array('get'));
+        $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
+            ->setMethods(array('get'))
+            ->getMock();
         $mockProvider->expects($this->once())->method('get')
                      ->will($this->returnValue('A nasty error happened!'));
 

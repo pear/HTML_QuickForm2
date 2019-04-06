@@ -100,10 +100,10 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     {
         $static = new HTML_QuickForm2_Element_Static('novalidate');
         try {
-            $rule = $this->getMock(
-                'HTML_QuickForm2_Rule', array('validateOwner'),
-                array($static, 'a message')
-            );
+            $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
+                ->setMethods(array('validateOwner'))
+                ->setConstructorArgs(array($static, 'a message'))
+                ->getMock();
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
     }

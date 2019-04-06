@@ -56,8 +56,10 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testValidCallbackRequired()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         try {
             $callbackMissing = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error');
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -75,8 +77,10 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testOptionsHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 
@@ -94,8 +98,10 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testConfigHandling()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 
@@ -117,8 +123,10 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testConfigOverridesOptions()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 

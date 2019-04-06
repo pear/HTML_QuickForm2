@@ -51,8 +51,10 @@ class HTML_QuickForm2_Rule_NotCallbackTest extends PHPUnit_Framework_TestCase
 {
     public function testNegatesResult()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 

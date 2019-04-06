@@ -68,8 +68,10 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
 
     public function testCanOnlyValidateFileUploads()
     {
-        $mockEl  = $this->getMock('HTML_QuickForm2_Element', array('getType',
-                                  'getRawValue', 'setValue', '__toString'));
+        $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(array('getType',
+                                  'getRawValue', 'setValue', '__toString'))
+            ->getMock();
         try {
             $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($mockEl, 'an error', 1024);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -81,7 +83,9 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
 
     public function testMissingUploadsAreSkipped()
     {
-        $mockNoUpload = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+            ->setMethods(array('getValue'))
+            ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue(array(
                         'name'     => '',
@@ -96,7 +100,9 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
 
     public function testOptionsHandling()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+            ->setMethods(array('getValue'))
+            ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue(array(
                     'name'     => 'pr0n.jpg',
@@ -114,7 +120,9 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
 
     public function testConfigHandling()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+            ->setMethods(array('getValue'))
+            ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue(array(
                     'name'     => 'pr0n.jpg',
@@ -137,7 +145,9 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
 
     public function testConfigOverridesOptions()
     {
-        $mockFile = $this->getMock('HTML_QuickForm2_Element_InputFile', array('getValue'));
+        $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
+            ->setMethods(array('getValue'))
+            ->getMock();
         $mockFile->expects($this->once())->method('getValue')
                  ->will($this->returnValue(array(
                     'name'     => 'pr0n.jpg',
