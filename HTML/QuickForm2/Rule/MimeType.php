@@ -94,7 +94,7 @@ class HTML_QuickForm2_Rule_MimeType extends HTML_QuickForm2_Rule
     */
     public function setConfig($config)
     {
-        if (0 == count($config) || !is_string($config) && !is_array($config)) {
+        if (!is_string($config) && !is_array($config) || array() === $config) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'MimeType Rule requires MIME type(s), ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'

@@ -270,7 +270,9 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     */
     public function setValue($value)
     {
-        $this->size = max($this->size, count($value));
+        if (is_array($value)) {
+            $this->size = max($this->size, count($value));
+        }
         $this->_createSelects();
         parent::setValue($value);
         $this->_loadChildOptions();

@@ -164,10 +164,10 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     public static function mergeConfig($localConfig, $globalConfig)
     {
         $config = null;
-        if (0 < count($globalConfig)) {
+        if (null !== $globalConfig && array() !== $globalConfig) {
             $config = self::toCanonicalForm($globalConfig, 'operator');
         }
-        if (0 < count($localConfig)) {
+        if (null !== $localConfig && array() !== $localConfig) {
             $config = (isset($config)? $config: array())
                       + self::toCanonicalForm($localConfig);
         }
@@ -217,7 +217,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     */
     public function setConfig($config)
     {
-        if (0 == count($config)) {
+        if (null === $config || array() === $config) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Compare Rule requires an argument to compare with'
             );
