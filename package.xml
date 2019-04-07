@@ -5,6 +5,7 @@
     http://pear.php.net/dtd/package-2.0.xsd">
  <name>HTML_QuickForm2</name>
  <channel>pear.php.net</channel>
+ <extends>HTML_QuickForm</extends>
  <summary>PHP5 rewrite of HTML_QuickForm package</summary>
  <description>
  PHP5 rewrite of HTML_QuickForm and HTML_QuickForm_Controller packages.
@@ -267,6 +268,9 @@ their contents when DataSources did not contain values for them.
      <file name="Factory.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
+     <file name="InvalidArgumentException.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
      <file name="JavascriptBuilder.php" role="php">
       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
       <tasks:replace from="@package_version@" to="version" type="package-info" />
@@ -278,6 +282,9 @@ their contents when DataSources did not contain values for them.
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Node.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="NotFoundException.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Renderer.php" role="php">
