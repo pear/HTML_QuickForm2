@@ -1,4 +1,11 @@
 {
+    "name":        "pear/html_quickform2",
+    "description": "Provides methods to create, validate and render HTML forms in PHP.",
+    "type":        "library",
+    "keywords":    ["forms", "validation", "javascript", "wizard", "pear", "quickform"],
+    "homepage":    "https://pear.php.net/package/HTML_QuickForm2/",
+    "license":     "BSD-3-Clause",
+
     "authors": [
         {
             "email": "avb@php.net",
@@ -11,27 +18,20 @@
             "role": "Lead"
         }
     ],
-    "autoload": {
-        "psr-0": {
-            "HTML": "./"
-        }
-    },
-    "description": "Provides methods to create, validate and render HTML forms in PHP.",
-    "include-path": [
-        "./"
-    ],
-    "license": "BSD",
-    "name": "pear/html_quickform2",
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2",
         "source": "https://github.com/pear/HTML_QuickForm2"
     },
-    "type": "library",
     "require": {
         "pear/pear_exception": "^1.0",
-        "pear/html_common2": "^2.0"
+        "pear/html_common2":   "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^3.7|^4.8|^5.7"
+        "phpunit/phpunit":     "^3.7|^4.8|^5.7"
+    },
+    "autoload": {
+        "psr-0": {
+            "HTML": "./"
+        }
     }
 }
