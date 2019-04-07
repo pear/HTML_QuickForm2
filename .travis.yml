@@ -46,9 +46,8 @@ script:
   - pear package-validate ./package.xml
   - php ./pear-package-helper.php
   - pear install ./.pear-package/package.xml
-  - pear list
-  - pear config-show
-  - echo "include_path='$(pear config-get php_dir):.'" >> $(pear config-get php_ini)
-  - php -r "echo get_include_path();"
+  - php -r "echo get_include_path() . PHP_EOL . PHP_EOL;"
+  - echo "include_path='$(pear config-get php_dir):`php -r 'echo get_include_path();'`'" >> $(pear config-get php_ini)
+  - php -r "echo get_include_path() . PHP_EOL . PHP_EOL;"
   # Run tests on HTML_QuickForm2 installed with pear
   - phpunit `pear config-get test_dir`/HTML_QuickForm2
