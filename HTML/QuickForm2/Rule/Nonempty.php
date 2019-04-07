@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 rules
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Rule.php';
 
 /**
  * Rule checking that the field is not empty

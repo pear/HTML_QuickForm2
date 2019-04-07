@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for all HTML_QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Node.php';
+// pear-package-only /**
+// pear-package-only  * Base class for all HTML_QuickForm2 elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Node.php';
 
 /**
  * Abstract base class for simple QuickForm2 containers
@@ -509,7 +509,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function __toString()
     {
-        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
+        // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
         $renderer = $this->render(HTML_QuickForm2_Renderer::factory('default'));
         return $renderer->__toString()

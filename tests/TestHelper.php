@@ -42,28 +42,27 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-// If running from SVN checkout, update include_path
-if ('@' . 'package_version@' == '@package_version@') {
-    $classPath   = realpath(dirname(dirname(__FILE__)));
-    $includePath = array_map('realpath', explode(PATH_SEPARATOR, get_include_path()));
-    if (0 !== ($key = array_search($classPath, $includePath))) {
-        if (false !== $key) {
-            unset($includePath[$key]);
+// Are we running with an autoloader (composer's, presumably) already?
+if (!class_exists('HTML_QuickForm2_Loader', true)) {
+    // If running from SVN checkout, update include_path
+    if ('@' . 'package_version@' == '@package_version@') {
+        $classPath   = realpath(dirname(dirname(__FILE__)));
+        $includePath = array_map('realpath', explode(PATH_SEPARATOR, get_include_path()));
+        if (0 !== ($key = array_search($classPath, $includePath))) {
+            if (false !== $key) {
+                unset($includePath[$key]);
+            }
+            set_include_path($classPath . PATH_SEPARATOR . implode(PATH_SEPARATOR, $includePath));
         }
-        set_include_path($classPath . PATH_SEPARATOR . implode(PATH_SEPARATOR, $includePath));
     }
+    require_once 'HTML/QuickForm2/Loader.php';
+    spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
 }
 
-require_once 'HTML/QuickForm2/Loader.php';
-spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
 
-if (strpos($_SERVER['argv'][0], 'phpunit') === false) {
-    /** Include PHPUnit dependencies based on version */
-    require_once 'PHPUnit/Runner/Version.php';
-    if (version_compare(PHPUnit_Runner_Version::id(), '3.5.0', '>=')) {
-        require_once 'PHPUnit/Autoload.php';
-    } else {
-        require_once 'PHPUnit/Framework.php';
-    }
+if (strpos($_SERVER['argv'][0], 'phpunit') === false
+    && !class_exists('PHPUnit_Framework_TestCase', true)
+) {
+    require_once 'PHPUnit/Autoload.php';
 }
 ?>

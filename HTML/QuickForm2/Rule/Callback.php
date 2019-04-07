@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 rules
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Rule.php';
 
 /**
  * Rule checking the value via a callback function (method)
@@ -104,7 +104,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
 
     protected function getJavascriptCallback()
     {
-        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+        // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $config    = $this->getConfig();
         $arguments = array($this->owner->getJavascriptValue());

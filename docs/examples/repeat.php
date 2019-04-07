@@ -3,8 +3,8 @@
  * Usage example for HTML_QuickForm2 package: repeat element
  */
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
 $form = new HTML_QuickForm2('testRepeat');
 

@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Abstract base class for QuickForm2 renderers
- */
-require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only /**
+// pear-package-only  * Abstract base class for QuickForm2 renderers
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
 /**
  * Proxy class for HTML_QuickForm2 renderers and their plugins
@@ -184,7 +184,9 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     {
         for ($i = count($this->_plugins); $i < count($this->_pluginClasses); $i++) {
             list($className, $includeFile) = $this->_pluginClasses[$i];
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
+            if (!class_exists($className, true)) {
+                HTML_QuickForm2_Loader::loadClass($className, $includeFile);
+            }
 
             $methods    = array();
             $plugin     = new $className;

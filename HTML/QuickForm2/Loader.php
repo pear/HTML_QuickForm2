@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Exception classes for HTML_QuickForm2
- */
-require_once 'HTML/QuickForm2/Exception.php';
+// pear-package-only /**
+// pear-package-only  * Exception classes for HTML_QuickForm2
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Exception.php';
 
 /**
  * Class with static methods for loading classes and files

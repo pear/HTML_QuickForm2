@@ -43,10 +43,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Abstract base class for QuickForm2 renderers
- */
-require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only /**
+// pear-package-only  * Abstract base class for QuickForm2 renderers
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
 /**
  * A renderer for HTML_QuickForm2 building an array of form elements

@@ -45,7 +45,9 @@
 /**
  * Base class for exceptions in PEAR
  */
-require_once 'PEAR/Exception.php';
+if (!class_exists('PEAR_Exception', true)) {
+    require_once 'PEAR/Exception.php';
+}
 
 /**
  * Base class for exceptions in HTML_QuickForm2 package
@@ -67,54 +69,7 @@ class HTML_QuickForm2_Exception extends PEAR_Exception
 {
 }
 
-/**
- * Exception that denotes some resource was not found
- *
- * One example is trying to instantiate a nonexistent class in Factory
- * <code>
- * try {
- *     HTML_QuickForm2_Factory::registerElement('missing', 'NonExistent');
- *     $el = HTML_QuickForm2_Factory::createElement('missing');
- * } catch (HTML_QuickForm2_NotFoundException $e) {
- *     echo $e->getMessage();
- * }
- * </code>
- * This code fill output "Class 'NonExistent' does not exist and no file to load"
- *
- * @category HTML
- * @package  HTML_QuickForm2
- * @author   Alexey Borzov <avb@php.net>
- * @author   Bertrand Mansion <golgote@mamasam.com>
- * @license  http://opensource.org/licenses/bsd-license.php New BSD License
- * @version  Release: @package_version@
- * @link     http://pear.php.net/package/HTML_QuickForm2
- */
-class HTML_QuickForm2_NotFoundException extends HTML_QuickForm2_Exception
-{
-}
-
-/**
- * Exception that denotes invalid arguments were passed
- *
- * One example is trying to create an element of type which is unknown to Factory
- * <code>
- * try {
- *     $el = HTML_QuickForm2_Factory::createElement('unknown');
- * } catch (HTML_QuickForm2_InvalidArgumentException $e) {
- *     echo $e->getMessage();
- * }
- * </code>
- * This code will output "Element type 'unknown' is not known"
- *
- * @category HTML
- * @package  HTML_QuickForm2
- * @author   Alexey Borzov <avb@php.net>
- * @author   Bertrand Mansion <golgote@mamasam.com>
- * @license  http://opensource.org/licenses/bsd-license.php New BSD License
-s * @version  Release: @package_version@
- * @link     http://pear.php.net/package/HTML_QuickForm2
- */
-class HTML_QuickForm2_InvalidArgumentException extends HTML_QuickForm2_Exception
-{
-}
+// backwards compatibility, include the child exceptions if installed with PEAR installer
+// pear-package-only require_once 'HTML/QuickForm2/InvalidArgumentException.php';
+// pear-package-only require_once 'HTML/QuickForm2/NotFoundException.php';
 ?>

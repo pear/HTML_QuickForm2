@@ -5,9 +5,11 @@
  * NB: This usage example requires HTML_AJAX package to work.
  */
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Renderer.php';
-require_once 'HTML/AJAX/Helper.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
+if (!class_exists('HTML_AJAX_Helper', true)) {
+    require_once 'HTML/AJAX/Helper.php';
+}
 require_once './support/hierselect-loader.php';
 
 $form = new HTML_QuickForm2('ajaxHierselect');

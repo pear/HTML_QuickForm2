@@ -42,20 +42,20 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for HTML_QuickForm2 groups
- */
-require_once 'HTML/QuickForm2/Container/Group.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 groups
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Container/Group.php';
 
-/**
- * Classes for <select> elements
- */
-require_once 'HTML/QuickForm2/Element/Select.php';
+// pear-package-only /**
+// pear-package-only  * Classes for <select> elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Select.php';
 
-/**
- * Class for adding inline javascript to the form
- */
-require_once 'HTML/QuickForm2/Element/Script.php';
+// pear-package-only /**
+// pear-package-only  * Class for adding inline javascript to the form
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Script.php';
 
 
 /**
@@ -378,7 +378,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     */
     private function _generateInitScript()
     {
-        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+        // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $ids = array();
         /* @var $element HTML_QuickForm2_Element */

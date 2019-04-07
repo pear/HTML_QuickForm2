@@ -42,8 +42,8 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/** Interface for classes that supply (translated) messages for the elements */
-require_once 'HTML/QuickForm2/MessageProvider.php';
+// pear-package-only /** Interface for classes that supply (translated) messages for the elements */
+// pear-package-only require_once 'HTML/QuickForm2/MessageProvider.php';
 
 /**
  * Provides default translations for various elements' messages

@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for fieldsets
- */
-require_once 'HTML/QuickForm2/Container.php';
+// pear-package-only /**
+// pear-package-only  * Base class for fieldsets
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Container.php';
 
 /**
  * Concrete implementation of a container for fieldsets

@@ -42,14 +42,14 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for HTML_QuickForm2 group of elements
- */
-require_once 'HTML/QuickForm2/Container/Group.php';
-/**
- * Base class for HTML_QuickForm2 select element
- */
-require_once 'HTML/QuickForm2/Element/Select.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 group of elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Container/Group.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 select element
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Select.php';
 
 /**
  * Class for a group of elements used to input dates (and times).
@@ -161,10 +161,10 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
             $this->messageProvider = $data['messageProvider'];
         } else {
             if (isset($data['language']) && 'locale' == $data['language']) {
-                HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Strftime');
+                // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Strftime');
                 $this->messageProvider = new HTML_QuickForm2_MessageProvider_Strftime();
             } else {
-                HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
+                // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
                 $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
             }
         }

@@ -50,8 +50,8 @@ $secondary = array(
     array(5 => "Wagner", 6 => "Mozart", 7 => "Beethoven")
 );
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
 $form = new HTML_QuickForm2('elements');
 

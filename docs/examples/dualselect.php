@@ -10,10 +10,10 @@
  * client-side validation with custom element.
  */
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Element/Select.php';
-require_once 'HTML/QuickForm2/Renderer.php';
-require_once 'HTML/QuickForm2/Renderer/Plugin.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Element/Select.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer/Plugin.php';
 
 /**
  * "Dualselect" element
@@ -42,9 +42,8 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
     {
         if ($this->frozen) {
             return $this->getFrozenHtml();
-        } else {
-            require_once 'HTML/QuickForm2/Renderer.php';
 
+        } else {
             return $this->render(
                 HTML_QuickForm2_Renderer::factory('default')
                     ->setTemplateForId(

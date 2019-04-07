@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for checkboxes and radios
- */
-require_once 'HTML/QuickForm2/Element/InputCheckable.php';
+// pear-package-only /**
+// pear-package-only  * Base class for checkboxes and radios
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/InputCheckable.php';
 
 /**
  * Class for <input type="radio" /> elements

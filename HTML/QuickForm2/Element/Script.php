@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Class for static elements that only contain text or markup
- */
-require_once 'HTML/QuickForm2/Element/Static.php';
+// pear-package-only /**
+// pear-package-only  * Class for static elements that only contain text or markup
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Static.php';
 
 /**
  * Class for adding inline javascript to the form

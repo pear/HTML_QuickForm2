@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for <input> elements
- */
-require_once 'HTML/QuickForm2/Element/Input.php';
+// pear-package-only /**
+// pear-package-only  * Base class for <input> elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
  * Class for <input type="image" /> elements

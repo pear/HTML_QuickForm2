@@ -6,15 +6,15 @@
  * @ignore
  */
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Controller.php';
-require_once 'HTML/QuickForm2/Renderer.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Controller.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
 // Load some default action handlers
-require_once 'HTML/QuickForm2/Controller/Action/Next.php';
-require_once 'HTML/QuickForm2/Controller/Action/Back.php';
-require_once 'HTML/QuickForm2/Controller/Action/Jump.php';
-require_once 'HTML/QuickForm2/Controller/Action/Display.php';
+// pear-package-only require_once 'HTML/QuickForm2/Controller/Action/Next.php';
+// pear-package-only require_once 'HTML/QuickForm2/Controller/Action/Back.php';
+// pear-package-only require_once 'HTML/QuickForm2/Controller/Action/Jump.php';
+// pear-package-only require_once 'HTML/QuickForm2/Controller/Action/Display.php';
 
 // Start the session, form-page values will be kept there
 session_start();

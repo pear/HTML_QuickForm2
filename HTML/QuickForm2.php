@@ -42,15 +42,15 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Abstract base class for QuickForm2 containers
- */
-require_once 'HTML/QuickForm2/Container.php';
+// pear-package-only /**
+// pear-package-only  * Abstract base class for QuickForm2 containers
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Container.php';
 
-/**
- * Data source for HTML_QuickForm2 objects based on superglobal arrays
- */
-require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
+// pear-package-only /**
+// pear-package-only  * Data source for HTML_QuickForm2 objects based on superglobal arrays
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/DataSource/SuperGlobal.php';
 
 /**
  * Class representing a HTML form

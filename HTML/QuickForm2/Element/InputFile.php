@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for <input> elements
- */
-require_once 'HTML/QuickForm2/Element/Input.php';
+// pear-package-only /**
+// pear-package-only  * Base class for <input> elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Element/Input.php';
 
 /**
  * Class for <input type="file" /> elements
@@ -109,7 +109,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
             $this->messageProvider = $data['messageProvider'];
 
         } else {
-            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
+            // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_MessageProvider_Default');
             $this->messageProvider = HTML_QuickForm2_MessageProvider_Default::getInstance();
         }
         if (isset($data['language'])) {

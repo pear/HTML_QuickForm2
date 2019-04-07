@@ -1,6 +1,6 @@
 <?php
 /**
- * Action handler for going to a specific page of a multipage form
+ * Exception classes for HTML_QuickForm2
  *
  * PHP version 5
  *
@@ -42,14 +42,18 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-// pear-package-only /** Interface for Controller action handlers */
-// pear-package-only require_once 'HTML/QuickForm2/Controller/Action.php';
-
 /**
- * Action handler for going to a specific page of a multipage form
+ * Exception that denotes invalid arguments were passed
  *
- * When an instance of this class is added in addHandler(), action name
- * should be set to ID of a page you want to go to, not 'direct'
+ * One example is trying to create an element of type which is unknown to Factory
+ * <code>
+ * try {
+ *     $el = HTML_QuickForm2_Factory::createElement('unknown');
+ * } catch (HTML_QuickForm2_InvalidArgumentException $e) {
+ *     echo $e->getMessage();
+ * }
+ * </code>
+ * This code will output "Element type 'unknown' is not known"
  *
  * @category HTML
  * @package  HTML_QuickForm2
@@ -59,14 +63,7 @@
  * @version  Release: @package_version@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
-class HTML_QuickForm2_Controller_Action_Direct
-    implements HTML_QuickForm2_Controller_Action
+class HTML_QuickForm2_InvalidArgumentException extends HTML_QuickForm2_Exception
 {
-    public function perform(HTML_QuickForm2_Controller_Page $page, $name)
-    {
-        $page->storeValues();
-
-        return $page->getController()->getPage($name)->handle('jump');
-    }
 }
 ?>

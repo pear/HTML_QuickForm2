@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Class with static methods for loading classes and files
- */
-require_once 'HTML/QuickForm2/Loader.php';
+// pear-package-only /**
+// pear-package-only  * Class with static methods for loading classes and files
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Loader.php';
 
 /**
  * Abstract base class for QuickForm2 renderers
@@ -143,8 +143,10 @@ abstract class HTML_QuickForm2_Renderer
         }
 
         list ($className, $includeFile) = self::$_types[$type];
-        HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer_Proxy');
+        if (!class_exists($className, true)) {
+            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
+        }
+        // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer_Proxy');
         return new HTML_QuickForm2_Renderer_Proxy(new $className, self::$_pluginClasses[$type]);
     }
 
@@ -303,7 +305,7 @@ abstract class HTML_QuickForm2_Renderer
     public function getJavascriptBuilder()
     {
         if (empty($this->jsBuilder)) {
-            HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+            // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
             $this->jsBuilder = new HTML_QuickForm2_JavascriptBuilder();
         }
         return $this->jsBuilder;

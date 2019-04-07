@@ -42,10 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Interface for data sources used by HTML_QuickForm2 objects
- */
-require_once 'HTML/QuickForm2/DataSource.php';
+// pear-package-only /**
+// pear-package-only  * Interface for data sources used by HTML_QuickForm2 objects
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/DataSource.php';
 
 /**
  * Interface for data sources containing submitted values

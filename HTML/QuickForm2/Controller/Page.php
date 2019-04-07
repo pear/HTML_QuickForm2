@@ -187,7 +187,7 @@ abstract class HTML_QuickForm2_Controller_Page
         $actionName,
         $imageSrc = 'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
     ) {
-        require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
+        // pear-package-only require_once 'HTML/QuickForm2/Controller/DefaultAction.php';
 
         if (0 == count($this->form)) {
             $image = $this->form->appendChild(

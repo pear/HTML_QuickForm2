@@ -403,7 +403,7 @@ abstract class HTML_QuickForm2_Rule
     */
     public function getJavascript($outputTriggers = true)
     {
-        HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
+        // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $js = $this->getJavascriptCallback() . ",\n\t'" . $this->owner->getId()
               . "', " . HTML_QuickForm2_JavascriptBuilder::encode($this->getMessage());

@@ -57,9 +57,6 @@ class HTML_QuickForm2_AllTests
 {
     public static function main()
     {
-        if (!class_exists('PHPUnit_TextUI_TestRunner', true)) {
-            require_once 'PHPUnit/TextUI/TestRunner.php';
-        }
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
 

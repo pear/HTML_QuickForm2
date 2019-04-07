@@ -10,11 +10,13 @@
  * </code>
  */
 
-require_once 'HTML/QuickForm2.php';
-require_once 'HTML/QuickForm2/Renderer.php';
-require_once 'Twig/Autoloader.php';
+// pear-package-only require_once 'HTML/QuickForm2.php';
+// pear-package-only require_once 'HTML/QuickForm2/Renderer.php';
 
-Twig_Autoloader::register();
+if (!class_exists('Twig_Environment', true)) {
+    require_once 'Twig/Autoloader.php';
+    Twig_Autoloader::register();
+}
 
 $options = array(
     'a' => 'Letter A', 'b' => 'Letter B', 'c' => 'Letter C',

@@ -45,7 +45,9 @@
 /**
  * HTML_Common2 - base class for HTML elements
  */
-require_once 'HTML/Common2.php';
+if (!class_exists('HTML_Common2', true)) {
+    require_once 'HTML/Common2.php';
+}
 
 // By default, we generate element IDs with numeric indexes appended even for
 // elements with unique names. If you want IDs to be equal to the element
@@ -59,20 +61,20 @@ if (null === HTML_Common2::getOption('language')) {
     HTML_Common2::setOption('language', 'en');
 }
 
-/**
- * Exception classes for HTML_QuickForm2
- */
-require_once 'HTML/QuickForm2/Exception.php';
+// pear-package-only /**
+// pear-package-only  * Exception classes for HTML_QuickForm2
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Exception.php';
 
-/**
- * Static factory class for QuickForm2 elements
- */
-require_once 'HTML/QuickForm2/Factory.php';
+// pear-package-only /**
+// pear-package-only  * Static factory class for QuickForm2 elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Factory.php';
 
-/**
- * Base class for HTML_QuickForm2 rules
- */
-require_once 'HTML/QuickForm2/Rule.php';
+// pear-package-only /**
+// pear-package-only  * Base class for HTML_QuickForm2 rules
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/Rule.php';
 
 
 /**
