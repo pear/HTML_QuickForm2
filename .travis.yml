@@ -42,7 +42,7 @@ script:
   - which phpunit
   - phpunit --version
   # Do not test composer installation on PHP 5.2 due to lack of composer
-  - if [[ $PHP52SUCKS != true]]; then phpunit ./tests; fi
+  - if [[ $PHP52SUCKS != true ]]; then phpunit ./tests; fi
   - pear package-validate ./package.xml
   - php ./pear-package-helper.php
   - pear install ./.pear-package/package.xml
