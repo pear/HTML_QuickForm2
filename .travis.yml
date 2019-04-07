@@ -20,17 +20,24 @@ matrix:
 install:
   - |
     if [[ $PHP52SUCKS == true ]]; then
-      wget http://download.pear.php.net/package/HTML_Common2-2.1.1.tgz
-      pear install ./HTML_Common2-2.1.1.tgz
+      wget http://download.pear.php.net/package/HTML_Common2-2.1.2.tgz
+      pear install --offline ./HTML_Common2-2.1.2.tgz
     else
       pear channel-update pear.php.net
-      pear install HTML_Common2
-      composer install
+      composer install --no-dev
     fi
-script:
   - |
-    if [[ $PHP52SUCKS == true ]]; then
-      phpunit tests
-    else
-      ./vendor/bin/phpunit tests
+    # Export Composer's global bin dir to PATH, but not on PHP 5.2 (borrowed from Wordpress):
+    if [[ $PHP52SUCKS != true ]]; then
+      composer config --list --global
+      export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
     fi
+  - |
+    # Global install of a supported PHPUnit version
+    if [[ $PHP52SUCKS != true ]]; then
+      composer global require "phpunit/phpunit=^3.7|^4.8|^5.7"
+    fi
+
+script:
+  - which phpunit
+  - phpunit tests
