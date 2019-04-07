@@ -42,22 +42,42 @@
  * @link       http://pear.php.net/package/HTML_QuickForm2
  */
 
-// Are we running with an autoloader (composer's, presumably) already?
-if (!class_exists('HTML_QuickForm2_Loader', true)) {
-    // If running from SVN checkout, update include_path
-    if ('@' . 'package_version@' == '@package_version@') {
-        $classPath   = realpath(dirname(dirname(__FILE__)));
-        $includePath = array_map('realpath', explode(PATH_SEPARATOR, get_include_path()));
-        if (0 !== ($key = array_search($classPath, $includePath))) {
-            if (false !== $key) {
-                unset($includePath[$key]);
-            }
-            set_include_path($classPath . PATH_SEPARATOR . implode(PATH_SEPARATOR, $includePath));
-        }
-    }
+// We need to be sure that we have sane dependencies (HTML_Common2 and PEAR_Exception)
+// So we only allow the tests to run when installed with PEAR or with composer
+
+$installed = false;
+
+if ('@' . 'package_version@' !== '@package_version@') {
+    // Installed with PEAR: we should be on the include path, use own autoloader
     require_once 'HTML/QuickForm2/Loader.php';
     spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
+    $installed = true;
+
+} else {
+    foreach (array(dirname(__FILE__) . '/../../../autoload.php', dirname(__FILE__) . '/../vendor/autoload.php') as $file) {
+        if (file_exists($file)) {
+            require_once $file;
+            $installed = true;
+
+            break;
+        }
+    }
+
 }
+
+if (!$installed) {
+    fwrite(STDERR,
+        'As HTML_QuickForm2 has required dependencies, tests should be run either' . PHP_EOL . PHP_EOL .
+        ' - after installation of package with PEAR:' . PHP_EOL .
+        '    php ./pear-package-helper.php' . PHP_EOL .
+        '    pear install ./.pear-package/package.xml' . PHP_EOL . PHP_EOL .
+        ' - or setting up its dependencies using Composer:' . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL
+    );
+
+    die(1);
+}
+
 
 
 if (strpos($_SERVER['argv'][0], 'phpunit') === false

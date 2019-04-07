@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 //
 // Copies all files mentioned in <contents> of package.xml to a temporary dir, enabling commented out

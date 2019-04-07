@@ -40,4 +40,5 @@ install:
 
 script:
   - which phpunit
-  - phpunit tests
+  - phpunit --version
+  - phpunit ./tests
