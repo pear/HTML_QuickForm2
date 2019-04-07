@@ -23,16 +23,16 @@ function handleFile(SimpleXMLElement $file, $dirName)
         $targetDir = './.pear-package' . substr($dirName, 1)
                      . substr($file['name'], 0, $pos);
         if (is_dir($targetDir)) {
-            echo "Creating {$targetDir}\r\n";
+            echo "Creating {$targetDir}" . PHP_EOL;
             mkdir($targetDir, 0777, true);
         }
     }
 
     if (!preg_match('/.php$/', $file['name'])) {
-        echo "Copying {$dirName}/{$file['name']} to {$targetDir}\r\n";
+        echo "Copying {$dirName}/{$file['name']} to {$targetDir}" . PHP_EOL;
         copy("{$dirName}/{$file['name']}", './.pear-package' . substr($dirName, 1) . '/' . $file['name']);
     } else {
-        echo "Mangling {$dirName}/{$file['name']} and saving to {$targetDir}\r\n";
+        echo "Mangling {$dirName}/{$file['name']} and saving to {$targetDir}" . PHP_EOL;
         $text = file_get_contents($dirName . '/' . $file['name']);
         file_put_contents('./.pear-package' . substr($dirName, 1) . '/' . $file['name'], strtr($text, $translations));
     }
@@ -48,7 +48,7 @@ function handleDir(SimpleXMLElement $dir, $dirName = null)
 
     $targetDir = './.pear-package' . substr($dirName, 1);
     if (!is_dir($targetDir)) {
-        echo "Creating {$targetDir}\r\n";
+        echo "Creating {$targetDir}" . PHP_EOL;
         mkdir($targetDir, 0777, true);
     }
 
