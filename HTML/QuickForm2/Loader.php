@@ -68,13 +68,14 @@ class HTML_QuickForm2_Loader
     *
     * @param string $className   Class name to load
     * @param string $includeFile Name of the file (supposedly) containing the given class
+    * @param bool   $autoload    Whether we should try autoloading
     *
     * @throws   HTML_QuickForm2_NotFoundException   If the file either can't be
     *               loaded or doesn't contain the given class
     */
-    public static function loadClass($className, $includeFile = null)
+    public static function loadClass($className, $includeFile = null, $autoload = false)
     {
-        if (class_exists($className, false) || interface_exists($className, false)) {
+        if (class_exists($className, $autoload) || interface_exists($className, $autoload)) {
             return;
         }
 

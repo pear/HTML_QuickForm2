@@ -42,12 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * HTML_Common2 - base class for HTML elements
- */
-if (!class_exists('HTML_Common2', true)) {
-    require_once 'HTML/Common2.php';
-}
+// pear-package-only /**
+// pear-package-only  * HTML_Common2 - base class for HTML elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/Common2.php';
 
 // By default, we generate element IDs with numeric indexes appended even for
 // elements with unique names. If you want IDs to be equal to the element

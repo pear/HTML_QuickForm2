@@ -42,12 +42,10 @@
  * @link     http://pear.php.net/package/HTML_QuickForm2
  */
 
-/**
- * Base class for exceptions in PEAR
- */
-if (!class_exists('PEAR_Exception', true)) {
-    require_once 'PEAR/Exception.php';
-}
+// pear-package-only /**
+// pear-package-only  * Base class for exceptions in PEAR
+// pear-package-only  */
+// pear-package-only require_once 'PEAR/Exception.php';
 
 /**
  * Base class for exceptions in HTML_QuickForm2 package

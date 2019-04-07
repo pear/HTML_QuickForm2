@@ -174,9 +174,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_InvalidArgumentException("Element type '$type' is not known");
         }
         list($className, $includeFile) = self::$elementTypes[$type];
-        if (!class_exists($className, true)) {
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-        }
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         return new $className($name, $attributes, $data);
     }
 
@@ -231,9 +229,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
         }
         list($className, $includeFile) = self::$registeredRules[$type];
-        if (!class_exists($className, true)) {
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-        }
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         if (isset(self::$registeredRules[$type][2])) {
             $config = call_user_func(
                 array($className, 'mergeConfig'),

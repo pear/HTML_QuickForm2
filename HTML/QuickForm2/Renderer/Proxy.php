@@ -184,9 +184,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     {
         for ($i = count($this->_plugins); $i < count($this->_pluginClasses); $i++) {
             list($className, $includeFile) = $this->_pluginClasses[$i];
-            if (!class_exists($className, true)) {
-                HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-            }
+            HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
 
             $methods    = array();
             $plugin     = new $className;

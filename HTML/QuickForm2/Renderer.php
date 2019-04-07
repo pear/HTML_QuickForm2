@@ -143,9 +143,7 @@ abstract class HTML_QuickForm2_Renderer
         }
 
         list ($className, $includeFile) = self::$_types[$type];
-        if (!class_exists($className, true)) {
-            HTML_QuickForm2_Loader::loadClass($className, $includeFile);
-        }
+        HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer_Proxy');
         return new HTML_QuickForm2_Renderer_Proxy(new $className, self::$_pluginClasses[$type]);
     }
