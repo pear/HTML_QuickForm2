@@ -418,6 +418,9 @@ their contents when DataSources did not contain values for them.
       <file name="InputTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
+      <file name="ScriptTest.php" role="test">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
       <file name="SelectTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -696,6 +699,7 @@ their contents when DataSources did not contain values for them.
    <install as="QuickForm2/Element/InputResetTest.php" name="tests/QuickForm2/Element/InputResetTest.php" />
    <install as="QuickForm2/Element/InputSubmitTest.php" name="tests/QuickForm2/Element/InputSubmitTest.php" />
    <install as="QuickForm2/Element/InputTest.php" name="tests/QuickForm2/Element/InputTest.php" />
+   <install as="QuickForm2/Element/ScriptTest.php" name="tests/QuickForm2/Element/ScriptTest.php" />
    <install as="QuickForm2/Element/SelectTest.php" name="tests/QuickForm2/Element/SelectTest.php" />
    <install as="QuickForm2/Element/StaticTest.php" name="tests/QuickForm2/Element/StaticTest.php" />
    <install as="QuickForm2/Element/TextareaTest.php" name="tests/QuickForm2/Element/TextareaTest.php" />

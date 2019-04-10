@@ -27,6 +27,11 @@ require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
  */
 class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        HTML_Common2::setOption('nonce', null);
+    }
+
     public function testEncode()
     {
         $this->assertEquals('null', HTML_QuickForm2_JavascriptBuilder::encode(null));
@@ -73,6 +78,21 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $libraries = $builder->getLibraries(true, true);
         $this->assertContains('qf.Validator', $libraries);
         $this->assertContains('<script', $libraries);
+    }
+
+    public function testInlineLibraryNonce()
+    {
+        $builder = new HTML_QuickForm2_JavascriptBuilder();
+
+        $libraries = $builder->getLibraries(true, true);
+        $this->assertNotRegExp('/<script[^>]*nonce/', $libraries);
+
+        HTML_Common2::setOption(
+            'nonce',
+            $nonce = base64_encode('HTML_QuickForm2_nonce' . microtime())
+        );
+        $libraries = $builder->getLibraries(true, true);
+        $this->assertRegExp('/<script[^>]*nonce="' . $nonce . '"/', $libraries);
     }
 
     public function testInlineMissingLibrary()
@@ -132,6 +152,23 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $scriptBoth = $builder->getFormJavascript();
         $this->assertContains('jsRuleOne', $scriptBoth);
         $this->assertContains('setupCodeTwo', $scriptBoth);
+    }
+
+    public function testFormJavascriptNonce()
+    {
+        $builder = new HTML_QuickForm2_JavascriptBuilder();
+        $builder->addElementJavascript('Some setup code');
+
+        $script = $builder->getFormJavascript();
+        $this->assertContains('Some setup code', $script);
+        $this->assertNotRegExp('/<script[^>]*nonce/', $script);
+
+        HTML_Common2::setOption(
+            'nonce',
+            $nonce = base64_encode('HTML_QuickForm2_nonce' . microtime())
+        );
+        $script = $builder->getFormJavascript();
+        $this->assertRegExp('/<script[^>]*nonce="' . $nonce . '"/', $script);
     }
 }
 ?>

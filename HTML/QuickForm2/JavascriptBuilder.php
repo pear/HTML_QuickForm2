@@ -290,8 +290,13 @@ class HTML_QuickForm2_JavascriptBuilder
     protected function wrapScript($js)
     {
         if ('' != $js) {
-            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n"
-                  . $js . "\n//]]>\n</script>";
+            $cr         = HTML_Common2::getOption('linebreak');
+            $attributes = ' type="text/javascript"';
+            if (null !== ($nonce = HTML_Common2::getOption('nonce'))) {
+                $attributes .= ' nonce="' . $nonce . '"';
+            }
+            $js = "<script{$attributes}>{$cr}//<![CDATA[{$cr}"
+                  . $js . "{$cr}//]]>{$cr}</script>";
         }
         return $js;
     }
