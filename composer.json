@@ -20,11 +20,12 @@
     ],
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2",
-        "source": "https://github.com/pear/HTML_QuickForm2"
+        "source": "https://github.com/pear/HTML_QuickForm2",
+        "docs":   "https://pear.php.net/manual/en/package.html.html-quickform2.php"
     },
     "require": {
         "pear/pear_exception": "^1.0",
-        "pear/html_common2":   "^2.0"
+        "pear/html_common2":   "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit":     "^3.7|^4.8|^5.7"
