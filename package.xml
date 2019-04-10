@@ -51,7 +51,7 @@
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+ <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
  <notes>
 Bug #20295 was incorrectly fixed for Static elements, this led to removing
 their contents when DataSources did not contain values for them.
@@ -735,7 +735,7 @@ their contents when DataSources did not contain values for them.
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Bug fixes
  * When using HTML_QuickForm2_DataSource_Array and its descendants elements'
@@ -774,7 +774,7 @@ Other features and changes
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
   * Leftover 'foo' no longer stays in grouped element's name when renaming group
     named 'foo[foo]' (bug #19477)
@@ -793,7 +793,7 @@ Other features and changes
     <release>beta</release>
     <api>stable</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Bug fixes
   * Server-side validation errors for elements inside Repeats are properly
@@ -829,7 +829,7 @@ Backwards compatibility issues
     <release>beta</release>
     <api>stable</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Feature additions
   * Repeat element: given 'prototype' Container (either fieldset or group)
@@ -865,7 +865,7 @@ Bug fixes
     <release>beta</release>
     <api>stable</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Feature additions
   * Added 'email' Rule (request #16906)
@@ -907,7 +907,7 @@ Backwards compatibility issues
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Bug fixes
   * Callback renderer did not export setLabelCallback() method (bug #18833)
@@ -931,7 +931,7 @@ Other features and changes
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Milestone 6: &quot;live&quot; validation, localization changes, moving to beta
 
@@ -993,7 +993,7 @@ Backwards compatibility issues
     <release>alpha</release>
     <api>alpha</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Milestone 5: Javascript support, client-side validation, filters
 
@@ -1043,7 +1043,7 @@ Backwards compatibility issues
     <release>alpha</release>
     <api>alpha</api>
    </stability>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <date>2010-03-08</date>
    <notes>
 Milestone 4: port of HTML_QuickForm_Controller, group rules
@@ -1097,7 +1097,7 @@ Backwards compatibility issues
     <api>alpha</api>
    </stability>
    <date>2009-10-25</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Milestone 3: renderers and groups
 
@@ -1135,7 +1135,7 @@ special attention to changes in SVN.
    <api>alpha</api>
   </stability>
   <date>2007-10-22</date>
-  <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+  <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
   <notes>
 Milestone 2: now with server-side validation support
 
@@ -1170,7 +1170,7 @@ Other resources to consider:
     <api>alpha</api>
    </stability>
    <date>2007-04-17</date>
-   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
    <notes>
 Milestone 1
 
