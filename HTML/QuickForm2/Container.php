@@ -23,6 +23,10 @@
 // pear-package-only  * Base class for all HTML_QuickForm2 elements
 // pear-package-only  */
 // pear-package-only require_once 'HTML/QuickForm2/Node.php';
+// pear-package-only /**
+// pear-package-only  * Implements a recursive iterator for the container elements
+// pear-package-only  */
+// pear-package-only require_once 'HTML/QuickForm2/ContainerIterator.php';
 
 /**
  * Abstract base class for simple QuickForm2 containers
@@ -524,33 +528,5 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     }
 }
 
-/**
- * Implements a recursive iterator for the container elements
- *
- * @category HTML
- * @package  HTML_QuickForm2
- * @author   Alexey Borzov <avb@php.net>
- * @author   Bertrand Mansion <golgote@mamasam.com>
- * @license  https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
- * @version  Release: @package_version@
- * @link     https://pear.php.net/package/HTML_QuickForm2
- */
-class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator implements RecursiveIterator
-{
-    public function __construct(HTML_QuickForm2_Container $container)
-    {
-        parent::__construct($container->getElements());
-    }
-
-    public function hasChildren()
-    {
-        return $this->current() instanceof HTML_QuickForm2_Container;
-    }
-
-    public function getChildren()
-    {
-        return new HTML_QuickForm2_ContainerIterator($this->current());
-    }
-}
 
 ?>

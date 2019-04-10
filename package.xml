@@ -61,6 +61,11 @@ their contents when DataSources did not contain values for them.
    <dir name="HTML">
     <dir name="QuickForm2">
      <dir name="Container">
+      <dir name="Repeat">
+       <file name="JavascriptBuilder.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /HTML/QuickForm2/Container/Repeat -->
       <file name="Fieldset.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -123,6 +128,17 @@ their contents when DataSources did not contain values for them.
       </file>
      </dir> <!-- /HTML/QuickForm2/DataSource -->
      <dir name="Element">
+      <dir name="Select">
+       <file name="Optgroup.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="OptionContainer.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+       <file name="OptionIterator.php" role="php">
+        <tasks:replace from="@package_version@" to="version" type="package-info" />
+       </file>
+      </dir> <!-- /HTML/QuickForm2/Element/Select -->
       <file name="Button.php" role="php">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -251,6 +267,9 @@ their contents when DataSources did not contain values for them.
       </file>
      </dir> <!-- /HTML/QuickForm2/Rule -->
      <file name="Container.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ContainerIterator.php" role="php">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file name="Controller.php" role="php">
@@ -520,50 +539,53 @@ their contents when DataSources did not contain values for them.
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /tests -->
-   <dir name="docs/examples">
-    <dir name="controller">
-     <file name="simple.php" role="doc">
-      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-     </file>
-     <file name="tabbed.php" role="doc">
-      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-     </file>
-     <file name="wizard.php" role="doc">
-      <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-     </file>
-    </dir> <!-- /docs/examples/controller -->
-    <dir name="js">
-     <file name="dualselect.js" role="doc" />
-     <file name="hierselect-server.php" role="doc" />
-    </dir> <!-- /docs/examples/js -->
-    <dir name="renderers">
-     <dir name="templates">
-      <file name="array-twig.tpl" role="doc" />
-     </dir> <!-- /docs/examples/renderers/templates -->
-     <file name="array-twig.php" role="doc">
-      <tasks:replace  from="@data_dir@" to="data_dir" type="pear-config" />
-     </file>
-    </dir> <!-- /docs/examples/renderers -->
-    <dir name="support">
-     <file name="hierselect-loader.php" role="doc" />
-    </dir> <!-- /docs/examples/support -->
-    <file role="doc" name="basic-elements.php">
-     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-    </file>
-    <file role="doc" name="builtin-rules.php">
-     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-    </file>
-    <file role="doc" name="default-renderer.php" />
-    <file role="doc" name="dualselect.php">
-     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-    </file>
-    <file name="hierselect-ajax.php" role="doc">
-     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-    </file>
-    <file name="repeat.php" role="doc">
-     <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
-    </file>
-   </dir> <!-- /docs/examples -->
+   <dir name="docs">
+     <file name="LICENSE" role="doc" />
+     <dir name="examples">
+      <dir name="controller">
+       <file name="simple.php" role="doc">
+        <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+       </file>
+       <file name="tabbed.php" role="doc">
+        <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+       </file>
+       <file name="wizard.php" role="doc">
+        <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+       </file>
+      </dir> <!-- /docs/examples/controller -->
+      <dir name="js">
+       <file name="dualselect.js" role="doc" />
+       <file name="hierselect-server.php" role="doc" />
+      </dir> <!-- /docs/examples/js -->
+      <dir name="renderers">
+       <dir name="templates">
+        <file name="array-twig.tpl" role="doc" />
+       </dir> <!-- /docs/examples/renderers/templates -->
+       <file name="array-twig.php" role="doc">
+        <tasks:replace  from="@data_dir@" to="data_dir" type="pear-config" />
+       </file>
+      </dir> <!-- /docs/examples/renderers -->
+      <dir name="support">
+       <file name="hierselect-loader.php" role="doc" />
+      </dir> <!-- /docs/examples/support -->
+      <file role="doc" name="basic-elements.php">
+       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      </file>
+      <file role="doc" name="builtin-rules.php">
+       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      </file>
+      <file role="doc" name="default-renderer.php" />
+      <file role="doc" name="dualselect.php">
+       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      </file>
+      <file name="hierselect-ajax.php" role="doc">
+       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      </file>
+      <file name="repeat.php" role="doc">
+       <tasks:replace from="@data_dir@" to="data_dir" type="pear-config" />
+      </file>
+     </dir> <!-- /docs/examples -->
+   </dir>
    <dir name="data/js">
     <dir name="min">
      <file name="quickform.js" role="data">
@@ -600,7 +622,7 @@ their contents when DataSources did not contain values for them.
    <package>
     <name>HTML_Common2</name>
     <channel>pear.php.net</channel>
-    <min>2.0.0</min>
+    <min>2.1.0</min>
    </package>
   </required>
  </dependencies>
@@ -613,6 +635,8 @@ their contents when DataSources did not contain values for them.
    <install as="js/min/quickform.js" name="data/js/min/quickform.js" />
    <install as="js/min/quickform-hierselect.js" name="data/js/min/quickform-hierselect.js" />
    <install as="js/min/quickform-repeat.js" name="data/js/min/quickform-repeat.js" />
+
+   <install as="LICENSE" name="docs/LICENSE" />
    <install as="examples/controller/simple.php" name="docs/examples/controller/simple.php" />
    <install as="examples/controller/tabbed.php" name="docs/examples/controller/tabbed.php" />
    <install as="examples/controller/wizard.php" name="docs/examples/controller/wizard.php" />

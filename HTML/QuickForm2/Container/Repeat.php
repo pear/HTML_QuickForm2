@@ -21,76 +21,8 @@
 
 // pear-package-only /** Base class for all HTML_QuickForm2 containers */
 // pear-package-only require_once 'HTML/QuickForm2/Container.php';
-// pear-package-only /** Javascript aggregator and builder class */
-// pear-package-only require_once 'HTML/QuickForm2/JavascriptBuilder.php';
-
-/**
- * Javascript builder used when rendering a repeat prototype
- *
- * Instead of returning form setup code and client-side rules as normal
- * Javascript code, it returns them as Javascript string literals. These are
- * expected to be eval()'d when adding a new repeat item.
- *
- * This class is not intended for normal use.
- *
- * @category HTML
- * @package  HTML_QuickForm2
- * @author   Alexey Borzov <avb@php.net>
- * @author   Bertrand Mansion <golgote@mamasam.com>
- * @license  https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
- * @version  Release: @package_version@
- * @link     https://pear.php.net/package/HTML_QuickForm2
- */
-class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
-    extends HTML_QuickForm2_JavascriptBuilder
-{
-    /**
-     * Fake "current form" ID
-     * @var string
-     */
-    protected $formId = 'repeat';
-
-    /**
-     * Empty list of javascript libraries, base one(s) are in original builder
-     * @var array
-     */
-    protected $libraries = array();
-
-
-    /**
-     * Returns rules and element setup code as Javascript string literals
-     *
-     * @return array array('rules', 'setup code')
-     */
-    public function getFormJavascriptAsStrings()
-    {
-        return array(
-            self::encode(
-                empty($this->rules['repeat'])
-                ? '' : "[\n" . implode(",\n", $this->rules['repeat']) . "\n]"
-            ),
-            self::encode(
-                empty($this->scripts['repeat'])
-                ? '' : implode("\n", $this->scripts['repeat'])
-            )
-        );
-    }
-
-    /**
-     * Passes Javascript libraries added by repeat prototype
-     *
-     * @param HTML_QuickForm2_JavascriptBuilder $recipient original Javascript builder
-     */
-    public function passLibraries(HTML_QuickForm2_JavascriptBuilder $recipient)
-    {
-        foreach ($this->libraries as $name => $library) {
-            $recipient->addLibrary(
-                $name, $library['file'], $library['webPath'], $library['absPath']
-            );
-        }
-    }
-}
-
+// pear-package-only /** Javascript builder used when rendering a repeat prototype */
+// pear-package-only require_once 'HTML/QuickForm2/Container/Repeat/JavascriptBuilder.php';
 
 
 /**
