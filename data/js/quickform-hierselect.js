@@ -1,11 +1,11 @@
 /**
  * HTML_QuickForm2: support functions for hierselect elements
  * Package version @package_version@
- * http://pear.php.net/package/HTML_QuickForm2
+ * https://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2014, Alexey Borzov, Bertrand Mansion
- * Licensed under new BSD license
- * http://opensource.org/licenses/bsd-license.php
+ * Copyright 2006-2019, Alexey Borzov, Bertrand Mansion
+ * Licensed under BSD 3-Clause License
+ * https://opensource.org/licenses/BSD-3-Clause
  */
 
 /**

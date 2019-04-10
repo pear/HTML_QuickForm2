@@ -17,7 +17,7 @@
     <property name="release.concat" value="../data/js/" />
     <property name="release.minified" value="../data/js/min/" />
 
-    <property name="closure_command" value="java -jar ${path.closure} --compilation_level SIMPLE_OPTIMIZATIONS" />
+    <property name="closure_command" value="java -jar ${path.closure} --compilation_level SIMPLE_OPTIMIZATIONS --rewrite_polyfills=false" />
 
     <target name="init">
         <mkdir dir="build"/>
