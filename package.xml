@@ -42,9 +42,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2014-06-28</date>
+ <date>2019-04-10</date>
  <version>
-  <release>2.0.2</release>
+  <release>2.1.0</release>
   <api>2.0.1</api>
  </version>
  <stability>
@@ -53,8 +53,21 @@
  </stability>
  <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
  <notes>
-Bug #20295 was incorrectly fixed for Static elements, this led to removing
-their contents when DataSources did not contain values for them.
+ * HTML_QuickForm2 runs under PHP 7.2+ without warnings / &quot;deprecated&quot;
+   messages
+ * Tests run correctly on PHPUnit versions up to 5
+ * It is possible to automatically add &quot;nonce&quot; attributes to inline
+   &lt;script&gt; tags, just call
+   HTML_Common2::setOption('nonce', $someNonceValue);
+   before outputting the form. This allows running HTML_QuickForm2 with
+   reasonable Content-Security-Policy
+ * Bundled a separate LICENSE file instead of having it in each .php file
+   header. Updated phrasing and links to mention 3-Clause BSD license
+   the package actually uses.
+
+When installing with composer, files no longer contain 'require_once' calls
+and 'include-path' option is not used. The package is now 100% autoloader
+compatible, all classes reside in separate files.
  </notes>
  <contents>
   <dir name="/">
@@ -729,6 +742,22 @@ their contents when DataSources did not contain values for them.
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2014-06-28</date>
+   <version>
+    <release>2.0.2</release>
+    <api>2.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
+   <notes>
+Bug #20295 was incorrectly fixed for Static elements, this led to removing
+their contents when DataSources did not contain values for them.
+   </notes>
+  </release>
   <release>
    <date>2014-06-26</date>
    <version>
