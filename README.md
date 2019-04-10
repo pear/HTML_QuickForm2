@@ -19,19 +19,33 @@ Features:
  * Multipage forms (tabbed forms and wizards) are possible.
  * Pluggable elements, rules, renderers and renderer plugins.
 
-Please report all issues via the [PEAR bug tracker].
+Please report issues via the [PEAR bug tracker] or [Github issues].
 
 Pull requests are welcome.
 
-[PEAR HTML_QuickForm2]: http://pear.php.net/package/HTML_QuickForm2/
+[PEAR HTML_QuickForm2]: https://pear.php.net/package/HTML_QuickForm2/
 [PEAR SVN]: https://svn.php.net/repository/pear/packages/HTML_QuickForm2
-[PEAR HTML_QuickForm]: http://pear.php.net/package/HTML_QuickForm/
-[PEAR bug tracker]: http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2
+[PEAR HTML_QuickForm]: https://pear.php.net/package/HTML_QuickForm/
+[PEAR bug tracker]: https://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_QuickForm2
+[Github issues]: https://github.com/pear/HTML_QuickForm2/issues
+
+## Installation
+
+The package may be installed either with PEAR
+
+    $ pear install HTML_QuickForm2
+
+or with composer
+
+    $ composer require pear/html_quickform2
+
+Since release 2.1 composer installation relies completely on autoloading and does not contain `require_once` calls or 
+use `include-path` option.
 
 ## Basic usage
 
 ```PHP
-require_once 'HTML/QuickForm2.php';
+require_once 'HTML/QuickForm2.php'; // Only when installed with PEAR
 
 $form = new HTML_QuickForm2('tutorial');
 
@@ -78,22 +92,27 @@ Additional examples are in the docs/examples directory.
 
 ## Testing, Packaging and Installing (Pear)
 
-To test, run either
+To test, run
 
     $ phpunit tests/
 
-or
+after installing dependencies with composer. You can also test the installed package with
 
-    $ pear run-tests -r
+    $ phpunit [PEAR tests dir]/HTML_QuickForm2
 
-To build, simply
+Since PEAR package needs its `require_once` statements re-enabled, please run the helper file before packaging and
+installing
 
-    $ pear package
+    $ php pear-package-helper.php
+
+Then to build, simply
+
+    $ pear package .pear-package/package.xml
 
 To install from scratch
 
-    $ pear install package.xml
+    $ pear install .pear-package/package.xml
 
 To upgrade
 
-    $ pear upgrade -f package.xml
+    $ pear upgrade -f .pear-package/package.xml
