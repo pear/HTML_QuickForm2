@@ -20,9 +20,9 @@ function handleFile(SimpleXMLElement $file, $dirName)
         $targetDir = './.pear-package' . substr($dirName, 1);
 
     } else {
-        $targetDir = './.pear-package' . substr($dirName, 1)
+        $targetDir = './.pear-package' . substr($dirName, 1) . '/'
                      . substr($file['name'], 0, $pos);
-        if (is_dir($targetDir)) {
+        if (!is_dir($targetDir)) {
             echo "Creating {$targetDir}" . PHP_EOL;
             mkdir($targetDir, 0777, true);
         }
