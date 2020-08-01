@@ -62,4 +62,20 @@ if (strpos($_SERVER['argv'][0], 'phpunit') === false
 ) {
     require_once 'PHPUnit/Autoload.php';
 }
+
+
+// Monkey-patching of phpunit/phpunit-mock-objects package to prevent errors like
+// "Function ReflectionType::__toString() is deprecated"
+// Inspired by https://github.com/lavary/crunz/commit/8ef1370aa47009fd1945fb73f0414bd88634ada2
+if (PHP_VERSION_ID >= 50600 // probably have PHPUnit 5.7
+    && !class_exists('PHPUnit_Framework_MockObject_Generator', false) // not too late to patch?
+    && is_dir($mock = dirname(__DIR__) . '/vendor/phpunit/phpunit-mock-objects') // have mocks in local vendor dir?
+) {
+    $source = __DIR__ . '/MockObjectGenerator.' . (PHP_VERSION_ID >= 70100 ? 'patched' : 'original') . '.php';
+    file_put_contents(
+        $mock . '/src/Framework/MockObject/Generator.php',
+        file_get_contents($source)
+    );
+}
+
 ?>
