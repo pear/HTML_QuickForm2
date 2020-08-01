@@ -27,19 +27,19 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/NonemptyTest.php';
-require_once dirname(__FILE__) . '/RequiredTest.php';
-require_once dirname(__FILE__) . '/CompareTest.php';
-require_once dirname(__FILE__) . '/EmptyTest.php';
-require_once dirname(__FILE__) . '/RegexTest.php';
-require_once dirname(__FILE__) . '/CallbackTest.php';
-require_once dirname(__FILE__) . '/LengthTest.php';
-require_once dirname(__FILE__) . '/MaxFileSizeTest.php';
-require_once dirname(__FILE__) . '/MimeTypeTest.php';
-require_once dirname(__FILE__) . '/EachTest.php';
-require_once dirname(__FILE__) . '/NotCallbackTest.php';
-require_once dirname(__FILE__) . '/NotRegexTest.php';
-require_once dirname(__FILE__) . '/EmailTest.php';
+require_once __DIR__ . '/NonemptyTest.php';
+require_once __DIR__ . '/RequiredTest.php';
+require_once __DIR__ . '/CompareTest.php';
+require_once __DIR__ . '/EmptyTest.php';
+require_once __DIR__ . '/RegexTest.php';
+require_once __DIR__ . '/CallbackTest.php';
+require_once __DIR__ . '/LengthTest.php';
+require_once __DIR__ . '/MaxFileSizeTest.php';
+require_once __DIR__ . '/MimeTypeTest.php';
+require_once __DIR__ . '/EachTest.php';
+require_once __DIR__ . '/NotCallbackTest.php';
+require_once __DIR__ . '/NotRegexTest.php';
+require_once __DIR__ . '/EmailTest.php';
 
 class QuickForm2_Rule_AllTests
 {

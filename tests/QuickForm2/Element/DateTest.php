@@ -20,7 +20,7 @@
  */
 
 /** Sets up includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
 class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
 {

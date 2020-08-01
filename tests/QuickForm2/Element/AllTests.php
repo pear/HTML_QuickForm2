@@ -27,23 +27,23 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/InputTest.php';
-require_once dirname(__FILE__) . '/SelectTest.php';
-require_once dirname(__FILE__) . '/TextareaTest.php';
-require_once dirname(__FILE__) . '/InputCheckableTest.php';
-require_once dirname(__FILE__) . '/InputCheckboxTest.php';
-require_once dirname(__FILE__) . '/InputPasswordTest.php';
-require_once dirname(__FILE__) . '/InputImageTest.php';
-require_once dirname(__FILE__) . '/InputHiddenTest.php';
-require_once dirname(__FILE__) . '/InputSubmitTest.php';
-require_once dirname(__FILE__) . '/InputButtonTest.php';
-require_once dirname(__FILE__) . '/InputResetTest.php';
-require_once dirname(__FILE__) . '/ButtonTest.php';
-require_once dirname(__FILE__) . '/InputFileTest.php';
-require_once dirname(__FILE__) . '/StaticTest.php';
-require_once dirname(__FILE__) . '/DateTest.php';
-require_once dirname(__FILE__) . '/HierselectTest.php';
-require_once dirname(__FILE__) . '/ScriptTest.php';
+require_once __DIR__ . '/InputTest.php';
+require_once __DIR__ . '/SelectTest.php';
+require_once __DIR__ . '/TextareaTest.php';
+require_once __DIR__ . '/InputCheckableTest.php';
+require_once __DIR__ . '/InputCheckboxTest.php';
+require_once __DIR__ . '/InputPasswordTest.php';
+require_once __DIR__ . '/InputImageTest.php';
+require_once __DIR__ . '/InputHiddenTest.php';
+require_once __DIR__ . '/InputSubmitTest.php';
+require_once __DIR__ . '/InputButtonTest.php';
+require_once __DIR__ . '/InputResetTest.php';
+require_once __DIR__ . '/ButtonTest.php';
+require_once __DIR__ . '/InputFileTest.php';
+require_once __DIR__ . '/StaticTest.php';
+require_once __DIR__ . '/DateTest.php';
+require_once __DIR__ . '/HierselectTest.php';
+require_once __DIR__ . '/ScriptTest.php';
 
 class QuickForm2_Element_AllTests
 {

@@ -27,10 +27,10 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/DefaultTest.php';
-require_once dirname(__FILE__) . '/ArrayTest.php';
-require_once dirname(__FILE__) . '/CallbackTest.php';
-require_once dirname(__FILE__) . '/StubTest.php';
+require_once __DIR__ . '/DefaultTest.php';
+require_once __DIR__ . '/ArrayTest.php';
+require_once __DIR__ . '/CallbackTest.php';
+require_once __DIR__ . '/StubTest.php';
 
 class QuickForm2_Renderer_AllTests
 {

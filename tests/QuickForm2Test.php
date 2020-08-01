@@ -20,7 +20,7 @@
  */
 
 /** Sets up includes */
-require_once dirname(__FILE__) . '/TestHelper.php';
+require_once __DIR__ . '/TestHelper.php';
 
 class FormRule extends HTML_QuickForm2_Rule
 {

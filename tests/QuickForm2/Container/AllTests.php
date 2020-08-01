@@ -27,9 +27,9 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/FieldsetTest.php';
-require_once dirname(__FILE__) . '/GroupTest.php';
-require_once dirname(__FILE__) . '/RepeatTest.php';
+require_once __DIR__ . '/FieldsetTest.php';
+require_once __DIR__ . '/GroupTest.php';
+require_once __DIR__ . '/RepeatTest.php';
 
 class QuickForm2_Container_AllTests
 {

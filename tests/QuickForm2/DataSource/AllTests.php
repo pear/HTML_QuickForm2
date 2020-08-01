@@ -27,8 +27,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/ArrayTest.php';
-require_once dirname(__FILE__) . '/SuperGlobalTest.php';
+require_once __DIR__ . '/ArrayTest.php';
+require_once __DIR__ . '/SuperGlobalTest.php';
 
 class QuickForm2_DataSource_AllTests
 {

@@ -27,22 +27,22 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/FactoryTest.php';
-require_once dirname(__FILE__) . '/NodeTest.php';
-require_once dirname(__FILE__) . '/ElementTest.php';
-require_once dirname(__FILE__) . '/Element/AllTests.php';
-require_once dirname(__FILE__) . '/ContainerTest.php';
-require_once dirname(__FILE__) . '/ContainerOverloadTest.php';
-require_once dirname(__FILE__) . '/Container/AllTests.php';
-require_once dirname(__FILE__) . '/DataSource/AllTests.php';
-require_once dirname(__FILE__) . '/RuleTest.php';
-require_once dirname(__FILE__) . '/Rule/AllTests.php';
-require_once dirname(__FILE__) . '/FilterTest.php';
-require_once dirname(__FILE__) . '/RendererTest.php';
-require_once dirname(__FILE__) . '/Renderer/AllTests.php';
-require_once dirname(__FILE__) . '/ControllerTest.php';
-require_once dirname(__FILE__) . '/Controller/AllTests.php';
-require_once dirname(__FILE__) . '/JavascriptBuilderTest.php';
+require_once __DIR__ . '/FactoryTest.php';
+require_once __DIR__ . '/NodeTest.php';
+require_once __DIR__ . '/ElementTest.php';
+require_once __DIR__ . '/Element/AllTests.php';
+require_once __DIR__ . '/ContainerTest.php';
+require_once __DIR__ . '/ContainerOverloadTest.php';
+require_once __DIR__ . '/Container/AllTests.php';
+require_once __DIR__ . '/DataSource/AllTests.php';
+require_once __DIR__ . '/RuleTest.php';
+require_once __DIR__ . '/Rule/AllTests.php';
+require_once __DIR__ . '/FilterTest.php';
+require_once __DIR__ . '/RendererTest.php';
+require_once __DIR__ . '/Renderer/AllTests.php';
+require_once __DIR__ . '/ControllerTest.php';
+require_once __DIR__ . '/Controller/AllTests.php';
+require_once __DIR__ . '/JavascriptBuilderTest.php';
 
 class QuickForm2_AllTests
 {

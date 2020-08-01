@@ -27,8 +27,8 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/PageTest.php';
-require_once dirname(__FILE__) . '/Action/AllTests.php';
+require_once __DIR__ . '/PageTest.php';
+require_once __DIR__ . '/Action/AllTests.php';
 
 class QuickForm2_Controller_AllTests
 {

@@ -20,7 +20,7 @@
  */
 
 /** Sets up includes */
-require_once dirname(dirname(dirname(__FILE__))) . '/TestHelper.php';
+require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
 /**
  * Let's just make parseAttributes() public rather than copy and paste regex

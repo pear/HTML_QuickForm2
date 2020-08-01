@@ -20,7 +20,7 @@
  */
 
 /** Sets up includes */
-require_once dirname(dirname(__FILE__)) . '/TestHelper.php';
+require_once dirname(__DIR__) . '/TestHelper.php';
 
 /**
  * An "implementation" of renderer, to be able to create an instance

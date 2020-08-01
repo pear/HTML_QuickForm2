@@ -144,14 +144,14 @@ if ($form->validate()) {
 if ('@data_dir@' != '@' . 'data_dir@') {
     $filename = '@data_dir@/HTML_QuickForm2/quickform.css';
 } else {
-    $filename = dirname(dirname(dirname(dirname(__FILE__)))) . '/data/quickform.css';
+    $filename = dirname(dirname(dirname(__DIR__))) . '/data/quickform.css';
 }
 $context['default_styles'] = file_get_contents($filename);
 
 $renderer = HTML_QuickForm2_Renderer::factory('array');
 $form->render($renderer);
 
-$loader   = new Twig_Loader_Filesystem(dirname(__FILE__) . '/templates');
+$loader   = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 // in real life usage you should set up the cache directory!
 $twig     = new Twig_Environment($loader);
 $template = $twig->loadTemplate('array-twig.tpl');

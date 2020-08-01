@@ -104,7 +104,7 @@ class HTML_QuickForm2_JavascriptBuilder
             // package was probably not installed, use relative path
             if (0 === strpos($defaultAbsPath, '@' . 'data_dir@')) {
                 $defaultAbsPath = realpath(
-                    dirname(dirname(dirname(__FILE__)))
+                    dirname(dirname(__DIR__))
                     . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'js'
                 ) . DIRECTORY_SEPARATOR;
             }

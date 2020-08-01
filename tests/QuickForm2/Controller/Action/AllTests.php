@@ -27,12 +27,12 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
     }
 }
 
-require_once dirname(__FILE__) . '/BackTest.php';
-require_once dirname(__FILE__) . '/DirectTest.php';
-require_once dirname(__FILE__) . '/DisplayTest.php';
-require_once dirname(__FILE__) . '/JumpTest.php';
-require_once dirname(__FILE__) . '/NextTest.php';
-require_once dirname(__FILE__) . '/SubmitTest.php';
+require_once __DIR__ . '/BackTest.php';
+require_once __DIR__ . '/DirectTest.php';
+require_once __DIR__ . '/DisplayTest.php';
+require_once __DIR__ . '/JumpTest.php';
+require_once __DIR__ . '/NextTest.php';
+require_once __DIR__ . '/SubmitTest.php';
 
 class QuickForm2_Controller_Action_AllTests
 {

@@ -31,7 +31,7 @@ if ('@' . 'package_version@' !== '@package_version@') {
     $installed = true;
 
 } else {
-    foreach (array(dirname(__FILE__) . '/../../../autoload.php', dirname(__FILE__) . '/../vendor/autoload.php') as $file) {
+    foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php') as $file) {
         if (file_exists($file)) {
             require_once $file;
             $installed = true;
