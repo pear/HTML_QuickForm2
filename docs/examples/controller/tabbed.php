@@ -28,15 +28,15 @@ abstract class TabbedPage extends HTML_QuickForm2_Controller_Page
                                ->setId('tabs');
         foreach ($this->getController() as $pageId => $page) {
             $tabGroup->addElement('submit', $this->getButtonName($pageId),
-                                  array('class' => 'flat', 'value' => ucfirst($pageId)) +
-                                  ($page === $this? array('disabled' => 'disabled'): array()));
+                                  ['class' => 'flat', 'value' => ucfirst($pageId)] +
+                                  ($page === $this? ['disabled' => 'disabled'] : []));
         }
     }
 
     protected function addGlobalSubmit()
     {
         $this->form->addElement('submit', $this->getButtonName('submit'),
-                                array('value' => 'Big Red Button', 'class' => 'bigred'));
+                                ['value' => 'Big Red Button', 'class' => 'bigred']);
         $this->setDefaultAction('submit');
     }
 }
@@ -51,11 +51,11 @@ class PageFoo extends TabbedPage
 
         $radioGroup = $fs->addElement('group')->setLabel('Do you want this feature?')
                          ->setSeparator('<br />');
-        $radioGroup->addElement('radio', 'iradYesNoMaybe', array('value' => 'Y'), array('content' => 'Yes'));
-        $radioGroup->addElement('radio', 'iradYesNoMaybe', array('value' => 'N'), array('content' => 'No'));
-        $radioGroup->addElement('radio', 'iradYesNoMaybe', array('value' => 'M'), array('content' => 'Maybe'));
+        $radioGroup->addElement('radio', 'iradYesNoMaybe', ['value' => 'Y'], ['content' => 'Yes']);
+        $radioGroup->addElement('radio', 'iradYesNoMaybe', ['value' => 'N'], ['content' => 'No']);
+        $radioGroup->addElement('radio', 'iradYesNoMaybe', ['value' => 'M'], ['content' => 'Maybe']);
 
-        $fs->addElement('text', 'tstText', array('size'=>20, 'maxlength'=>50))
+        $fs->addElement('text', 'tstText', ['size'=>20, 'maxlength'=>50])
            ->setLabel('Why do you want it?');
 
         $radioGroup->addRule('required', 'Check a radiobutton');
@@ -75,23 +75,23 @@ class PageBar extends TabbedPage
         // XXX: no date element yet
         $dateGroup = $fs->addElement('group', 'favDate')->setLabel('Favourite date:')
                         ->setSeparator('-');
-        for ($i = 1, $doptions = array(); $i <= 31; $i++) {
+        for ($i = 1, $doptions = []; $i <= 31; $i++) {
             $doptions[$i] = sprintf('%02d', $i);
         }
         $dateGroup->addElement('select', 'd')->loadOptions($doptions);
-        $dateGroup->addElement('select', 'M')->loadOptions(array(
+        $dateGroup->addElement('select', 'M')->loadOptions([
             1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 5 => 'June',
             7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
-        ));
-        for ($i = 1950, $yoptions = array(); $i <= date('Y'); $i++) {
+        ]);
+        for ($i = 1950, $yoptions = []; $i <= date('Y'); $i++) {
             $yoptions[$i] = $i;
         }
         $dateGroup->addElement('select', 'Y')->loadOptions($yoptions);
 
 
         $checkGroup = $fs->addElement('group', 'favLetter')->setLabel('Favourite letters:')
-                         ->setSeparator(array('&nbsp;', '<br />'));
-        foreach (array('A', 'B', 'C', 'D', 'X', 'Y', 'Z') as $letter) {
+                         ->setSeparator(['&nbsp;', '<br />']);
+        foreach (['A', 'B', 'C', 'D', 'X', 'Y', 'Z'] as $letter) {
             $checkGroup->addElement('checkbox', $letter)->setContent($letter);
         }
 
@@ -107,9 +107,9 @@ class PageBaz extends TabbedPage
 
         $fs = $this->form->addElement('fieldset')->setLabel('Baz page');
 
-        $poem = $fs->addElement('textarea', 'textPoetry', array('rows' => 5, 'cols' => 40))
+        $poem = $fs->addElement('textarea', 'textPoetry', ['rows' => 5, 'cols' => 40])
                    ->setLabel('Recite a poem:');
-        $fs->addElement('textarea', 'textOpinion', array('rows' => 5, 'cols' => 40))
+        $fs->addElement('textarea', 'textOpinion', ['rows' => 5, 'cols' => 40])
            ->setLabel('Did you like this demo?');
 
         $poem->addRule('required', 'Pretty please!');
@@ -201,12 +201,12 @@ $tabbed->addHandler('process', new TabbedProcess());
 // We redefine 'display' handler to use the proper stylesheets
 $tabbed->addHandler('display', new TabbedDisplay());
 
-$tabbed->addDatasource(new HTML_QuickForm2_DataSource_Array(array(
+$tabbed->addDatasource(new HTML_QuickForm2_DataSource_Array([
     'iradYesNoMaybe' => 'M',
-    'favLetter'      => array('A' => true, 'Z' => true),
-    'favDate'        => array('d' => 1, 'M' => 1, 'Y' => 2001),
+    'favLetter'      => ['A' => true, 'Z' => true],
+    'favDate'        => ['d' => 1, 'M' => 1, 'Y' => 2001],
     'textOpinion'    => 'Yes, it rocks!'
-)));
+]));
 
 $tabbed->run();
 ?>

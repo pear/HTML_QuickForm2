@@ -44,12 +44,12 @@ class HTML_QuickForm2_MessageProvider_Strftime implements HTML_QuickForm2_Messag
     * Lists of month names and weekdays accorfing to current locale
     * @var array
     */
-    protected $messages = array(
-        'weekdays_short'=> array(),
-        'weekdays_long' => array(),
-        'months_short'  => array(),
-        'months_long'   => array()
-    );
+    protected $messages = [
+        'weekdays_short'=> [],
+        'weekdays_long' => [],
+        'months_short'  => [],
+        'months_long'   => []
+    ];
 
    /**
     * Constructor, builds lists of month and weekday names

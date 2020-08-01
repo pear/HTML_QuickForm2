@@ -37,7 +37,7 @@
  */
 class HTML_QuickForm2_Element_InputButton extends HTML_QuickForm2_Element_Input
 {
-    protected $attributes = array('type' => 'button');
+    protected $attributes = ['type' => 'button'];
 
    /**
     * Buttons can not be frozen

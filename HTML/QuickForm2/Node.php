@@ -73,7 +73,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Array containing the parts of element ids
     * @var array
     */
-    protected static $ids = array();
+    protected static $ids = [];
 
    /**
     * Element's "frozen" status
@@ -97,19 +97,19 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Contains options and data used for the element creation
     * @var  array
     */
-    protected $data = array();
+    protected $data = [];
 
    /**
     * Validation rules for element
     * @var  array
     */
-    protected $rules = array();
+    protected $rules = [];
 
    /**
     * An array of callback filters for element
     * @var  array
     */
-    protected $filters = array();
+    protected $filters = [];
 
    /**
     * Recursive filter callbacks for element
@@ -119,7 +119,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     *
     * @var  array
     */
-    protected $recursiveFilters = array();
+    protected $recursiveFilters = [];
 
    /**
     * Error message (usually set via Rule if validation fails)
@@ -131,7 +131,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Changing 'name' and 'id' attributes requires some special handling
     * @var array
     */
-    protected $watchedAttributes = array('id', 'name');
+    protected $watchedAttributes = ['id', 'name'];
 
    /**
     * Intercepts setting 'name' and 'id' attributes
@@ -174,7 +174,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @param string|array $attributes HTML attributes (either a string or an array)
     * @param array        $data       Element data (label, options used for element setup)
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         parent::__construct($attributes);
         $this->setName($name);
@@ -202,7 +202,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         $stop      =  !self::getOption('id_force_append_index');
         $tokens    =  strlen($elementName)
                       ? explode('[', str_replace(']', '', $elementName))
-                      : ($stop? array('qfauto', ''): array('qfauto'));
+                      : ($stop? ['qfauto', ''] : ['qfauto']);
         $container =& self::$ids;
         $id        =  '';
 
@@ -226,7 +226,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             }
             $id .= '-' . $token;
             if (!isset($container[$token])) {
-                $container[$token] = array();
+                $container[$token] = [];
             // Handle duplicate names when not having mandatory indexes
             } elseif (empty($tokens) && $stop) {
                 $tokens[] = '';
@@ -256,7 +256,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         do {
             $token = array_shift($tokens);
             if (!isset($container[$token])) {
-                $container[$token] = array();
+                $container[$token] = [];
             }
             $container =& $container[$token];
         } while (!empty($tokens));
@@ -492,7 +492,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected function getDataSources()
     {
         if (empty($this->container)) {
-            return array();
+            return [];
         } else {
             return $this->container->getDataSources();
         }
@@ -537,7 +537,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             );
         }
 
-        $this->rules[] = array($rule, $runAt);
+        $this->rules[] = [$rule, $runAt];
         return $rule;
     }
 
@@ -696,14 +696,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
      * @return   $this    The element
      * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
      */
-    public function addFilter($callback, array $options = array())
+    public function addFilter($callback, array $options = [])
     {
         if (!is_callable($callback, false, $callbackName)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Filter should be a valid callback, '{$callbackName}' was given"
             );
         }
-        $this->filters[] = array($callback, $options);
+        $this->filters[] = [$callback, $options];
         return $this;
     }
 
@@ -727,14 +727,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
      * @return   $this    The element
      * @throws   HTML_QuickForm2_InvalidArgumentException    If callback is incorrect
      */
-    public function addRecursiveFilter($callback, array $options = array())
+    public function addRecursiveFilter($callback, array $options = [])
     {
         if (!is_callable($callback, false, $callbackName)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Filter should be a valid callback, '{$callbackName}' was given"
             );
         }
-        $this->recursiveFilters[] = array($callback, $options);
+        $this->recursiveFilters[] = [$callback, $options];
         return $this;
     }
 

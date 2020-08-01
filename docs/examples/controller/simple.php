@@ -24,11 +24,11 @@ class SimplePage extends HTML_QuickForm2_Controller_Page
         $form = $this->form;
         $fs = $form->addFieldset()->setLabel("Controller example 1: a simple form");
 
-        $fs->addText("tstText", array('size'=>20, 'maxlength'=>50))
+        $fs->addText("tstText", ['size'=>20, 'maxlength'=>50])
            ->setLabel("Please enter something:")
            ->addRule("required", "Pretty please!");
 
-        $fs->addSubmit($this->getButtonName('submit'), array('value' => 'Send'));
+        $fs->addSubmit($this->getButtonName('submit'), ['value' => 'Send']);
         $this->setDefaultAction('submit')
              ->setAttribute('style', 'display:none');
     }

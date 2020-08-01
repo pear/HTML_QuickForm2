@@ -29,9 +29,9 @@ class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $_POST = array(
+        $_POST = [
             'foo' => 'A button clicked'
-        );
+        ];
     }
 
     public function testCannotBeFrozen()
@@ -47,10 +47,10 @@ class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
         $foo = $form->appendChild(new HTML_QuickForm2_Element_InputSubmit('foo'));
         $bar = $form->appendChild(new HTML_QuickForm2_Element_InputSubmit('bar'));
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => 'Default for foo',
             'bar' => 'Default for bar'
-        )));
+        ]));
         $this->assertEquals('A button clicked', $foo->getValue());
         $this->assertNull($bar->getValue());
 

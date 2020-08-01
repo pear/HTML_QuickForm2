@@ -30,11 +30,11 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
     protected $phpError;
     protected $errorHandler;
 
-    protected $nodeAbstractMethods = array(
+    protected $nodeAbstractMethods = [
         'updateValue', 'getId', 'getName', 'getType', 'getRawValue', 'setId',
         'setName', 'setValue', '__toString', 'getJavascriptValue',
         'getJavascriptTriggers', 'render'
-    );
+    ];
 
     protected function setUp()
     {
@@ -51,7 +51,7 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
 
     protected function setErrorHandler()
     {
-        set_error_handler(array($this, 'handleError'));
+        set_error_handler([$this, 'handleError']);
         $this->errorHandler = true;
     }
 
@@ -128,10 +128,10 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         HTML_QuickForm2_Factory::registerElement('fakeelement', 'FakeElement', __DIR__ . '/_files/FakeElement.php');
         /* @var $el FakeElement */
         $el = HTML_QuickForm2_Factory::createElement('fakeelement',
-                'fake', 'attributes', array('options' => '', 'label' => 'fake label'));
+                'fake', 'attributes', ['options' => '', 'label' => 'fake label']);
         $this->assertInstanceOf('FakeElement', $el);
         $this->assertEquals('fake', $el->name);
-        $this->assertEquals(array('options' => '', 'label' => 'fake label'), $el->data);
+        $this->assertEquals(['options' => '', 'label' => 'fake label'], $el->data);
         $this->assertEquals('attributes', $el->attributes);
     }
 

@@ -27,24 +27,24 @@ require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_HierselectTest extends PHPUnit_Framework_TestCase
 {
-    private $_primary   = array(1 => 'one', 2 => 'two');
-    private $_secondary = array(
-        1 => array(11 => 'one-one', 12 => 'one-two'),
-        2 => array(21 => 'two-one', 22 => 'two-two')
-    );
+    private $_primary   = [1 => 'one', 2 => 'two'];
+    private $_secondary = [
+        1 => [11 => 'one-one', 12 => 'one-two'],
+        2 => [21 => 'two-one', 22 => 'two-two']
+    ];
 
     public function testUpdateValueOnNameChange()
     {
         $form = new HTML_QuickForm2('testHierselectForm');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'foo' => array(1, 12),
-            'bar' => array(2, 21)
-        )));
-        $hs   = $form->addHierselect('foo')->loadOptions(array($this->_primary, $this->_secondary));
-        $this->assertEquals(array(1, 12), $hs->getValue());
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+            'foo' => [1, 12],
+            'bar' => [2, 21]
+        ]));
+        $hs   = $form->addHierselect('foo')->loadOptions([$this->_primary, $this->_secondary]);
+        $this->assertEquals([1, 12], $hs->getValue());
 
         $hs->setName('bar');
-        $this->assertEquals(array(2, 21), $hs->getValue());
+        $this->assertEquals([2, 21], $hs->getValue());
     }
 
     /**
@@ -55,11 +55,11 @@ class HTML_QuickForm2_Element_HierselectTest extends PHPUnit_Framework_TestCase
     {
         $form = new HTML_QuickForm2('bug20295');
 
-        $hs = $form->addHierselect('hs')->loadOptions(array($this->_primary, $this->_secondary))
-                ->setValue(array(1, 12));
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $hs = $form->addHierselect('hs')->loadOptions([$this->_primary, $this->_secondary])
+                ->setValue([1, 12]);
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'hs' => null
-        )));
+        ]));
 
         $this->assertNull($hs->getValue());
     }

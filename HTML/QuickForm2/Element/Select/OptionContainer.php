@@ -50,7 +50,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     *
     * @var array
     */
-    protected $options = array();
+    protected $options = [];
 
    /**
     * Reference to parent <select>'s values
@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     public function addOption($text, $value, $attributes = null)
     {
         if (null === $attributes) {
-            $attributes = array('value' => (string)$value);
+            $attributes = ['value' => (string)$value];
         } else {
             $attributes = self::prepareAttributes($attributes);
             if (isset($attributes['selected'])) {
@@ -106,7 +106,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
         if (!isset($attributes['disabled'])) {
             $this->possibleValues[(string)$value] = true;
         }
-        $this->options[] = array('text' => $text, 'attr' => $attributes);
+        $this->options[] = ['text' => $text, 'attr' => $attributes];
     }
 
    /**

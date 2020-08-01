@@ -81,7 +81,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
         if (is_scalar($allowedLength)) {
             $check = "length == {$allowedLength}";
         } else {
-            $checks = array();
+            $checks = [];
             if (!empty($allowedLength['min'])) {
                 $checks[] = "length >= {$allowedLength['min']}";
             }
@@ -158,10 +158,10 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
             $length = $globalConfig;
 
         } else {
-            $length = self::mergeMinMaxLength(array(), $globalConfig);
+            $length = self::mergeMinMaxLength([], $globalConfig);
             if (isset($localConfig)) {
                 $length = self::mergeMinMaxLength(
-                    $length, is_array($localConfig)? $localConfig: array($localConfig)
+                    $length, is_array($localConfig)? $localConfig: [$localConfig]
                 );
             }
         }
@@ -185,8 +185,8 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     public function setConfig($config)
     {
         if (is_array($config)) {
-            $config = self::mergeMinMaxLength(array(), $config)
-                      + array('min' => 0, 'max' => 0);
+            $config = self::mergeMinMaxLength([], $config)
+                      + ['min' => 0, 'max' => 0];
         }
         if (is_array($config) && ($config['min'] < 0 || $config['max'] < 0)
             || !is_array($config) && $config < 0
@@ -207,7 +207,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 
         if (!empty($config['min']) && !empty($config['max'])) {
             if ($config['min'] > $config['max']) {
-                list($config['min'], $config['max']) = array($config['max'], $config['min']);
+                list($config['min'], $config['max']) = [$config['max'], $config['min']];
             } elseif ($config['min'] == $config['max']) {
                 $config = $config['min'];
             }

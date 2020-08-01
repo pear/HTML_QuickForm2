@@ -48,12 +48,12 @@ $username = $fs->addText('username')->setLabel('Username');
 $username->addRule('required', 'Username is required');
 
 $password = $fs->addPassword('pass')
-            ->setLabel(array('Password', 'Password should be 8 characters at minimum'));
+            ->setLabel(['Password', 'Password should be 8 characters at minimum']);
 $password->addRule('required', 'Password is required');
 
 $form->addHidden('my_hidden1')->setValue('1');
 $form->addHidden('my_hidden2')->setValue('2');
-$form->addSubmit('submit', array('value' => 'Send', 'id' => 'submit'));
+$form->addSubmit('submit', ['value' => 'Send', 'id' => 'submit']);
 
 if ($form->validate()) {
     $form->toggleFrozen(true);
@@ -61,11 +61,11 @@ if ($form->validate()) {
 
 
 $renderer = HTML_QuickForm2_Renderer::factory('default')
-    ->setOption(array(
+    ->setOption([
         'group_hiddens' => true,
         'group_errors'  => true,
         'required_note' => '<strong>Note:</strong> Required fields are marked with an asterisk (<em>*</em>).'
-    ))
+    ])
     ->setTemplateForId('submit', '<div class="element">{element} or <a href="/">Cancel</a></div>')
     ->setTemplateForClass(
         'HTML_QuickForm2_Element_Input',

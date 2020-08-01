@@ -48,13 +48,13 @@ class HTML_QuickForm2_DataSource_SuperGlobal
     * Information on file uploads (from $_FILES)
     * @var array
     */
-    protected $files = array();
+    protected $files = [];
 
    /**
     * Keys present in the $_FILES array
     * @var array
     */
-    private static $_fileKeys = array('name', 'type', 'size', 'tmp_name', 'error');
+    private static $_fileKeys = ['name', 'type', 'size', 'tmp_name', 'error'];
 
    /**
     * Class constructor, intializes the internal arrays from superglobals
@@ -84,7 +84,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal
         if (!is_array($arr)) {
             return call_user_func($callback, $arr);
         }
-        $mapped = array();
+        $mapped = [];
         foreach ($arr as $k => $v) {
             $mapped[$k] = is_array($v)?
                           $this->arrayMapRecursive($callback, $v):
@@ -101,7 +101,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal
         if (false !== ($pos = strpos($name, '['))) {
             $tokens = explode('[', str_replace(']', '', $name));
             $base   = array_shift($tokens);
-            $value  = array();
+            $value  = [];
             if (!isset($this->files[$base]['name'])) {
                 return null;
             }

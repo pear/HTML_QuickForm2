@@ -39,7 +39,7 @@ class HTML_QuickForm2_Element_InputPassword extends HTML_QuickForm2_Element_Inpu
 {
     protected $persistent = true;
 
-    protected $attributes = array('type' => 'password');
+    protected $attributes = ['type' => 'password'];
 
     protected function getFrozenHtml()
     {

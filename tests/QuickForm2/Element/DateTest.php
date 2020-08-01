@@ -29,34 +29,34 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
     */
     public function testInvalidMessageProvider()
     {
-        $invalid = new HTML_QuickForm2_Element_Date('invalid', null, array('messageProvider' => array()));
+        $invalid = new HTML_QuickForm2_Element_Date('invalid', null, ['messageProvider' => []]);
     }
 
     public static function callbackMessageProvider($messageId, $langId)
     {
-        return array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday');
+        return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday'];
     }
 
     public function testCallbackMessageProvider()
     {
-        $date = new HTML_QuickForm2_Element_Date('callback', null, array(
+        $date = new HTML_QuickForm2_Element_Date('callback', null, [
             'format'          => 'l',
-            'messageProvider' => array(__CLASS__, 'callbackMessageProvider')
-        ));
+            'messageProvider' => [__CLASS__, 'callbackMessageProvider']
+        ]);
         $this->assertContains('<option value="6">Caturday</option>', $date->__toString());
     }
 
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->setMethods(array('get'))
+            ->setMethods(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
-                     ->will($this->returnValue(array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday')));
-        $date = new HTML_QuickForm2_Element_Date('object', null, array(
+                     ->will($this->returnValue(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday']));
+        $date = new HTML_QuickForm2_Element_Date('object', null, [
             'format'          => 'l',
             'messageProvider' => $mockProvider
-        ));
+        ]);
         $this->assertContains('<option value="6">Caturday</option>', $date->__toString());
     }
 
@@ -66,9 +66,9 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
     */
     public function testRequest4061()
     {
-        $date = new HTML_QuickForm2_Element_Date('MaxMinHour', null, array(
+        $date = new HTML_QuickForm2_Element_Date('MaxMinHour', null, [
             'format' => 'H', 'minHour' => 22, 'maxHour' => 6
-        ));
+        ]);
         $this->assertRegexp(
             '!<option value="22">22</option>.+<option value="6">06</option>!is',
             $date->__toString()
@@ -85,18 +85,18 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
     */
     public function testRequest5957()
     {
-        $date = new HTML_QuickForm2_Element_Date('MaxMinMonth', null, array(
+        $date = new HTML_QuickForm2_Element_Date('MaxMinMonth', null, [
             'format' => 'F', 'minMonth' => 10, 'maxMonth' => 3
-        ));
+        ]);
         $this->assertRegexp('!October.+March!is', $date->__toString());
         $this->assertNotContains('January', $date->__toString());
     }
 
     public function testSetValueAcceptsDateTime()
     {
-        $date = new HTML_QuickForm2_Element_Date('DateTimeTest', null, array('format' => 'Ymd'));
+        $date = new HTML_QuickForm2_Element_Date('DateTimeTest', null, ['format' => 'Ymd']);
         $date->setValue(new DateTime('2012-06-26'));
-        $this->assertEquals(array('Y' => 2012, 'm' => 6, 'd' => 26), $date->getValue());
+        $this->assertEquals(['Y' => 2012, 'm' => 6, 'd' => 26], $date->getValue());
     }
 
     /**
@@ -106,12 +106,12 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
     public function testBug20295()
     {
         $form = new HTML_QuickForm2('bug20295');
-        $date = $form->addDate('aDate', null, array('format' => 'Ymd'))
+        $date = $form->addDate('aDate', null, ['format' => 'Ymd'])
                     ->setValue('today');
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'aDate' => null
-        )));
+        ]));
 
         $this->assertNull($date->getValue());
     }

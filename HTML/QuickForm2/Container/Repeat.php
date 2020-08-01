@@ -79,13 +79,13 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * Available indexes
      * @var array
      */
-    protected $itemIndexes = array();
+    protected $itemIndexes = [];
 
     /**
      * Errors for (repeated) child elements set during validate() call
      * @var array
      */
-    protected $childErrors = array();
+    protected $childErrors = [];
 
     /**
      * Whether getDataSources() should return Container's data sources
@@ -129,7 +129,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * @param string|array $attributes Attributes (either a string or an array)
      * @param array        $data       Additional element data
      */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         if (!empty($data['prototype'])) {
             $this->setPrototype($data['prototype']);
@@ -149,7 +149,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     {
         if (!empty($this->elements[0])) {
             parent::removeChild($this->elements[0]);
-            $this->elements = array();
+            $this->elements = [];
         }
         parent::appendChild($prototype);
         return $this;
@@ -228,7 +228,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     protected function getDataSources()
     {
         if (!$this->passDataSources) {
-            return array();
+            return [];
         } else {
             return parent::getDataSources();
         }
@@ -315,7 +315,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     public function setIndexes(array $indexes)
     {
-        $hash = array();
+        $hash = [];
         foreach ($indexes as $index) {
             if (preg_match(self::INDEX_REGEXP, $index)) {
                 $hash[$index] = true;
@@ -404,11 +404,11 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     protected function backupChildAttributes($backupId = false, $backupError = false)
     {
         $this->appendIndexTemplates();
-        $backup = array();
+        $backup = [];
         $key    = 0;
         /* @var HTML_QuickForm2_Node $child */
         foreach ($this->getRecursiveIterator() as $child) {
-            $backup[$key] = array('name' => $child->getName());
+            $backup[$key] = ['name' => $child->getName()];
             if ($child instanceof HTML_QuickForm2_Element_InputCheckable) {
                 $backup[$key]['valueAttr'] = $child->getAttribute('value');
             }
@@ -508,7 +508,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     protected function getChildValues($filtered = false)
     {
         $backup = $this->backupChildAttributes();
-        $values = array();
+        $values = [];
         foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
             if (null !== ($itemValues = parent::getChildValues($filtered))) {
@@ -531,7 +531,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     {
         $backup = $this->backupChildAttributes(false, true);
         $valid  = true;
-        $this->childErrors = array();
+        $this->childErrors = [];
         foreach ($this->getIndexes() as $index) {
             $this->replaceIndexTemplates($index, $backup);
             $valid = $this->getPrototype()->validate() && $valid;
@@ -568,7 +568,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $myId     = HTML_QuickForm2_JavascriptBuilder::encode($this->getId());
         $protoId  = HTML_QuickForm2_JavascriptBuilder::encode($this->getPrototype()->getId());
 
-        $triggers = array();
+        $triggers = [];
         /* @var $child HTML_QuickForm2_Node */
         foreach ($this->getRecursiveIterator() as $child) {
             $triggers[] = $child->getId();

@@ -40,16 +40,16 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('"\r\n\t\\\'\"bar\\\\"', HTML_QuickForm2_JavascriptBuilder::encode("\r\n\t'\"bar\\"));
         $this->assertEquals(1, HTML_QuickForm2_JavascriptBuilder::encode(1));
 
-        $this->assertEquals('[]', HTML_QuickForm2_JavascriptBuilder::encode(array()));
+        $this->assertEquals('[]', HTML_QuickForm2_JavascriptBuilder::encode([]));
         $this->assertEquals('{}', HTML_QuickForm2_JavascriptBuilder::encode(new stdClass()));
 
-        $this->assertEquals('["a","b"]', HTML_QuickForm2_JavascriptBuilder::encode(array('a', 'b')));
-        $this->assertEquals('{"0":"a","b":"c"}', HTML_QuickForm2_JavascriptBuilder::encode(array('a', 'b' => 'c')));
+        $this->assertEquals('["a","b"]', HTML_QuickForm2_JavascriptBuilder::encode(['a', 'b']));
+        $this->assertEquals('{"0":"a","b":"c"}', HTML_QuickForm2_JavascriptBuilder::encode(['a', 'b' => 'c']));
 
         $obj = new stdClass();
         $obj->a = 'b';
         $obj->c = 'd';
-        $obj->e = array('f', 'g');
+        $obj->e = ['f', 'g'];
         $this->assertEquals('{"a":"b","c":"d","e":["f","g"]}', HTML_QuickForm2_JavascriptBuilder::encode($obj));
 
         try {
@@ -112,15 +112,15 @@ class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
         $element = new HTML_QuickForm2_Element_InputText();
 
         $mockRuleOne = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($element))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleOne->expects($this->once())->method('getJavascriptCallback')
             ->will($this->returnValue('jsRuleOne'));
 
         $mockRuleTwo = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($element))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleTwo->expects($this->once())->method('getJavascriptCallback')
             ->will($this->returnValue('jsRuleTwo'));

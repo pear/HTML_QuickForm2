@@ -54,14 +54,14 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $_REQUEST = array(
+        $_REQUEST = [
             '_qf__form1' => ''
-        );
+        ];
 
-        $_POST = array(
+        $_POST = [
             'foo' => 'a value',
             'fooReborn' => 'another value'
-        );
+        ];
     }
 
     public function tearDown()
@@ -87,7 +87,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ElementImpl(null, array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ElementImpl(null, ['id' => 'manual']);
         $this->assertEquals('manual', $obj->getId());
 
         $this->assertSame($obj, $obj->setId('another'));
@@ -100,7 +100,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testCanNotRemoveNameOrId()
     {
-        $obj = new HTML_QuickForm2_ElementImpl('somename', array(), array('id' => 'someid'));
+        $obj = new HTML_QuickForm2_ElementImpl('somename', [], ['id' => 'someid']);
         try {
             $obj->removeAttribute('name');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -118,11 +118,11 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testUniqueIdsGenerated()
     {
-        $names = array(
+        $names = [
             '', 'value', 'array[]', 'array[8]', 'array[60000]', 'array[20]',
             'array[name][]', 'bigger[name][5]', 'bigger[name][]', 'bigger[name][6]'
-        );
-        $usedIds = array();
+        ];
+        $usedIds = [];
         foreach ($names as $name) {
             $el = new HTML_QuickForm2_ElementImpl($name);
             $this->assertNotEquals('', $el->getId(), 'Should have an auto-generated \'id\' attribute');
@@ -138,14 +138,14 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
 
     public function testManualIdsNotReused()
     {
-        $usedIds = array(
+        $usedIds = [
             'foo-0', 'foo-2', 'foo-bar-0', 'foo-bar-2', 'foo-baz-0-0'
-        );
-        $names = array(
+        ];
+        $names = [
             'foo', 'foo[bar]', 'foo[baz][]'
-        );
+        ];
         foreach ($usedIds as $id) {
-            $elManual = new HTML_QuickForm2_ElementImpl('foo', array('id' => $id));
+            $elManual = new HTML_QuickForm2_ElementImpl('foo', ['id' => $id]);
         }
         foreach ($names as $name) {
             $el = new HTML_QuickForm2_ElementImpl($name);
@@ -171,10 +171,10 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
     public function testDataSourcePriority()
     {
         $form = new HTML_QuickForm2('form1');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => 'new value',
             'bar' => 'default value'
-        )));
+        ]));
         $elFoo = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
         $elBar = $form->appendChild(new HTML_QuickForm2_ElementImpl('bar'));
 
@@ -188,9 +188,9 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $el = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
         $this->assertNull($el->getValue());
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => 'updated value'
-        )));
+        ]));
         $this->assertEquals('updated value', $el->getValue());
     }
 
@@ -241,9 +241,9 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         $el = $form->appendChild(new HTML_QuickForm2_ElementImpl('foo'));
         $el->setValue('not empty');
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => null
-        )));
+        ]));
         $this->assertNull($el->getValue());
     }
 }

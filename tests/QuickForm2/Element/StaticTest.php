@@ -45,17 +45,17 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
 
     public function testUpdateValueNoInject()
     {
-        $_POST = array(
+        $_POST = [
             'foo' => '<b>exploit</b>',
             'bar' => 'exploit',
             'baz' => 'ok'
-        );
+        ];
 
         $form = new HTML_QuickForm2('submit', 'post', null, false);
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => '<b>foo</b>',
             'bar' => 'bar'
-        )));
+        ]));
 
         $foo = $form->appendChild(new HTML_QuickForm2_Element_Static('foo'));
         $bar = $form->appendChild(new HTML_QuickForm2_Element_Static('bar'));
@@ -79,8 +79,8 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
         $static = new HTML_QuickForm2_Element_Static('novalidate');
         try {
             $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(array('validateOwner'))
-                ->setConstructorArgs(array($static, 'a message'))
+                ->setMethods(['validateOwner'])
+                ->setConstructorArgs([$static, 'a message'])
                 ->getMock();
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
 
     public function testCanRemoveName()
     {
-        $foo = new HTML_QuickForm2_Element_Static('foo', array('id' => 'bar'));
+        $foo = new HTML_QuickForm2_Element_Static('foo', ['id' => 'bar']);
         $foo->removeAttribute('name');
         $this->assertNull($foo->getAttribute('name'));
 
@@ -100,13 +100,13 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     public function testTagName()
     {
         $img = new HTML_QuickForm2_Element_Static(
-            'picture', array('alt' => 'foo', 'src' => 'pr0n.gif'),
-            array('tagName' => 'img', 'forceClosingTag' => false)
+            'picture', ['alt' => 'foo', 'src' => 'pr0n.gif'],
+            ['tagName' => 'img', 'forceClosingTag' => false]
         );
         $this->assertRegexp('!<img[^<>]*alt="foo" src="pr0n.gif"[^<>]*/>!', $img->__toString());
 
         $div = new HTML_QuickForm2_Element_Static(
-            null, array('class' => 'foo'), array('tagName' => 'div')
+            null, ['class' => 'foo'], ['tagName' => 'div']
         );
         $this->assertRegexp('!<div[^<>]*class="foo"[^<>]*></div>!', $div->__toString());
         $div->setContent('bar');
@@ -118,7 +118,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     */
     public function testDisallowedTagNames()
     {
-        $static = new HTML_QuickForm2_Element_Static('foo', null, array('tagName' => 'input'));
+        $static = new HTML_QuickForm2_Element_Static('foo', null, ['tagName' => 'input']);
     }
 
     /**
@@ -128,11 +128,11 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
     public function testBug20295()
     {
         $form   = new HTML_QuickForm2('bug20295');
-        $static = $form->addStatic('foo', array(), array('content' => 'not empty'));
+        $static = $form->addStatic('foo', [], ['content' => 'not empty']);
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo' => null
-        )));
+        ]));
         $this->assertNull($static->getContent());
     }
 
@@ -141,7 +141,7 @@ class HTML_QuickForm2_Element_StaticTest extends PHPUnit_Framework_TestCase
         $form = new HTML_QuickForm2('afterbug20295');
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array());
 
-        $static = $form->addStatic('foo', array(), array('content' => 'not empty'));
+        $static = $form->addStatic('foo', [], ['content' => 'not empty']);
 
         $this->assertEquals('not empty', $static->getContent());
     }

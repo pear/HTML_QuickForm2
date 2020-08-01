@@ -30,8 +30,8 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
     public function testValidateGenericElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                    'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockValid->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
@@ -40,8 +40,8 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue('some value'));
@@ -53,31 +53,31 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
     public function testValidateInputFileElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
-                  ->will($this->returnValue(array(
+                  ->will($this->returnValue([
                       'name'     => '',
                       'type'     => '',
                       'tmp_name' => '',
                       'error'    => UPLOAD_ERR_NO_FILE,
                       'size'     => 0
-                  )));
+                  ]));
         $rule = new HTML_QuickForm2_Rule_Empty($mockValid, 'an error');
         $this->assertTrue($rule->validate());
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
-                    ->will($this->returnValue(array(
+                    ->will($this->returnValue([
                         'name'     => 'goodfile.php',
                         'type'     => 'application/octet-stream',
                         'tmp_name' => '/tmp/foobar',
                         'error'    => UPLOAD_ERR_OK,
                         'size'     => 1234
-                    )));
+                    ]));
         $rule2 = new HTML_QuickForm2_Rule_Empty($mockInvalid, 'an error');
         $this->assertFalse($rule2->validate());
         $this->assertEquals('an error', $mockInvalid->getError());
@@ -86,16 +86,16 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
     public function testFailedUploadIsNotEmpty()
     {
         $mockFailed = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFailed->expects($this->once())->method('getValue')
-                   ->will($this->returnValue(array(
+                   ->will($this->returnValue([
                        'name'     => 'badfile.php',
                        'type'     => '',
                        'tmp_name' => '',
                        'error'    => UPLOAD_ERR_FORM_SIZE,
                        'size'     => 0
-                   )));
+                   ]));
         $rule = new HTML_QuickForm2_Rule_Empty($mockFailed, 'an error');
         $this->assertFalse($rule->validate());
         $this->assertEquals('an error', $mockFailed->getError());
@@ -104,20 +104,20 @@ class HTML_QuickForm2_Rule_EmptyTest extends PHPUnit_Framework_TestCase
     public function testValidateArray()
     {
         $mockElEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElEmpty->expects($this->once())->method('getRawValue')
-                    ->will($this->returnValue(array()));
+                    ->will($this->returnValue([]));
         $rule = new HTML_QuickForm2_Rule_Empty($mockElEmpty, 'an error');
         $this->assertTrue($rule->validate());
 
         $mockElNonEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                         'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                         'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElNonEmpty->expects($this->once())->method('getRawValue')
-                       ->will($this->returnValue(array('foo', 'bar')));
+                       ->will($this->returnValue(['foo', 'bar']));
         $rule = new HTML_QuickForm2_Rule_Empty($mockElNonEmpty, 'an error');
         $this->assertFalse($rule->validate());
     }

@@ -48,11 +48,11 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
             $this->fail('Expected HTML_QuickForm2_NotFoundException was not thrown');
         } catch (HTML_QuickForm2_NotFoundException $e) {}
 
-        $_SESSION[sprintf(HTML_QuickForm2_Controller::KEY_CONTAINER, 'foo')] = array(
-            'datasources' => array(),
-            'values'      => array(),
-            'valid'       => array()
-        );
+        $_SESSION[sprintf(HTML_QuickForm2_Controller::KEY_CONTAINER, 'foo')] = [
+            'datasources' => [],
+            'values'      => [],
+            'valid'       => []
+        ];
         $controller = new HTML_QuickForm2_Controller(null, true, false);
         $this->assertEquals('foo', $controller->getId());
         $this->assertTrue($controller->isWizard());
@@ -61,21 +61,21 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
 
     public function testContainer()
     {
-        $_SESSION = array();
+        $_SESSION = [];
 
         $controller = new HTML_QuickForm2_Controller('foo');
         $container  = $controller->getSessionContainer();
-        $this->assertNotEquals(array(), $_SESSION);
+        $this->assertNotEquals([], $_SESSION);
 
         $controller->destroySessionContainer();
-        $this->assertEquals(array(), $_SESSION);
+        $this->assertEquals([], $_SESSION);
     }
 
     public function testAddPage()
     {
         $firstPage  = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('firstPage')])
             ->getMock();
         $controller = new HTML_QuickForm2_Controller('foo');
 
@@ -91,8 +91,8 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
         try {
             $controller->addPage(
                 $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                    ->setMethods(array('populateForm'))
-                    ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
+                    ->setMethods(['populateForm'])
+                    ->setConstructorArgs([new HTML_QuickForm2('firstPage')])
                     ->getMock()
             );
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -110,40 +110,40 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
 
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array(new HTML_QuickForm2('aPage')))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([new HTML_QuickForm2('aPage')])
                 ->getMock()
         );
-        $this->assertEquals(array('aPage', 'display'), $controller->getActionName());
+        $this->assertEquals(['aPage', 'display'], $controller->getActionName());
     }
 
     public function testGetActionName()
     {
-        $_REQUEST = array(
+        $_REQUEST = [
             sprintf(HTML_QuickForm2_Controller_Page::KEY_NAME, 'foo', 'bar')         => 'Button value',
             sprintf(HTML_QuickForm2_Controller_Page::KEY_NAME, 'baz', 'quux') . '_x' => 15
-        );
+        ];
 
         $controller1 = new HTML_QuickForm2_Controller('first');
         $controller1->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array(new HTML_QuickForm2('foo')))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([new HTML_QuickForm2('foo')])
                 ->getMock()
         );
-        $this->assertEquals(array('foo', 'bar'), $controller1->getActionName());
+        $this->assertEquals(['foo', 'bar'], $controller1->getActionName());
 
         $controller2 = new HTML_QuickForm2_Controller('second');
         $controller2->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array(new HTML_QuickForm2('baz')))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([new HTML_QuickForm2('baz')])
                 ->getMock()
         );
-        $this->assertEquals(array('baz', 'quux'), $controller2->getActionName());
+        $this->assertEquals(['baz', 'quux'], $controller2->getActionName());
 
-        $_REQUEST = array();
-        $this->assertEquals(array('foo', 'bar'), $controller1->getActionName());
+        $_REQUEST = [];
+        $this->assertEquals(['foo', 'bar'], $controller1->getActionName());
     }
 
     public function testIsValidSimple()
@@ -151,13 +151,13 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new HTML_QuickForm2_Controller('simpleIsValid');
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array(new HTML_QuickForm2('first')))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([new HTML_QuickForm2('first')])
                 ->getMock()
         );
         $second = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('second')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('second')])
             ->getMock();
         $controller->addPage($second);
         $controller->getSessionContainer()->storeValidationStatus('first', true);
@@ -172,22 +172,22 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new HTML_QuickForm2_Controller('isValidUnseen', false);
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array(new HTML_QuickForm2('seen')))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([new HTML_QuickForm2('seen')])
                 ->getMock()
         );
         $mockUnseen = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(array('validate', 'getValue'))
-            ->setConstructorArgs(array('unseen'))
+            ->setMethods(['validate', 'getValue'])
+            ->setConstructorArgs(['unseen'])
             ->getMock();
         $mockUnseen->expects($this->once())->method('validate')
                    ->will($this->returnValue(true));
         $mockUnseen->expects($this->once())->method('getValue')
-                   ->will($this->returnValue(array('foo' => 'bar')));
+                   ->will($this->returnValue(['foo' => 'bar']));
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->setMethods(array('populateForm'))
-                ->setConstructorArgs(array($mockUnseen))
+                ->setMethods(['populateForm'])
+                ->setConstructorArgs([$mockUnseen])
                 ->getMock()
         );
         $controller->getSessionContainer()->storeValidationStatus('seen', true);
@@ -205,27 +205,27 @@ class HTML_QuickForm2_ControllerTest extends PHPUnit_Framework_TestCase
     public function testBug8687()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(array('validate'))
-            ->setConstructorArgs(array('invalid'))
+            ->setMethods(['validate'])
+            ->setConstructorArgs(['invalid'])
             ->getMock();
         $mockForm->expects($this->once())->method('validate')
                  ->will($this->returnValue(false));
-        $select = $mockForm->addElement('select', 'foo', array('multiple'))
-                           ->loadOptions(array('one' => 'First label', 'two' => 'Second label'));
+        $select = $mockForm->addElement('select', 'foo', ['multiple'])
+                           ->loadOptions(['one' => 'First label', 'two' => 'Second label']);
         $box    = $mockForm->addElement('checkbox', 'bar');
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array($mockForm))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([$mockForm])
             ->getMock();
         $controller = new HTML_QuickForm2_Controller('bug8687', false);
         $controller->addPage($mockPage);
-        $controller->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'foo' => array('two'),
+        $controller->addDataSource(new HTML_QuickForm2_DataSource_Array([
+            'foo' => ['two'],
             'bar' => '1'
-        )));
+        ]));
 
         $this->assertFalse($controller->isValid());
-        $this->assertEquals(array('two'), $select->getValue());
+        $this->assertEquals(['two'], $select->getValue());
         $this->assertEquals('1', $box->getValue());
     }
 }

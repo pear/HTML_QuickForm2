@@ -31,24 +31,24 @@ class HTML_QuickForm2_Controller_Action_DirectTest
     public function testPerform()
     {
         $source = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(array('validate', 'getValue'))
-            ->setConstructorArgs(array('source'))
+            ->setMethods(['validate', 'getValue'])
+            ->setConstructorArgs(['source'])
             ->getMock();
         $source->expects($this->once())->method('validate')
                ->will($this->returnValue(true));
         $source->expects($this->once())->method('getValue')
-               ->will($this->returnValue(array('foo' => 'bar')));
+               ->will($this->returnValue(['foo' => 'bar']));
         $sourcePage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array($source))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([$source])
             ->getMock();
         $sourcePage->addHandler('destination', new HTML_QuickForm2_Controller_Action_Direct());
         $destPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('destination')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('destination')])
             ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(array('perform'))
+            ->setMethods(['perform'])
             ->getMock();
         $mockJump->expects($this->once())->method('perform')
                  ->will($this->returnValue('jump to destination'));
@@ -60,7 +60,7 @@ class HTML_QuickForm2_Controller_Action_DirectTest
 
         $this->assertEquals('jump to destination', $sourcePage->handle('destination'));
         $this->assertTrue($controller->getSessionContainer()->getValidationStatus('source'));
-        $this->assertEquals(array('foo' => 'bar'), $controller->getSessionContainer()->getValues('source'));
+        $this->assertEquals(['foo' => 'bar'], $controller->getSessionContainer()->getValues('source'));
     }
 }
 ?>

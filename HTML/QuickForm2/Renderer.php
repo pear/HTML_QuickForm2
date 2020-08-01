@@ -51,36 +51,36 @@ abstract class HTML_QuickForm2_Renderer
     * List of registered renderer types
     * @var array
     */
-    private static $_types = array(
-        'callback' => array('HTML_QuickForm2_Renderer_Callback', null),
-        'default'  => array('HTML_QuickForm2_Renderer_Default', null),
-        'array'    => array('HTML_QuickForm2_Renderer_Array', null),
-        'stub'     => array('HTML_QuickForm2_Renderer_Stub', null)
-    );
+    private static $_types = [
+        'callback' => ['HTML_QuickForm2_Renderer_Callback', null],
+        'default'  => ['HTML_QuickForm2_Renderer_Default', null],
+        'array'    => ['HTML_QuickForm2_Renderer_Array', null],
+        'stub'     => ['HTML_QuickForm2_Renderer_Stub', null]
+    ];
 
    /**
     * List of registered renderer plugins
     * @var array
     */
-    private static $_pluginClasses = array(
-        'callback' => array(),
-        'default'  => array(),
-        'array'    => array(),
-        'stub'     => array()
-    );
+    private static $_pluginClasses = [
+        'callback' => [],
+        'default'  => [],
+        'array'    => [],
+        'stub'     => []
+    ];
 
    /**
     * Renderer options
     * @var  array
     * @see  setOption()
     */
-    protected $options = array(
+    protected $options = [
         'group_hiddens' => true,
         'required_note' => '<em>*</em> denotes required fields.',
         'errors_prefix' => 'Invalid information entered:',
         'errors_suffix' => 'Please correct these fields.',
         'group_errors'  => false
-    );
+    ];
 
    /**
     * Javascript builder object
@@ -138,9 +138,9 @@ abstract class HTML_QuickForm2_Renderer
     final public static function register($type, $className, $includeFile = null)
     {
         $type = strtolower($type);
-        self::$_types[$type] = array($className, $includeFile);
+        self::$_types[$type] = [$className, $includeFile];
         if (empty(self::$_pluginClasses[$type])) {
-            self::$_pluginClasses[$type] = array();
+            self::$_pluginClasses[$type] = [];
         }
     }
 
@@ -159,7 +159,7 @@ abstract class HTML_QuickForm2_Renderer
         // We don't check self::$_types, since a plugin may be registered
         // before renderer itself if it goes with some custom element
         if (empty(self::$_pluginClasses[$type])) {
-            self::$_pluginClasses[$type] = array(array($className, $includeFile));
+            self::$_pluginClasses[$type] = [[$className, $includeFile]];
         } else {
             foreach (self::$_pluginClasses[$type] as $plugin) {
                 if (0 == strcasecmp($plugin[0], $className)) {
@@ -168,7 +168,7 @@ abstract class HTML_QuickForm2_Renderer
                     );
                 }
             }
-            self::$_pluginClasses[$type][] = array($className, $includeFile);
+            self::$_pluginClasses[$type][] = [$className, $includeFile];
         }
     }
 
@@ -191,7 +191,7 @@ abstract class HTML_QuickForm2_Renderer
     */
     protected function exportMethods()
     {
-        return array();
+        return [];
     }
 
    /**

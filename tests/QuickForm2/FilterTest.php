@@ -47,19 +47,19 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $_REQUEST['_qf__filters'] = '';
-        $_POST = array(
+        $_POST = [
             'foo' => '  ',
             'bar' => 'VALUE',
-            'baz' => array('VALUE1', 'VALUE2'),
+            'baz' => ['VALUE1', 'VALUE2'],
             'sel' => 'VALUE2'
-        );
+        ];
     }
 
     public function testFiltersShouldPreserveNulls()
     {
         $mockElement = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElement->expects($this->atLeastOnce())
                     ->method('getRawValue')->will($this->returnValue(null));
@@ -67,7 +67,7 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $this->assertNull($mockElement->getValue());
 
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(array('getType', 'setValue', '__toString'))
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->appendChild($mockElement);
         $mockContainer->addRecursiveFilter('intval');
@@ -90,7 +90,7 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
         $select = $form->addSelect('sel')->loadOptions(
-            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
+            ['VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3']);
         $select->addFilter('strtolower');
         $this->assertEquals('value2', $select->getValue());
     }
@@ -98,17 +98,17 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     public function testSelectMultipleRecursive()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
-        $select = $form->addSelect('baz', array('multiple' => 'multiple'))->loadOptions(
-            array('VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3'));
+        $select = $form->addSelect('baz', ['multiple' => 'multiple'])->loadOptions(
+            ['VALUE1' => 'VALUE1', 'VALUE2' => 'VALUE2', 'VALUE3' => 'VALUE3']);
         $select->addRecursiveFilter('strtolower');
-        $this->assertEquals(array('value1', 'value2'), $select->getValue());
+        $this->assertEquals(['value1', 'value2'], $select->getValue());
     }
 
     public function testSelectMultipleNonRecursive()
     {
-        $s = new HTML_QuickForm2_Element_Select('foo', array('multiple' => 'multiple'),
-                                                array('intrinsic_validation' => false));
-        $s->setValue(array('foo', 'bar'));
+        $s = new HTML_QuickForm2_Element_Select('foo', ['multiple' => 'multiple'],
+                                                ['intrinsic_validation' => false]);
+        $s->setValue(['foo', 'bar']);
         $s->addFilter('count');
 
         $this->assertEquals(2, $s->getValue());
@@ -133,10 +133,10 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
     public function testButton()
     {
         $form = new HTML_QuickForm2('filters', 'post', null, false);
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'bar' => 'VALUE'
-        )));
-        $button = $form->addButton('bar', array('type' => 'submit'));
+        ]));
+        $button = $form->addButton('bar', ['type' => 'submit']);
         $button->addFilter('strtolower');
         $this->assertEquals('value', $button->getValue());
     }
@@ -174,11 +174,11 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
         $el2->setValue('B');
         $el3->setValue('C');
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'foo' => 'AA',
             'bar' => 'B',
             'baz' => 'C'
-        ), $c1->getValue());
+        ], $c1->getValue());
 
         $c1->addRecursiveFilter('strtolower');
 
@@ -200,14 +200,14 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
 
     public function testGroup()
     {
-        $value1     = array('foo' => 'foo');
-        $value1F    = array('foo' => 'F');
-        $value2     = array('bar' => 'bar', 'baz' => array('quux' => 'baz'));
-        $value2F    = array('bar' => 'Bar', 'baz' => array('quux' => 'Baz'));
-        $valueAnon  = array('e1' => 'e1');
-        $valueAnonF = array('e1' => '1');
-        $formValue  = array('g1' => $value1, 'g2' => array('i2' => $value2)) + $valueAnon;
-        $formValueF = array('g1' => $value1F, 'g2' => array('i2' => $value2F)) + $valueAnonF;
+        $value1     = ['foo' => 'foo'];
+        $value1F    = ['foo' => 'F'];
+        $value2     = ['bar' => 'bar', 'baz' => ['quux' => 'baz']];
+        $value2F    = ['bar' => 'Bar', 'baz' => ['quux' => 'Baz']];
+        $valueAnon  = ['e1' => 'e1'];
+        $valueAnonF = ['e1' => '1'];
+        $formValue  = ['g1' => $value1, 'g2' => ['i2' => $value2]] + $valueAnon;
+        $formValueF = ['g1' => $value1F, 'g2' => ['i2' => $value2F]] + $valueAnonF;
 
         $form = new HTML_QuickForm2('testGroupGetValue');
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
@@ -217,7 +217,7 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
 
         $el1 = $g1->addText('foo');
         // Trim O *after* strtoupper
-        $el1->addFilter('trim', array('O'));
+        $el1->addFilter('trim', ['O']);
 
         $g2 = $form->addGroup('g2[i2]');
         $g2->addRecursiveFilter('ucfirst');
@@ -226,7 +226,7 @@ class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
 
         $anon = $form->addGroup();
         $anon->addText('e1');
-        $anon->addRecursiveFilter('substr', array(1, 1));
+        $anon->addRecursiveFilter('substr', [1, 1]);
 
         $this->assertEquals($formValueF, $form->getValue());
     }

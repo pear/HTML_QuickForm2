@@ -90,7 +90,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         // Prepare a mapper for element names as array
         $prefixLength = $this->prependsName() ? substr_count($this->getName(), '[') + 1 : 0;
-        $nameParts = $groupValues = array();
+        $nameParts = $groupValues = [];
 
         /* @var $child HTML_QuickForm2_Node */
         foreach ($this as $i => $child) {
@@ -100,7 +100,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
             }
             $nameParts[] = $tokens;
             if ($child instanceof self) {
-                $groupValues[$i] = array();
+                $groupValues[$i] = [];
             }
         }
 
@@ -110,7 +110,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
         foreach ((array)$value as $k => $v) {
             foreach ($nameParts as $i => $tokens) {
-                $val = array($k => $v);
+                $val = [$k => $v];
                 do {
                     $token = array_shift($tokens);
                     $numeric = false;

@@ -30,8 +30,8 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                    'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
@@ -39,16 +39,16 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ruleSimple->validate());
 
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
-                     ->will($this->returnValue(array(
+                     ->will($this->returnValue([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                     )));
+                     ]));
         $ruleFile = new HTML_QuickForm2_Rule_NotRegex($mockNoUpload, 'an error', '/\\.(jpe?g|gif|png)$/i');
         $this->assertTrue($ruleFile->validate());
     }
@@ -56,8 +56,8 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
     public function testNegatesResult()
     {
         $mockComment = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockComment->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue('Buy some cheap VIAGRA from our online pharmacy!!!'));
@@ -65,16 +65,16 @@ class HTML_QuickForm2_Rule_NotRegexTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($ruleNoSpam->validate());
 
         $mockUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockUpload->expects($this->once())->method('getValue')
-                   ->will($this->returnValue(array(
+                   ->will($this->returnValue([
                      'name'     => 'pr0n.jpg',
                      'type'     => 'image/jpeg',
                      'tmp_name' => '/tmp/foobar',
                      'error'    => UPLOAD_ERR_OK,
                      'size'     => 123456
-                   )));
+                   ]));
         $ruleNoExe = new HTML_QuickForm2_Rule_NotRegex($mockUpload, 'an error', '/\\.(exe|scr|cmd)$/i');
         $this->assertTrue($ruleNoExe->validate());
     }

@@ -75,7 +75,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
         $value  = $this->owner->getValue();
         $config = $this->getConfig();
         return (bool)call_user_func_array(
-            $config['callback'], array_merge(array($value), $config['arguments'])
+            $config['callback'], array_merge([$value], $config['arguments'])
         );
     }
 
@@ -84,7 +84,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
         $config    = $this->getConfig();
-        $arguments = array($this->owner->getJavascriptValue());
+        $arguments = [$this->owner->getJavascriptValue()];
         foreach ($config['arguments'] as $arg) {
             $arguments[] = HTML_QuickForm2_JavascriptBuilder::encode($arg);
         }
@@ -183,15 +183,15 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
             $config = $localConfig;
 
         } else {
-            if (!self::arrayHasSomeKeys($globalConfig, array('callback', 'arguments', 'js_callback'))) {
-                $config = array('callback' => $globalConfig);
+            if (!self::arrayHasSomeKeys($globalConfig, ['callback', 'arguments', 'js_callback'])) {
+                $config = ['callback' => $globalConfig];
             } else {
                 $config = $globalConfig;
             }
-            if (self::arrayHasSomeKeys($localConfig, array('callback', 'arguments', 'js_callback'))) {
+            if (self::arrayHasSomeKeys($localConfig, ['callback', 'arguments', 'js_callback'])) {
                 $config += $localConfig;
             } elseif (isset($localConfig)) {
-                $config += array('callback' => $localConfig, 'arguments' => $localConfig);
+                $config += ['callback' => $localConfig, 'arguments' => $localConfig];
             }
         }
         return $config;
@@ -212,7 +212,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
     public function setConfig($config)
     {
         if (!is_array($config) || !isset($config['callback'])) {
-            $config = array('callback' => $config);
+            $config = ['callback' => $config];
         }
         if (!is_callable($config['callback'], false, $callbackName)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
@@ -226,7 +226,7 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
                 preg_replace('/\s+/', ' ', var_export($config['arguments'], true)) . ' given'
             );
         }
-        return parent::setConfig($config + array('arguments' => array()));
+        return parent::setConfig($config + ['arguments' => []]);
     }
 }
 ?>

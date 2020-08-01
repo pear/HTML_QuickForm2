@@ -84,10 +84,10 @@ $form = new HTML_QuickForm2('basicRules');
 $form->setAttribute('enctype', 'multipart/form-data');
 
 // data source with default values:
-$form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+$form->addDataSource(new HTML_QuickForm2_DataSource_Array([
     'testUsername'      => 'luser',
-    'friends'           => array('luser123', 'gangsta1998')
-)));
+    'friends'           => ['luser123', 'gangsta1998']
+]));
 
 // override whatever value was submitted
 $form->addElement('hidden', 'MAX_FILE_SIZE')->setValue('102400');
@@ -97,19 +97,19 @@ $form->addElement('hidden', 'MAX_FILE_SIZE')->setValue('102400');
 //
 
 $fsAuth = $form->addElement('fieldset')->setLabel('Auth credentials');
-$username = $fsAuth->addElement('text', 'testUsername', array('style' => 'width: 200px;'))
+$username = $fsAuth->addElement('text', 'testUsername', ['style' => 'width: 200px;'])
                    ->setLabel('Username (letters only):');
-$email = $fsAuth->addElement('text', 'testEmail', array('style' => 'width: 200px'))
+$email = $fsAuth->addElement('text', 'testEmail', ['style' => 'width: 200px'])
                 ->setLabel('Email:');
 
 $fsPasswords = $fsAuth->addElement('fieldset')
                       ->setLabel('Supply password only if you want to change it');
 
-$oldPassword = $fsPasswords->addElement('password', 'oldPassword', array('style' => 'width: 200px;'))
+$oldPassword = $fsPasswords->addElement('password', 'oldPassword', ['style' => 'width: 200px;'])
                            ->setLabel('Old password (<i>qwerty</i>):');
-$newPassword = $fsPasswords->addElement('password', 'newPassword', array('style' => 'width: 200px;'))
+$newPassword = $fsPasswords->addElement('password', 'newPassword', ['style' => 'width: 200px;'])
                            ->setLabel('New password (min 6 chars):');
-$repPassword = $fsPasswords->addElement('password', 'newPasswordRepeat', array('style' => 'width: 200px;'))
+$repPassword = $fsPasswords->addElement('password', 'newPasswordRepeat', ['style' => 'width: 200px;'])
                            ->setLabel('Repeat new password:');
 
 $username->addRule('required', 'Username is required', null,
@@ -145,18 +145,18 @@ $newPassword->addRule('nonempty', '', null, HTML_QuickForm2_Rule::ONBLUR_CLIENT_
 
 $fsGrouped = $form->addElement('fieldset')->setLabel('Validating grouped elements');
 $boxGroup = $fsGrouped->addElement('group', 'boxes')->setLabel('Check at least two:');
-$boxGroup->addElement('checkbox', null, array('value' => 'red'))->setContent('<span style="color: #f00;">Red</span>');
-$boxGroup->addElement('checkbox', null, array('value' => 'green'))->setContent('<span style="color: #0f0;">Green</span>');
-$boxGroup->addElement('checkbox', null, array('value' => 'blue'))->setContent('<span style="color: #00f;">Blue</span>');
+$boxGroup->addElement('checkbox', null, ['value' => 'red'])->setContent('<span style="color: #f00;">Red</span>');
+$boxGroup->addElement('checkbox', null, ['value' => 'green'])->setContent('<span style="color: #0f0;">Green</span>');
+$boxGroup->addElement('checkbox', null, ['value' => 'blue'])->setContent('<span style="color: #00f;">Blue</span>');
 
 $boxGroup->addRule('required', 'Check at least two boxes', 2,
                    HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
 $friends = $fsGrouped->addElement('group', 'friends')->setLabel('Friends usernames (letters only):')
                      ->setSeparator('<br />');
-$friends->addElement('text', '0', array('style' => 'width: 200px;', 'id' => 'friend-1'));
-$friends->addElement('text', '1', array('style' => 'width: 200px;', 'id' => 'friend-2'));
-$friends->addElement('text', '2', array('style' => 'width: 200px;', 'id' => 'friend-3'));
+$friends->addElement('text', '0', ['style' => 'width: 200px;', 'id' => 'friend-1']);
+$friends->addElement('text', '1', ['style' => 'width: 200px;', 'id' => 'friend-2']);
+$friends->addElement('text', '2', ['style' => 'width: 200px;', 'id' => 'friend-3']);
 
 $friends->addRule('each', 'Friends\' usernames should contain only letters',
                   $friends->createRule('regex', '', '/^[a-zA-Z]+$/'),
@@ -167,7 +167,7 @@ $friends->addRule('each', 'Friends\' usernames should contain only letters',
 //
 
 $fsUpload = $form->addElement('fieldset')->setLabel('Upload picture (try one &gt; 100 kB for fun)');
-$upload = $fsUpload->addElement('file', 'testUpload', array('style' => 'width: 200px'))
+$upload = $fsUpload->addElement('file', 'testUpload', ['style' => 'width: 200px'])
                    ->setLabel('Picture (gif, jpg, png, &lt;=20kB):');
 
 // no longer using special 'uploadedfile' rule for uploads, allow client-side validation
@@ -179,13 +179,13 @@ $upload->addRule('regex', 'Allowed extensions: .gif, .jp(e)g, .png', '/\\.(gif|j
 
 // these don't work client-side, for obvious reasons
 $upload->addRule('mimetype', 'Your browser doesn\'t think that\'s an image',
-                 array('image/gif', 'image/png', 'image/jpeg', 'image/pjpeg'));
+                 ['image/gif', 'image/png', 'image/jpeg', 'image/pjpeg']);
 $upload->addRule('maxfilesize', 'File is too big, allowed size 20kB', 20480);
 
 $submitGrp = $form->addElement('group')->setSeparator('&nbsp;&nbsp;&nbsp;');
 
-$submitGrp->addElement('submit', 'testSubmit', array('value' => 'Send'));
-$submitGrp->addElement('checkbox', 'clientSide', array('onclick' => 'enableValidation(this);'))
+$submitGrp->addElement('submit', 'testSubmit', ['value' => 'Send']);
+$submitGrp->addElement('checkbox', 'clientSide', ['onclick' => 'enableValidation(this);'])
           ->setContent('perform client-side validation')
           ->setAttribute('checked'); // override submit value
 

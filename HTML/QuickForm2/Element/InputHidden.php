@@ -37,7 +37,7 @@
  */
 class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
 {
-    protected $attributes = array('type' => 'hidden');
+    protected $attributes = ['type' => 'hidden'];
 
    /**
     * Hidden elements can not be frozen

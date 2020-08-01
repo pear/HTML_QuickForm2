@@ -29,32 +29,32 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $_FILES = array(
-            'foo' => array(
+        $_FILES = [
+            'foo' => [
                 'name'      => 'file.doc',
                 'tmp_name'  => '/tmp/nothing',
                 'type'      => 'text/plain',
                 'size'      => 1234,
                 'error'     => UPLOAD_ERR_OK
-            ),
-            'toobig' => array(
+            ],
+            'toobig' => [
                 'name'      => 'ahugefile.zip',
                 'tmp_name'  => '',
                 'type'      => '',
                 'size'      => 0,
                 'error'     => UPLOAD_ERR_FORM_SIZE
-            ),
-            'local' => array(
+            ],
+            'local' => [
                 'name'      => 'nasty-trojan.exe',
                 'tmp_name'  => '',
                 'type'      => '',
                 'size'      => 0,
                 'error'     => UPLOAD_ERR_CANT_WRITE
-            )
-        );
-        $_POST = array(
+            ]
+        ];
+        $_POST = [
             'MAX_FILE_SIZE' => '987654'
-        );
+        ];
     }
 
     public function testCannotBeFrozen()
@@ -71,13 +71,13 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $bar = $form->appendChild(new HTML_QuickForm2_Element_InputFile('bar'));
 
         $this->assertNull($bar->getValue());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name'      => 'file.doc',
             'tmp_name'  => '/tmp/nothing',
             'type'      => 'text/plain',
             'size'      => 1234,
             'error'     => UPLOAD_ERR_OK
-        ), $foo->getValue());
+        ], $foo->getValue());
     }
 
     public function testBuiltinValidation()
@@ -96,7 +96,7 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
     */
     public function testInvalidMessageProvider()
     {
-        $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, array('messageProvider' => array()));
+        $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, ['messageProvider' => []]);
     }
 
     public static function callbackMessageProvider($messageId, $langId)
@@ -107,9 +107,9 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
     public function testCallbackMessageProvider()
     {
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
-        $upload = $form->addFile('local', array(), array(
-            'messageProvider' => array(__CLASS__, 'callbackMessageProvider')
-        ));
+        $upload = $form->addFile('local', [], [
+            'messageProvider' => [__CLASS__, 'callbackMessageProvider']
+        ]);
         $this->assertFalse($form->validate());
         $this->assertEquals('A nasty error happened!', $upload->getError());
     }
@@ -117,15 +117,15 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->setMethods(array('get'))
+            ->setMethods(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
                      ->will($this->returnValue('A nasty error happened!'));
 
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
-        $upload = $form->addFile('local', array(), array(
+        $upload = $form->addFile('local', [], [
             'messageProvider' => $mockProvider
-        ));
+        ]);
         $this->assertFalse($form->validate());
         $this->assertEquals('A nasty error happened!', $upload->getError());
     }
@@ -139,12 +139,12 @@ class HTML_QuickForm2_Element_InputFileTest extends PHPUnit_Framework_TestCase
         $form = new HTML_QuickForm2('broken', 'get');
 
         try {
-            $form->addFile('upload', array('id' => 'upload'));
+            $form->addFile('upload', ['id' => 'upload']);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {}
 
         $group = HTML_QuickForm2_Factory::createElement('group', 'fileGroup');
-        $group->addFile('upload', array('id' => 'upload'));
+        $group->addFile('upload', ['id' => 'upload']);
         try {
             $form->appendChild($group);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');

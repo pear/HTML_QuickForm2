@@ -29,11 +29,11 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
 {
     public function setUp()
     {
-        $_POST = array(
+        $_POST = [
             'box1'      => '1',
-            'vegetable' => array('1', '3')
-        );
-        $_GET = array();
+            'vegetable' => ['1', '3']
+        ];
+        $_GET = [];
     }
 
     public function testDefaultValueAttributeIs1()
@@ -50,9 +50,9 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
         $this->assertEquals('1', $box1->getValue());
         $this->assertNull($box2->getValue());
 
-        $formPost->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $formPost->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'box2' => '1'
-        )));
+        ]));
         $this->assertEquals('1', $box1->getValue());
         $this->assertNull($box2->getValue());
 
@@ -60,9 +60,9 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
         $box3 = $formGet->appendChild(new HTML_QuickForm2_Element_InputCheckbox('box3'));
         $this->assertNull($box3->getValue());
 
-        $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $formGet->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'box3' => '1'
-        )));
+        ]));
         $this->assertEquals('1', $box3->getValue());
     }
 
@@ -74,9 +74,9 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     {
         $formPost = new HTML_QuickForm2('request16806', 'post', null, false);
 
-        $box1 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 1), array('label' => 'carrot'));
-        $box2 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 2), array('label' => 'pea'));
-        $box3 = $formPost->addElement('checkbox', 'vegetable[]', array('value' => 3), array('label' => 'bean'));
+        $box1 = $formPost->addElement('checkbox', 'vegetable[]', ['value' => 1], ['label' => 'carrot']);
+        $box2 = $formPost->addElement('checkbox', 'vegetable[]', ['value' => 2], ['label' => 'pea']);
+        $box3 = $formPost->addElement('checkbox', 'vegetable[]', ['value' => 3], ['label' => 'bean']);
 
         $this->assertEquals('checked', $box1->getAttribute('checked'));
         $this->assertNotEquals('checked', $box2->getAttribute('checked'));
@@ -90,7 +90,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     public function testBug16816()
     {
         $box = new HTML_QuickForm2_Element_InputCheckbox(
-            'vegetable[1]', array('value' => 2, 'checked' => 1), array('label' => 'pea')
+            'vegetable[1]', ['value' => 2, 'checked' => 1], ['label' => 'pea']
         );
         $boxHtml = $box->__toString();
     }
@@ -102,7 +102,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     public function testValue0()
     {
         $box = new HTML_QuickForm2_Element_InputCheckbox(
-            'testBox', array('value' => 0)
+            'testBox', ['value' => 0]
         );
         $this->assertContains('value="0"', $box->__toString());
     }
@@ -121,9 +121,9 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
         $this->assertNotNull($box1->getAttribute('checked'));
         $this->assertNull($box2->getAttribute('checked'));
 
-        $formNoSubmit->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $formNoSubmit->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'box2' => true
-        )));
+        ]));
         $this->assertNotNull($box2->getAttribute('checked'));
         $this->assertNull($box1->getAttribute('checked'));
 
@@ -138,15 +138,15 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends PHPUnit_Framework_TestCa
     public function testBug20295()
     {
         $form = new HTML_QuickForm2('bug20295');
-        $box  = $form->addCheckbox('box', array('value' => 'yep', 'checked' => 'checked'));
+        $box  = $form->addCheckbox('box', ['value' => 'yep', 'checked' => 'checked']);
 
         // data source searching should stop on finding this null
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'box' => null
-        )));
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        ]));
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'box' => 'yep'
-        )));
+        ]));
 
         $this->assertNull($box->getValue());
     }

@@ -52,9 +52,9 @@ class HTML_QuickForm2_Controller_Action_Jump
     protected static function splitUri($uri)
     {
         if (false === ($qm = strpos($uri, '?'))) {
-            return array($uri, '');
+            return [$uri, ''];
         } else {
-            return array(substr($uri, 0, $qm), substr($uri, $qm));
+            return [substr($uri, 0, $qm), substr($uri, $qm)];
         }
     }
 
@@ -137,7 +137,7 @@ class HTML_QuickForm2_Controller_Action_Jump
                 $host  = trim(end($parts));
             } else {
                 $host  = '';
-                foreach (array('HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR') as $key) {
+                foreach (['HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR'] as $key) {
                     if (!empty($_SERVER[$key])) {
                         $host = $_SERVER[$key];
                         break;

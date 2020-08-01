@@ -37,14 +37,14 @@
  */
 class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_InputCheckable
 {
-    protected $attributes = array('type' => 'checkbox');
+    protected $attributes = ['type' => 'checkbox'];
 
-    protected $frozenHtml = array(
+    protected $frozenHtml = [
         'checked'   => '<code>[x]</code>',
         'unchecked' => '<code>[&nbsp;]</code>'
-    );
+    ];
 
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         parent::__construct($name, $attributes, $data);
         if (null === $this->getAttribute('value')) {

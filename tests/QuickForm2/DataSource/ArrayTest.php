@@ -35,23 +35,23 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->ds = new HTML_QuickForm2_DataSource_Array(array(
+        $this->ds = new HTML_QuickForm2_DataSource_Array([
             'foo' => 'some value',
-            'bar' => array(
+            'bar' => [
                 'key'     => 'some other value',
                 'nullkey' => null
-            ),
-            'baz' => array(
-                'key1' => array(
+            ],
+            'baz' => [
+                'key1' => [
                     'key2' => 'yet another value'
-                )
-            ),
-            'escape' => array(
+                ]
+            ],
+            'escape' => [
                 'o\'really' => 'yes',
                 'oh\\no' => 'no'
-            ),
+            ],
             'quux' => null
-        ));
+        ]);
     }
 
     public function testReturnsNullForAbsentValue()
@@ -66,7 +66,7 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('some value', $this->ds->getValue('foo'));
         $this->assertEquals(
-            array('key' => 'some other value', 'nullkey' => null),
+            ['key' => 'some other value', 'nullkey' => null],
             $this->ds->getValue('bar')
         );
         $this->assertEquals('some other value', $this->ds->getValue('bar[key]'));

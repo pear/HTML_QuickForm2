@@ -11,21 +11,21 @@
  */
 class OptionLoader
 {
-    protected $primaryOptions = array();
+    protected $primaryOptions = [];
 
-    protected $secondaryOptions = array();
+    protected $secondaryOptions = [];
 
     public function __construct()
     {
-        $this->primaryOptions = array(
+        $this->primaryOptions = [
             1 => 'Database',
             2 => 'HTML',
             3 => 'HTTP',
             4 => 'Images',
             5 => 'Mail'
-        );
+        ];
 
-        $this->secondaryOptions[1] = array (
+        $this->secondaryOptions[1] = [
           1 => 'DB',
           2 => 'DBA',
           3 => 'DBA_Relational',
@@ -57,9 +57,9 @@ class OptionLoader
           29 => 'MDB2_TableBrowser',
           30 => 'MDB_QueryTool',
           31 => 'SQL_Parser',
-        );
+        ];
 
-        $this->secondaryOptions[2] = array (
+        $this->secondaryOptions[2] = [
           1 => 'HTML_AJAX',
           2 => 'HTML_BBCodeParser',
           3 => 'HTML_CSS',
@@ -100,9 +100,9 @@ class OptionLoader
           38 => 'HTML_TreeMenu',
           39 => 'Pager',
           40 => 'Pager_Sliding',
-        );
+        ];
 
-        $this->secondaryOptions[3] = array (
+        $this->secondaryOptions[3] = [
           1 => 'HTTP',
           2 => 'HTTP_Client',
           3 => 'HTTP_Download',
@@ -117,9 +117,9 @@ class OptionLoader
           12 => 'HTTP_Upload',
           13 => 'HTTP_WebDAV_Client',
           14 => 'HTTP_WebDAV_Server',
-        );
+        ];
 
-        $this->secondaryOptions[4] = array (
+        $this->secondaryOptions[4] = [
           1 => 'Image_3D',
           2 => 'Image_Barcode',
           3 => 'Image_Canvas',
@@ -139,9 +139,9 @@ class OptionLoader
           17 => 'Image_Transform',
           18 => 'Image_WBMP',
           19 => 'Image_XBM',
-        );
+        ];
 
-        $this->secondaryOptions[5] = array (
+        $this->secondaryOptions[5] = [
           1 => 'Mail',
           2 => 'Mail_IMAP',
           3 => 'Mail_IMAPv2',
@@ -150,7 +150,7 @@ class OptionLoader
           6 => 'Mail_Queue',
           7 => 'Mail_mimeDecode',
           8 => 'Net_NNTP',
-        );
+        ];
     }
 
    /**
@@ -159,14 +159,14 @@ class OptionLoader
     * @param array $values Values for previous select elements in hierselect
     * @return array Associative array (option value => option text)
     */
-    public function getOptions(array $values = array())
+    public function getOptions(array $values = [])
     {
         if (empty($values)) {
             return $this->primaryOptions;
         } elseif (1 == count($values) && !empty($this->secondaryOptions[$values[0]])) {
             return $this->secondaryOptions[$values[0]];
         } else {
-            return array('' => ' ');
+            return ['' => ' '];
         }
     }
 
@@ -176,13 +176,13 @@ class OptionLoader
     * @param array $values Values for previous select elements in hierselect
     * @return array Returns array that serializes to JS object {values: [...], texts: [...]}
     */
-    public function getOptionsAjax(array $values = array())
+    public function getOptionsAjax(array $values = [])
     {
         // This helps to notice the difference between sync and async calls
         sleep(1);
         $options = $this->getOptions($values);
-        return array('values' => array_keys($options),
-                     'texts'  => array_values($options));
+        return ['values' => array_keys($options),
+                     'texts'  => array_values($options)];
     }
 }
 ?>

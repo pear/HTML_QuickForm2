@@ -8,20 +8,20 @@
 
 $form = new HTML_QuickForm2('testRepeat');
 
-$form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-    'country' => array(4, 706, 180),
-    'street'  => array(
+$form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+    'country' => [4, 706, 180],
+    'street'  => [
         'Secret Taliban caves',
         'Pirate hideout. Aaargh!',
         'Somewhere in the jungle'
-    ),
-    'default' => array(true, false, false),
+    ],
+    'default' => [true, false, false],
 
-    'links' => array(
+    'links' => [
         'main'  => 'yes_1',
-        'title' => array('php.net', 'pear.php.net', 'google.com')
-    )
-)));
+        'title' => ['php.net', 'pear.php.net', 'google.com']
+    ]
+]));
 
 /* @var $fsOne HTML_QuickForm2_Container_Fieldset */
 $fsOne    = $form->addFieldset()->setLabel('Fieldset-based repeat element');
@@ -32,7 +32,7 @@ $repeatFs = $fsOne->addRepeat()
                   ->setId('repeat-fieldset')
                   ->setLabel('Shipping addresses');
 
-$countries = array(
+$countries = [
     ''  => "-- please select --",
     4   => "Afghanistan",
     148 => "Chad",
@@ -41,14 +41,14 @@ $countries = array(
     706 => "Somalia",
     736 => "Sudan",
     716 => "Zimbabwe"
-);
+];
 
 $country = $repeatFs->addSelect('country')->loadOptions($countries)->setLabel('Country:');
-$repeatFs->addText('region', array('style' => 'width: 20em;'))->setLabel('Region:');
-$street  = $repeatFs->addText('street', array('style' => 'width: 20em;'))->setLabel('Street address:');
+$repeatFs->addText('region', ['style' => 'width: 20em;'])->setLabel('Region:');
+$street  = $repeatFs->addText('street', ['style' => 'width: 20em;'])->setLabel('Street address:');
 $repeatFs->addCheckbox('default')->setContent('default shipping address');
 // button to remove a repeated item from a repeat, enabled automatically
-$repeatFs->addButton('remove', array('type' => 'button'))
+$repeatFs->addButton('remove', ['type' => 'button'])
          ->setContent('remove this address')
          ->addClass('repeatRemove');
 
@@ -63,27 +63,27 @@ $street->addRule('required', 'Please input street address', null,
 $fsTwo = $form->addFieldset()->setLabel('Group-based repeat element');
 /* @var $repeatGroup HTML_QuickForm2_Container_Repeat */
 $repeatGroup = $fsTwo->addRepeat(
-                    null, array('id' => 'repeat-group'),
-                    array('prototype' => HTML_QuickForm2_Factory::createElement('group', 'links')
-                                         ->setLabel('A link:')->setSeparator('&nbsp;'))
+                    null, ['id' => 'repeat-group'],
+                    ['prototype' => HTML_QuickForm2_Factory::createElement('group', 'links')
+                                         ->setLabel('A link:')->setSeparator('&nbsp;')]
                )->setIndexField('links[title]') // not strictly necessary, but doesn't hurt either
                 ->setLabel('Links');
 
-$repeatGroup->addText('title', array('style' => 'width: 15em;'));
+$repeatGroup->addText('title', ['style' => 'width: 15em;']);
 // specially crafted value attribute to prevent adding index to name
-$repeatGroup->addRadio('main', array('value' => 'yes_:idx:'))->setContent('main');
+$repeatGroup->addRadio('main', ['value' => 'yes_:idx:'])->setContent('main');
 // button to remove a repeated item from a repeat
-$repeatGroup->addButton('remove', array('type' => 'button'))
+$repeatGroup->addButton('remove', ['type' => 'button'])
             ->setContent('X')
             ->addClass('repeatRemove');
 // a button for adding repeated elements, with an explicit onclick
-$fsTwo->addButton('add', array(
+$fsTwo->addButton('add', [
     'type'    => 'button',
     'onclick' => "document.getElementById('repeat-group').repeat.add(); return false;"
-))->setContent('Add another link');
+])->setContent('Add another link');
 
 
-$form->addSubmit('submit', array('value' => 'Send this form'));
+$form->addSubmit('submit', ['value' => 'Send this form']);
 
 /* @var $renderer HTML_QuickForm2_Renderer_Default */
 $renderer = HTML_QuickForm2_Renderer::factory('default');

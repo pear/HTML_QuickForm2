@@ -30,8 +30,8 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     function testValidateGenericElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                    'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockValid->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue('a string'));
@@ -40,8 +40,8 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue(''));
@@ -53,31 +53,31 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     function testValidateInputFileElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
-                  ->will($this->returnValue(array(
+                  ->will($this->returnValue([
                     'name'     => 'goodfile.php',
                     'type'     => 'application/octet-stream',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 1234
-                  )));
+                  ]));
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockValid, 'an error');
         $this->assertTrue($rule->validate());
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
-                    ->will($this->returnValue(array(
+                    ->will($this->returnValue([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                    )));
+                    ]));
         $rule2 = new HTML_QuickForm2_Rule_Nonempty($mockInvalid, 'an error');
         $this->assertFalse($rule2->validate());
         $this->assertEquals('an error', $mockInvalid->getError());
@@ -86,8 +86,8 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     public function testDefaultConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                 'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl);
         $this->assertEquals(1, $rule->getConfig());
@@ -96,8 +96,8 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     public function testPositiveNumberRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                 'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl, 'an error', -1);
@@ -110,15 +110,15 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     */
     function testValidateSelectMultiple()
     {
-        $options     = array('1' => 'Option 1', '2' => 'Option 2');
+        $options     = ['1' => 'Option 1', '2' => 'Option 2'];
         $multiSelect = new HTML_QuickForm2_Element_Select(
-            'mult', array('multiple'), array('options' => $options)
+            'mult', ['multiple'], ['options' => $options]
         );
 
         $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($multiSelect, 'an error');
         $this->assertFalse($nonEmpty->validate());
 
-        $multiSelect->setValue(array(1));
+        $multiSelect->setValue([1]);
         $this->assertTrue($nonEmpty->validate());
 
         $nonEmpty->setConfig(2);
@@ -128,7 +128,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     function testValidateContainer()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(array('getType', 'setValue', '__toString'))
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar[idx]')->setValue('I am not empty');
@@ -146,10 +146,10 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     function testValidateNestedContainer()
     {
         $mockOuter = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(array('getType', 'setValue', '__toString'))
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockInner = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(array('getType', 'setValue', '__toString'))
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockOuter->addElement('text', 'foo[idx]')->setValue('');
         $bar = $mockInner->addElement('text', 'bar[idx]')->setValue('not empty');
@@ -165,10 +165,10 @@ class HTML_QuickForm2_Rule_NonemptyTest extends PHPUnit_Framework_TestCase
     public function testContainerValidationTriggers()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(array('getType', 'setValue', '__toString'))
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
-        $foo = $mockContainer->addElement('text', 'foo', array('id' => 'foo'));
-        $bar = $mockContainer->addElement('text', 'bar', array('id' => 'bar'));
+        $foo = $mockContainer->addElement('text', 'foo', ['id' => 'foo']);
+        $bar = $mockContainer->addElement('text', 'bar', ['id' => 'bar']);
 
         $nonEmpty = new HTML_QuickForm2_Rule_Nonempty($mockContainer, 'an error');
         $this->assertContains('["foo","bar"]', $nonEmpty->getJavascript());

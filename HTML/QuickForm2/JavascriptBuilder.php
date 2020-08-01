@@ -41,13 +41,13 @@ class HTML_QuickForm2_JavascriptBuilder
     * Client-side rules
     * @var array
     */
-    protected $rules = array();
+    protected $rules = [];
 
    /**
     * Elements' setup code
     * @var array
     */
-    protected $scripts = array();
+    protected $scripts = [];
 
    /**
     * Whether to generate a validator object for the form if no rules are present
@@ -56,15 +56,15 @@ class HTML_QuickForm2_JavascriptBuilder
     *
     * @var array
     */
-    protected $forceValidator = array();
+    protected $forceValidator = [];
 
     /**
     * Javascript libraries
     * @var array
     */
-    protected $libraries = array(
-        'base' => array('file' => 'quickform.js')
-    );
+    protected $libraries = [
+        'base' => ['file' => 'quickform.js']
+    ];
 
    /**
     * Default web path to JS library files
@@ -125,9 +125,9 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public function addLibrary($name, $fileName, $webPath = null, $absPath = null)
     {
-        $this->libraries[strtolower($name)] = array(
+        $this->libraries[strtolower($name)] = [
             'file' => $fileName, 'webPath' => $webPath, 'absPath' => $absPath
-        );
+        ];
     }
 
 
@@ -142,7 +142,7 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public function getLibraries($inline = false, $addScriptTags = true)
     {
-        $ret = $inline? '': array();
+        $ret = $inline? '': [];
         foreach ($this->libraries as $name => $library) {
             if ($inline) {
                 $path = !empty($library['absPath'])? $library['absPath']: $this->defaultAbsPath;
@@ -181,8 +181,8 @@ class HTML_QuickForm2_JavascriptBuilder
     public function setFormId($formId)
     {
         $this->formId = $formId;
-        $this->rules[$this->formId]          = array();
-        $this->scripts[$this->formId]        = array();
+        $this->rules[$this->formId]          = [];
+        $this->scripts[$this->formId]        = [];
         $this->forceValidator[$this->formId] = false;
     }
 
@@ -322,32 +322,32 @@ class HTML_QuickForm2_JavascriptBuilder
             return $value;
 
         } elseif (is_string($value)) {
-            return '"' . strtr($value, array(
+            return '"' . strtr($value, [
                                 "\r" => '\r',
                                 "\n" => '\n',
                                 "\t" => '\t',
                                 "'"  => "\\'",
                                 '"'  => '\"',
                                 '\\' => '\\\\'
-                              )) . '"';
+                ]) . '"';
 
         } elseif (is_array($value)) {
             // associative array, encoding as JS object
             if (count($value) && array_keys($value) !== range(0, count($value) - 1)) {
                 return '{' . implode(',', array_map(
-                    array('HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'),
+                    ['HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'],
                     array_keys($value), array_values($value)
                 )) . '}';
             }
             return '[' . implode(',', array_map(
-                array('HTML_QuickForm2_JavascriptBuilder', 'encode'),
+                ['HTML_QuickForm2_JavascriptBuilder', 'encode'],
                 $value
             )) . ']';
 
         } elseif (is_object($value)) {
             $vars = get_object_vars($value);
             return '{' . implode(',', array_map(
-                array('HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'),
+                ['HTML_QuickForm2_JavascriptBuilder', 'encodeNameValue'],
                 array_keys($vars), array_values($vars)
             )) . '}';
 

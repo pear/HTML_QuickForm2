@@ -29,62 +29,62 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
 {
     public function setUp()
     {
-        $_GET = array(
+        $_GET = [
             'foo' => 'some value',
             'bar' => 'o\\\'really',
-            'baz' => array(
+            'baz' => [
                 'key' => 'some other value',
                 'unescape' => 'me\\\\please'
-            )
-        );
+            ]
+        ];
 
-        $_POST = array(
+        $_POST = [
             'foo' => 'post value',
             'bar' => 'yes\\\'really',
-            'baz' => array(
+            'baz' => [
                 'key' => 'yet another value',
                 'unescape' => 'or\\\\else'
-            )
-        );
+            ]
+        ];
 
-        $_FILES = array(
-            'foo' => array(
+        $_FILES = [
+            'foo' => [
                 'name'      => 'file.doc',
                 'tmp_name'  => '/tmp/nothing',
                 'type'      => 'text/plain',
                 'size'      => 1234,
                 'error'     => UPLOAD_ERR_OK
-            ),
-            'bar' => array(
-                'name'      => array('key' => 'a\\\'thing\\\'.foobar'),
-                'tmp_name'  => array('key' => 'C:\\windows\\temp\\whatever'),
-                'type'      => array('key' => 'application/foobar'),
-                'size'      => array('key' => 4321),
-                'error'     => array('key' => UPLOAD_ERR_OK)
-            ),
-            'baz' => array(
-                'name'      => array(
-                                'two' => array('three' => 'grimoire.txt'),
-                                'escape' => array('o\'really' => '123.jpeg')
-                               ),
-                'tmp_name'  => array(
-                                'two' => array('three' => '/mount/tmp/asdzxc'),
-                                'escape' => array('o\'really' => 'C:\\upload\\somefile')
-                               ),
-                'type'      => array(
-                                'two' => array('three' => 'text/unreadable'),
-                                'escape' => array('o\'really' => 'image/pr0n')
-                               ),
-                'size'      => array(
-                                'two' => array('three' => 65536),
-                                'escape' => array('o\'really' => 5678)
-                               ),
-                'error'     => array(
-                                'two' => array('three' => UPLOAD_ERR_OK),
-                                'escape' => array('o\'really' => UPLOAD_ERR_OK)
-                               )
-            )
-        );
+            ],
+            'bar' => [
+                'name'      => ['key' => 'a\\\'thing\\\'.foobar'],
+                'tmp_name'  => ['key' => 'C:\\windows\\temp\\whatever'],
+                'type'      => ['key' => 'application/foobar'],
+                'size'      => ['key' => 4321],
+                'error'     => ['key' => UPLOAD_ERR_OK]
+            ],
+            'baz' => [
+                'name'      => [
+                                'two' => ['three' => 'grimoire.txt'],
+                                'escape' => ['o\'really' => '123.jpeg']
+                ],
+                'tmp_name'  => [
+                                'two' => ['three' => '/mount/tmp/asdzxc'],
+                                'escape' => ['o\'really' => 'C:\\upload\\somefile']
+                ],
+                'type'      => [
+                                'two' => ['three' => 'text/unreadable'],
+                                'escape' => ['o\'really' => 'image/pr0n']
+                ],
+                'size'      => [
+                                'two' => ['three' => 65536],
+                                'escape' => ['o\'really' => 5678]
+                ],
+                'error'     => [
+                                'two' => ['three' => UPLOAD_ERR_OK],
+                                'escape' => ['o\'really' => UPLOAD_ERR_OK]
+                ]
+            ]
+        ];
     }
 
     public function testRequestMethodGet()
@@ -114,27 +114,27 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
     public function testGetUpload()
     {
         $ds1 = new HTML_QuickForm2_DataSource_SuperGlobal('POST', false);
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name'      => 'file.doc',
             'tmp_name'  => '/tmp/nothing',
             'type'      => 'text/plain',
             'size'      => 1234,
             'error'     => UPLOAD_ERR_OK
-        ), $ds1->getUpload('foo'));
-        $this->assertEquals(array(
+        ], $ds1->getUpload('foo'));
+        $this->assertEquals([
             'name'      => 'a\\\'thing\\\'.foobar',
             'tmp_name'  => 'C:\\windows\\temp\\whatever',
             'type'      => 'application/foobar',
             'size'      => 4321,
             'error'     => UPLOAD_ERR_OK
-        ), $ds1->getUpload('bar[key]'));
-        $this->assertEquals(array(
+        ], $ds1->getUpload('bar[key]'));
+        $this->assertEquals([
             'name'      => 'grimoire.txt',
             'tmp_name'  => '/mount/tmp/asdzxc',
             'type'      => 'text/unreadable',
             'size'      => 65536,
             'error'     => UPLOAD_ERR_OK
-        ), $ds1->getUpload('baz[two][three]'));
+        ], $ds1->getUpload('baz[two][three]'));
     }
 
    /**
@@ -143,13 +143,13 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
     public function testQuotesAndBackslashesEscaped()
     {
         $ds = new HTML_QuickForm2_DataSource_SuperGlobal('POST');
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name'      => '123.jpeg',
             'tmp_name'  => 'C:\\upload\\somefile',
             'type'      => 'image/pr0n',
             'size'      => 5678,
             'error'     => UPLOAD_ERR_OK
-        ), $ds->getUpload('baz[escape][o\'really]'));
+        ], $ds->getUpload('baz[escape][o\'really]'));
     }
 }
 ?>

@@ -57,7 +57,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     * Additional renderer methods to proxy via __call(), as returned by exportMethods()
     * @var array
     */
-    private $_rendererMethods = array();
+    private $_rendererMethods = [];
 
    /**
     * Reference to a list of registered renderer plugins for that renderer type
@@ -69,7 +69,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     * Plugins for this renderer
     * @var array
     */
-    private $_plugins = array();
+    private $_plugins = [];
 
    /**
     * Plugin methods to call via __call() magic method
@@ -78,7 +78,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     *
     * @var array
     */
-    private $_pluginMethods = array();
+    private $_pluginMethods = [];
 
    /**
     * Constructor, sets proxied renderer and its plugins
@@ -108,13 +108,13 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         $lower = strtolower($name);
         if (isset($this->_rendererMethods[$lower])) {
             // support fluent interfaces
-            $ret = call_user_func_array(array($this->_renderer, $name), $arguments);
+            $ret = call_user_func_array([$this->_renderer, $name], $arguments);
             return $ret === $this->_renderer? $this: $ret;
         }
         $this->updatePlugins();
         if (isset($this->_pluginMethods[$lower])) {
             return call_user_func_array(
-                array($this->_plugins[$this->_pluginMethods[$lower]], $name),
+                [$this->_plugins[$this->_pluginMethods[$lower]], $name],
                 $arguments
             );
         }
@@ -163,7 +163,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
             list($className, $includeFile) = $this->_pluginClasses[$i];
             HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
 
-            $methods    = array();
+            $methods    = [];
             $plugin     = new $className;
             $reflection = new ReflectionObject($plugin);
             foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {

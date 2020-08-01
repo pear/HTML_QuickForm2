@@ -53,7 +53,7 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
      * Empty list of javascript libraries, base one(s) are in original builder
      * @var array
      */
-    protected $libraries = array();
+    protected $libraries = [];
 
 
     /**
@@ -63,7 +63,7 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
      */
     public function getFormJavascriptAsStrings()
     {
-        return array(
+        return [
             self::encode(
                 empty($this->rules['repeat'])
                 ? '' : "[\n" . implode(",\n", $this->rules['repeat']) . "\n]"
@@ -72,7 +72,7 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
                 empty($this->scripts['repeat'])
                 ? '' : implode("\n", $this->scripts['repeat'])
             )
-        );
+        ];
     }
 
     /**

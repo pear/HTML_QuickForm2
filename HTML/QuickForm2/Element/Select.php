@@ -48,7 +48,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * Values for the select element (i.e. values of the selected options)
     * @var  array
     */
-    protected $values = array();
+    protected $values = [];
 
    /**
     * Possible values for select elements
@@ -57,7 +57,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * some option and that option is not disabled.
     * @var array
     */
-    protected $possibleValues = array();
+    protected $possibleValues = [];
 
 
    /**
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     * Enable intrinsic validation by default
     * @var  array
     */
-    protected $data = array('intrinsic_validation' => true);
+    protected $data = ['intrinsic_validation' => true];
 
    /**
     * Class constructor
@@ -89,9 +89,9 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if junk is given in $options
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
-        $options = isset($data['options'])? $data['options']: array();
+        $options = isset($data['options'])? $data['options']: [];
         unset($data['options']);
         parent::__construct($name, $attributes, $data);
         $this->loadOptions($options);
@@ -127,8 +127,8 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         if (null === ($value = $this->getValue())) {
             return '&nbsp;';
         }
-        $valueHash = is_array($value)? array_flip($value): array($value => true);
-        $options   = array();
+        $valueHash = is_array($value)? array_flip($value): [$value => true];
+        $options   = [];
         foreach ($this->optionContainer->getRecursiveIterator() as $child) {
             if (is_array($child) && isset($valueHash[$child['attr']['value']])
                 && empty($child['attr']['disabled'])
@@ -142,12 +142,12 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             $name = $this->attributes['name'] .
                     (empty($this->attributes['multiple'])? '': '[]');
             // Only use id attribute if doing single hidden input
-            $idAttr = (1 == count($valueHash))? array('id' => $this->getId()): array();
+            $idAttr = (1 == count($valueHash))? ['id' => $this->getId()] : [];
             foreach ($valueHash as $key => $item) {
-                $html .= '<input type="hidden"' . self::getAttributesString(array(
+                $html .= '<input type="hidden"' . self::getAttributesString([
                              'name'  => $name,
                              'value' => $key
-                         ) + $idAttr) . ' />';
+                        ] + $idAttr) . ' />';
             }
         }
         return $html;
@@ -178,7 +178,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             return null;
         }
 
-        $values = array();
+        $values = [];
         foreach ($this->values as $value) {
             if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value])) {
                 $values[] = $value;
@@ -209,7 +209,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         if (is_array($value)) {
             $this->values = array_values($value);
         } else {
-            $this->values = array($value);
+            $this->values = [$value];
         }
         return $this;
     }
@@ -246,7 +246,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function loadOptions(array $options)
     {
-        $this->possibleValues  = array();
+        $this->possibleValues  = [];
         $this->optionContainer = new HTML_QuickForm2_Element_Select_OptionContainer(
             $this->values, $this->possibleValues
         );

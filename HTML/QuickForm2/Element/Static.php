@@ -54,7 +54,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     * - content: Content of the static element
     * @var  array
     */
-    protected $data = array('content' => '');
+    protected $data = ['content' => ''];
 
    /**
     * Class constructor
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     * @param string|array $attributes Attributes (either a string or an array)
     * @param array        $data       Additional element data
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         if (!empty($data['tagName'])) {
             $this->setTagName(
@@ -211,7 +211,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
 
     public function getJavascriptTriggers()
     {
-        return array();
+        return [];
     }
 
    /**
@@ -248,7 +248,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     {
         // Prevent people shooting themselves in the proverbial foot
         if (in_array(strtolower($name),
-                     array('form', 'fieldset', 'button', 'input', 'select', 'textarea'))
+                     ['form', 'fieldset', 'button', 'input', 'select', 'textarea'])
         ) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Do not use tag name '{$name}' with Static element, use proper element class"

@@ -78,7 +78,7 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     protected function getJavascriptCallback()
     {
         $rule      = clone $this->getConfig();
-        $callbacks = array();
+        $callbacks = [];
         foreach ($this->owner->getRecursiveIterator(RecursiveIteratorIterator::LEAVES_ONLY) as $child) {
             try {
                 $rule->setOwner($child);

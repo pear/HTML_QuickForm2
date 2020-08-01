@@ -47,8 +47,8 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($mockEl, 'an error', 1024);
@@ -62,16 +62,16 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testMissingUploadsAreSkipped()
     {
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
-                     ->will($this->returnValue(array(
+                     ->will($this->returnValue([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                     )));
+                     ]));
         $maxSize = new HTML_QuickForm2_Rule_MaxFileSize($mockNoUpload, 'an error', 1024);
         $this->assertTrue($maxSize->validate());
     }
@@ -79,16 +79,16 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue(array(
+                 ->will($this->returnValue([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => dirname(__DIR__) . '/_files/1024-bytes.upload',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 1024
-                 )));
+                 ]));
         $size512 = new HTML_QuickForm2_Rule_MaxFileSize($mockFile, 'too big', 512);
         $this->assertFalse($size512->validate());
 
@@ -99,16 +99,16 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testConfigHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue(array(
+                 ->will($this->returnValue([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => dirname(__DIR__) . '/_files/1024-bytes.upload',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 1024
-                 )));
+                 ]));
 
         HTML_QuickForm2_Factory::registerRule('filesize-512', 'HTML_QuickForm2_Rule_MaxFileSize',
                                               null, 512);
@@ -124,16 +124,16 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends PHPUnit_Framework_TestCase
     public function testConfigOverridesOptions()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->once())->method('getValue')
-                 ->will($this->returnValue(array(
+                 ->will($this->returnValue([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => dirname(__DIR__) . '/_files/1024-bytes.upload',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 1024
-                 )));
+                 ]));
         HTML_QuickForm2_Factory::registerRule('filesize-override-512', 'HTML_QuickForm2_Rule_MaxFileSize',
                                               null, 512);
         $maxSize = $mockFile->addRule('filesize-override-512', 'too big', 10240);

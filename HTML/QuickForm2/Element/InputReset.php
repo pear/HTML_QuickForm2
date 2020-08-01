@@ -37,7 +37,7 @@
  */
 class HTML_QuickForm2_Element_InputReset extends HTML_QuickForm2_Element_Input
 {
-    protected $attributes = array('type' => 'reset');
+    protected $attributes = ['type' => 'reset'];
 
    /**
     * Reset buttons can not be frozen

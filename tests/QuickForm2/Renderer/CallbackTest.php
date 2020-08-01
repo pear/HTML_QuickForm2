@@ -90,17 +90,17 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
     public function testRenderElementUsingMostAppropriateCallback()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testRenderElement')
+            'text', 'foo', ['id' => 'testRenderElement']
         );
 
         $class = get_class($this);
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForClass(
-                'HTML_QuickForm2_Element_InputText', array($class, '_renderInputText')
+                'HTML_QuickForm2_Element_InputText', [$class, '_renderInputText']
             )->setCallbackForClass(
-                'HTML_QuickForm2_Element_Input', array($class, '_renderInput')
+                'HTML_QuickForm2_Element_Input', [$class, '_renderInput']
             )->setCallbackForId(
-                'testRenderElement', array($class, '_renderTestRenderElement')
+                'testRenderElement', [$class, '_renderTestRenderElement']
             );
 
         $this->assertEquals(
@@ -124,13 +124,13 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
     public function testRenderRequiredElement()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testRenderRequiredElement')
+            'text', 'foo', ['id' => 'testRenderRequiredElement']
         );
 
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForId(
                 'testRenderRequiredElement',
-                array(get_class($this), '_renderTestRenderRequiredElement')
+                [get_class($this), '_renderTestRenderRequiredElement']
             );
         $this->assertEquals(
             $element->__toString(),
@@ -147,12 +147,12 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithValidationError()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testElementWithError')
+            'text', 'foo', ['id' => 'testElementWithError']
         );
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForId(
                 'testElementWithError',
-                array(get_class($this), '_renderTestElementWithError')
+                [get_class($this), '_renderTestElementWithError']
             );
 
         $this->assertEquals(
@@ -179,12 +179,12 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithSingleLabel()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testSingleLabel')
+            'text', 'foo', ['id' => 'testSingleLabel']
         );
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForId(
                 'testSingleLabel',
-                array(get_class($this), '_renderTestSingleLabel')
+                [get_class($this), '_renderTestSingleLabel']
             );
 
         $this->assertEquals(
@@ -201,12 +201,12 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithMultipleLabels()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testMultipleLabels')
-        )->setLabel(array('first', 'second'));
+            'text', 'foo', ['id' => 'testMultipleLabels']
+        )->setLabel(['first', 'second']);
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForId(
                 'testMultipleLabels',
-                array(get_class($this), '_renderTestMultipleLabels')
+                [get_class($this), '_renderTestMultipleLabels']
             );
 
         $this->assertEquals(
@@ -214,7 +214,7 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
             $element->render($renderer->reset())->__toString()
         );
 
-        $element->setLabel(array('another', 'foo' => 'foo'));
+        $element->setLabel(['another', 'foo' => 'foo']);
         $this->assertEquals(
             'First label: another' . $element->__toString() . 'Named label: foo',
             $element->render($renderer->reset())->__toString()
@@ -240,11 +240,11 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
         $form     = new HTML_QuickForm2('groupedErrors');
         $element  = $form->addText('testGroupedErrors')->setError('Some error');
         $renderer = HTML_Quickform2_Renderer::factory('callback')
-            ->setOption(array(
+            ->setOption([
                 'group_errors'  => true,
                 'errors_prefix' => 'Your errors:',
                 'errors_suffix' => ''
-            ));
+            ]);
 
         $this->assertContains(
             '<div class="errors"><p>Your errors:</p><ul><li>Some error</li></ul></div>',
@@ -295,23 +295,23 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testRenderGroupedElementUsingMostAppropriateTemplate()
     {
-        $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testRenderGroup'));
-        $element = $group->addElement('text', 'bar', array('id' => 'testRenderGroupedElement'));
+        $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', ['id' => 'testRenderGroup']);
+        $element = $group->addElement('text', 'bar', ['id' => 'testRenderGroupedElement']);
 
         $class= get_class($this);
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setCallbackForClass(
                 'HTML_QuickForm2_Element_InputText',
-                array($class, '_renderGroupInputText')
+                [$class, '_renderGroupInputText']
             )->setElementCallbackForGroupClass(
                 'HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input',
-                array($class, '_renderGroupInput')
+                [$class, '_renderGroupInput']
             )->setElementCallbackForGroupId(
                 'testRenderGroup', 'HTML_QuickForm2_Element',
-                array($class, '_renderGroup')
+                [$class, '_renderGroup']
             )->setCallbackForId(
                 'testRenderGroupedElement',
-                array($class, '_renderGroupedElement')
+                [$class, '_renderGroupedElement']
             );
 
         $this->assertContains(
@@ -361,15 +361,15 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
 
     public function testRenderGroupedElementsWithSeparators()
     {
-        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testSeparators'));
+        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', ['id' => 'testSeparators']);
         $element1 = $group->addElement('text', 'bar');
         $element2 = $group->addElement('text', 'baz');
         $element3 = $group->addElement('text', 'quux');
 
         $renderer = HTML_Quickform2_Renderer::factory('callback')
-            ->setCallbackForId('testSeparators', array(get_class($this), '_renderTestSeparators'))
+            ->setCallbackForId('testSeparators', [get_class($this), '_renderTestSeparators'])
             ->setElementCallbackForGroupId(
-                'testSeparators', 'HTML_QuickForm2_Element_InputText', array(get_class($this), '_renderTestSeparators2')
+                'testSeparators', 'HTML_QuickForm2_Element_InputText', [get_class($this), '_renderTestSeparators2']
             );
 
         $this->assertEquals(
@@ -383,7 +383,7 @@ class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
             $group->render($renderer->reset())->__toString()
         );
 
-        $group->setSeparator(array('<br />', '&nbsp;'));
+        $group->setSeparator(['<br />', '&nbsp;']);
         $this->assertEquals(
             '<foo>' . $element1 . '</foo><br /><foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
             $group->render($renderer->reset())->__toString()

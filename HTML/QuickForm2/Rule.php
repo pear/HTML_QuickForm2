@@ -92,7 +92,7 @@ abstract class HTML_QuickForm2_Rule
     *
     * @var  array
     */
-    protected $chainedRules = array(array());
+    protected $chainedRules = [[]];
 
 
    /**
@@ -260,7 +260,7 @@ abstract class HTML_QuickForm2_Rule
                 'or_(): Cannot add a "required" rule'
             );
         }
-        $this->chainedRules[] = array($next);
+        $this->chainedRules[] = [$next];
         return $this;
     }
 
@@ -390,9 +390,9 @@ abstract class HTML_QuickForm2_Rule
               : 'new qf.Rule(' . $js;
 
         if (count($this->chainedRules) > 1 || count($this->chainedRules[0]) > 0) {
-            $chained = array();
+            $chained = [];
             foreach ($this->chainedRules as $item) {
-                $multipliers = array();
+                $multipliers = [];
                 /* @var $multiplier HTML_QuickForm2_Rule */
                 foreach ($item as $multiplier) {
                     $multipliers[] = $multiplier->getJavascript(false);

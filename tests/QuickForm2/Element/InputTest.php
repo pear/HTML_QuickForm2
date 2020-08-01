@@ -27,7 +27,7 @@ require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Element_InputImpl extends HTML_QuickForm2_Element_Input
 {
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         parent::__construct($name, $attributes, $data);
         $this->attributes['type'] = 'concrete';

@@ -46,13 +46,13 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     * Data sources providing values for form elements
     * @var array
     */
-    protected $datasources = array();
+    protected $datasources = [];
 
    /**
     * We do not allow setting "method" and "id" other than through constructor
     * @var array
     */
-    protected $watchedAttributes = array('id', 'method');
+    protected $watchedAttributes = ['id', 'method'];
 
    /**
     * Class constructor, form's "id" and "method" attributes can only be set here
@@ -71,7 +71,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         $trackSubmit = empty($id) ? false : $trackSubmit;
         $this->attributes = array_merge(
             self::prepareAttributes($attributes),
-            array('method' => $method)
+            ['method' => $method]
         );
         parent::setId(empty($id) ? null : $id);
         if (!isset($this->attributes['action'])) {
@@ -85,10 +85,10 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         }
         if ($trackSubmit) {
             $this->appendChild(HTML_QuickForm2_Factory::createElement(
-                'hidden', '_qf__' . $id, array('id' => 'qf:' . $id)
+                'hidden', '_qf__' . $id, ['id' => 'qf:' . $id]
             ));
         }
-        $this->addFilter(array($this, 'skipInternalFields'));
+        $this->addFilter([$this, 'skipInternalFields']);
     }
 
     protected function onAttributeChange($name, $value = null)

@@ -50,21 +50,21 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * Various options to control the element's display.
     * @var      array
     */
-    protected $data = array(
+    protected $data = [
         'format'           => 'dMY',
         'minYear'          => 2001,
         'maxYear'          => null, // set in the constructor
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',
-        'optionIncrement'  => array('i' => 1, 's' => 1),
+        'optionIncrement'  => ['i' => 1, 's' => 1],
         // request #4061: max and min hours (only for 'H' modifier)
         'minHour'          => 0,
         'maxHour'          => 23,
         // request #5957: max and min months
         'minMonth'         => 1,
         'maxMonth'         => 12
-    );
+    ];
 
    /**
     * Language code
@@ -124,7 +124,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     *
     * @throws HTML_QuickForm2_InvalidArgumentException
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         if (isset($data['messageProvider'])) {
             if (!is_callable($data['messageProvider'])
@@ -156,7 +156,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         parent::__construct($name, $attributes, $data);
 
         $backslash = false;
-        $separators = array();
+        $separators = [];
         $separator =  '';
 
         for ($i = 0, $length = strlen($this->data['format']); $i < $length; $i++) {
@@ -166,18 +166,18 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 $separator .= $sign;
             } else {
                 $loadSelect = true;
-                $options    = array();
+                $options    = [];
                 switch ($sign) {
                 case 'D':
                     // Sunday is 0 like with 'w' in date()
                     $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                               ? $this->messageProvider->get(array('date', 'weekdays_short'), $this->language)
-                               : call_user_func($this->messageProvider, array('date', 'weekdays_short'), $this->language);
+                               ? $this->messageProvider->get(['date', 'weekdays_short'], $this->language)
+                               : call_user_func($this->messageProvider, ['date', 'weekdays_short'], $this->language);
                     break;
                 case 'l':
                     $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                               ? $this->messageProvider->get(array('date', 'weekdays_long'), $this->language)
-                               : call_user_func($this->messageProvider, array('date', 'weekdays_long'), $this->language);
+                               ? $this->messageProvider->get(['date', 'weekdays_long'], $this->language)
+                               : call_user_func($this->messageProvider, ['date', 'weekdays_long'], $this->language);
                     break;
                 case 'd':
                     $options = $this->createOptionList(1, 31);
@@ -193,8 +193,8 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     if ('M' == $sign || 'F' == $sign) {
                         $key   = 'M' == $sign ? 'months_short' : 'months_long';
                         $names = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                                 ? $this->messageProvider->get(array('date', $key), $this->language)
-                                 : call_user_func($this->messageProvider, array('date', $key), $this->language);
+                                 ? $this->messageProvider->get(['date', $key], $this->language)
+                                 : call_user_func($this->messageProvider, ['date', $key], $this->language);
                         foreach ($options as $k => &$v) {
                             $v = $names[$k - 1];
                         }
@@ -213,14 +213,14 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                         $this->data['maxYear'],
                         $this->data['minYear'] > $this->data['maxYear']? -1: 1
                     );
-                    array_walk($options, array($this, '_shortYearCallback'));
+                    array_walk($options, [$this, '_shortYearCallback']);
                     break;
                 case 'h':
                     $options = $this->createOptionList(1, 12);
                     break;
                 case 'g':
                     $options = $this->createOptionList(1, 12);
-                    array_walk($options, array($this, '_shortHourCallback'));
+                    array_walk($options, [$this, '_shortHourCallback']);
                     break;
                 case 'H':
                     $options = $this->createOptionList(
@@ -236,10 +236,10 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     $options = $this->createOptionList(0, 59, $this->data['optionIncrement']['s']);
                     break;
                 case 'a':
-                    $options = array('am' => 'am', 'pm' => 'pm');
+                    $options = ['am' => 'am', 'pm' => 'pm'];
                     break;
                 case 'A':
-                    $options = array('AM' => 'AM', 'PM' => 'PM');
+                    $options = ['AM' => 'AM', 'PM' => 'PM'];
                     break;
                 case 'W':
                     $options = $this->createOptionList(1, 53);
@@ -264,12 +264,12 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     ) {
                         // Using '+' array operator to preserve the keys
                         if (is_array($this->data['emptyOptionText']) && !empty($this->data['emptyOptionText'][$sign])) {
-                            $options = array($this->data['emptyOptionValue'] => $this->data['emptyOptionText'][$sign]) + $options;
+                            $options = [$this->data['emptyOptionValue'] => $this->data['emptyOptionText'][$sign]] + $options;
                         } else {
-                            $options = array($this->data['emptyOptionValue'] => $this->data['emptyOptionText']) + $options;
+                            $options = [$this->data['emptyOptionValue'] => $this->data['emptyOptionText']] + $options;
                         }
                     }
-                    $this->addSelect($sign, array('id' => self::generateId($this->getName() . "[{$sign}]"))
+                    $this->addSelect($sign, ['id' => self::generateId($this->getName() . "[{$sign}]")]
                                             + $this->getAttributes())
                          ->loadOptions($options);
                 }
@@ -312,7 +312,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     */
     protected function createOptionList($start, $end, $step = 1)
     {
-        for ($i = $start, $options = array(); $start > $end? $i >= $end: $i <= $end; $i += $step) {
+        for ($i = $start, $options = []; $start > $end? $i >= $end: $i <= $end; $i += $step) {
             $options[$i] = sprintf('%02d', $i);
         }
         return $options;
@@ -347,10 +347,10 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     public function setValue($value)
     {
         if (empty($value)) {
-            $value = array();
+            $value = [];
 
         } elseif (is_array($value)) {
-            $value = array_map(array($this, 'trimLeadingZeros'), $value);
+            $value = array_map([$this, 'trimLeadingZeros'], $value);
 
         } elseif (is_scalar($value) || $value instanceof DateTime) {
             if ($value instanceof DateTime) {
@@ -362,7 +362,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 // might be a unix epoch, then we fill all possible values
                 $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));
             }
-            $value = array(
+            $value = [
                 'D' => $arr[0],
                 'l' => $arr[0],
                 'd' => $arr[1],
@@ -379,7 +379,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 'a' => $arr[8],
                 'A' => $arr[9],
                 'W' => $this->trimLeadingZeros($arr[10])
-            );
+            ];
         }
         return parent::setValue($value);
     }

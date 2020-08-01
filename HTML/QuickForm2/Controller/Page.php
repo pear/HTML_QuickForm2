@@ -63,7 +63,7 @@ abstract class HTML_QuickForm2_Controller_Page
     * Contains the mapping of action names to handlers (objects implementing HTML_QuickForm2_Controller_Action)
     * @var  array
     */
-    protected $handlers = array();
+    protected $handlers = [];
 
    /**
     * Class constructor, accepts the form to wrap around
@@ -169,7 +169,7 @@ abstract class HTML_QuickForm2_Controller_Page
         if (0 == count($this->form)) {
             $image = $this->form->appendChild(
                 new HTML_QuickForm2_Controller_DefaultAction(
-                    $this->getButtonName($actionName), array('src' => $imageSrc)
+                    $this->getButtonName($actionName), ['src' => $imageSrc]
                 )
             );
 
@@ -185,7 +185,7 @@ abstract class HTML_QuickForm2_Controller_Page
             $it->rewind();
             $image = $this->form->insertBefore(
                 new HTML_QuickForm2_Controller_DefaultAction(
-                    $this->getButtonName($actionName), array('src' => $imageSrc)
+                    $this->getButtonName($actionName), ['src' => $imageSrc]
                 ),
                 $it->current()
             );
@@ -202,7 +202,7 @@ abstract class HTML_QuickForm2_Controller_Page
             if (!empty($this->controller) && $this->controller->propagateId()) {
                 $this->form->addElement(
                     'hidden', HTML_QuickForm2_Controller::KEY_ID,
-                    array('id' => 'qf:controller-id')
+                    ['id' => 'qf:controller-id']
                 )->setValue($this->controller->getId());
             }
             $this->populateForm();

@@ -49,7 +49,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     */
     protected $value = null;
 
-    protected $attributes = array('type' => 'file');
+    protected $attributes = ['type' => 'file'];
 
    /**
     * Message provider for upload error messages
@@ -72,7 +72,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
     * @param array        $data       Data used to set up error messages for PHP's
     *                                 file upload errors.
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         if (isset($data['messageProvider'])) {
             if (!is_callable($data['messageProvider'])
@@ -196,11 +196,11 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
             return false;
         }
         if (isset($this->value['error'])
-            && !in_array($this->value['error'], array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE))
+            && !in_array($this->value['error'], [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])
         ) {
             $errorMessage = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
-                            ? $this->messageProvider->get(array('file', $this->value['error']), $this->language)
-                            : call_user_func($this->messageProvider, array('file', $this->value['error']), $this->language);
+                            ? $this->messageProvider->get(['file', $this->value['error']], $this->language)
+                            : call_user_func($this->messageProvider, ['file', $this->value['error']], $this->language);
             if (UPLOAD_ERR_INI_SIZE == $this->value['error']) {
                 $iniSize = ini_get('upload_max_filesize');
                 $size    = intval($iniSize);
@@ -224,14 +224,14 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         return parent::validate();
     }
 
-    public function addFilter($callback, array $options = array())
+    public function addFilter($callback, array $options = [])
     {
         throw new HTML_QuickForm2_Exception(
             'InputFile elements do not support filters'
         );
     }
 
-    public function addRecursiveFilter($callback, array $options = array())
+    public function addRecursiveFilter($callback, array $options = [])
     {
         throw new HTML_QuickForm2_Exception(
             'InputFile elements do not support filters'

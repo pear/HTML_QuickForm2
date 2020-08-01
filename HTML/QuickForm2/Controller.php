@@ -77,13 +77,13 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * Contains the pages (instances of HTML_QuickForm2_Controller_Page) of the multipage form
     * @var array
     */
-    protected $pages = array();
+    protected $pages = [];
 
    /**
     * Contains the mapping of action names to handlers (objects implementing HTML_QuickForm2_Controller_Action)
     * @var array
     */
-    protected $handlers = array();
+    protected $handlers = [];
 
    /**
     * The action extracted from HTTP request: array('page', 'action')
@@ -222,13 +222,13 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
         $regex = '/^_qf_(' . implode('|', $names) . ')_(.+?)(_x)?$/';
         foreach (array_keys($_REQUEST) as $key) {
             if (preg_match($regex, $key, $matches)) {
-                $this->actionName = array($matches[1], $matches[2]);
+                $this->actionName = [$matches[1], $matches[2]];
                 break;
             }
         }
         if (!is_array($this->actionName)) {
             reset($this->pages);
-            $this->actionName = array(key($this->pages), 'display');
+            $this->actionName = [key($this->pages), 'display'];
         }
         return $this->actionName;
     }
@@ -275,7 +275,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     public function handle(HTML_QuickForm2_Controller_Page $page, $actionName)
     {
         if (!isset($this->handlers[$actionName])
-            && in_array($actionName, array('next', 'back', 'submit', 'display', 'jump'))
+            && in_array($actionName, ['next', 'back', 'submit', 'display', 'jump'])
         ) {
             $className = 'HTML_QuickForm2_Controller_Action_' . ucfirst($actionName);
             // pear-package-only HTML_QuickForm2_Loader::loadClass($className);
@@ -389,7 +389,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
                     // Empty Session datasource makes the form look submitted
                     $page->getForm()->setDatasources(array_merge(
                         $container->getDatasources(),
-                        array(new HTML_QuickForm2_DataSource_Session(array()))
+                        [new HTML_QuickForm2_DataSource_Session([])]
                     ));
                     // This will store the "submitted" values in session and
                     // return validation status
@@ -430,7 +430,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     {
         $this->getSessionContainer()->storeDatasources(
             array_merge(
-                $this->getSessionContainer()->getDatasources(), array($datasource)
+                $this->getSessionContainer()->getDatasources(), [$datasource]
             )
         );
     }
@@ -442,7 +442,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function getValue()
     {
-        $values = array();
+        $values = [];
         foreach (array_keys($this->pages) as $id) {
             $values = HTML_QuickForm2_Container::arrayMerge(
                 $values, $this->getSessionContainer()->getValues($id)

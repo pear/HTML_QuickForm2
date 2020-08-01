@@ -27,11 +27,11 @@ require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
  */
 class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
 {
-    protected $nodeAbstractMethods = array(
+    protected $nodeAbstractMethods = [
         'updateValue', 'getId', 'getName', 'getType', 'getRawValue', 'setId',
         'setName', 'setValue', '__toString', 'getJavascriptValue',
         'getJavascriptTriggers', 'render'
-    );
+    ];
 
     public function testMakesElementRequired()
     {
@@ -49,8 +49,8 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $rule = $mockNode->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(array('validateOwner'))
-                ->setConstructorArgs(array($mockNode, 'some message'))
+                ->setMethods(['validateOwner'])
+                ->setConstructorArgs([$mockNode, 'some message'])
                 ->getMock()
         );
         try {
@@ -76,8 +76,8 @@ class HTML_QuickForm2_Rule_RequiredTest extends PHPUnit_Framework_TestCase
         try {
             $required->or_(
                 $this->getMockBuilder('HTML_QuickForm2_Rule')
-                    ->setMethods(array('validateOwner'))
-                    ->setConstructorArgs(array($mockNode, 'some message'))
+                    ->setMethods(['validateOwner'])
+                    ->setConstructorArgs([$mockNode, 'some message'])
                     ->getMock()
             );
         } catch (HTML_QuickForm2_Exception $e) {

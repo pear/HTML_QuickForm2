@@ -13,29 +13,29 @@ if (!class_exists('HTML_AJAX_Helper', true)) {
 require_once './support/hierselect-loader.php';
 
 $form = new HTML_QuickForm2('ajaxHierselect');
-$form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-    'syncHS'  => array(2, 16),
-    'asyncHS' => array(2, 16)
-)));
+$form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+    'syncHS'  => [2, 16],
+    'asyncHS' => [2, 16]
+]));
 
 $loader = new OptionLoader();
 
 $fsSync = $form->addElement('fieldset')->setLabel('Sync call');
 
-$fsSync->addElement('hierselect', 'syncHS', array('style' => 'width: 250px;'))
+$fsSync->addElement('hierselect', 'syncHS', ['style' => 'width: 250px;'])
        ->setLabel('Choose package:')
-       ->loadOptions(array($loader->getOptions(), array()),
-                     array($loader, 'getOptions'), 'loadOptionsSync')
+       ->loadOptions([$loader->getOptions(), []],
+                     [$loader, 'getOptions'], 'loadOptionsSync')
        ->setSeparator('<br />');
 
 $fsAsync = $form->addElement('fieldset')->setLabel('Async call');
-$fsAsync->addElement('hierselect', 'asyncHS', array('style' => 'width: 250px;'))
+$fsAsync->addElement('hierselect', 'asyncHS', ['style' => 'width: 250px;'])
         ->setLabel('Choose package again:')
-        ->loadOptions(array($loader->getOptions(), array()),
-                      array($loader, 'getOptions'), 'loadOptionsAsync')
+        ->loadOptions([$loader->getOptions(), []],
+                      [$loader, 'getOptions'], 'loadOptionsAsync')
         ->setSeparator('<br />');
 
-$form->addElement('submit', 'testSubmit', array('value' => 'Send'));
+$form->addElement('submit', 'testSubmit', ['value' => 'Send']);
 
 $renderer = HTML_QuickForm2_Renderer::factory('default');
 $form->render($renderer);

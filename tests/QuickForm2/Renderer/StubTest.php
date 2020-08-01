@@ -44,17 +44,17 @@ class HTML_QuickForm2_Renderer_StubTest extends PHPUnit_Framework_TestCase
     public function testGroupErrors()
     {
         $form     = new HTML_QuickForm2('testGroupErrors');
-        $text     = $form->addText('anElement', array('id' => 'anElement'))
+        $text     = $form->addText('anElement', ['id' => 'anElement'])
                         ->setError('an error');
         $renderer = HTML_QuickForm2_Renderer::factory('stub');
 
         $renderer->setOption('group_errors', false);
         $form->render($renderer);
-        $this->assertEquals(array(), $renderer->getErrors());
+        $this->assertEquals([], $renderer->getErrors());
 
         $renderer->setOption('group_errors', true);
         $form->render($renderer);
-        $this->assertEquals(array('anElement' => 'an error'), $renderer->getErrors());
+        $this->assertEquals(['anElement' => 'an error'], $renderer->getErrors());
     }
 
     public function testGroupHiddens()
@@ -65,11 +65,11 @@ class HTML_QuickForm2_Renderer_StubTest extends PHPUnit_Framework_TestCase
 
         $renderer->setOption('group_hiddens', false);
         $form->render($renderer);
-        $this->assertEquals(array(), $renderer->getHidden());
+        $this->assertEquals([], $renderer->getHidden());
 
         $renderer->setOption('group_hiddens', true);
         $form->render($renderer);
-        $this->assertEquals(array($hidden->__toString()), $renderer->getHidden());
+        $this->assertEquals([$hidden->__toString()], $renderer->getHidden());
     }
 }
 ?>

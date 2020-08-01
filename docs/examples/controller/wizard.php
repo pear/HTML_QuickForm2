@@ -26,10 +26,10 @@ class PageFirst extends HTML_QuickForm2_Controller_Page
         $fs = $this->form->addElement('fieldset')->setLabel('Wizard page 1 of 3');
 
         $radioGroup = $fs->addElement('group')->setLabel('Are you absolutely sure?');
-        $radioGroup->addElement('radio', 'iradYesNo', array('value' => 'Y'), array('content' => 'Yes'));
-        $radioGroup->addElement('radio', 'iradYesNo', array('value' => 'N'), array('content' => 'No'));
+        $radioGroup->addElement('radio', 'iradYesNo', ['value' => 'Y'], ['content' => 'Yes']);
+        $radioGroup->addElement('radio', 'iradYesNo', ['value' => 'N'], ['content' => 'No']);
 
-        $fs->addElement('submit', $this->getButtonName('next'), array('value' => 'Next >>'));
+        $fs->addElement('submit', $this->getButtonName('next'), ['value' => 'Next >>']);
 
         $radioGroup->addRule('required', 'Check Yes or No');
 
@@ -43,18 +43,18 @@ class PageSecond extends HTML_QuickForm2_Controller_Page
     {
         $fs = $this->form->addElement('fieldset')->setLabel('Wizard page 2 of 3');
 
-        $nameGroup = $fs->addElement('group', 'name', array('id' => 'nameGrp'))
+        $nameGroup = $fs->addElement('group', 'name', ['id' => 'nameGrp'])
                         ->setLabel('Name:')
                         ->setSeparator('<span class="separator">,</span>');
-        $nameGroup->addElement('text', 'last', array('size' => 20))
+        $nameGroup->addElement('text', 'last', ['size' => 20])
                   ->setLabel('Last')
                   ->addRule('required', 'Last name is required');
-        $nameGroup->addElement('text', 'first', array('size' => 20))
+        $nameGroup->addElement('text', 'first', ['size' => 20])
                   ->setLabel('First');
 
         $buttonGroup = $fs->addElement('group');
-        $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
-        $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Next >>'));
+        $buttonGroup->addElement('submit', $this->getButtonName('back'), ['value' => '<< Back']);
+        $buttonGroup->addElement('submit', $this->getButtonName('next'), ['value' => 'Next >>']);
 
         $this->setDefaultAction('next');
     }
@@ -66,13 +66,13 @@ class PageThird extends HTML_QuickForm2_Controller_Page
     {
         $fs = $this->form->addElement('fieldset')->setLabel('Wizard page 3 of 3');
 
-        $fs->addElement('textarea', 'itxaTest', array('rows' => 5, 'cols' => 40))
+        $fs->addElement('textarea', 'itxaTest', ['rows' => 5, 'cols' => 40])
            ->setLabel('Parting words:')
            ->addRule('required', 'Say something!');
 
         $buttonGroup = $fs->addElement('group');
-        $buttonGroup->addElement('submit', $this->getButtonName('back'), array('value' => '<< Back'));
-        $buttonGroup->addElement('submit', $this->getButtonName('next'), array('value' => 'Finish'));
+        $buttonGroup->addElement('submit', $this->getButtonName('back'), ['value' => '<< Back']);
+        $buttonGroup->addElement('submit', $this->getButtonName('next'), ['value' => 'Finish']);
 
         $this->setDefaultAction('next');
     }

@@ -30,8 +30,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testRegexIsRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                 'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $regex = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
@@ -45,8 +45,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                 'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo123'));
@@ -61,8 +61,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo'));
@@ -81,8 +81,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('foo'));
@@ -97,8 +97,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testBug10799()
     {
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                      'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                      'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue("12345\n"));
@@ -110,30 +110,30 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testCheckUploadFilename()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
-                  ->will($this->returnValue(array(
+                  ->will($this->returnValue([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                  )));
+                  ]));
         $rule = new HTML_QuickForm2_Rule_Regex($mockValid, 'an error', '/\\.(jpe?g|gif|png)$/i');
         $this->assertTrue($rule->validate());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
-                    ->will($this->returnValue(array(
+                    ->will($this->returnValue([
                       'name'     => 'trojan.exe',
                       'type'     => 'application/octet-stream',
                       'tmp_name' => '/tmp/quux',
                       'error'    => UPLOAD_ERR_OK,
                       'size'     => 98765
-                    )));
+                    ]));
         $rule = new HTML_QuickForm2_Rule_Regex($mockInvalid, 'an error', '/\\.(jpe?g|gif|png)$/i');
         $this->assertFalse($rule->validate());
     }
@@ -141,8 +141,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                    'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue(''));
@@ -150,16 +150,16 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ruleSimple->validate());
 
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(array('getValue'))
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
-                     ->will($this->returnValue(array(
+                     ->will($this->returnValue([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                     )));
+                     ]));
         $ruleFile = new HTML_QuickForm2_Rule_Regex($mockNoUpload, 'an error', '/\\.(jpe?g|gif|png)$/i');
         $this->assertTrue($ruleFile->validate());
     }
@@ -167,8 +167,8 @@ class HTML_QuickForm2_Rule_RegexTest extends PHPUnit_Framework_TestCase
     public function testRequest12736()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                 'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('no Cyrillic letters here'));

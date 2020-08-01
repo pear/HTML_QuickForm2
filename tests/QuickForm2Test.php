@@ -43,13 +43,13 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $_REQUEST = array(
+        $_REQUEST = [
             '_qf__track' => ''
-        );
-        $_GET = array(
+        ];
+        $_GET = [
             'key' => 'value'
-        );
-        $_POST = array();
+        ];
+        $_POST = [];
     }
 
     public function testTrackSubmit()
@@ -80,7 +80,7 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('get', $form2->getAttribute('method'));
         $this->assertEquals('foo', $form2->getAttribute('id'));
 
-        $form3 = new HTML_QuickForm2('bar', 'post', array('method' => 'get', 'id' => 'whatever'));
+        $form3 = new HTML_QuickForm2('bar', 'post', ['method' => 'get', 'id' => 'whatever']);
         $this->assertEquals('post', $form3->getAttribute('method'));
         $this->assertEquals('bar', $form3->getAttribute('id'));
     }
@@ -90,7 +90,7 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
         $form1 = new HTML_QuickForm2('test');
         $this->assertEquals($_SERVER['PHP_SELF'], $form1->getAttribute('action'));
 
-        $form2 = new HTML_QuickForm2('test2', 'post', array('action' => '/foobar.php'));
+        $form2 = new HTML_QuickForm2('test2', 'post', ['action' => '/foobar.php']);
         $this->assertEquals('/foobar.php', $form2->getAttribute('action'));
     }
 
@@ -129,19 +129,19 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
 
     public function testSetDataSources()
     {
-        $ds1 = new HTML_QuickForm2_DataSource_Array(array('key' => 'value'));
-        $ds2 = new HTML_QuickForm2_DataSource_Array(array('another key' => 'foo'));
+        $ds1 = new HTML_QuickForm2_DataSource_Array(['key' => 'value']);
+        $ds2 = new HTML_QuickForm2_DataSource_Array(['another key' => 'foo']);
 
         $form = new HTML_QuickForm2('dstest');
         $this->assertEquals(0, count($form->getDataSources()));
         $form->addDataSource($ds2);
         $this->assertEquals(1, count($form->getDataSources()));
 
-        $form->setDataSources(array($ds1, $ds2));
+        $form->setDataSources([$ds1, $ds2]);
         $this->assertEquals(2, count($form->getDataSources()));
 
         try {
-            $form->setDataSources(array($ds1, 'bogus', $ds2));
+            $form->setDataSources([$ds1, 'bogus', $ds2]);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             return;
         }
@@ -160,7 +160,7 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
     public function testFormRule()
     {
         $form = new HTML_QuickForm2('track', 'post');
-        $foo = $form->addElement('text', 'foo', array('id' => 'foo'));
+        $foo = $form->addElement('text', 'foo', ['id' => 'foo']);
         $form->addRule(new FormRule($form));
 
         $this->assertFalse($form->validate());
@@ -173,7 +173,7 @@ class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
      */
     public function testRequest19403()
     {
-        $_POST = array('_qf__track' => '');
+        $_POST = ['_qf__track' => ''];
         $form  = new HTML_QuickForm2('track');
 
         $this->assertArrayHasKey('_qf__track', $form->getRawValue());

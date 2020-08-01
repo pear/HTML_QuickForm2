@@ -30,7 +30,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     public function testRenderElementUsingMostAppropriateTemplate()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testRenderElement')
+            'text', 'foo', ['id' => 'testRenderElement']
         );
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForClass(
@@ -62,7 +62,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     public function testRenderRequiredElement()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testRenderRequiredElement')
+            'text', 'foo', ['id' => 'testRenderRequiredElement']
         );
 
         $renderer = HTML_Quickform2_Renderer::factory('default')
@@ -85,7 +85,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithValidationError()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testElementWithError')
+            'text', 'foo', ['id' => 'testElementWithError']
         );
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
@@ -117,7 +117,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithSingleLabel()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testSingleLabel')
+            'text', 'foo', ['id' => 'testSingleLabel']
         );
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
@@ -139,8 +139,8 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
     public function testRenderElementWithMultipleLabels()
     {
         $element = HTML_QuickForm2_Factory::createElement(
-            'text', 'foo', array('id' => 'testMultipleLabels')
-        )->setLabel(array('first', 'second'));
+            'text', 'foo', ['id' => 'testMultipleLabels']
+        )->setLabel(['first', 'second']);
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForId(
                 'testMultipleLabels',
@@ -153,7 +153,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             $element->render($renderer->reset())->__toString()
         );
 
-        $element->setLabel(array('another', 'foo' => 'foo'));
+        $element->setLabel(['another', 'foo' => 'foo']);
         $this->assertEquals(
             'First label: another' . $element->__toString() . 'Named label: foo',
             $element->render($renderer->reset())->__toString()
@@ -179,11 +179,11 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
         $form     = new HTML_QuickForm2('groupedErrors');
         $element  = $form->addText('testGroupedErrors')->setError('Some error');
         $renderer = HTML_Quickform2_Renderer::factory('default')
-            ->setOption(array(
+            ->setOption([
                 'group_errors'  => true,
                 'errors_prefix' => 'Your errors:',
                 'errors_suffix' => ''
-            ));
+            ]);
 
         $this->assertContains(
             '<div class="errors"><p>Your errors:</p><ul><li>Some error</li></ul></div>',
@@ -211,8 +211,8 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
 
     public function testRenderGroupedElementUsingMostAppropriateTemplate()
     {
-        $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testRenderGroup'));
-        $element = $group->addElement('text', 'bar', array('id' => 'testRenderGroupedElement'));
+        $group   = HTML_QuickForm2_Factory::createElement('group', 'foo', ['id' => 'testRenderGroup']);
+        $element = $group->addElement('text', 'bar', ['id' => 'testRenderGroupedElement']);
 
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setTemplateForClass(
@@ -251,7 +251,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
 
     public function testRenderGroupedElementsWithSeparators()
     {
-        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', array('id' => 'testSeparators'));
+        $group = HTML_QuickForm2_Factory::createElement('group', 'foo', ['id' => 'testSeparators']);
         $element1 = $group->addElement('text', 'bar');
         $element2 = $group->addElement('text', 'baz');
         $element3 = $group->addElement('text', 'quux');
@@ -273,7 +273,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends PHPUnit_Framework_TestCase
             $group->render($renderer->reset())->__toString()
         );
 
-        $group->setSeparator(array('<br />', '&nbsp;'));
+        $group->setSeparator(['<br />', '&nbsp;']);
         $this->assertEquals(
             '<foo>' . $element1 . '</foo><br /><foo>' . $element2 . '</foo>&nbsp;<foo>' . $element3 . '</foo>',
             $group->render($renderer->reset())->__toString()

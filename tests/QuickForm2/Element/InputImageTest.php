@@ -29,13 +29,13 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $_POST = array(
+        $_POST = [
             'foo_x' => '12',
             'foo_y' => '34',
-            'bar' => array(
-                'idx' => array('56', '78')
-            )
-        );
+            'bar' => [
+                'idx' => ['56', '78']
+            ]
+        ];
     }
 
     public function testCannotBeFrozen()
@@ -65,15 +65,15 @@ class HTML_QuickForm2_Element_InputImageTest extends PHPUnit_Framework_TestCase
         $foo = $form->appendChild(new HTML_QuickForm2_Element_InputImage('foo'));
         $bar = $form->appendChild(new HTML_QuickForm2_Element_InputImage('bar[idx]'));
 
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'foo_x' => '1234',
             'foo_y' => '5678',
-            'bar' => array(
-                'idx' => array('98', '76')
-            )
-        )));
-        $this->assertEquals(array('x' => '12', 'y' => '34'), $foo->getValue());
-        $this->assertEquals(array('x' => '56', 'y' => '78'), $bar->getValue());
+            'bar' => [
+                'idx' => ['98', '76']
+            ]
+        ]));
+        $this->assertEquals(['x' => '12', 'y' => '34'], $foo->getValue());
+        $this->assertEquals(['x' => '56', 'y' => '78'], $bar->getValue());
 
         $foo->setAttribute('disabled');
         $this->assertNull($foo->getValue());

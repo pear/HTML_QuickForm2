@@ -55,11 +55,11 @@ class HTML_QuickForm2_Controller_SessionContainer
             HTML_QuickForm2_Controller::KEY_CONTAINER, $controller->getId()
         );
         if (empty($_SESSION[$name])) {
-            $_SESSION[$name] = array(
-                'datasources' => array(),
-                'values'      => array(),
-                'valid'       => array()
-            );
+            $_SESSION[$name] = [
+                'datasources' => [],
+                'values'      => [],
+                'valid'       => []
+            ];
         }
         $this->data =& $_SESSION[$name];
     }
@@ -85,7 +85,7 @@ class HTML_QuickForm2_Controller_SessionContainer
     public function getValues($pageId)
     {
         return array_key_exists($pageId, $this->data['values'])
-               ? $this->data['values'][$pageId]: array();
+               ? $this->data['values'][$pageId]: [];
     }
 
    /**
@@ -157,7 +157,7 @@ class HTML_QuickForm2_Controller_SessionContainer
     public function storeOpaque($name, $value)
     {
         if (!array_key_exists('opaque', $this->data)) {
-            $this->data['opaque'] = array();
+            $this->data['opaque'] = [];
         }
         $this->data['opaque'][$name] = $value;
     }

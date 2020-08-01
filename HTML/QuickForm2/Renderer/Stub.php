@@ -61,13 +61,13 @@ class HTML_QuickForm2_Renderer_Stub extends HTML_QuickForm2_Renderer
     * Form errors if 'group_errors' option is true
     * @var array
     */
-    public $errors = array();
+    public $errors = [];
 
    /**
     * Hidden elements if 'group_hiddens' option is true
     * @var array
     */
-    public $hidden = array();
+    public $hidden = [];
 
    /**
     * Whether the form contains required elements
@@ -77,11 +77,11 @@ class HTML_QuickForm2_Renderer_Stub extends HTML_QuickForm2_Renderer
 
     protected function exportMethods()
     {
-        return array(
+        return [
             'getErrors',
             'getHidden',
             'hasRequired'
-        );
+        ];
     }
 
    /**
@@ -116,8 +116,8 @@ class HTML_QuickForm2_Renderer_Stub extends HTML_QuickForm2_Renderer
 
     public function reset()
     {
-        $this->errors   = array();
-        $this->hidden   = array();
+        $this->errors   = [];
+        $this->hidden   = [];
         $this->required = false;
 
         return $this;

@@ -103,7 +103,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testCanSetId()
     {
-        $obj = new HTML_QuickForm2_ContainerImpl(null, array('id' => 'manual'));
+        $obj = new HTML_QuickForm2_ContainerImpl(null, ['id' => 'manual']);
         $this->assertEquals('manual', $obj->getId());
 
         $this->assertSame($obj, $obj->setId('another'));
@@ -126,7 +126,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
     public function testCanNotRemoveNameOrId()
     {
-        $obj = new HTML_QuickForm2_ContainerImpl('somename', array(), array('id' => 'someid'));
+        $obj = new HTML_QuickForm2_ContainerImpl('somename', [], ['id' => 'someid']);
         try {
             $obj->removeAttribute('name');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -292,7 +292,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertSame($e3, $e3Insert, 'insertBefore() should return the inserted element');
         $this->assertNull($c2->getElementById($e4->getId()), 'Element should be removed from container');
 
-        $test = array($e2, $e3, $e4, $e1);
+        $test = [$e2, $e3, $e4, $e1];
         $i = 0;
         foreach ($c1 as $element) {
             $this->assertSame($test[$i++], $element, 'Elements are in the wrong order');
@@ -342,14 +342,14 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $c2->appendChild($e5);
         $c2->appendChild($c1);
 
-        $this->assertEquals(array($e1, $e3), $c1->getElementsByName('foo'));
-        $this->assertEquals(array($e5, $e1, $e3), $c2->getElementsByName('foo'));
+        $this->assertEquals([$e1, $e3], $c1->getElementsByName('foo'));
+        $this->assertEquals([$e5, $e1, $e3], $c2->getElementsByName('foo'));
     }
 
     public function testDuplicateIdHandling()
     {
-        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', array('id' => 'dup'));
-        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', array('id' => 'dup'));
+        $e1 = new HTML_QuickForm2_ElementImpl2('dup1', ['id' => 'dup']);
+        $e2 = new HTML_QuickForm2_ElementImpl2('dup2', ['id' => 'dup']);
 
         $c1 = new HTML_QuickForm2_ContainerImpl('dupContainer1');
         $c2 = new HTML_QuickForm2_ContainerImpl('dupContainer2');
@@ -412,11 +412,11 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el1->setValue('a value');
         $el2->setValue('other value');
         $el3->setValue('yet another value');
-        $this->assertEquals(array(
-            'foo' => array('idx' => 'a value'),
+        $this->assertEquals([
+            'foo' => ['idx' => 'a value'],
             'bar' => 'other value',
             'baz' => 'yet another value'
-        ), $c1->getValue());
+        ], $c1->getValue());
     }
 
     public function testGetRawValue()
@@ -428,23 +428,23 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
         $foo->setValue(' foo value ');
         $bar->setValue(' BAR VALUE ');
-        $this->assertEquals(array(
+        $this->assertEquals([
             'foo' => ' foo value ',
             'bar' => ' BAR VALUE '
-        ), $c->getRawValue());
+        ], $c->getRawValue());
 
         $c->addRecursiveFilter('trim');
         $bar->addFilter('strtolower');
-        $this->assertEquals(array(
+        $this->assertEquals([
             'foo' => ' foo value ',
             'bar' => ' BAR VALUE '
-        ), $c->getRawValue());
+        ], $c->getRawValue());
 
         $c->addFilter('count');
-        $this->assertEquals(array(
+        $this->assertEquals([
             'foo' => ' foo value ',
             'bar' => ' BAR VALUE '
-        ), $c->getRawValue());
+        ], $c->getRawValue());
     }
 
     public function testValidate()
@@ -454,20 +454,20 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $el2 = $cValidate->appendChild(new HTML_QuickForm2_ElementImpl2('bar'));
 
         $ruleTrue1 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner'))
-            ->setConstructorArgs(array($cValidate, 'irrelevant message'))
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs([$cValidate, 'irrelevant message'])
             ->getMock();
         $ruleTrue1->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
         $ruleFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner'))
-            ->setConstructorArgs(array($el1, 'some error'))
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs([$el1, 'some error'])
             ->getMock();
         $ruleFalse->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(false));
         $ruleTrue2 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner'))
-            ->setConstructorArgs(array($el2, 'irrelevant message'))
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs([$el2, 'irrelevant message'])
             ->getMock();
         $ruleTrue2->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
@@ -490,8 +490,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('foo'));
 
         $ruleChange = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner'))
-            ->setConstructorArgs(array($element, 'a message'))
+            ->setMethods(['validateOwner'])
+            ->setConstructorArgs([$element, 'a message'])
             ->getMock();
         $ruleChange->expects($this->exactly(2))->method('validateOwner')
                    ->will($this->onConsecutiveCalls(true, false));
@@ -517,14 +517,14 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
         $element   = $container->appendChild(new HTML_QuickForm2_ElementImpl2('anElement'));
 
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($container))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$container])
             ->getMock();
         $ruleContainer->expects($this->once())->method('getJavascriptCallback')
                       ->will($this->returnValue('containerCallback'));
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($element))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$element])
             ->getMock();
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
                     ->will($this->returnValue('elementCallback'));
@@ -542,8 +542,8 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $container = new HTML_QuickForm2_ContainerImpl('aContainer');
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($container))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$container])
             ->getMock();
         $ruleContainer->expects($this->never())->method('getJavascriptCallback');
 
@@ -564,7 +564,7 @@ class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
 
         $el1->setValue('first');
         $el2->setValue('second');
-        $this->assertEquals(array('foo' => array('first', 'second')), $c->getValue());
+        $this->assertEquals(['foo' => ['first', 'second']], $c->getValue());
     }
 }
 ?>

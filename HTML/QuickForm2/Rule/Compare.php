@@ -60,7 +60,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     * Possible comparison operators
     * @var array
     */
-    protected $operators = array('==', '!=', '===', '!==', '<', '<=', '>', '>=');
+    protected $operators = ['==', '!=', '===', '!==', '<', '<=', '>', '>='];
 
 
    /**
@@ -96,7 +96,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
                     ? $config['operand']->getJavascriptValue()
                     : HTML_QuickForm2_JavascriptBuilder::encode($config['operand']);
 
-        if (!in_array($config['operator'], array('===', '!=='))) {
+        if (!in_array($config['operator'], ['===', '!=='])) {
             $check = "Number({$operand1}) {$config['operator']} Number({$operand2})";
         } else {
             $check = "String({$operand1}) {$config['operator']} String({$operand2})";
@@ -141,11 +141,11 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     public static function mergeConfig($localConfig, $globalConfig)
     {
         $config = null;
-        if (null !== $globalConfig && array() !== $globalConfig) {
+        if (null !== $globalConfig && [] !== $globalConfig) {
             $config = self::toCanonicalForm($globalConfig, 'operator');
         }
-        if (null !== $localConfig && array() !== $localConfig) {
-            $config = (isset($config)? $config: array())
+        if (null !== $localConfig && [] !== $localConfig) {
+            $config = (isset($config)? $config: [])
                       + self::toCanonicalForm($localConfig);
         }
         return $config;
@@ -162,7 +162,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     protected static function toCanonicalForm($config, $key = 'operand')
     {
         if (!is_array($config)) {
-            return array($key => $config);
+            return [$key => $config];
 
         } elseif (array_key_exists('operator', $config)
                   || array_key_exists('operand', $config)
@@ -170,10 +170,10 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
             return $config;
 
         } elseif (1 == count($config)) {
-            return array($key => end($config));
+            return [$key => end($config)];
 
         } else {
-            return array('operator' => reset($config), 'operand' => end($config));
+            return ['operator' => reset($config), 'operand' => end($config)];
         }
     }
 
@@ -194,21 +194,21 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     */
     public function setConfig($config)
     {
-        if (null === $config || array() === $config) {
+        if (null === $config || [] === $config) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Compare Rule requires an argument to compare with'
             );
         }
         $config = self::toCanonicalForm($config);
 
-        $config += array('operator' => '===');
+        $config += ['operator' => '==='];
         if (!in_array($config['operator'], $this->operators)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Compare Rule requires a valid comparison operator, ' .
                 preg_replace('/\s+/', ' ', var_export($config['operator'], true)) . ' given'
             );
         }
-        if (in_array($config['operator'], array('==', '!='))) {
+        if (in_array($config['operator'], ['==', '!='])) {
             $config['operator'] .= '=';
         }
 

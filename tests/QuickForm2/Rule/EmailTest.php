@@ -43,39 +43,39 @@ class HTML_QuickForm2_Rule_EmailTest extends PHPUnit_Framework_TestCase
     public static function emailProvider()
     {
         // data lifted from PHP's ext/filter test suite
-        return array(
+        return [
             // 016.phpt
             // array('a@b.c', true), need the means to enable / disable validating host
-            array('abuse@example.com', true),
-            array('test!.!@#$%^&*@example.com', false),
-            array('test@@#$%^&*())).com', false),
-            array('test@.com', false),
-            array('test@com', false),
-            array('@', false),
-            array('[]()/@example.com', false),
-            array('QWERTYUIOPASDFGHJKLZXCVBNM@QWERTYUIOPASDFGHJKLZXCVBNM.NET', true),
-            array('e.x.a.m.p.l.e.@example.com', false),
-            array('firstname.lastname@employee.2something.com', true),
-            array('-@foo.com', true),
-            array('foo@-.com', false),
-            array('foo@bar.123', false),
-            array('foo@bar.-', false),
+            ['abuse@example.com', true],
+            ['test!.!@#$%^&*@example.com', false],
+            ['test@@#$%^&*())).com', false],
+            ['test@.com', false],
+            ['test@com', false],
+            ['@', false],
+            ['[]()/@example.com', false],
+            ['QWERTYUIOPASDFGHJKLZXCVBNM@QWERTYUIOPASDFGHJKLZXCVBNM.NET', true],
+            ['e.x.a.m.p.l.e.@example.com', false],
+            ['firstname.lastname@employee.2something.com', true],
+            ['-@foo.com', true],
+            ['foo@-.com', false],
+            ['foo@bar.123', false],
+            ['foo@bar.-', false],
             // Bug #44445 (email validator does not handle domains starting/ending with a -)
-            array("foo@-foo.com", false),
-            array("foo@foo-.com", false),
+            ["foo@-foo.com", false],
+            ["foo@foo-.com", false],
             // PMOPB-45-2007:PHP ext/filter Email Validation Vulnerability
-            array("test@example.com\n", false),
+            ["test@example.com\n", false],
             // Bug #50158 (FILTER_VALIDATE_EMAIL fails with valid addresses containing = or ?)
-            array("test=mail@example.com", true),
-            array("test-mail@example.com", true),
-            array("test+mail@example.com", true),
-            array("test?mail@example.com", true),
+            ["test=mail@example.com", true],
+            ["test-mail@example.com", true],
+            ["test+mail@example.com", true],
+            ["test?mail@example.com", true],
             // Bug #55478 (FILTER_VALIDATE_EMAIL fails with internationalized domain name addresses containing >1 -)
-            array("test@xn--example--7za.de", true), // "example-?.de"
+            ["test@xn--example--7za.de", true], // "example-?.de"
             // Bug #52929 (Segfault in filter_var with FILTER_VALIDATE_EMAIL with large amount of data)
-            array('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.zz', false),
-            array(str_repeat('x', 8000), false)
-        );
+            ['xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.zz', false],
+            [str_repeat('x', 8000), false]
+        ];
     }
 }
 ?>

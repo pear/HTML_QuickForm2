@@ -71,7 +71,7 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     {
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeat   = new HTML_QuickForm2_Container_Repeat(
-            null, null, array('prototype' => $fieldset)
+            null, null, ['prototype' => $fieldset]
         );
         $textOne  = new HTML_QuickForm2_Element_InputText('firstText');
         $textTwo  = new HTML_QuickForm2_Element_InputText('secondText');
@@ -89,79 +89,79 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     public function testSetIndexesExplicitly()
     {
         $repeat = new HTML_QuickForm2_Container_Repeat();
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $this->assertEquals([], $repeat->getIndexes());
 
-        $repeat->setIndexes(array('foo', 'bar', 'baz', 'qu\'ux', 'baz', 25));
-        $this->assertEquals(array('foo', 'bar', 'baz', 25), $repeat->getIndexes());
+        $repeat->setIndexes(['foo', 'bar', 'baz', 'qu\'ux', 'baz', 25]);
+        $this->assertEquals(['foo', 'bar', 'baz', 25], $repeat->getIndexes());
     }
 
     public function testSetIndexFieldExplicitly()
     {
         $form = new HTML_QuickForm2('testIndexField');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'blah' => array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+            'blah' => [
                 'blergh'    => 'a',
                 'blurgh'    => 'b',
                 'ba-a-a-ah' => 'c',
                 42          => 'd'
-            ),
-            'argh' => array(
+            ],
+            'argh' => [
                 'a'    => 'e',
                 'b\'c' => 'f',
                 'd'    => 'g'
-            )
-        )));
+            ]
+        ]));
 
         $repeat = new HTML_QuickForm2_Container_Repeat();
         $repeat->setIndexField('blah');
-        $repeat->setIndexes(array('foo', 'bar'));
+        $repeat->setIndexes(['foo', 'bar']);
         $form->appendChild($repeat);
-        $this->assertEquals(array('blergh', 'blurgh', 42), $repeat->getIndexes());
+        $this->assertEquals(['blergh', 'blurgh', 42], $repeat->getIndexes());
 
         $repeat->setIndexField('argh');
-        $this->assertEquals(array('a', 'd'), $repeat->getIndexes());
+        $this->assertEquals(['a', 'd'], $repeat->getIndexes());
     }
 
     public function testGuessIndexField()
     {
         $form = new HTML_QuickForm2('guessIndexField');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'blah'   => array('foo' => 1),
-            'bzz'    => array('bar' => array('a', 'b')),
-            'aaargh' => array('foo' => ''),
-            'blergh' => array('foo' => '', 'bar' => 'bar value')
-        )));
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+            'blah'   => ['foo' => 1],
+            'bzz'    => ['bar' => ['a', 'b']],
+            'aaargh' => ['foo' => ''],
+            'blergh' => ['foo' => '', 'bar' => 'bar value']
+        ]));
 
         $repeat = new HTML_QuickForm2_Container_Repeat();
         $form->appendChild($repeat);
 
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $this->assertEquals([], $repeat->getIndexes());
 
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeat->setPrototype($fieldset);
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $this->assertEquals([], $repeat->getIndexes());
 
         $fieldset->addCheckbox('blah');
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $this->assertEquals([], $repeat->getIndexes());
 
-        $fieldset->addSelect('bzz', array('multiple'));
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $fieldset->addSelect('bzz', ['multiple']);
+        $this->assertEquals([], $repeat->getIndexes());
 
-        $fieldset->addText('aaargh', array('disabled'));
-        $this->assertEquals(array(), $repeat->getIndexes());
+        $fieldset->addText('aaargh', ['disabled']);
+        $this->assertEquals([], $repeat->getIndexes());
 
         $fieldset->addText('blergh');
-        $this->assertEquals(array('foo', 'bar'), $repeat->getIndexes());
+        $this->assertEquals(['foo', 'bar'], $repeat->getIndexes());
     }
 
     public function testGetValue()
     {
-        $values = array(
-            'foo' => array('a' => 'a value', 'b' => 'b value', 'c' => 'c value'),
-            'bar' => array(
-                'baz' => array('a' => 'aa', 'b' => 'bb', 'c' => 'cc')
-            )
-        );
+        $values = [
+            'foo' => ['a' => 'a value', 'b' => 'b value', 'c' => 'c value'],
+            'bar' => [
+                'baz' => ['a' => 'aa', 'b' => 'bb', 'c' => 'cc']
+            ]
+        ];
 
         $form   = new HTML_QuickForm2('repeatValue');
         $repeat = new HTML_QuickForm2_Container_Repeat();
@@ -176,7 +176,7 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($values, $repeat->getValue());
 
-        $repeat->setIndexes(array('a', 'c'));
+        $repeat->setIndexes(['a', 'c']);
         unset($values['foo']['b'], $values['bar']['baz']['b']);
         $this->assertEquals($values, $repeat->getValue());
     }
@@ -192,16 +192,16 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
 
     public function testServerSideValidationErrors()
     {
-        $ds = new HTML_QuickForm2_DataSource_Session(array(
-            'foo' => array('', 'blah', '')
-        ));
+        $ds = new HTML_QuickForm2_DataSource_Session([
+            'foo' => ['', 'blah', '']
+        ]);
         $form = new HTML_QuickForm2('repeatValidate');
         $form->addDataSource($ds);
 
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $text     = new HTML_QuickForm2_Element_InputText('foo');
         $repeat   = new HTML_QuickForm2_Container_Repeat(
-            null, null, array('prototype' => $fieldset)
+            null, null, ['prototype' => $fieldset]
         );
         $fieldset->appendChild($text);
         $form->appendChild($repeat);
@@ -225,10 +225,10 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     {
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeat   = new HTML_QuickForm2_Container_Repeat(
-            null, null, array('prototype' => $fieldset)
+            null, null, ['prototype' => $fieldset]
         );
         $fieldset->addText('foo');
-        $repeat->setIndexes(array(1));
+        $repeat->setIndexes([1]);
 
         $this->assertEquals(null, $repeat->getValue());
     }
@@ -241,7 +241,7 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     {
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeat   = new HTML_QuickForm2_Container_Repeat(
-            null, null, array('prototype' => $fieldset)
+            null, null, ['prototype' => $fieldset]
         );
         $fieldset->addStatic()
             ->setContent('Content of static element')
@@ -263,18 +263,18 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     public function testBug20295()
     {
         $form = new HTML_QuickForm2('repeat-bug');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-            'buggy' => array(
-                'name'  => array(1 => 'First', 2 => 'Second'),
-                'extra' => array(1 => 'Has extra', 2 => null)
-            )
-        )));
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+            'buggy' => [
+                'name'  => [1 => 'First', 2 => 'Second'],
+                'extra' => [1 => 'Has extra', 2 => null]
+            ]
+        ]));
 
         $group = new HTML_QuickForm2_Container_Group('buggy');
         $group->addText('name');
         $group->addText('extra');
 
-        $repeat = $form->addRepeat(null, array('id' => 'buggy-repeat'), array('prototype' => $group));
+        $repeat = $form->addRepeat(null, ['id' => 'buggy-repeat'], ['prototype' => $group]);
 
         $value = $repeat->getValue();
         $this->assertEquals('', $value['buggy']['extra'][2]);
@@ -284,13 +284,13 @@ class HTML_QuickForm2_Container_RepeatTest extends PHPUnit_Framework_TestCase
     {
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeat   = new HTML_QuickForm2_Container_Repeat(
-            null, null, array('prototype' => $fieldset)
+            null, null, ['prototype' => $fieldset]
         );
 
         $fieldset->addText('foo')
             ->addRule('required', 'Required!', null, HTML_QuickForm2_Rule::CLIENT_SERVER);
 
-        $repeat->setIndexes(array());
+        $repeat->setIndexes([]);
         $renderer = HTML_QuickForm2_Renderer::factory('array');
         $renderer->getJavascriptBuilder()->setFormId('fake-repeat');
         $repeat->render($renderer);

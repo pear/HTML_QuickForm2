@@ -46,19 +46,19 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
     * "unchecked" for not checked
     * @var  array
     */
-    protected $frozenHtml = array(
+    protected $frozenHtml = [
         'checked'   => 'On',
         'unchecked' => 'Off'
-    );
+    ];
 
    /**
     * Contains options and data used for the element creation
     * - content: Label "glued" to a checkbox or radio
     * @var  array
     */
-    protected $data = array('content' => '');
+    protected $data = ['content' => ''];
 
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         parent::__construct($name, $attributes, $data);
         // "checked" attribute should be updated on changes to "value" attribute

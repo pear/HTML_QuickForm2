@@ -24,9 +24,9 @@
  */
 class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
 {
-    protected $attributes = array('multiple' => 'multiple');
+    protected $attributes = ['multiple' => 'multiple'];
 
-    protected $watchedAttributes = array('id', 'name', 'multiple');
+    protected $watchedAttributes = ['id', 'name', 'multiple'];
 
     protected function onAttributeChange($name, $value = null)
     {
@@ -88,10 +88,10 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
         $name = $this->getName();
 
         $selectFrom = new HTML_QuickForm2_Element_Select(
-            "_{$name}", array('id' => "{$id}-from") + $this->attributes
+            "_{$name}", ['id' => "{$id}-from"] + $this->attributes
         );
         $selectTo   = new HTML_QuickForm2_Element_Select(
-            $name, array('id' => "{$id}-to") + $this->attributes
+            $name, ['id' => "{$id}-to"] + $this->attributes
         );
         $strValues = array_map('strval', $this->values);
         foreach ($this->optionContainer as $option) {
@@ -112,20 +112,20 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
 
         $buttonFromTo = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_fromto",
-            array('type' => 'button', 'id' => "{$id}-fromto") +
-                (empty($this->data['from_to']['attributes'])? array(): self::prepareAttributes($this->data['from_to']['attributes'])),
-            array('content' => (empty($this->data['from_to']['content'])? ' &gt;&gt; ': $this->data['from_to']['content']))
+            ['type' => 'button', 'id' => "{$id}-fromto"] +
+                (empty($this->data['from_to']['attributes'])? [] : self::prepareAttributes($this->data['from_to']['attributes'])),
+            ['content' => (empty($this->data['from_to']['content'])? ' &gt;&gt; ': $this->data['from_to']['content'])]
         );
         $buttonToFrom = HTML_QuickForm2_Factory::createElement(
             'button', "{$name}_tofrom",
-            array('type' => 'button', 'id' => "{$id}-tofrom") +
-                (empty($this->data['to_from']['attributes'])? array(): self::prepareAttributes($this->data['to_from']['attributes'])),
-            array('content' => (empty($this->data['to_from']['content'])? ' &lt;&lt; ': $this->data['to_from']['content']))
+            ['type' => 'button', 'id' => "{$id}-tofrom"] +
+                (empty($this->data['to_from']['attributes'])? [] : self::prepareAttributes($this->data['to_from']['attributes'])),
+            ['content' => (empty($this->data['to_from']['content'])? ' &lt;&lt; ': $this->data['to_from']['content'])]
         );
-        return array(
+        return [
             'select_from'    => $selectFrom->__toString(),   'select_to'      => $selectTo->__toString(),
             'button_from_to' => $buttonFromTo->__toString(), 'button_to_from' => $buttonToFrom->__toString()
-        );
+        ];
     }
 
    /**
@@ -151,7 +151,7 @@ class HTML_QuickForm2_Element_DualSelect extends HTML_QuickForm2_Element_Select
     public function getJavascriptTriggers()
     {
         $id = $this->getId();
-        return array("{$id}-from", "{$id}-to", "{$id}-fromto", "{$id}-tofrom");
+        return ["{$id}-from", "{$id}-to", "{$id}-fromto", "{$id}-tofrom"];
     }
 }
 
@@ -247,7 +247,7 @@ readfile($filename);
 <body>
 <?php
 
-$options = array(
+$options = [
       4 => "Afghanistan",                              8 => "Albania",                 12 => "Algeria",                   20 => "Andorra",                        24 => "Angola",             28 => "Antigua and Barbuda",             32 => "Argentina",             51 => "Armenia",                                       36 => "Australia",                 40 => "Austria",
      31 => "Azerbaijan",                              44 => "Bahamas",                 48 => "Bahrain",                   50 => "Bangladesh",                     52 => "Barbados",          112 => "Belarus",                         56 => "Belgium",               84 => "Belize",                                       204 => "Benin",                     64 => "Bhutan",
      68 => "Bolivia",                                 70 => "Bosnia and Herzegovina",  72 => "Botswana",                  76 => "Brazil",                         96 => "Brunei Darussalam", 100 => "Bulgaria",                       854 => "Burkina Faso",         108 => "Burundi",                                      116 => "Cambodia",                 120 => "Cameroon",
@@ -268,37 +268,37 @@ $options = array(
     756 => "Switzerland",                            760 => "Syria",                  158 => "Taiwan",                   762 => "Tajikistan",                    834 => "Tanzania",          764 => "Thailand",                       626 => "Timor-Leste",          768 => "Togo",                                         776 => "Tonga",                    780 => "Trinidad and Tobago",
     788 => "Tunisia",                                792 => "Turkey",                 795 => "Turkmenistan",             798 => "Tuvalu",                        800 => "Uganda",            804 => "Ukraine",                        784 => "United Arab Emirates", 826 => "United Kingdom of Great Britain & N. Ireland", 840 => "United States of America", 858 => "Uruguay",
     860 => "Uzbekistan",                             548 => "Vanuatu",                862 => "Venezuela",                704 => "Viet Nam",                      732 => "Western Sahara",    887 => "Yemen",                          894 => "Zambia",               716 => "Zimbabwe"
-);
+];
 
 $form = new HTML_QuickForm2('dualselect');
-$form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
-    'destinations' => array(4, 148, 180, 368, 706, 736, 716)
-)));
+$form->addDataSource(new HTML_QuickForm2_DataSource_Array([
+    'destinations' => [4, 148, 180, 368, 706, 736, 716]
+]));
 
 $fs = $form->addElement('fieldset')
         ->setLabel('A custom "dualselect" element using a renderer plugin for output');
 
 $ds = $fs->addElement(
     'dualselect', 'destinations',
-    array('size' => 10, 'style' => 'width: 215px; font-size: 90%'),
-    array(
+    ['size' => 10, 'style' => 'width: 215px; font-size: 90%'],
+    [
         'options'    => $options,
         'keepSorted' => true,
-        'from_to'    => array('content' => ' &gt;&gt; ', 'attributes' => array('style' => 'font-size: 90%')),
-        'to_from'    => array('content' => ' &lt&lt; ', 'attributes' => array('style' => 'font-size: 90%')),
-    )
-)->setLabel(array(
+        'from_to'    => ['content' => ' &gt;&gt; ', 'attributes' => ['style' => 'font-size: 90%']],
+        'to_from'    => ['content' => ' &lt&lt; ', 'attributes' => ['style' => 'font-size: 90%']],
+    ]
+)->setLabel([
     'Popular travel destinations:',
     'Available',
     'Chosen'
-));
+]);
 
 $ds->addRule('required', 'Select at least two destinations', 2,
              HTML_QuickForm2_Rule::ONBLUR_CLIENT_SERVER);
 
-$fs->addElement('checkbox', 'doFreeze', null, array('content' => 'Freeze dualselect on form submit'));
+$fs->addElement('checkbox', 'doFreeze', null, ['content' => 'Freeze dualselect on form submit']);
 
-$fs->addElement('submit', 'testSubmit', array('value' => 'Submit form'));
+$fs->addElement('submit', 'testSubmit', ['value' => 'Submit form']);
 
 // outputting form values
 if ('POST' == $_SERVER['REQUEST_METHOD']) {

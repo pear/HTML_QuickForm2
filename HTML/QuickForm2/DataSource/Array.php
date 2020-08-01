@@ -48,7 +48,7 @@ class HTML_QuickForm2_DataSource_Array implements HTML_QuickForm2_DataSource_Nul
     *
     * @param array $values Array containing the elements' values
     */
-    public function __construct(array $values = array())
+    public function __construct(array $values = [])
     {
         $this->values = $values;
     }

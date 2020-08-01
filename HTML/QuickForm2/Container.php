@@ -39,26 +39,26 @@
  * @version  Release: @package_version@
  * @link     https://pear.php.net/package/HTML_QuickForm2
  *
- * @method HTML_QuickForm2_Element_Button        addButton(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputCheckbox addCheckbox(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Date          addDate(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Container_Fieldset    addFieldset(string $name = '', $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Container_Group       addGroup(string $name = '', $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputFile     addFile(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputHidden   addHidden(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Hierselect    addHierselect(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputImage    addImage(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputButton   addInputButton(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputPassword addPassword(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputRadio    addRadio(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Container_Repeat      addRepeat(string $name = '', $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputReset    addReset(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Script        addScript(string $name = '', $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Select        addSelect(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Static        addStatic(string $name = '', $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputSubmit   addSubmit(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_InputText     addText(string $name, $attributes = null, array $data = array())
- * @method HTML_QuickForm2_Element_Textarea      addTextarea(string $name, $attributes = null, array $data = array())
+ * @method HTML_QuickForm2_Element_Button        addButton(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputCheckbox addCheckbox(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Date          addDate(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Container_Fieldset    addFieldset(string $name = '', $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Container_Group       addGroup(string $name = '', $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputFile     addFile(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputHidden   addHidden(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Hierselect    addHierselect(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputImage    addImage(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputButton   addInputButton(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputPassword addPassword(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputRadio    addRadio(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Container_Repeat      addRepeat(string $name = '', $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputReset    addReset(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Script        addScript(string $name = '', $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Select        addSelect(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Static        addStatic(string $name = '', $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputSubmit   addSubmit(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_InputText     addText(string $name, $attributes = null, array $data = [])
+ * @method HTML_QuickForm2_Element_Textarea      addTextarea(string $name, $attributes = null, array $data = [])
  */
 abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
@@ -67,7 +67,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * Array of elements contained in this container
     * @var array
     */
-    protected $elements = array();
+    protected $elements = [];
 
 
     public function setName($name)
@@ -116,7 +116,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     protected function getChildValues($filtered = false)
     {
         $method = $filtered? 'getValue': 'getRawValue';
-        $values = $forceKeys = array();
+        $values = $forceKeys = [];
         foreach ($this as $child) {
             $value = $child->$method();
             if (null !== $value) {
@@ -134,7 +134,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                         do {
                             $token = array_shift($tokens);
                             if (!isset($valueAry[$token])) {
-                                $valueAry[$token] = array();
+                                $valueAry[$token] = [];
                             }
                             $valueAry =& $valueAry[$token];
                         } while (count($tokens) > 1);
@@ -199,7 +199,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {
                 $a[$k] = $v;
             } else {
-                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: array(), $v);
+                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: [], $v);
             }
         }
         return $a;
@@ -257,7 +257,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     * @throws   HTML_QuickForm2_NotFoundException
     */
     public function addElement(
-        $elementOrType, $name = null, $attributes = null, array $data = array()
+        $elementOrType, $name = null, $attributes = null, array $data = []
     ) {
         if ($elementOrType instanceof HTML_QuickForm2_Node) {
             return $this->appendChild($elementOrType);
@@ -326,7 +326,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function getElementsByName($name)
     {
-        $found = array();
+        $found = [];
         foreach ($this->getRecursiveIterator() as $element) {
             if ($element->getName() == $name) {
                 $found[] = $element;
@@ -357,7 +357,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                     $this->removeChild($element);
                 }
                 $element->setContainer($this);
-                array_splice($this->elements, $offset, 0, array($element));
+                array_splice($this->elements, $offset, 0, [$element]);
                 return $element;
             }
             $offset++;
@@ -463,7 +463,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 $type = strtolower($match[2]);
                 $name = isset($a[0]) ? $a[0] : null;
                 $attr = isset($a[1]) ? $a[1] : null;
-                $data = isset($a[2]) ? $a[2] : array();
+                $data = isset($a[2]) ? $a[2] : [];
                 return $this->addElement($type, $name, $attr, $data);
             }
         }
@@ -507,7 +507,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     */
     public function getJavascriptValue($inContainer = false)
     {
-        $args = array();
+        $args = [];
         foreach ($this as $child) {
             if ('' != ($value = $child->getJavascriptValue(true))) {
                 $args[] = $value;
@@ -518,7 +518,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 
     public function getJavascriptTriggers()
     {
-        $triggers = array();
+        $triggers = [];
         foreach ($this as $child) {
             foreach ($child->getJavascriptTriggers() as $trigger) {
                 $triggers[$trigger] = true;

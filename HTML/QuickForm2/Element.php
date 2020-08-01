@@ -57,11 +57,11 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
         if (!$this->persistent || null === ($value = $this->getValue())) {
             return '';
         }
-        return '<input type="hidden"' . self::getAttributesString(array(
+        return '<input type="hidden"' . self::getAttributesString([
             'name'  => $this->getName(),
             'value' => $value,
             'id'    => $this->getId()
-        )) . ' />';
+            ]) . ' />';
     }
 
    /**
@@ -112,7 +112,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
 
     public function getJavascriptTriggers()
     {
-        return array($this->getId());
+        return [$this->getId()];
     }
 
     /**
@@ -133,7 +133,7 @@ abstract class HTML_QuickForm2_Element extends HTML_QuickForm2_Node
         foreach ($recursive as $filter) {
             if (is_array($value)) {
                 array_walk_recursive(
-                    $value, array('HTML_QuickForm2_Node', 'applyFilter'), $filter
+                    $value, ['HTML_QuickForm2_Node', 'applyFilter'], $filter
                 );
             } else {
                 self::applyFilter($value, null, $filter);

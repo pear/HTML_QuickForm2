@@ -50,15 +50,15 @@ require_once 'HTML/QuickForm2.php'; // Only when installed with PEAR
 $form = new HTML_QuickForm2('tutorial');
 
 // Set defaults for the form elements
-$form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+$form->addDataSource(new HTML_QuickForm2_DataSource_Array([
     'name' => 'Joe User'
-)));
+]));
 
 // Add some elements to the form
 $fieldset = $form->addElement('fieldset')->setLabel('QuickForm2 tutorial example');
-$name = $fieldset->addElement('text', 'name', array('size' => 50, 'maxlength' => 255))
+$name = $fieldset->addElement('text', 'name', ['size' => 50, 'maxlength' => 255])
                  ->setLabel('Enter your name:');
-$fieldset->addElement('submit', null, array('value' => 'Send!'));
+$fieldset->addElement('submit', null, ['value' => 'Send!']);
 
 // Define filters and validation rules
 $name->addFilter('trim');

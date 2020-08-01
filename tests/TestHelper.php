@@ -27,11 +27,11 @@ $installed = false;
 if ('@' . 'package_version@' !== '@package_version@') {
     // Installed with PEAR: we should be on the include path, use own autoloader
     require_once 'HTML/QuickForm2/Loader.php';
-    spl_autoload_register(array('HTML_QuickForm2_Loader', 'autoload'));
+    spl_autoload_register(['HTML_QuickForm2_Loader', 'autoload']);
     $installed = true;
 
 } else {
-    foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php') as $file) {
+    foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
         if (file_exists($file)) {
             require_once $file;
             $installed = true;

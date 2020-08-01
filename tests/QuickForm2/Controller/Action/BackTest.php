@@ -33,17 +33,17 @@ class HTML_QuickForm2_Controller_Action_BackTest
         $formOne = new HTML_QuickForm2('formOne');
         $formOne->addElement('text', 'foo')->setValue('foo value');
         $pageOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array($formOne))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([$formOne])
             ->getMock();
         $formTwo = new HTML_QuickForm2('formTwo');
         $formTwo->addElement('text', 'bar')->setValue('bar value');
         $pageTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array($formTwo))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([$formTwo])
             ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(array('perform'))
+            ->setMethods(['perform'])
             ->getMock();
         $mockJump->expects($this->exactly(2))->method('perform')
                  ->will($this->returnValue('jump to foo'));
@@ -53,7 +53,7 @@ class HTML_QuickForm2_Controller_Action_BackTest
         $controller->addPage($pageTwo);
 
         $this->assertEquals('jump to foo', $pageTwo->handle('back'));
-        $this->assertEquals(array(), $controller->getSessionContainer()->getValues('formOne'));
+        $this->assertEquals([], $controller->getSessionContainer()->getValues('formOne'));
         $this->assertContains('bar value', $controller->getSessionContainer()->getValues('formTwo'));
 
         $this->assertEquals('jump to foo', $pageOne->handle('back'));
@@ -63,19 +63,19 @@ class HTML_QuickForm2_Controller_Action_BackTest
     public function testNoValidationForWizards()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(array('validate'))
-            ->setConstructorArgs(array('eternallyValid'))
+            ->setMethods(['validate'])
+            ->setConstructorArgs(['eternallyValid'])
             ->getMock();
         $mockForm->expects($this->once())->method('validate')
                  ->will($this->returnValue(true));
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array($mockForm))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([$mockForm])
             ->getMock();
         $mockPage->addHandler(
             'jump',
             $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-                ->setMethods(array('perform'))
+                ->setMethods(['perform'])
                 ->getMock()
         );
 

@@ -29,14 +29,14 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
 {
     public function testConstructorSetsContent()
     {
-        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', null, array('content' => 'I am foo'));
+        $checkable = new HTML_QuickForm2_Element_InputCheckable('foo', null, ['content' => 'I am foo']);
         $this->assertEquals('I am foo', $checkable->getContent());
     }
 
     public function testContentRendering()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'foo', array('id' => 'checkableFoo'), array('content' => 'I am foo')
+            'foo', ['id' => 'checkableFoo'], ['content' => 'I am foo']
         );
         $this->assertRegExp(
             '!<label\\s+for="checkableFoo">I am foo</label>!',
@@ -54,7 +54,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
     public function testEmptyContentRendering()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'foo1', array('id' => 'checkableFoo1')
+            'foo1', ['id' => 'checkableFoo1']
         );
         $this->assertNotRegExp('!<label!', $checkable->__toString());
     }
@@ -92,7 +92,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
     public function testFrozenHtmlGeneration()
     {
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
-            'checkableFreeze', array('value' => 'my value'), array('content' => 'freeze me')
+            'checkableFreeze', ['value' => 'my value'], ['content' => 'freeze me']
         );
         $checkable->setAttribute('checked');
 
@@ -106,9 +106,9 @@ class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestC
     public function testBug15708()
     {
         $form = new HTML_QuickForm2('bug15708');
-        $form->addDataSource(new HTML_QuickForm2_DataSource_Array(array(
+        $form->addDataSource(new HTML_QuickForm2_DataSource_Array([
             'aRadio' => 1
-        )));
+        ]));
         $aRadio = $form->appendChild(
                             new HTML_QuickForm2_Element_InputCheckable('aRadio')
                       )->setAttribute('value', 1);

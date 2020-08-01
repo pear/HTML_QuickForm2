@@ -205,13 +205,13 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $fooXyzzy = $fooNop->addText('xyzzy');
         $fooYzzyx = $fooNop->addText('yzzyx');
 
-        $foo->setValue(array(
+        $foo->setValue([
             'bar'   => 'first value',
-            'ba'    => array('z' => 'second value'),
-            'qu'    => array('ux' => 'third value'),
-                       array('xyzzy' => 'fourth value'),
-                       array('yzzyx' => 'fifth value')
-        ));
+            'ba'    => ['z' => 'second value'],
+            'qu'    => ['ux' => 'third value'],
+                       ['xyzzy' => 'fourth value'],
+                       ['yzzyx' => 'fifth value']
+        ]);
         $this->assertEquals('first value', $fooBar->getValue());
         $this->assertEquals('second value', $fooBaz->getValue());
         $this->assertEquals('third value', $fooQuux->getValue());
@@ -225,13 +225,13 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $g2   = $anon->addGroup();
         $e4   = $g2->addText('e4');
         $e5   = $g2->addText('e5');
-        $anon->setValue(array(
+        $anon->setValue([
             'e1' => 'first value',
-            'e2' => array('i1' => 'second value'),
-            'g1' => array('e3' => 'third value'),
-                    array('e4' => 'fourth value'),
-                    array('e5' => 'fifth value')
-        ));
+            'e2' => ['i1' => 'second value'],
+            'g1' => ['e3' => 'third value'],
+                    ['e4' => 'fourth value'],
+                    ['e5' => 'fifth value']
+        ]);
         $this->assertEquals('first value', $e1->getValue());
         $this->assertEquals('second value', $e2->getValue());
         $this->assertEquals('third value', $e3->getValue());
@@ -249,15 +249,15 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $foo = new HTML_QuickForm2_Container_Group('foo');
         $foo->addText('bar');
 
-        $this->assertSame($foo, $foo->setValue(array('bar' => 'a value')));
+        $this->assertSame($foo, $foo->setValue(['bar' => 'a value']));
     }
 
     public function testGetValue()
     {
-        $value1    = array('foo' => 'foo value');
-        $value2    = array('bar' => 'bar value', 'baz' => array('quux' => 'baz value'));
-        $valueAnon = array('e1' => 'e1 value');
-        $formValue = array('g1' => $value1, 'g2' => array('i2' => $value2)) + $valueAnon;
+        $value1    = ['foo' => 'foo value'];
+        $value2    = ['bar' => 'bar value', 'baz' => ['quux' => 'baz value']];
+        $valueAnon = ['e1' => 'e1 value'];
+        $formValue = ['g1' => $value1, 'g2' => ['i2' => $value2]] + $valueAnon;
 
         $form = new HTML_QuickForm2('testGroupGetValue');
         $form->addDataSource(new HTML_QuickForm2_DataSource_Array($formValue));
@@ -277,10 +277,10 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
 
     public function testGetRawValue()
     {
-        $unfiltered = array(
+        $unfiltered = [
             'foo' => ' foo value ',
             'bar' => ' BAR VALUE '
-        );
+        ];
 
         $g = new HTML_QuickForm2_Container_Group('filtered');
         $foo = $g->addElement('text', 'foo');
@@ -306,14 +306,14 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $element = $group->addElement('text', 'anElement');
 
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($group))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->once())->method('getJavascriptCallback')
                   ->will($this->returnValue('groupCallback'));
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($element))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$element])
             ->getMock();
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
                     ->will($this->returnValue('elementCallback'));
@@ -331,8 +331,8 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
     {
         $group = new HTML_QuickForm2_Container_Group('aGroup');
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(array('validateOwner', 'getJavascriptCallback'))
-            ->setConstructorArgs(array($group))
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->never())->method('getJavascriptCallback');
 
@@ -374,12 +374,12 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
     public function testCheckboxGroupSetValue()
     {
         $group = new HTML_QuickForm2_Container_Group('boxGroup');
-        $group->addCheckbox('', array('value' => 'red'));
-        $group->addCheckbox('', array('value' => 'green'));
-        $group->addCheckbox('', array('value' => 'blue'));
+        $group->addCheckbox('', ['value' => 'red']);
+        $group->addCheckbox('', ['value' => 'green']);
+        $group->addCheckbox('', ['value' => 'blue']);
 
-        $group->setValue(array('red', 'blue'));
-        $this->assertEquals(array('red', 'blue'), $group->getValue());
+        $group->setValue(['red', 'blue']);
+        $this->assertEquals(['red', 'blue'], $group->getValue());
     }
 
     /**
@@ -402,27 +402,27 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
     public function testRadioGroupSetValue()
     {
         $group = new HTML_QuickForm2_Container_Group();
-        $group->addRadio('request20103', array('value' => 'first'));
-        $group->addRadio('request20103', array('value' => 'second'));
-        $group->addRadio('request20103', array('value' => 'third'));
+        $group->addRadio('request20103', ['value' => 'first']);
+        $group->addRadio('request20103', ['value' => 'second']);
+        $group->addRadio('request20103', ['value' => 'third']);
 
-        $group->setValue(array('request20103' => 'second'));
-        $this->assertEquals(array('request20103' => 'second'), $group->getValue());
+        $group->setValue(['request20103' => 'second']);
+        $this->assertEquals(['request20103' => 'second'], $group->getValue());
 
         $namedGroup = new HTML_QuickForm2_Container_Group('named');
-        $namedGroup->addRadio('request20103[sub]', array('value' => 'first'));
-        $namedGroup->addRadio('request20103[sub]', array('value' => 'second'));
-        $namedGroup->addRadio('request20103[sub]', array('value' => 'third'));
+        $namedGroup->addRadio('request20103[sub]', ['value' => 'first']);
+        $namedGroup->addRadio('request20103[sub]', ['value' => 'second']);
+        $namedGroup->addRadio('request20103[sub]', ['value' => 'third']);
 
-        $namedGroup->setValue(array('request20103' => array('sub' => 'third')));
-        $this->assertEquals(array('request20103' => array('sub' => 'third')), $namedGroup->getValue());
+        $namedGroup->setValue(['request20103' => ['sub' => 'third']]);
+        $this->assertEquals(['request20103' => ['sub' => 'third']], $namedGroup->getValue());
     }
 
     public function testScalarValueBug()
     {
         $group = new HTML_QuickForm2_Container_Group();
         $text  = $group->addText('foo[bar]');
-        $group->setValue(array('foo' => 'foo value'));
+        $group->setValue(['foo' => 'foo value']);
 
         $this->assertEquals('', $text->getValue());
     }
@@ -433,7 +433,7 @@ class HTML_QuickForm2_Element_GroupTest extends PHPUnit_Framework_TestCase
         $foo   = $group->addText('foo')->setValue('foo value');
         $bar   = $group->addText('bar')->setValue('bar value');
 
-        $group->setValue(array('foo' => 'new foo value'));
+        $group->setValue(['foo' => 'new foo value']);
         $this->assertEquals('new foo value', $foo->getValue());
         $this->assertEquals('', $bar->getValue());
 

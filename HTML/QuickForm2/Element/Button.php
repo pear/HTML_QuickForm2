@@ -45,7 +45,7 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     * - content: Content to be displayed between <button></button> tags
     * @var  array
     */
-    protected $data = array('content' => '');
+    protected $data = ['content' => ''];
 
    /**
     * Element's submit value

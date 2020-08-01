@@ -35,8 +35,8 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testValidCallbackRequired()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $callbackMissing = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error');
@@ -46,7 +46,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
         }
         try {
             $callbackBogus = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error',
-                                    array('callback' => 'bogusfunctionname'));
+                                    ['callback' => 'bogusfunctionname']);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertRegexp('/Callback Rule requires a valid callback/', $e->getMessage());
@@ -56,8 +56,8 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
@@ -65,20 +65,20 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
         $strlen = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error', 'strlen');
         $this->assertTrue($strlen->validate());
 
-        $notFoo = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error', array($this, 'checkNotFoo'));
+        $notFoo = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error', [$this, 'checkNotFoo']);
         $this->assertFalse($notFoo->validate());
 
         $inArray = new HTML_QuickForm2_Rule_Callback($mockEl, 'an error',
-                        array('callback' => 'in_array',
-                              'arguments' => array(array('foo', 'bar', 'baz'))));
+                        ['callback' => 'in_array',
+                              'arguments' => [['foo', 'bar', 'baz']]]);
         $this->assertTrue($inArray->validate());
     }
 
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
@@ -88,33 +88,33 @@ class HTML_QuickForm2_Rule_CallbackTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($strlen->validate());
 
         HTML_QuickForm2_Factory::registerRule('inarray', 'HTML_QuickForm2_Rule_Callback', null,
-                                    array('callback' => 'in_array',
-                                          'arguments' => array(array('foo', 'bar', 'baz'))));
+                                    ['callback' => 'in_array',
+                                          'arguments' => [['foo', 'bar', 'baz']]]);
         $inArray = HTML_QuickForm2_Factory::createRule('inarray', $mockEl, 'an error');
         $this->assertTrue($inArray->validate());
 
         HTML_QuickForm2_Factory::registerRule('inarray2', 'HTML_QuickForm2_Rule_Callback', null, 'in_array');
         $inArray2 = HTML_QuickForm2_Factory::createRule('inarray2', $mockEl, 'an error',
-                                array(array('one', 'two', 'three')));
+                                [['one', 'two', 'three']]);
         $this->assertFalse($inArray2->validate());
     }
 
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(array('getType',
-                                  'getRawValue', 'setValue', '__toString'))
+            ->setMethods(['getType',
+                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
                ->method('getRawValue')->will($this->returnValue('foo'));
 
         HTML_QuickForm2_Factory::registerRule('inarray-override', 'HTML_QuickForm2_Rule_Callback', null,
-                                    array('callback' => 'in_array',
-                                          'arguments' => array(array('foo', 'bar', 'baz'))));
+                                    ['callback' => 'in_array',
+                                          'arguments' => [['foo', 'bar', 'baz']]]);
         $rule1 = HTML_QuickForm2_Factory::createRule('inarray-override', $mockEl, 'an error',
-                                    array('callback' => array($this, 'checkNotFoo')));
+                                    ['callback' => [$this, 'checkNotFoo']]);
         $rule2 = HTML_QuickForm2_Factory::createRule('inarray-override', $mockEl, 'an error',
-                                    array('arguments' => array(array('one', 'two', 'three'))));
+                                    ['arguments' => [['one', 'two', 'three']]]);
         $this->assertTrue($rule1->validate());
         $this->assertTrue($rule2->validate());
     }

@@ -44,64 +44,64 @@ class HTML_QuickForm2_Factory
     * List of element types known to Factory
     * @var array
     */
-    protected static $elementTypes = array(
-        'button'        => array('HTML_QuickForm2_Element_Button', null),
-        'checkbox'      => array('HTML_QuickForm2_Element_InputCheckbox', null),
-        'date'          => array('HTML_QuickForm2_Element_Date', null),
-        'fieldset'      => array('HTML_QuickForm2_Container_Fieldset', null),
-        'group'         => array('HTML_QuickForm2_Container_Group', null),
-        'file'          => array('HTML_QuickForm2_Element_InputFile', null),
-        'hidden'        => array('HTML_QuickForm2_Element_InputHidden', null),
-        'hierselect'    => array('HTML_QuickForm2_Element_Hierselect', null),
-        'image'         => array('HTML_QuickForm2_Element_InputImage', null),
-        'inputbutton'   => array('HTML_QuickForm2_Element_InputButton', null),
-        'password'      => array('HTML_QuickForm2_Element_InputPassword', null),
-        'radio'         => array('HTML_QuickForm2_Element_InputRadio', null),
-        'repeat'        => array('HTML_QuickForm2_Container_Repeat', null),
-        'reset'         => array('HTML_QuickForm2_Element_InputReset', null),
-        'script'        => array('HTML_QuickForm2_Element_Script', null),
-        'select'        => array('HTML_QuickForm2_Element_Select', null),
-        'static'        => array('HTML_QuickForm2_Element_Static', null),
-        'submit'        => array('HTML_QuickForm2_Element_InputSubmit', null),
-        'text'          => array('HTML_QuickForm2_Element_InputText', null),
-        'textarea'      => array('HTML_QuickForm2_Element_Textarea', null)
-    );
+    protected static $elementTypes = [
+        'button'        => ['HTML_QuickForm2_Element_Button', null],
+        'checkbox'      => ['HTML_QuickForm2_Element_InputCheckbox', null],
+        'date'          => ['HTML_QuickForm2_Element_Date', null],
+        'fieldset'      => ['HTML_QuickForm2_Container_Fieldset', null],
+        'group'         => ['HTML_QuickForm2_Container_Group', null],
+        'file'          => ['HTML_QuickForm2_Element_InputFile', null],
+        'hidden'        => ['HTML_QuickForm2_Element_InputHidden', null],
+        'hierselect'    => ['HTML_QuickForm2_Element_Hierselect', null],
+        'image'         => ['HTML_QuickForm2_Element_InputImage', null],
+        'inputbutton'   => ['HTML_QuickForm2_Element_InputButton', null],
+        'password'      => ['HTML_QuickForm2_Element_InputPassword', null],
+        'radio'         => ['HTML_QuickForm2_Element_InputRadio', null],
+        'repeat'        => ['HTML_QuickForm2_Container_Repeat', null],
+        'reset'         => ['HTML_QuickForm2_Element_InputReset', null],
+        'script'        => ['HTML_QuickForm2_Element_Script', null],
+        'select'        => ['HTML_QuickForm2_Element_Select', null],
+        'static'        => ['HTML_QuickForm2_Element_Static', null],
+        'submit'        => ['HTML_QuickForm2_Element_InputSubmit', null],
+        'text'          => ['HTML_QuickForm2_Element_InputText', null],
+        'textarea'      => ['HTML_QuickForm2_Element_Textarea', null]
+    ];
 
    /**
     * List of registered rules
     * @var array
     */
-    protected static $registeredRules = array(
-        'nonempty'      => array('HTML_QuickForm2_Rule_Nonempty', null),
-        'empty'         => array('HTML_QuickForm2_Rule_Empty', null),
-        'required'      => array('HTML_QuickForm2_Rule_Required', null),
-        'compare'       => array('HTML_QuickForm2_Rule_Compare', null),
-        'eq'            => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '===')),
-        'neq'           => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '!==')),
-        'lt'            => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '<')),
-        'lte'           => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '<=')),
-        'gt'            => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '>')),
-        'gte'           => array('HTML_QuickForm2_Rule_Compare', null,
-                                 array('operator' => '>=')),
-        'regex'         => array('HTML_QuickForm2_Rule_Regex', null),
-        'callback'      => array('HTML_QuickForm2_Rule_Callback', null),
-        'length'        => array('HTML_QuickForm2_Rule_Length', null),
-        'minlength'     => array('HTML_QuickForm2_Rule_Length', null,
-                                 array('max' => 0)),
-        'maxlength'     => array('HTML_QuickForm2_Rule_Length', null,
-                                 array('min' => 0)),
-        'maxfilesize'   => array('HTML_QuickForm2_Rule_MaxFileSize', null),
-        'mimetype'      => array('HTML_QuickForm2_Rule_MimeType', null),
-        'each'          => array('HTML_QuickForm2_Rule_Each', null),
-        'notcallback'   => array('HTML_QuickForm2_Rule_NotCallback', null),
-        'notregex'      => array('HTML_QuickForm2_Rule_NotRegex', null),
-        'email'         => array('HTML_QuickForm2_Rule_Email', null)
-    );
+    protected static $registeredRules = [
+        'nonempty'      => ['HTML_QuickForm2_Rule_Nonempty', null],
+        'empty'         => ['HTML_QuickForm2_Rule_Empty', null],
+        'required'      => ['HTML_QuickForm2_Rule_Required', null],
+        'compare'       => ['HTML_QuickForm2_Rule_Compare', null],
+        'eq'            => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '===']],
+        'neq'           => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '!==']],
+        'lt'            => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '<']],
+        'lte'           => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '<=']],
+        'gt'            => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '>']],
+        'gte'           => ['HTML_QuickForm2_Rule_Compare', null,
+                                 ['operator' => '>=']],
+        'regex'         => ['HTML_QuickForm2_Rule_Regex', null],
+        'callback'      => ['HTML_QuickForm2_Rule_Callback', null],
+        'length'        => ['HTML_QuickForm2_Rule_Length', null],
+        'minlength'     => ['HTML_QuickForm2_Rule_Length', null,
+                                 ['max' => 0]],
+        'maxlength'     => ['HTML_QuickForm2_Rule_Length', null,
+                                 ['min' => 0]],
+        'maxfilesize'   => ['HTML_QuickForm2_Rule_MaxFileSize', null],
+        'mimetype'      => ['HTML_QuickForm2_Rule_MimeType', null],
+        'each'          => ['HTML_QuickForm2_Rule_Each', null],
+        'notcallback'   => ['HTML_QuickForm2_Rule_NotCallback', null],
+        'notregex'      => ['HTML_QuickForm2_Rule_NotRegex', null],
+        'email'         => ['HTML_QuickForm2_Rule_Email', null]
+    ];
 
 
    /**
@@ -113,7 +113,7 @@ class HTML_QuickForm2_Factory
     */
     public static function registerElement($type, $className, $includeFile = null)
     {
-        self::$elementTypes[strtolower($type)] = array($className, $includeFile);
+        self::$elementTypes[strtolower($type)] = [$className, $includeFile];
     }
 
 
@@ -144,7 +144,7 @@ class HTML_QuickForm2_Factory
     *           not be found and/or loaded from file
     */
     public static function createElement(
-        $type, $name = null, $attributes = null, array $data = array()
+        $type, $name = null, $attributes = null, array $data = []
     ) {
         $type = strtolower($type);
         if (!isset(self::$elementTypes[$type])) {
@@ -168,7 +168,7 @@ class HTML_QuickForm2_Factory
     public static function registerRule(
         $type, $className, $includeFile = null, $config = null
     ) {
-        self::$registeredRules[strtolower($type)] = array($className, $includeFile, $config);
+        self::$registeredRules[strtolower($type)] = [$className, $includeFile, $config];
     }
 
 
@@ -209,7 +209,7 @@ class HTML_QuickForm2_Factory
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         if (isset(self::$registeredRules[$type][2])) {
             $config = call_user_func(
-                array($className, 'mergeConfig'),
+                [$className, 'mergeConfig'],
                 $config, self::$registeredRules[$type][2]
             );
         }

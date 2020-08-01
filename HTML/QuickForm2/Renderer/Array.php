@@ -113,13 +113,13 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     * An array being generated
     * @var array
     */
-    public $array = array();
+    public $array = [];
 
    /**
     * Array with references to 'elements' fields of currently processed containers
     * @var array
     */
-    public $containers = array();
+    public $containers = [];
 
    /**
     * Whether the form contains required elements
@@ -131,7 +131,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     * Additional style information for elements
     * @var array
     */
-    public $styles = array();
+    public $styles = [];
 
    /**
     * Constructor, adds a new 'static_labels' option
@@ -143,10 +143,10 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     protected function exportMethods()
     {
-        return array(
+        return [
             'toArray',
             'setStyleForId'
-        );
+        ];
     }
 
    /**
@@ -159,8 +159,8 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     */
     public function reset()
     {
-        $this->array       = array();
-        $this->containers  = array();
+        $this->array       = [];
+        $this->containers  = [];
         $this->hasRequired = false;
 
         return $this;
@@ -185,10 +185,10 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     */
     public function buildCommonFields(HTML_QuickForm2_Node $element)
     {
-        $ary = array(
+        $ary = [
             'id'     => $element->getId(),
             'frozen' => $element->toggleFrozen()
-        );
+        ];
         if ($labels = $element->getLabel()) {
             if (!is_array($labels) || !$this->options['static_labels']) {
                 $ary['label'] = $labels;
@@ -223,10 +223,10 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
      */
     public function buildCommonContainerFields(HTML_QuickForm2_Node $container)
     {
-        return $this->buildCommonFields($container) + array(
-            'elements'   => array(),
+        return $this->buildCommonFields($container) + [
+            'elements'   => [],
             'attributes' => $container->getAttributes(true)
-        );
+            ];
     }
 
    /**
@@ -258,7 +258,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
         }
         if (empty($this->containers)) {
             $this->array      += $container;
-            $this->containers  = array(&$this->array['elements']);
+            $this->containers  = [&$this->array['elements']];
         } else {
             $cntIndex = count($this->containers) - 1;
             $myIndex  = count($this->containers[$cntIndex]);
@@ -293,12 +293,12 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     */
     public function renderElement(HTML_QuickForm2_Node $element)
     {
-        $ary = $this->buildCommonFields($element) + array(
+        $ary = $this->buildCommonFields($element) + [
             'html'     => $element->__toString(),
             'value'    => $element->getValue(),
             'type'     => $element->getType(),
             'required' => $element->isRequired(),
-        );
+            ];
         $this->pushScalar($ary);
     }
 
@@ -317,12 +317,12 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
         $this->array = $this->buildCommonContainerFields($form);
         if ($this->options['group_errors']) {
-            $this->array['errors'] = array();
+            $this->array['errors'] = [];
         }
         if ($this->options['group_hiddens']) {
-            $this->array['hidden'] = array();
+            $this->array['hidden'] = [];
         }
-        $this->containers  = array(&$this->array['elements']);
+        $this->containers  = [&$this->array['elements']];
     }
 
     public function finishForm(HTML_QuickForm2_Node $form)
@@ -336,10 +336,10 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     public function startContainer(HTML_QuickForm2_Node $container)
     {
-        $ary = $this->buildCommonContainerFields($container) + array(
+        $ary = $this->buildCommonContainerFields($container) + [
             'required' => $container->isRequired(),
             'type'     => $container->getType()
-        );
+            ];
         $this->pushContainer($ary);
     }
 
@@ -350,13 +350,13 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     public function startGroup(HTML_QuickForm2_Node $group)
     {
-        $ary = $this->buildCommonContainerFields($group) + array(
+        $ary = $this->buildCommonContainerFields($group) + [
             'required' => $group->isRequired(),
             'type'     => $group->getType(),
             'class'    => $group->getAttribute('class')
-        );
+            ];
         if ($separator = $group->getSeparator()) {
-            $ary['separator'] = array();
+            $ary['separator'] = [];
             for ($i = 0, $count = count($group); $i < $count - 1; $i++) {
                 if (!is_array($separator)) {
                     $ary['separator'][] = (string)$separator;

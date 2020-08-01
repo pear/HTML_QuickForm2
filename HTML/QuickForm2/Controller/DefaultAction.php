@@ -44,7 +44,7 @@
 class HTML_QuickForm2_Controller_DefaultAction
     extends HTML_QuickForm2_Element_InputImage
 {
-    protected $attributes = array('type' => 'image', 'id' => 'qf:default-action');
+    protected $attributes = ['type' => 'image', 'id' => 'qf:default-action'];
 
    /**
     * Disallow changing the 'id' attribute

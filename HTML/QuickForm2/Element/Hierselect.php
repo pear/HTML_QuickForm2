@@ -61,7 +61,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * @see  loadOptions()
     * @var  array
     */
-    protected $options = array();
+    protected $options = [];
 
    /**
     * PHP callback function for getting additional options
@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * @see  _loadChildOptions()
     * @see  _generateInlineScript()
     */
-    private $_values = array();
+    private $_values = [];
 
     public function getType()
     {
@@ -112,12 +112,12 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * @param string|array $attributes Attributes (either a string or an array)
     * @param array        $data       Additional element data
     */
-    public function __construct($name = null, $attributes = null, array $data = array())
+    public function __construct($name = null, $attributes = null, array $data = [])
     {
         if (!empty($data['size'])) {
             $this->size = $data['size'];
         }
-        $options = isset($data['options'])? $data['options']: array();
+        $options = isset($data['options'])? $data['options']: [];
         unset($data['options'], $data['size']);
         parent::__construct($name, $attributes, $data);
         $this->loadOptions($options);
@@ -197,7 +197,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
             $data = $this->getData();
             unset($data['label']);
             $this->appendChild(new HTML_QuickForm2_Element_Select(
-                $i, array('id' => self::generateId($this->getName() . "[{$i}]")) + $this->getAttributes(), $data
+                $i, ['id' => self::generateId($this->getName() . "[{$i}]")] + $this->getAttributes(), $data
             ));
         }
     }
@@ -208,11 +208,11 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     private function _loadChildOptions()
     {
         $idx           = 0;
-        $this->_values = array();
+        $this->_values = [];
         /* @var $select HTML_QuickForm2_Element_Select */
         foreach ($this as $select) {
             if (empty($this->options[$idx])) {
-                $this->options[$idx] = array();
+                $this->options[$idx] = [];
             }
             $keys  =  $this->_values;
             $array =& $this->options[$idx++];
@@ -220,7 +220,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
                 $key = array_shift($keys);
                 if (!isset($array[$key])) {
                     if (!empty($keys)) {
-                        $array[$key] = array();
+                        $array[$key] = [];
                     } elseif (!empty($this->callback)) {
                         $array[$key] = call_user_func($this->callback, $this->_values);
                     } else {
@@ -314,9 +314,9 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         if (!is_array($ary)) {
             $ret = $ary;
         } elseif (0 == $depth) {
-            $ret = array('values' => array_keys($ary), 'texts' => array_values($ary));
+            $ret = ['values' => array_keys($ary), 'texts' => array_values($ary)];
         } else {
-            $ret = array();
+            $ret = [];
             foreach ($ary as $k => $v) {
                 $ret[$k] = $this->_prepareOptions($v, $depth - 1);
             }
@@ -337,7 +337,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         $cr       = HTML_Common2::getOption('linebreak');
         $js       = "qf.elements.hierselect.defaults['{$selectId}'] = " .
                     HTML_QuickForm2_JavascriptBuilder::encode($this->_values) . ";{$cr}";
-        $jsParts  = array();
+        $jsParts  = [];
         for ($i = 1; $i < count($this->options); $i++) {
             $jsParts[] = empty($this->options[$i])
                          ? '{}' : HTML_QuickForm2_JavascriptBuilder::encode($this->_prepareOptions(
@@ -358,7 +358,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     {
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_JavascriptBuilder');
 
-        $ids = array();
+        $ids = [];
         /* @var $element HTML_QuickForm2_Element */
         foreach ($this as $element) {
             $ids[] = $element->getId();

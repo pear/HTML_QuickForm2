@@ -30,8 +30,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     public function testPopulateFormOnce()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('firstPage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('firstPage')])
             ->getMock();
         $mockPage->expects($this->once())->method('populateForm');
 
@@ -43,8 +43,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     {
         $controller = new HTML_QuickForm2_Controller('precedence');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('precedencePage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('precedencePage')])
             ->getMock();
         $controller->addPage($mockPage);
 
@@ -54,7 +54,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
         } catch (HTML_QuickForm2_NotFoundException $e) {}
 
         $mockFoo1 = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(array('perform'))
+            ->setMethods(['perform'])
             ->getMock();
         $mockFoo1->expects($this->once())->method('perform')
                  ->will($this->returnValue('foo common'));
@@ -62,7 +62,7 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo common', $mockPage->handle('foo'));
 
         $mockFoo2 = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(array('perform'))
+            ->setMethods(['perform'])
             ->getMock();
         $mockFoo2->expects($this->once())->method('perform')
                  ->will($this->returnValue('foo specific'));
@@ -74,8 +74,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     {
         $controller = new HTML_QuickForm2_Controller('defaultDisplay');
         $mockPage   = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('defaultDisplayPage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('defaultDisplayPage')])
             ->getMock();
         $controller->addPage($mockPage);
 
@@ -88,8 +88,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     public function testSetDefaultAction()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('defaultActionPage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('defaultActionPage')])
             ->getMock();
         $mockPage->setDefaultAction('foo', 'empty.gif');
 
@@ -106,8 +106,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     public function testDefaultActionIsFirstElement()
     {
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('defaultActionPage')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('defaultActionPage')])
             ->getMock();
         $mockPage->getForm()->addElement('text', 'first');
         $mockPage->getForm()->addElement('text', 'second');
@@ -122,8 +122,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
     public function testPropagateControllerId()
     {
         $noPropPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('noPropagateForm')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('noPropagateForm')])
             ->getMock();
         $noPropController = new HTML_QuickForm2_Controller('foo', true, false);
         $noPropController->addPage($noPropPage);
@@ -132,8 +132,8 @@ class HTML_QuickForm2_Controller_PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($hidden));
 
         $propPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(array('populateForm'))
-            ->setConstructorArgs(array(new HTML_QuickForm2('propagateForm')))
+            ->setMethods(['populateForm'])
+            ->setConstructorArgs([new HTML_QuickForm2('propagateForm')])
             ->getMock();
         $propController = new HTML_QuickForm2_Controller('bar', true, true);
         $propController->addPage($propPage);

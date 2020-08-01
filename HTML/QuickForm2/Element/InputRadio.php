@@ -37,11 +37,11 @@
  */
 class HTML_QuickForm2_Element_InputRadio extends HTML_QuickForm2_Element_InputCheckable
 {
-    protected $attributes = array('type' => 'radio', 'value' => 'on');
+    protected $attributes = ['type' => 'radio', 'value' => 'on'];
 
-    protected $frozenHtml = array(
+    protected $frozenHtml = [
         'checked'   => '<code>(x)</code>',
         'unchecked' => '<code>(&nbsp;)</code>'
-    );
+    ];
 }
 ?>
