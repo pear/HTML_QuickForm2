@@ -4,11 +4,6 @@ sudo: false
 
 matrix:
   include:
-    - php: "5.2"
-      dist: precise
-      env: PHP52SUCKS=true
-    - php: "5.3"
-      dist: precise
     - php: "5.4"
     - php: "5.5"
     - php: "5.6"
@@ -23,26 +18,14 @@ matrix:
       env: MONKEY_PATCH=true
 
 install:
-  - |
-    if [[ $PHP52SUCKS == true ]]; then
-      wget http://download.pear.php.net/package/HTML_Common2-2.1.2.tgz
-      pear install --offline ./HTML_Common2-2.1.2.tgz
-    else
-      pear channel-update pear.php.net
-      composer install --no-dev
-    fi
-  - |
-    # Export Composer's global bin dir to PATH, but not on PHP 5.2 (borrowed from Wordpress):
-    if [[ $PHP52SUCKS != true ]]; then
-      composer config --list --global
-      export COMPOSER_GLOBAL=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }"; }`
-      export PATH="${COMPOSER_GLOBAL}/vendor/bin:$PATH"
-    fi
-  - |
-    # Global install of a supported PHPUnit version
-    if [[ $PHP52SUCKS != true ]]; then
-      composer global require "phpunit/phpunit=^3.7|^4.8|^5.7"
-    fi
+  - pear channel-update pear.php.net
+  - composer install --no-dev
+  # Export Composer's global bin dir to PATH (borrowed from Wordpress):
+  - composer config --list --global
+  - export COMPOSER_GLOBAL=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }"; }`
+  - export PATH="${COMPOSER_GLOBAL}/vendor/bin:$PATH"
+  # Global install of a supported PHPUnit version
+  - composer global require "phpunit/phpunit=^4.8|^5.7"
   - |
     # Monkey patch phpunit/phpunit-mock-objects
     if [[ $MONKEY_PATCH == true ]]; then
@@ -52,8 +35,7 @@ install:
 script:
   - which phpunit
   - phpunit --version
-  # Do not test composer installation on PHP 5.2 due to lack of composer
-  - if [[ $PHP52SUCKS != true ]]; then phpunit ./tests; fi
+  - phpunit ./tests
   - pear package-validate ./package.xml
   - php ./pear-package-helper.php
   - pear install ./.pear-package/package.xml
