@@ -39,31 +39,31 @@ abstract class HTML_QuickForm2_Rule
     * Constant showing that validation should be run server-side
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const SERVER = 1;
+    const SERVER               = 0b001;
 
    /**
     * Constant showing that validation should be run client-side (on form submit)
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const CLIENT = 2;
+    const CLIENT               = 0b010;
 
    /**
     * Constant showing that validation should be run client-side (on form submit and on leaving the field)
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const ONBLUR_CLIENT = 6;
+    const ONBLUR_CLIENT        = 0b110;
 
    /**
     * A combination of SERVER and CLIENT constants
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const CLIENT_SERVER = 3;
+    const CLIENT_SERVER        = 0b011;
 
    /**
     * A combination of SERVER and ONBLUR_CLIENT constants
     * @see  HTML_QuickForm2_Node::addRule()
     */
-    const ONBLUR_CLIENT_SERVER = 7;
+    const ONBLUR_CLIENT_SERVER = 0b111;
 
    /**
     * An element whose value will be validated by this rule
