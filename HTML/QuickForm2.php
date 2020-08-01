@@ -81,9 +81,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             !$trackSubmit && ('get' == $method && !empty($_GET) ||
                               'post' == $method && (!empty($_POST) || !empty($_FILES)))
         ) {
-            $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal(
-                $method, get_magic_quotes_gpc()
-            ));
+            $this->addDataSource(new HTML_QuickForm2_DataSource_SuperGlobal($method));
         }
         if ($trackSubmit) {
             $this->appendChild(HTML_QuickForm2_Factory::createElement(

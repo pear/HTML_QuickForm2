@@ -60,34 +60,14 @@ class HTML_QuickForm2_DataSource_SuperGlobal
     * Class constructor, intializes the internal arrays from superglobals
     *
     * @param string $requestMethod  Request method (GET or POST)
-    * @param bool   $magicQuotesGPC Whether magic_quotes_gpc directive is on
     */
-    public function __construct($requestMethod = 'POST', $magicQuotesGPC = false)
+    public function __construct($requestMethod = 'POST')
     {
-        if (!$magicQuotesGPC) {
-            if ('GET' == strtoupper($requestMethod)) {
-                $this->values = $_GET;
-            } else {
-                $this->values = $_POST;
-                $this->files  = $_FILES;
-            }
+        if ('GET' == strtoupper($requestMethod)) {
+            parent::__construct($_GET);
         } else {
-            if ('GET' == strtoupper($requestMethod)) {
-                $this->values = $this->arrayMapRecursive('stripslashes', $_GET);
-            } else {
-                $this->values = $this->arrayMapRecursive('stripslashes', $_POST);
-                foreach ($_FILES as $key1 => $val1) {
-                    foreach ($val1 as $key2 => $val2) {
-                        if ('name' == $key2) {
-                            $this->files[$key1][$key2] = $this->arrayMapRecursive(
-                                'stripslashes', $val2
-                            );
-                        } else {
-                            $this->files[$key1][$key2] = $val2;
-                        }
-                    }
-                }
-            }
+            parent::__construct($_POST);
+            $this->files = $_FILES;
         }
     }
 

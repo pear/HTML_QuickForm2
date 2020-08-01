@@ -93,11 +93,6 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
         $this->assertEquals('some value', $ds1->getValue('foo'));
         $this->assertEquals('o\\\'really', $ds1->getValue('bar'));
         $this->assertEquals('me\\\\please', $ds1->getValue('baz[unescape]'));
-
-        $ds2 = new HTML_QuickForm2_DataSource_SuperGlobal('GET', true);
-        $this->assertEquals('some value', $ds2->getValue('foo'));
-        $this->assertEquals('o\'really', $ds2->getValue('bar'));
-        $this->assertEquals('me\\please', $ds2->getValue('baz[unescape]'));
     }
 
     public function testRequestMethodPost()
@@ -106,11 +101,6 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
         $this->assertEquals('post value', $ds1->getValue('foo'));
         $this->assertEquals('yes\\\'really', $ds1->getValue('bar'));
         $this->assertEquals('or\\\\else', $ds1->getValue('baz[unescape]'));
-
-        $ds2 = new HTML_QuickForm2_DataSource_SuperGlobal('POST', true);
-        $this->assertEquals('post value', $ds2->getValue('foo'));
-        $this->assertEquals('yes\'really', $ds2->getValue('bar'));
-        $this->assertEquals('or\\else', $ds2->getValue('baz[unescape]'));
     }
 
     public function testGetUploadReturnsNullForAbsentValue()
@@ -145,15 +135,6 @@ class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestC
             'size'      => 65536,
             'error'     => UPLOAD_ERR_OK
         ), $ds1->getUpload('baz[two][three]'));
-
-        $ds2 = new HTML_QuickForm2_DataSource_SuperGlobal('POST', true);
-        $this->assertEquals(array(
-            'name'      => 'a\'thing\'.foobar',
-            'tmp_name'  => 'C:\\windows\\temp\\whatever',
-            'type'      => 'application/foobar',
-            'size'      => 4321,
-            'error'     => UPLOAD_ERR_OK
-        ), $ds2->getUpload('bar[key]'));
     }
 
    /**
