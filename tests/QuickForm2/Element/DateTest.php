@@ -99,6 +99,16 @@ class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['Y' => 2012, 'm' => 6, 'd' => 26], $date->getValue());
     }
 
+    public function testSetValueAcceptsDateTimeImmutable()
+    {
+        if (version_compare(phpversion(), '5.5.0', '<')) {
+            $this->markTestSkipped("DateTimeImmutable is available since PHP 5.5");
+        }
+        $date = new HTML_QuickForm2_Element_Date('DateTimeImmutableTest', null, ['format' => 'Ymd']);
+        $date->setValue(new DateTimeImmutable('2020-09-14'));
+        $this->assertEquals(['Y' => 2020, 'm' => 9, 'd' => 14], $date->getValue());
+    }
+
     /**
      * If data source contains explicitly provided null values, those should be used
      * @link http://pear.php.net/bugs/bug.php?id=20295

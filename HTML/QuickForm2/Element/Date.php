@@ -352,8 +352,11 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         } elseif (is_array($value)) {
             $value = array_map([$this, 'trimLeadingZeros'], $value);
 
-        } elseif (is_scalar($value) || $value instanceof DateTime) {
-            if ($value instanceof DateTime) {
+        } elseif (is_scalar($value)
+                  || $value instanceof DateTime
+                  || interface_exists('DateTimeInterface') && $value instanceof DateTimeInterface
+        ) {
+            if (!is_scalar($value)) {
                 $arr = explode('-', $value->format('w-j-n-Y-g-G-i-s-a-A-W'));
             } else {
                 if (!is_numeric($value)) {
