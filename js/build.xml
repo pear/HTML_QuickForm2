@@ -19,6 +19,8 @@
 
     <property name="closure_command" value="java -jar ${path.closure} --compilation_level SIMPLE_OPTIMIZATIONS --rewrite_polyfills=false" />
 
+    <property name="package_version" value="2.2.0" />
+
     <target name="init">
         <mkdir dir="build"/>
         <mkdir dir="docs"/>
@@ -76,8 +78,7 @@
     <target name="clean-docs" description="Removes generated API docs">
         <delete dir="docs" />
     </target>
-    <target name="clean" depends="clean-js, clean-docs" description="Removes all generated files">
-    </target>
+    <target name="clean" depends="clean-js, clean-docs" description="Removes all generated files" />
 
     <target name="build-all" depends="clean, concat, minify, docs" description="Builds everything" />
 
@@ -89,6 +90,11 @@
                 <include name="${js.concat.hs}" />
                 <include name="${js.concat.repeat}" />
             </fileset>
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="@package_version@" replace="${package_version}" />
+                </replaceregexp>
+            </filterchain>
         </copy>
         <copy todir="${release.minified}">
             <mapper type="regexp" from="build.(.+)\.min\.js" to="\1.js" />
@@ -97,6 +103,11 @@
                 <include name="${js.minified.hs}" />
                 <include name="${js.minified.repeat}" />
             </fileset>
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="@package_version@" replace="${package_version}" />
+                </replaceregexp>
+            </filterchain>
         </copy>
     </target>
 </project>
