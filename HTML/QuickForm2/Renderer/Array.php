@@ -15,7 +15,7 @@
  * @author    Alexey Borzov <avb@php.net>
  * @author    Bertrand Mansion <golgote@mamasam.com>
  * @author    Thomas Schulz <ths@4bconsult.de>
- * @copyright 2006-2019 Alexey Borzov <avb@php.net>, Bertrand Mansion <golgote@mamasam.com>
+ * @copyright 2006-2020 Alexey Borzov <avb@php.net>, Bertrand Mansion <golgote@mamasam.com>
  * @license   https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
  * @link      https://pear.php.net/package/HTML_QuickForm2
  */
