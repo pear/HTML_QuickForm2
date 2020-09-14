@@ -42,9 +42,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2019-04-10</date>
+ <date>2020-09-14</date>
  <version>
-  <release>2.1.0</release>
+  <release>2.2.0</release>
   <api>2.0.1</api>
  </version>
  <stability>
@@ -53,21 +53,12 @@
  </stability>
  <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
  <notes>
- * HTML_QuickForm2 runs under PHP 7.2+ without warnings / &quot;deprecated&quot;
-   messages
- * Tests run correctly on PHPUnit versions up to 5
- * It is possible to automatically add &quot;nonce&quot; attributes to inline
-   &lt;script&gt; tags, just call
-   HTML_Common2::setOption('nonce', $someNonceValue);
-   before outputting the form. This allows running HTML_QuickForm2 with
-   reasonable Content-Security-Policy
- * Bundled a separate LICENSE file instead of having it in each .php file
-   header. Updated phrasing and links to mention 3-Clause BSD license
-   the package actually uses.
-
-When installing with composer, files no longer contain 'require_once' calls
-and 'include-path' option is not used. The package is now 100% autoloader
-compatible, all classes reside in separate files.
+ * Minimum required PHP version is now 5.4
+ * Removed support for magic_quotes_gpc, as get_magic_quotes_gpc()
+   was deprecated in PHP 7.4 and the functionality itself was disabled
+   since PHP 5.4 (https://github.com/pear/HTML_QuickForm2/issues/3)
+ * HTML_QuickForm2_Element_Date::setValue() will now accept an instance of
+   DateTimeInterface, not only DateTime
  </notes>
  <contents>
   <dir name="/">
@@ -630,10 +621,10 @@ compatible, all classes reside in separate files.
  <dependencies>
   <required>
    <php>
-    <min>5.2.0</min>
+    <min>5.4.0</min>
    </php>
    <pearinstaller>
-    <min>1.5.4</min>
+    <min>1.10.0</min>
    </pearinstaller>
    <package>
     <name>HTML_Common2</name>
@@ -742,6 +733,35 @@ compatible, all classes reside in separate files.
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2019-04-10</date>
+   <version>
+    <release>2.1.0</release>
+    <api>2.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
+   <notes>
+ * HTML_QuickForm2 runs under PHP 7.2+ without warnings / &quot;deprecated&quot;
+   messages
+ * Tests run correctly on PHPUnit versions up to 5
+ * It is possible to automatically add &quot;nonce&quot; attributes to inline
+   &lt;script&gt; tags, just call
+   HTML_Common2::setOption('nonce', $someNonceValue);
+   before outputting the form. This allows running HTML_QuickForm2 with
+   reasonable Content-Security-Policy
+* Bundled a separate LICENSE file instead of having it in each .php file
+  header. Updated phrasing and links to mention 3-Clause BSD license
+  the package actually uses.
+
+When installing with composer, files no longer contain 'require_once' calls
+and 'include-path' option is not used. The package is now 100% autoloader
+compatible, all classes reside in separate files.
+   </notes>
+  </release>
   <release>
    <date>2014-06-28</date>
    <version>

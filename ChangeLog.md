@@ -1,5 +1,14 @@
 # Changes in HTML_QuickForm2
 
+## 2.2.0 - 2020-09-14
+ * Minimum required PHP version is now 5.4
+ * Removed support for magic_quotes_gpc, as `get_magic_quotes_gpc()`
+   was deprecated in PHP 7.4 and the functionality itself was disabled 
+   since PHP 5.4 (GitHub issue #3)
+ * `HTML_QuickForm2_Element_Date::setValue()` will now accept an instance of
+   `DateTimeInterface`, not only `DateTime` 
+
+
 ## 2.1.0 - 2019-04-10
  * HTML_QuickForm2 runs under PHP 7.2+ without warnings / &quot;deprecated&quot;
    messages
