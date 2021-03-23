@@ -211,6 +211,52 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
     }
 
     /**
+     * Sets some options to renderer and returns form as array.
+     * http://www.google.com/codesearch/p?hl=en#X4TnDmcwdV0/trunk/yui/base/&q=HTML_QuickForm2%20lang:php
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $renderer = HTML_QuickForm2_Renderer::factory('array');
+        $renderer->setOption('required_note', _('полужирным отмечены обязательные поля'));
+        $renderer->setOption('group_errors', false);
+        $renderer->setOption('static_labels', true);
+
+        return $this->render($renderer)->toArray();
+    }
+
+    /**
+     * Return array of error messages for current validated form.
+     *
+     * @return array
+     */
+    public function errorMessages()
+    {
+        $error_messages = [];
+        # If we got form error - ignore elements errors.
+        if ($this->getError()) {
+            $error_messages[] = $this->getError();
+
+            return $error_messages;
+        }
+        foreach (new RecursiveIteratorIterator($this->getIterator()) as $elem) {
+            if (!$elem->getError()) {
+                continue;
+            }
+            $label = $elem->getData()['label'];
+            $label = is_array($label) ? $label[0] : $label;
+            if ($label) {
+                $error_messages[] = sprintf('%s: %s', $label, $elem->getError());
+            } else {
+                $error_messages[] = $elem->getError();
+            }
+        }
+
+        return $error_messages;
+    }
+
+    /**
      * Filter for form's getValue() removing internal fields' values from the array
      *
      * @param array $value

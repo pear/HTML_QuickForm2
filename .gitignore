@@ -10,3 +10,5 @@ js/docs/
 
 # used when generating PEAR package
 .pear-package/
+
+.idea

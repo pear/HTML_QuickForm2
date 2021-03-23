@@ -62,7 +62,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     */
     protected function validateOwner()
     {
-        if (0 == ($valueLength = strlen($this->owner->getValue()))) {
+        if (0 == ($valueLength = mb_strlen($this->owner->getValue(), 'UTF-8'))) {
             return true;
         }
 

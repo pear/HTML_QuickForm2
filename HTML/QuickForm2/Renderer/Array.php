@@ -186,8 +186,9 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     public function buildCommonFields(HTML_QuickForm2_Node $element)
     {
         $ary = [
-            'id'     => $element->getId(),
-            'frozen' => $element->toggleFrozen()
+            'id'                 => $element->getId(),
+            'frozen'             => $element->toggleFrozen(),
+            'element-attributes' => $element->getAttributes(),
         ];
         if ($labels = $element->getLabel()) {
             if (!is_array($labels) || !$this->options['static_labels']) {
