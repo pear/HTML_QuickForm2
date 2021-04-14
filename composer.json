@@ -34,6 +34,7 @@
     "autoload": {
         "psr-0": {
             "HTML_QuickForm2": ""
-        }
+        },
+        "exclude-from-classmap": ["/tests/", "/docs/", "/js/", "/data/"]
     }
 }
