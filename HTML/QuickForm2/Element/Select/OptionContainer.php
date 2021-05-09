@@ -140,8 +140,8 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     public function __toString()
     {
         $indentLvl = $this->getIndentLevel();
-        $indent    = $this->getIndent() . self::getOption('indent');
-        $linebreak = self::getOption('linebreak');
+        $indent    = $this->getIndent() . self::getOption(self::OPTION_INDENT);
+        $linebreak = self::getOption(self::OPTION_LINEBREAK);
         $html      = '';
         $strValues = array_map('strval', $this->values);
         foreach ($this->options as $option) {

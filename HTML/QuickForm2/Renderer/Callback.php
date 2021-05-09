@@ -177,7 +177,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     public static function _renderForm(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2 $form
     ) {
-        $break = HTML_Common2::getOption('linebreak');
+        $break = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $html[] = '<div class="quickform">' .
             call_user_func($renderer->errorGroupCallback, $renderer, $form) .
             '<form'.$form->getAttributes(true).'><div>' .
@@ -280,14 +280,14 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     public static function _renderContainer(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Container $container
     ) {
-        $break  = HTML_Common2::getOption('linebreak');
+        $break  = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         return implode($break, array_pop($renderer->html));
     }
 
     public static function _renderGroup(
         HTML_QuickForm2_Renderer $renderer, HTML_QuickForm2_Container_Group $group
     ) {
-        $break = HTML_Common2::getOption('linebreak');
+        $break = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $class = $group->getAttribute('class');
         $html[] = '<div class="row'.(!empty($class) ? ' '.$class : '').'">';
         $html[] = $renderer->renderLabel($group);
@@ -325,7 +325,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Container_Repeat $repeat
     ) {
-        $break = HTML_Common2::getOption('linebreak');
+        $break = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $html[] = '<div class="row repeat" id="'.$repeat->getId().'">';
         $label = $repeat->getLabel();
         if (!is_array($label)) {
@@ -345,7 +345,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         HTML_QuickForm2_Renderer $renderer,
         HTML_QuickForm2_Container_Fieldset $fieldset
     ) {
-        $break = HTML_Common2::getOption('linebreak');
+        $break = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $html[] = '<fieldset'.$fieldset->getAttributes(true).'>';
         $label = $fieldset->getLabel();
         if (!empty($label)) {

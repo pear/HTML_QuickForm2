@@ -66,21 +66,25 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
         if ($this->frozen) {
             return $this->getFrozenHtml();
         } else {
-            return $this->getIndent() . '<textarea' . $this->getAttributes(true) .
-                   '>' . preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars(
-                        $this->value, ENT_QUOTES, self::getOption('charset')
-                   )) . '</textarea>';
+            return $this->getIndent()
+                   . '<textarea' . $this->getAttributes(true) . '>'
+                   . preg_replace(
+                       "/(\r\n|\n|\r)/",
+                       '&#010;',
+                       htmlspecialchars($this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET))
+                   )
+                   . '</textarea>';
         }
     }
 
     public function getFrozenHtml()
     {
-        $value = htmlspecialchars($this->value, ENT_QUOTES, self::getOption('charset'));
+        $value = htmlspecialchars($this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET));
         if ('off' == $this->getAttribute('wrap')) {
             $html = $this->getIndent() . '<pre>' . $value .
-                    '</pre>' . self::getOption('linebreak');
+                    '</pre>' . self::getOption(self::OPTION_LINEBREAK);
         } else {
-            $html = nl2br($value) . self::getOption('linebreak');
+            $html = nl2br($value) . self::getOption(self::OPTION_LINEBREAK);
         }
         return $html . $this->getPersistentContent();
     }

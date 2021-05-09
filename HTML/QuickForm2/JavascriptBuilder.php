@@ -290,9 +290,9 @@ class HTML_QuickForm2_JavascriptBuilder
     protected function wrapScript($js)
     {
         if ('' != $js) {
-            $cr         = HTML_Common2::getOption('linebreak');
+            $cr         = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
             $attributes = ' type="text/javascript"';
-            if (null !== ($nonce = HTML_Common2::getOption('nonce'))) {
+            if (null !== ($nonce = HTML_Common2::getOption(HTML_QuickForm2_Node::OPTION_NONCE))) {
                 $attributes .= ' nonce="' . $nonce . '"';
             }
             $js = "<script{$attributes}>{$cr}//<![CDATA[{$cr}"

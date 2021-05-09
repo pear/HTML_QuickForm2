@@ -29,7 +29,7 @@ class HTML_QuickForm2_Element_ScriptTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        HTML_Common2::setOption('nonce', null);
+        HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_NONCE, null);
     }
 
     public function testInlineScriptNonce()
@@ -41,7 +41,7 @@ class HTML_QuickForm2_Element_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertNotRegExp('/<script[^>]*nonce/', $script);
 
         HTML_Common2::setOption(
-            'nonce',
+            HTML_QuickForm2_Node::OPTION_NONCE,
             $nonce = base64_encode('HTML_QuickForm2_nonce' . microtime())
         );
         $script = $element->__toString();

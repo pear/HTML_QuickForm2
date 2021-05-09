@@ -24,18 +24,6 @@
 // pear-package-only  */
 // pear-package-only require_once 'HTML/Common2.php';
 
-// By default, we generate element IDs with numeric indexes appended even for
-// elements with unique names. If you want IDs to be equal to the element
-// names by default, set this configuration option to false.
-if (null === HTML_Common2::getOption('id_force_append_index')) {
-    HTML_Common2::setOption('id_force_append_index', true);
-}
-
-// set the default language for various elements' messages
-if (null === HTML_Common2::getOption('language')) {
-    HTML_Common2::setOption('language', 'en');
-}
-
 // pear-package-only /**
 // pear-package-only  * Exception classes for HTML_QuickForm2
 // pear-package-only  */
@@ -69,6 +57,25 @@ if (null === HTML_Common2::getOption('language')) {
  */
 abstract class HTML_QuickForm2_Node extends HTML_Common2
 {
+    /**
+     * Name of option containing default language for various elements' messages
+     */
+    const OPTION_LANGUAGE = 'language';
+
+    /**
+     * Name of option that toggles always appending a numeric index to generated id values
+     *
+     * By default, we generate element IDs with numeric indexes appended even for
+     * elements with unique names. If you want IDs to be equal to the element
+     * names by default, set this configuration option to false.
+     */
+    const OPTION_ID_FORCE_APPEND_INDEX = 'id_force_append_index';
+
+    /**
+     * Name of option containing a value for "nonce" attribute of generated &lt;script&gt; tags
+     */
+    const OPTION_NONCE = 'nonce';
+
    /**
     * Array containing the parts of element ids
     * @var array
@@ -199,7 +206,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     protected static function generateId($elementName)
     {
-        $stop      =  !self::getOption('id_force_append_index');
+        $stop      =  !self::getOption(self::OPTION_ID_FORCE_APPEND_INDEX);
         $tokens    =  strlen($elementName)
                       ? explode('[', str_replace(']', '', $elementName))
                       : ($stop? ['qfauto', ''] : ['qfauto']);
@@ -776,5 +783,13 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * @return   HTML_QuickForm2_Renderer
     */
     abstract public function render(HTML_QuickForm2_Renderer $renderer);
+}
+
+// set default values for document-wide options
+if (null === HTML_Common2::getOption(HTML_QuickForm2_Node::OPTION_ID_FORCE_APPEND_INDEX)) {
+    HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_ID_FORCE_APPEND_INDEX, true);
+}
+if (null === HTML_Common2::getOption(HTML_QuickForm2_Node::OPTION_LANGUAGE)) {
+    HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_LANGUAGE, 'en');
 }
 ?>

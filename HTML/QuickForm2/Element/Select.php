@@ -116,7 +116,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             }
             $indent = $this->getIndent();
             return $indent . '<select' . $attrString . '>' .
-                   self::getOption('linebreak') .
+                   self::getOption(self::OPTION_LINEBREAK) .
                    $this->optionContainer->__toString() .
                    $indent . '</select>';
         }

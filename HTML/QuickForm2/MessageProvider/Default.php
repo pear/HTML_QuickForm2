@@ -269,7 +269,7 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
     public function get(array $messageId, $langId = null)
     {
         if (empty($langId)) {
-            $langId = HTML_Common2::getOption('language');
+            $langId = HTML_Common2::getOption(HTML_QuickForm2_Node::OPTION_LANGUAGE);
         }
         $key = array_shift($messageId);
         if (empty($this->messages[$key]) || empty($this->messages[$key][$langId])) {

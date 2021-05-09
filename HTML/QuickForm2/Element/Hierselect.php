@@ -334,7 +334,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         // we store values and options with id of first select rather than with
         // the element's name since the former has more chances to be unique
         $selectId = reset($this->elements)->getId();
-        $cr       = HTML_Common2::getOption('linebreak');
+        $cr       = self::getOption(self::OPTION_LINEBREAK);
         $js       = "qf.elements.hierselect.defaults['{$selectId}'] = " .
                     HTML_QuickForm2_JavascriptBuilder::encode($this->_values) . ";{$cr}";
         $jsParts  = [];

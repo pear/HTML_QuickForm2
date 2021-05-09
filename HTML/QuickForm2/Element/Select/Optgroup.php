@@ -61,7 +61,7 @@ class HTML_QuickForm2_Element_Select_Optgroup
     public function __toString()
     {
         $indent    = $this->getIndent();
-        $linebreak = self::getOption('linebreak');
+        $linebreak = self::getOption(self::OPTION_LINEBREAK);
         return $indent . '<optgroup' . $this->getAttributes(true) . '>' .
                $linebreak . parent::__toString() . $indent . '</optgroup>' . $linebreak;
     }
