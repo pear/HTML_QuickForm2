@@ -38,6 +38,7 @@
         "exclude-from-classmap": ["docs/"]
     },
     "autoload-dev": {
-        "classmap": ["tests/"]
+        "classmap": ["tests/"],
+        "exclude-from-classmap": ["tests/MockObjectGenerator.original.php", "tests/MockObjectGenerator.patched.php"]
     }
 }
