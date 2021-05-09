@@ -1,5 +1,13 @@
 # Changes in HTML_QuickForm2
 
+## 2.2.1 - 2021-05-09
+* Depend on newer HTML_Common2 that does not cause problems with optimized
+  composer autoloader, see Github issue #4
+* Consistently use `HTML_Common2::OPTION_*` constants for document-wide 
+  option names, define and use additional `HTML_QuickForm2_Node::OPTION_*`
+  constants instead of directly using `'language'`, `'id_force_append_index'`
+  and `'nonce'` strings
+
 ## 2.2.0 - 2020-09-14
  * Minimum required PHP version is now 5.4
  * Removed support for magic_quotes_gpc, as `get_magic_quotes_gpc()`
