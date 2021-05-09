@@ -26,7 +26,7 @@
     "require": {
         "php":                 ">=5.4.0",
         "pear/pear_exception": "^1.0",
-        "pear/html_common2":   "^2.1"
+        "pear/html_common2":   "^2.2"
     },
     "require-dev": {
         "phpunit/phpunit":     "^4.8|^5.7"
@@ -34,6 +34,10 @@
     "autoload": {
         "psr-0": {
             "HTML_QuickForm2": ""
-        }
+        },
+        "exclude-from-classmap": ["docs/"]
+    },
+    "autoload-dev": {
+        "classmap": ["tests/"]
     }
 }
