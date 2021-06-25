@@ -19,7 +19,7 @@
 
     <property name="closure_command" value="java -jar ${path.closure} --compilation_level SIMPLE_OPTIMIZATIONS --rewrite_polyfills=false" />
 
-    <property name="package_version" value="2.2.1" />
+    <property name="package_version" value="2.2.2" />
 
     <target name="init">
         <mkdir dir="build"/>

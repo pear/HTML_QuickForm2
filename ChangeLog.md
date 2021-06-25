@@ -1,5 +1,9 @@
 # Changes in HTML_QuickForm2
 
+## 2.2.2 - 2021-06-25
+* Incorrect option name used in `HTML_QuickForm2_Element_Script::__toString()`.
+  Thanks to Julian Striegl (striegljulian at gmail dot com) for reporting
+
 ## 2.2.1 - 2021-05-09
 * Depend on newer HTML_Common2 that does not cause problems with optimized
   composer autoloader, see Github issue #4

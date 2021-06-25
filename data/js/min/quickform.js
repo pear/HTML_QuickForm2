@@ -1,6 +1,6 @@
 /*
  HTML_QuickForm2 client-side validation library
- Package version 2.2.1
+ Package version 2.2.2
  https://pear.php.net/package/HTML_QuickForm2
 
  Copyright 2006-2021, Alexey Borzov, Bertrand Mansion
