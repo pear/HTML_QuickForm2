@@ -22,12 +22,14 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_JavascriptBuilder class
  */
-class HTML_QuickForm2_JavascriptBuilderTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_JavascriptBuilderTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_NONCE, null);
     }

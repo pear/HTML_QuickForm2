@@ -22,10 +22,12 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Factory class
  */
-class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_FactoryTest extends TestCase
 {
     protected $phpError;
     protected $errorHandler;
@@ -36,13 +38,13 @@ class HTML_QuickForm2_FactoryTest extends PHPUnit_Framework_TestCase
         'getJavascriptTriggers', 'render'
     ];
 
-    protected function setUp()
+    protected function set_up()
     {
         $this->phpError     = null;
         $this->errorHandler = false;
     }
 
-    protected function tearDown()
+    protected function tear_down()
     {
         if ($this->errorHandler) {
             restore_error_handler();

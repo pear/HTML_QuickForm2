@@ -22,10 +22,12 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for array-based data source
  */
-class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_DataSource_ArrayTest extends TestCase
 {
    /**
     * data source being tested
@@ -33,7 +35,7 @@ class HTML_QuickForm2_DataSource_ArrayTest extends PHPUnit_Framework_TestCase
     */
     protected $ds;
 
-    public function setUp()
+    protected function set_up()
     {
         $this->ds = new HTML_QuickForm2_DataSource_Array([
             'foo' => 'some value',

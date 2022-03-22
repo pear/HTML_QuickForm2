@@ -22,12 +22,14 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Element_InputSubmit class
  */
-class HTML_QuickForm2_Element_InputSubmitTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputSubmitTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_POST = [
             'foo' => 'A button clicked'

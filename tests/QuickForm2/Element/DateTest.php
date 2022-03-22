@@ -22,7 +22,9 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
-class HTML_QuickForm2_Element_DateTest extends PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class HTML_QuickForm2_Element_DateTest extends TestCase
 {
    /**
     * @expectedException HTML_QuickForm2_InvalidArgumentException

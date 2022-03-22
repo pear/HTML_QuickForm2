@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * A non-abstract subclass of Element
  *
@@ -50,9 +52,9 @@ class HTML_QuickForm2_ElementImpl extends HTML_QuickForm2_Element
 /**
  * Unit test for HTML_QuickForm2_Element class,
  */
-class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_ElementTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_REQUEST = [
             '_qf__form1' => ''
@@ -64,7 +66,7 @@ class HTML_QuickForm2_ElementTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    public function tearDown()
+    protected function tear_down()
     {
         HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_ID_FORCE_APPEND_INDEX, true);
     }

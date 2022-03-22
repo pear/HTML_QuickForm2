@@ -22,10 +22,12 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Element_InputCheckable class
  */
-class HTML_QuickForm2_Element_InputCheckableTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_InputCheckableTest extends TestCase
 {
     public function testConstructorSetsContent()
     {

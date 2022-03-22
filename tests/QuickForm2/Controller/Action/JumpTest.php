@@ -22,15 +22,16 @@
 /** Sets up includes */
 require_once dirname(dirname(dirname(__DIR__))) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Controller_Action_Jump class
  */
-class HTML_QuickForm2_Controller_Action_JumpTest
-    extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Controller_Action_JumpTest extends TestCase
 {
     protected $mockJump;
 
-    public function setUp()
+    protected function set_up()
     {
         $this->mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action_Jump')
             ->setMethods(['doRedirect'])

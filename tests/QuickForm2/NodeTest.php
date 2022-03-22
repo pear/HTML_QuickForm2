@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * A non-abstract subclass of Node
  *
@@ -51,7 +53,7 @@ class HTML_QuickForm2_NodeImpl extends HTML_QuickForm2_Node
 /**
  * Unit test for HTML_QuickForm2_Node class,
  */
-class HTML_QuickForm2_NodeTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_NodeTest extends TestCase
 {
     public function testCanSetLabel()
     {

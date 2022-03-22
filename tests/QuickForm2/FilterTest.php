@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
 {
     public function getType() { return 'concrete'; }
@@ -42,9 +44,9 @@ function repeatFilter($value)
 /**
  * Unit test for HTML_QuickForm2_Rule class
  */
-class HTML_QuickForm2_FilterTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_FilterTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_REQUEST['_qf__filters'] = '';
         $_POST = [

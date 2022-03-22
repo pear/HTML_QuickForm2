@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * An "implementation" of renderer, to be able to create an instance
  */
@@ -79,7 +81,7 @@ class HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin
 /**
  * Unit test for HTML_QuickForm2_Renderer class
  */
-class HTML_QuickForm2_RendererTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_RendererTest extends TestCase
 {
     public function testRegisterRenderer()
     {

@@ -22,10 +22,12 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Renderer_Callback class
  */
-class HTML_QuickForm2_Renderer_CallbackTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
 {
     public static function _renderInputText($renderer, $element)
     {

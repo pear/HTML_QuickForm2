@@ -22,11 +22,12 @@
 /** Sets up includes */
 require_once dirname(dirname(dirname(__DIR__))) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for HTML_QuickForm2_Controller_Action_Next class
  */
-class HTML_QuickForm2_Controller_Action_NextTest
-    extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Controller_Action_NextTest extends TestCase
 {
     public function testWizardBehaviour()
     {

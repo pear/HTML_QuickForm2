@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * A non-abstract subclass of Element
  *
@@ -82,7 +84,7 @@ class RuleRequest17576 extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2_Container class
  */
-class HTML_QuickForm2_ContainerTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_ContainerTest extends TestCase
 {
     public function testCanSetName()
     {

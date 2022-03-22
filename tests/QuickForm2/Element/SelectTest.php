@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Let's just make parseAttributes() public rather than copy and paste regex
  */
@@ -36,9 +38,9 @@ abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_C
 /**
  * Unit test for HTML_QuickForm2_Element_Select class
  */
-class HTML_QuickForm2_Element_SelectTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_Element_SelectTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_POST = [
             'single1' => '1'

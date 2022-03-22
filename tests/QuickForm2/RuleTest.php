@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * The non-abstract subclass of Rule
  */
@@ -37,7 +39,7 @@ class HTML_QuickForm2_Rule_ImplConst extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2_Rule class
  */
-class HTML_QuickForm2_RuleTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_RuleTest extends TestCase
 {
     public function testSetAndGetOptions()
     {

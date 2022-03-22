@@ -22,12 +22,14 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  * Unit test for superglobal-based data source
  */
-class HTML_QuickForm2_DataSource_SuperGlobalTest extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2_DataSource_SuperGlobalTest extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_GET = [
             'foo' => 'some value',

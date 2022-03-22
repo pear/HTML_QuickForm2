@@ -22,6 +22,8 @@
 /** Sets up includes */
 require_once __DIR__ . '/TestHelper.php';
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 class FormRule extends HTML_QuickForm2_Rule
 {
     protected function validateOwner()
@@ -39,9 +41,9 @@ class FormRule extends HTML_QuickForm2_Rule
 /**
  * Unit test for HTML_QuickForm2 class
  */
-class HTML_QuickForm2Test extends PHPUnit_Framework_TestCase
+class HTML_QuickForm2Test extends TestCase
 {
-    public function setUp()
+    protected function set_up()
     {
         $_REQUEST = [
             '_qf__track' => ''
