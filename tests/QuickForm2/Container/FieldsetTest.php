@@ -32,13 +32,13 @@ class HTML_QuickForm2_Element_FieldsetTest extends TestCase
     public function testFieldsetIsEmptyByDefault()
     {
         $fs = new HTML_QuickForm2_Container_Fieldset();
-        $this->assertRegExp('!\s*<fieldset id="[^"]+">\s*</fieldset>\s*!', $fs->__toString());
+        $this->assertMatchesRegularExpression('!\s*<fieldset id="[^"]+">\s*</fieldset>\s*!', $fs->__toString());
     }
 
     public function testLegend()
     {
         $fs = new HTML_QuickForm2_Container_Fieldset(null, null, ['label' => 'legend']);
-        $this->assertRegExp('!\s*<fieldset[^>]+>\s*<legend id="[^"]+-legend">legend</legend>\s*</fieldset>\s*!', $fs->__toString());
+        $this->assertMatchesRegularExpression('!\s*<fieldset[^>]+>\s*<legend id="[^"]+-legend">legend</legend>\s*</fieldset>\s*!', $fs->__toString());
     }
 }
 ?>

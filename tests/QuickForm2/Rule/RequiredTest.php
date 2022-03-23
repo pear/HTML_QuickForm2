@@ -38,7 +38,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMakesElementRequired()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->onlyMethods($this->nodeAbstractMethods)
             ->getMock();
         $mockNode->addRule(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
         $this->assertTrue($mockNode->isRequired());
@@ -47,22 +47,22 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMustBeFirstInChain()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->onlyMethods($this->nodeAbstractMethods)
             ->getMock();
         $rule = $mockNode->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
+                ->onlyMethods(['validateOwner'])
                 ->setConstructorArgs([$mockNode, 'some message'])
                 ->getMock()
         );
         try {
             $rule->and_(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Cannot add a "required" rule/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Cannot add a "required" rule/', $e->getMessage());
             try {
                 $rule->or_(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
             } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegexp('/Cannot add a "required" rule/', $e->getMessage());
+                $this->assertMatchesRegularExpression('/Cannot add a "required" rule/', $e->getMessage());
                 return;
             }
         }
@@ -72,18 +72,18 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testCannotAppendWithOr_()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->onlyMethods($this->nodeAbstractMethods)
             ->getMock();
         $required = new HTML_QuickForm2_Rule_Required($mockNode, 'element is required');
         try {
             $required->or_(
                 $this->getMockBuilder('HTML_QuickForm2_Rule')
-                    ->setMethods(['validateOwner'])
+                    ->onlyMethods(['validateOwner'])
                     ->setConstructorArgs([$mockNode, 'some message'])
                     ->getMock()
             );
         } catch (HTML_QuickForm2_Exception $e) {
-            $this->assertRegexp('/Cannot add a rule to "required" rule/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Cannot add a rule to "required" rule/', $e->getMessage());
             return;
         }
         $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
@@ -91,14 +91,15 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
 
    /**
     * @link http://pear.php.net/bugs/18133
-    * @expectedException HTML_QuickForm2_InvalidArgumentException
     */
     public function testCannotHaveEmptyMessage()
     {
+        $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
+
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->onlyMethods($this->nodeAbstractMethods)
             ->getMock();
-        $required = new HTML_QuickForm2_Rule_Required($mockNode);
+        new HTML_QuickForm2_Rule_Required($mockNode);
     }
 }
 ?>

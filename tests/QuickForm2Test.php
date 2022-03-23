@@ -96,24 +96,23 @@ class HTML_QuickForm2Test extends TestCase
         $this->assertEquals('/foobar.php', $form2->getAttribute('action'));
     }
 
-    public function testIdAndMethodAreReadonly()
+    public function testIdAttributeIsReadOnly()
+    {
+        $form = new HTML_QuickForm2('foo', 'get');
+        try {
+            $form->removeAttribute('id');
+        } catch (\HTML_QuickForm2_InvalidArgumentException $e) {
+            $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
+            $form->setId('newId');
+        }
+    }
+
+    public function testMethodAttributeIsReadOnly()
     {
         $form = new HTML_QuickForm2('foo', 'get');
 
-        try {
-            $form->removeAttribute('id');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            try {
-                $form->setAttribute('method', 'post');
-            } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                try {
-                    $form->setId('newId');
-                } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                    return;
-                }
-            }
-        }
-        $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
+        $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
+        $form->setAttribute('method', 'post');
     }
 
     public function testCannotAddToContainer()
@@ -121,12 +120,8 @@ class HTML_QuickForm2Test extends TestCase
         $form1 = new HTML_QuickForm2('form1');
         $form2 = new HTML_QuickForm2('form2');
 
-        try {
-            $form1->appendChild($form2);
-        } catch (HTML_QuickForm2_Exception $e) {
-            return;
-        }
-        $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
+        $this::expectException(\HTML_QuickForm2_Exception::class);
+        $form1->appendChild($form2);
     }
 
     public function testSetDataSources()

@@ -88,6 +88,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends TestCase
    /**
     * Notices were emitted when 'content' key was missing from $data
     * @see http://pear.php.net/bugs/bug.php?id=16816
+    * @doesNotPerformAssertions
     */
     public function testBug16816()
     {
@@ -106,7 +107,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends TestCase
         $box = new HTML_QuickForm2_Element_InputCheckbox(
             'testBox', ['value' => 0]
         );
-        $this->assertContains('value="0"', $box->__toString());
+        $this->assertStringContainsString('value="0"', $box->__toString());
     }
 
     /**

@@ -40,17 +40,17 @@ class HTML_QuickForm2_Element_InputCheckableTest extends TestCase
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
             'foo', ['id' => 'checkableFoo'], ['content' => 'I am foo']
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<label\\s+for="checkableFoo">I am foo</label>!',
             $checkable->__toString()
         );
 
         $checkable->toggleFrozen(true);
-        $this->assertNotRegExp('!<label!', $checkable->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<label!', $checkable->__toString());
 
         $checkable->toggleFrozen(false);
         $this->assertSame($checkable, $checkable->setContent(''));
-        $this->assertNotRegExp('!<label!', $checkable->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<label!', $checkable->__toString());
     }
 
     public function testEmptyContentRendering()
@@ -58,7 +58,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends TestCase
         $checkable = new HTML_QuickForm2_Element_InputCheckable(
             'foo1', ['id' => 'checkableFoo1']
         );
-        $this->assertNotRegExp('!<label!', $checkable->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<label!', $checkable->__toString());
     }
 
     public function testSetAndGetValue()
@@ -99,10 +99,10 @@ class HTML_QuickForm2_Element_InputCheckableTest extends TestCase
         $checkable->setAttribute('checked');
 
         $checkable->toggleFrozen(true);
-        $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $checkable->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $checkable->__toString());
 
         $checkable->removeAttribute('checked');
-        $this->assertNotRegExp('!<input!', $checkable->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<input!', $checkable->__toString());
     }
 
     public function testBug15708()
@@ -114,7 +114,7 @@ class HTML_QuickForm2_Element_InputCheckableTest extends TestCase
         $aRadio = $form->appendChild(
                             new HTML_QuickForm2_Element_InputCheckable('aRadio')
                       )->setAttribute('value', 1);
-        $this->assertContains('checked', $aRadio->__toString());
+        $this->assertStringContainsString('checked', $aRadio->__toString());
     }
 
 }

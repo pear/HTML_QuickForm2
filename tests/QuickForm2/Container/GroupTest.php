@@ -308,13 +308,13 @@ class HTML_QuickForm2_Element_GroupTest extends TestCase
         $element = $group->addElement('text', 'anElement');
 
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->once())->method('getJavascriptCallback')
                   ->will($this->returnValue('groupCallback'));
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
@@ -322,7 +322,7 @@ class HTML_QuickForm2_Element_GroupTest extends TestCase
 
         $group->addRule($ruleGroup, HTML_QuickForm2_Rule::CLIENT);
         $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
-        $this->assertRegexp(
+        $this->assertMatchesRegularExpression(
             '/elementCallback.*groupCallback/s',
             $group->render(HTML_QuickForm2_Renderer::factory('default'))
                   ->getJavascriptBuilder()->getFormJavascript()
@@ -333,7 +333,7 @@ class HTML_QuickForm2_Element_GroupTest extends TestCase
     {
         $group = new HTML_QuickForm2_Container_Group('aGroup');
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->never())->method('getJavascriptCallback');

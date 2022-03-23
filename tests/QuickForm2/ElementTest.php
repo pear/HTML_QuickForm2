@@ -106,11 +106,11 @@ class HTML_QuickForm2_ElementTest extends TestCase
         try {
             $obj->removeAttribute('name');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Required attribute(.*)can not be removed/', $e->getMessage());
             try {
                 $obj->removeAttribute('id');
             } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-                $this->assertRegExp('/Required attribute(.*)can not be removed/', $e->getMessage());
+                $this->assertMatchesRegularExpression('/Required attribute(.*)can not be removed/', $e->getMessage());
                 return;
             }
         }
@@ -230,7 +230,7 @@ class HTML_QuickForm2_ElementTest extends TestCase
     public function testGeneratedIdsShouldNotStartWithNumbers()
     {
         $el = new HTML_QuickForm2_ElementImpl('0');
-        $this->assertNotRegExp('/^\d/', $el->getId());
+        $this->assertDoesNotMatchRegularExpression('/^\d/', $el->getId());
     }
 
     /**

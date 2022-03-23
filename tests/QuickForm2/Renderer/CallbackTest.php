@@ -231,10 +231,13 @@ class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
         $renderer = HTML_Quickform2_Renderer::factory('callback')
             ->setOption('required_note', 'This is requi-i-i-ired!');
 
-        $this->assertNotContains('<div class="reqnote">', $form->render($renderer)->__toString());
+        $this->assertStringNotContainsString('<div class="reqnote">', $form->render($renderer)->__toString());
 
         $element->addRule('required', 'error message');
-        $this->assertContains('<div class="reqnote">This is requi-i-i-ired!</div>', $form->render($renderer)->__toString());
+        $this->assertStringContainsString(
+            '<div class="reqnote">This is requi-i-i-ired!</div>',
+            $form->render($renderer)->__toString()
+        );
     }
 
     public function testRenderGroupedErrors()
@@ -248,7 +251,7 @@ class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
                 'errors_suffix' => ''
             ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<div class="errors"><p>Your errors:</p><ul><li>Some error</li></ul></div>',
             $form->render($renderer)->__toString()
         );
@@ -263,8 +266,8 @@ class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
             ->setOption('group_hiddens', false);
 
         $html = $form->render($renderer)->__toString();
-        $this->assertContains('<div style="display: none;">' . $hidden1->__toString() . '</div>', $html);
-        $this->assertContains('<div style="display: none;">' . $hidden2->__toString() . '</div>', $html);
+        $this->assertStringContainsString('<div style="display: none;">' . $hidden1->__toString() . '</div>', $html);
+        $this->assertStringContainsString('<div style="display: none;">' . $hidden2->__toString() . '</div>', $html);
 
         $renderer->setOption('group_hiddens', true);
         $html = $form->render($renderer)->__toString();
@@ -272,7 +275,7 @@ class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
         // why not ?
         // $this->assertNotContains('<div style="display: none;">', $html);
 
-        $this->assertContains($hidden1->__toString() . $hidden2->__toString(), $html);
+        $this->assertStringContainsString($hidden1->__toString() . $hidden2->__toString(), $html);
     }
 
     public static function _renderGroupInputText($renderer, $element)
@@ -316,25 +319,25 @@ class HTML_QuickForm2_Renderer_CallbackTest extends TestCase
                 [$class, '_renderGroupedElement']
             );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'testRenderGroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setCallbackForId('testRenderGroupedElement', null);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'GroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setElementCallbackForGroupId('testRenderGroup', 'HTML_QuickForm2_Element', null);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'GroupedInput;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setElementCallbackForGroupClass('HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input', null);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'IgnoreThis', $group->render($renderer->reset())->__toString()
         );
     }

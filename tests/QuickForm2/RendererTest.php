@@ -118,7 +118,7 @@ class HTML_QuickForm2_RendererTest extends TestCase
         try {
             HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/already registered/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/already registered/', $e->getMessage());
             return;
         }
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
@@ -135,7 +135,7 @@ class HTML_QuickForm2_RendererTest extends TestCase
             $renderer = HTML_Quickform2_Renderer::factory($type);
             $renderer->sayHello();
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/^Duplicate method name/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/^Duplicate method name/', $e->getMessage());
             return;
         }
         $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');

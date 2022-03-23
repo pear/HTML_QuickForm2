@@ -32,14 +32,14 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testRegexIsRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $regex = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
             $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Regex Rule requires a regular expression/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Regex Rule requires a regular expression/', $e->getMessage());
             return;
         }
     }
@@ -47,7 +47,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testOptionsHandling()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
@@ -63,7 +63,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
@@ -83,7 +83,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
@@ -99,7 +99,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testBug10799()
     {
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
@@ -112,7 +112,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testCheckUploadFilename()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
                   ->will($this->returnValue([
@@ -126,7 +126,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
         $this->assertTrue($rule->validate());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
                     ->will($this->returnValue([
@@ -143,7 +143,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
@@ -152,7 +152,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
         $this->assertTrue($ruleSimple->validate());
 
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue([
@@ -169,15 +169,14 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testRequest12736()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                 'getRawValue', 'setValue', '__toString'])
+            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('no Cyrillic letters here'));
         $ruleCyr = new HTML_QuickForm2_Rule_Regex($mockEl, 'an error', '/\x{0445}\x{0443}\x{0439}/ui');
 
         $this->assertFalse($ruleCyr->validate());
-        $this->assertContains('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
+        $this->assertStringContainsString('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
     }
 }
 ?>

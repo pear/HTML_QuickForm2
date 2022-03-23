@@ -36,28 +36,28 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
             $mimeType = new HTML_QuickForm2_Rule_MimeType($file, 'an error');
             $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/MimeType Rule requires MIME type[(]s[)]/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/MimeType Rule requires MIME type[(]s[)]/', $e->getMessage());
         }
     }
 
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $mimeType = new HTML_QuickForm2_Rule_MimeType($mockEl, 'an error', 'text/plain');
             $this->fail('The expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/MimeType Rule can only validate file upload fields/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/MimeType Rule can only validate file upload fields/', $e->getMessage());
         }
     }
 
     public function testMissingUploadsAreSkipped()
     {
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue([
@@ -74,7 +74,7 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testOptionsHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue([
@@ -95,7 +95,7 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testConfigHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue([
@@ -120,7 +120,7 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->once())->method('getValue')
                  ->will($this->returnValue([

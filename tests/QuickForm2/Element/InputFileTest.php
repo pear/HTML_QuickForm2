@@ -90,15 +90,13 @@ class HTML_QuickForm2_Element_InputFileTest extends TestCase
 
         $toobig = $form->appendChild(new HTML_QuickForm2_Element_InputFile('toobig'));
         $this->assertFalse($form->validate());
-        $this->assertContains('987654', $toobig->getError());
+        $this->assertStringContainsString('987654', $toobig->getError());
     }
 
-   /**
-    * @expectedException HTML_QuickForm2_InvalidArgumentException
-    */
     public function testInvalidMessageProvider()
     {
-        $invalid = new HTML_QuickForm2_Element_InputFile('invalid', null, ['messageProvider' => []]);
+        $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
+        new HTML_QuickForm2_Element_InputFile('invalid', null, ['messageProvider' => []]);
     }
 
     public static function callbackMessageProvider($messageId, $langId)
@@ -119,7 +117,7 @@ class HTML_QuickForm2_Element_InputFileTest extends TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
                      ->will($this->returnValue('A nasty error happened!'));

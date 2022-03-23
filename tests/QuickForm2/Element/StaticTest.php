@@ -78,14 +78,12 @@ class HTML_QuickForm2_Element_StaticTest extends TestCase
 
     public function testCannotValidate()
     {
+        $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $static = new HTML_QuickForm2_Element_Static('novalidate');
-        try {
-            $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
-                ->setConstructorArgs([$static, 'a message'])
-                ->getMock();
-            $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
-        } catch (HTML_QuickForm2_InvalidArgumentException $e) { }
+        $this->getMockBuilder('HTML_QuickForm2_Rule')
+            ->onlyMethods(['validateOwner'])
+            ->setConstructorArgs([$static, 'a message'])
+            ->getMock();
     }
 
     public function testCanRemoveName()
@@ -105,22 +103,20 @@ class HTML_QuickForm2_Element_StaticTest extends TestCase
             'picture', ['alt' => 'foo', 'src' => 'pr0n.gif'],
             ['tagName' => 'img', 'forceClosingTag' => false]
         );
-        $this->assertRegexp('!<img[^<>]*alt="foo" src="pr0n.gif"[^<>]*/>!', $img->__toString());
+        $this->assertMatchesRegularExpression('!<img[^<>]*alt="foo" src="pr0n.gif"[^<>]*/>!', $img->__toString());
 
         $div = new HTML_QuickForm2_Element_Static(
             null, ['class' => 'foo'], ['tagName' => 'div']
         );
-        $this->assertRegexp('!<div[^<>]*class="foo"[^<>]*></div>!', $div->__toString());
+        $this->assertMatchesRegularExpression('!<div[^<>]*class="foo"[^<>]*></div>!', $div->__toString());
         $div->setContent('bar');
-        $this->assertRegexp('!<div[^<>]*class="foo"[^<>]*>bar</div>!', $div->__toString());
+        $this->assertMatchesRegularExpression('!<div[^<>]*class="foo"[^<>]*>bar</div>!', $div->__toString());
     }
 
-   /**
-    * @expectedException HTML_QuickForm2_InvalidArgumentException
-    */
     public function testDisallowedTagNames()
     {
-        $static = new HTML_QuickForm2_Element_Static('foo', null, ['tagName' => 'input']);
+        $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
+        new HTML_QuickForm2_Element_Static('foo', null, ['tagName' => 'input']);
     }
 
     /**

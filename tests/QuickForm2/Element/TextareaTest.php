@@ -33,7 +33,7 @@ class HTML_QuickForm2_Element_TextareaTest extends TestCase
     {
         $area = new HTML_QuickForm2_Element_Textarea();
         $this->assertNull($area->getValue());
-        $this->assertRegExp('!\\s*<textarea[^>]*></textarea>\\s*!', $area->__toString());
+        $this->assertMatchesRegularExpression('!\\s*<textarea[^>]*></textarea>\\s*!', $area->__toString());
     }
 
     public function testSetAndGetValue()
@@ -41,21 +41,21 @@ class HTML_QuickForm2_Element_TextareaTest extends TestCase
         $area = new HTML_QuickForm2_Element_Textarea();
         $this->assertSame($area, $area->setValue('Some string'));
         $this->assertEquals('Some string', $area->getValue());
-        $this->assertRegExp('!\\s*<textarea[^>]*>Some string</textarea>\\s*!', $area->__toString());
+        $this->assertMatchesRegularExpression('!\\s*<textarea[^>]*>Some string</textarea>\\s*!', $area->__toString());
 
         $area->setAttribute('disabled');
         $this->assertNull($area->getValue());
-        $this->assertRegExp('!\\s*<textarea[^>]*>Some string</textarea>\\s*!', $area->__toString());
+        $this->assertMatchesRegularExpression('!\\s*<textarea[^>]*>Some string</textarea>\\s*!', $area->__toString());
     }
 
     public function testValueOutputIsEscaped()
     {
         $area = new HTML_QuickForm2_Element_Textarea();
         $area->setValue('<foo>');
-        $this->assertNotRegExp('/<foo>/', $area->__toString());
+        $this->assertDoesNotMatchRegularExpression('/<foo>/', $area->__toString());
 
         $area->toggleFrozen(true);
-        $this->assertNotRegExp('/<foo>/', $area->__toString());
+        $this->assertDoesNotMatchRegularExpression('/<foo>/', $area->__toString());
     }
 
     public function testFrozenHtmlGeneration()
@@ -64,17 +64,17 @@ class HTML_QuickForm2_Element_TextareaTest extends TestCase
         $area->setValue('Some string');
 
         $area->toggleFrozen(true);
-        $this->assertRegExp('/Some string/', $area->__toString());
-        $this->assertRegExp('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
+        $this->assertMatchesRegularExpression('/Some string/', $area->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
 
         $area->persistentFreeze(false);
-        $this->assertRegExp('/Some string/', $area->__toString());
-        $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
+        $this->assertMatchesRegularExpression('/Some string/', $area->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
 
         $area->persistentFreeze(true);
         $area->setAttribute('disabled');
-        $this->assertRegExp('/Some string/', $area->__toString());
-        $this->assertNotRegExp('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
+        $this->assertMatchesRegularExpression('/Some string/', $area->__toString());
+        $this->assertDoesNotMatchRegularExpression('!<input[^>]*type="hidden"[^>]*/>!', $area->__toString());
     }
 }
 ?>

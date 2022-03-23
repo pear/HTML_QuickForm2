@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_NotCallbackTest extends TestCase
     public function testNegatesResult()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())

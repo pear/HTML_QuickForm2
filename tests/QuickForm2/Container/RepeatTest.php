@@ -29,44 +29,51 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Container_RepeatTest extends TestCase
 {
+    public function testCannotUseAnotherRepeatAsPrototype()
+    {
+        $repeatOne = new HTML_QuickForm2_Container_Repeat();
+        $repeatTwo = new HTML_QuickForm2_Container_Repeat();
+
+        $this::expectException(\HTML_QuickForm2_Exception::class);
+        $repeatOne->setPrototype($repeatTwo);
+    }
+
     public function testCannotAddRepeatToRepeat()
     {
         $repeatOne = new HTML_QuickForm2_Container_Repeat();
         $repeatTwo = new HTML_QuickForm2_Container_Repeat();
 
-        try {
-            $repeatOne->setPrototype($repeatTwo);
-            $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
-        } catch (HTML_QuickForm2_Exception $e) {}
-
         $fieldset = new HTML_QuickForm2_Container_Fieldset();
         $repeatOne->setPrototype($fieldset);
 
-        try {
-            $fieldset->appendChild($repeatTwo);
-            $this->fail('Expected HTML_QuickForm2_Exception was not thrown');
-        } catch (HTML_QuickForm2_Exception $e) {}
+        $this::expectException(\HTML_QuickForm2_Exception::class);
+        $fieldset->appendChild($repeatTwo);
     }
 
-    public function testPrototypeRequiredForDOMAndOutput()
+    public function testPrototypeRequiredForAppendChild()
     {
         $repeat = new HTML_QuickForm2_Container_Repeat();
         $text   = new HTML_QuickForm2_Element_InputText('aTextBox');
 
-        try {
-            $repeat->appendChild($text);
-            $this->fail('Expected HTML_QuickForm2_NotFoundException not found');
-        } catch (HTML_QuickForm2_NotFoundException $e) {}
+        $this::expectException(\HTML_QuickForm2_NotFoundException::class);
+        $repeat->appendChild($text);
+    }
 
-        try {
-            $repeat->insertBefore($text);
-            $this->fail('Expected HTML_QuickForm2_NotFoundException not found');
-        } catch (HTML_QuickForm2_NotFoundException $e) {}
+    public function testPrototypeRequiredForInsertBefore()
+    {
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+        $text   = new HTML_QuickForm2_Element_InputText('aTextBox');
 
-        try {
-            $repeat->render(HTML_QuickForm2_Renderer::factory('default'));
-            $this->fail('Expected HTML_QuickForm2_NotFoundException not found');
-        } catch (HTML_QuickForm2_NotFoundException $e) {}
+        $this::expectException(\HTML_QuickForm2_NotFoundException::class);
+        $repeat->insertBefore($text);
+    }
+
+    public function testPrototypeRequiredForOutput()
+    {
+        $repeat = new HTML_QuickForm2_Container_Repeat();
+
+        $this::expectException(\HTML_QuickForm2_NotFoundException::class);
+        $repeat->render(HTML_QuickForm2_Renderer::factory('default'));
     }
 
     public function testElementsAreAddedToPrototype()
@@ -189,7 +196,7 @@ class HTML_QuickForm2_Container_RepeatTest extends TestCase
         $repeat->setPrototype(new HTML_QuickForm2_Container_Fieldset());
         $repeat->toggleFrozen(true);
 
-        $this->assertNotContains('<script', $repeat->__toString());
+        $this->assertStringNotContainsString('<script', $repeat->__toString());
     }
 
     public function testServerSideValidationErrors()
@@ -297,7 +304,7 @@ class HTML_QuickForm2_Container_RepeatTest extends TestCase
         $renderer->getJavascriptBuilder()->setFormId('fake-repeat');
         $repeat->render($renderer);
 
-        $this->assertContains('new qf.Validator', $renderer->getJavascriptBuilder()->getValidator());
+        $this->assertStringContainsString('new qf.Validator', $renderer->getJavascriptBuilder()->getValidator());
     }
 }
 ?>

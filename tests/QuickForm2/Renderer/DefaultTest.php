@@ -170,10 +170,10 @@ class HTML_QuickForm2_Renderer_DefaultTest extends TestCase
         $renderer = HTML_Quickform2_Renderer::factory('default')
             ->setOption('required_note', 'This is requi-i-i-ired!');
 
-        $this->assertNotContains('<div class="reqnote">', $form->render($renderer)->__toString());
+        $this->assertStringNotContainsString('<div class="reqnote">', $form->render($renderer)->__toString());
 
         $element->addRule('required', 'error message');
-        $this->assertContains('<div class="reqnote">This is requi-i-i-ired!</div>', $form->render($renderer)->__toString());
+        $this->assertStringContainsString('<div class="reqnote">This is requi-i-i-ired!</div>', $form->render($renderer)->__toString());
     }
 
     public function testRenderGroupedErrors()
@@ -187,7 +187,7 @@ class HTML_QuickForm2_Renderer_DefaultTest extends TestCase
                 'errors_suffix' => ''
             ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<div class="errors"><p>Your errors:</p><ul><li>Some error</li></ul></div>',
             $form->render($renderer)->__toString()
         );
@@ -202,13 +202,13 @@ class HTML_QuickForm2_Renderer_DefaultTest extends TestCase
             ->setOption('group_hiddens', false);
 
         $html = $form->render($renderer)->__toString();
-        $this->assertContains('<div style="display: none;">' . $hidden1->__toString() . '</div>', $html);
-        $this->assertContains('<div style="display: none;">' . $hidden2->__toString() . '</div>', $html);
+        $this->assertStringContainsString('<div style="display: none;">' . $hidden1->__toString() . '</div>', $html);
+        $this->assertStringContainsString('<div style="display: none;">' . $hidden2->__toString() . '</div>', $html);
 
         $renderer->setOption('group_hiddens', true);
         $html = $form->render($renderer)->__toString();
-        $this->assertNotContains('<div style="display: none;">', $html);
-        $this->assertContains($hidden1->__toString() . $hidden2->__toString(), $html);
+        $this->assertStringNotContainsString('<div style="display: none;">', $html);
+        $this->assertStringContainsString($hidden1->__toString() . $hidden2->__toString(), $html);
     }
 
     public function testRenderGroupedElementUsingMostAppropriateTemplate()
@@ -228,25 +228,25 @@ class HTML_QuickForm2_Renderer_DefaultTest extends TestCase
                 'testRenderGroupedElement', 'testRenderGroupedElement;id={id},html={element}'
             );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'testRenderGroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setTemplateForId('testRenderGroupedElement', null);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'GroupedElement;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setElementTemplateForGroupId('testRenderGroup', 'HTML_QuickForm2_Element', null);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'GroupedInput;id=' . $element->getId() . ',html=' . $element->__toString(),
             $group->render($renderer->reset())->__toString()
         );
 
         $renderer->setElementTemplateForGroupClass('HTML_QuickForm2_Container_Group', 'HTML_QuickForm2_Element_Input', null);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'IgnoreThis', $group->render($renderer->reset())->__toString()
         );
     }

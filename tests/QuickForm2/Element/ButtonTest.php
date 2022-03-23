@@ -40,7 +40,7 @@ class HTML_QuickForm2_Element_ButtonTest extends TestCase
     public function testConstructorSetsContent()
     {
         $button = new HTML_QuickForm2_Element_Button('foo', null, ['content' => 'Some string']);
-        $this->assertRegexp('!<button[^>]*>Some string</button>!', $button->__toString());
+        $this->assertMatchesRegularExpression('!<button[^>]*>Some string</button>!', $button->__toString());
     }
 
     public function testCannotBeFrozen()

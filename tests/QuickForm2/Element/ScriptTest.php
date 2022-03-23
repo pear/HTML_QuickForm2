@@ -40,13 +40,13 @@ class HTML_QuickForm2_Element_ScriptTest extends TestCase
         $element->setContent('Some javascript');
 
         $script = $element->__toString();
-        $this->assertNotRegExp('/<script[^>]*nonce/', $script);
+        $this->assertDoesNotMatchRegularExpression('/<script[^>]*nonce/', $script);
 
         HTML_Common2::setOption(
             HTML_QuickForm2_Node::OPTION_NONCE,
             $nonce = base64_encode('HTML_QuickForm2_nonce' . microtime())
         );
         $script = $element->__toString();
-        $this->assertRegExp('/<script[^>]*nonce="' . $nonce . '"/', $script);
+        $this->assertMatchesRegularExpression('/<script[^>]*nonce="' . $nonce . '"/', $script);
     }
 }

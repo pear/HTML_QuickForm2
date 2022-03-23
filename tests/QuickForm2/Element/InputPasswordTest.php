@@ -35,10 +35,10 @@ class HTML_QuickForm2_Element_InputPasswordTest extends TestCase
         $input->setValue('bar');
         $input->toggleFrozen(true);
         // wow, never used lookbehind assertions before
-        $this->assertNotRegExp('/(?<!value=")bar/', $input->__toString());
+        $this->assertDoesNotMatchRegularExpression('/(?<!value=")bar/', $input->__toString());
 
         $input->persistentFreeze(false);
-        $this->assertNotRegexp('/bar/', $input->__toString());
+        $this->assertDoesNotMatchRegularExpression('/bar/', $input->__toString());
     }
 }
 ?>

@@ -32,27 +32,27 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testOperandRequired()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $compare = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error');
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Compare Rule requires an argument to compare with/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Compare Rule requires an argument to compare with/', $e->getMessage());
         }
         try {
             $compare2 = new HTML_QuickForm2_Rule_Compare($mockEl, 'some error', []);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e2) {
-            $this->assertRegexp('/Compare Rule requires an argument to compare with/', $e2->getMessage(), 'Wrong exception');
+            $this->assertMatchesRegularExpression('/Compare Rule requires an argument to compare with/', $e2->getMessage(), 'Wrong exception');
         }
     }
 
     public function testDefaultOperatorIsEqual()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
@@ -68,13 +68,13 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testCompareToOtherElement()
     {
         $mockFirst = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockFirst->expects($this->once())->method('getRawValue')
                   ->will($this->returnValue('foo'));
         $mockSecond = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockSecond->expects($this->once())->method('getRawValue')
@@ -88,21 +88,21 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testDisallowBogusOperators()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $bogus = new HTML_QuickForm2_Rule_Compare($mockEl, 'bogus error', ['foo', 'bar']);
             $this->fail('Expected HTML_QuickForm2_InvalidArgumentException was not thrown');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
-            $this->assertRegexp('/Compare Rule requires a valid comparison operator/', $e->getMessage());
+            $this->assertMatchesRegularExpression('/Compare Rule requires a valid comparison operator/', $e->getMessage());
         }
     }
 
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
@@ -125,7 +125,7 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
@@ -152,7 +152,7 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
@@ -170,13 +170,13 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testBug10754()
     {
         $mockFrom = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockFrom->expects($this->once())->method('getRawValue')
                  ->will($this->returnValue('00080002310000114151'));
         $mockTo   = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->onlyMethods(['getType',
                                    'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockTo->expects($this->once())->method('getRawValue')
@@ -192,15 +192,15 @@ class HTML_QuickForm2_Rule_CompareTest extends TestCase
     public function testValidationTriggers()
     {
         $foo = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->setConstructorArgs(['foo', ['id' => 'foo']])
             ->getMock();
         $bar = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->setConstructorArgs(['bar', ['id' => 'bar']])
             ->getMock();
         $compare = new HTML_QuickForm2_Rule_Compare($foo, '...', $bar);
-        $this->assertContains('["foo","bar"]', $compare->getJavascript());
+        $this->assertStringContainsString('["foo","bar"]', $compare->getJavascript());
     }
 }
 ?>

@@ -169,7 +169,7 @@ class HTML_QuickForm2_Renderer_ArrayTest extends TestCase
                         ->setOption('static_labels', false);
 
         $array = $element->render($renderer)->toArray();
-        $this->assertInternalType('array', $array['label']);
+        $this->assertIsArray($array['label']);
 
         $array = $element->render(
                     $renderer->setOption('static_labels', true)->reset()

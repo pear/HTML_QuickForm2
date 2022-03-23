@@ -52,7 +52,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
     {
         $sel = new HTML_QuickForm2_Element_Select();
         $this->assertNull($sel->getValue());
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!^<select[^>]*>\\s*</select>$!',
             $sel->__toString()
         );
@@ -117,14 +117,14 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
     {
         $sel = new HTML_QuickForm2_Element_Select();
         $sel->addOption('Text', 'Value');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!^<select[^>]*>\\s*<option[^>]+value="Value"[^>]*>Text</option>\\s*</select>!',
             $sel->__toString()
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
         $sel2->addOption('Text', 'Value', ['class' => 'bar']);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<option[^>]+class="bar"[^>]*>Text</option>!',
             $sel2->__toString()
         );
@@ -132,7 +132,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel3 = new HTML_QuickForm2_Element_Select();
         $sel3->addOption('Text', 'Value', ['selected']);
         $this->assertEquals('Value', $sel3->getValue());
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<option[^>]+selected="selected"[^>]*>Text</option>!',
             $sel3->__toString()
         );
@@ -143,14 +143,14 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel = new HTML_QuickForm2_Element_Select();
         $optgroup = $sel->addOptgroup('Label');
         $this->assertInstanceOf('HTML_QuickForm2_Element_Select_Optgroup', $optgroup);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*</optgroup>\\s*</select>!',
             $sel->__toString()
         );
 
         $sel2 = new HTML_QuickForm2_Element_Select();
         $optgroup2 = $sel2->addOptgroup('Label', ['class' => 'bar']);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<optgroup[^>]+class="bar"[^>]*>\\s*</optgroup>!',
             $sel2->__toString()
         );
@@ -161,7 +161,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel = new HTML_QuickForm2_Element_Select();
         $optgroup = $sel->addOptgroup('Label');
         $optgroup->addOption('Text', 'Value');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!^<select[^>]*>\\s*<optgroup[^>]+label="Label"[^>]*>\\s*' .
             '<option[^>]+value="Value"[^>]*>Text</option>\\s*</optgroup>\\s*</select>!',
             $sel->__toString()
@@ -170,7 +170,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel2 = new HTML_QuickForm2_Element_Select();
         $optgroup2 = $sel2->addOptgroup('Label');
         $optgroup2->addOption('Text', 'Value', ['class' => 'bar']);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+class="bar"[^>]*>Text</option>\\s*</optgroup>!',
             $sel2->__toString()
         );
@@ -179,7 +179,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $optgroup3 = $sel3->addOptgroup('Label');
         $optgroup3->addOption('Text', 'Value', ['selected']);
         $this->assertEquals('Value', $sel3->getValue());
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+selected="selected"[^>]*>Text</option>\\s*</optgroup>!',
             $sel3->__toString()
         );
@@ -190,19 +190,19 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel = new HTML_QuickForm2_Element_Select('loadOptions', ['multiple']);
         $this->assertSame($sel, $sel->loadOptions(['one' => 'First', 'two' => 'Second']));
         $sel->setValue(['one', 'two']);
-        $this->assertRegexp(
+        $this->assertMatchesRegularExpression(
             '!<option[^>]+value="one"[^>]*>First</option>\\s*<option[^>]+value="two"[^>]*>Second</option>!',
             $sel->__toString()
         );
         $this->assertEquals(['one', 'two'], $sel->getValue());
 
         $sel->loadOptions(['Label' => ['two' => 'Second', 'three' => 'Third']]);
-        $this->assertRegexp(
+        $this->assertMatchesRegularExpression(
             '!<optgroup[^>]+label="Label"[^>]*>\\s*<option[^>]+value="two"[^>]*>Second</option>\\s*' .
             '<option[^>]+value="three"[^>]*>Third</option>\\s*</optgroup>!',
             $sel->__toString()
         );
-        $this->assertNotRegexp(
+        $this->assertDoesNotMatchRegularExpression(
             '!<option[^>]+value="one"[^>]*>First</option>!',
             $sel->__toString()
         );
@@ -212,7 +212,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
     public function testSelectMultipleName()
     {
         $sel = new HTML_QuickForm2_Element_Select('foo', ['multiple']);
-        $this->assertRegExp('/name="foo\\[\\]"/', $sel->__toString());
+        $this->assertMatchesRegularExpression('/name="foo\\[\\]"/', $sel->__toString());
     }
 
     public function testFrozenHtmlGeneration()
@@ -223,12 +223,12 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel->toggleFrozen(true);
 
         $sel->persistentFreeze(false);
-        $this->assertNotRegExp('/[<>]/', $sel->__toString());
-        $this->assertRegExp('/Text/', $sel->__toString());
+        $this->assertDoesNotMatchRegularExpression('/[<>]/', $sel->__toString());
+        $this->assertMatchesRegularExpression('/Text/', $sel->__toString());
 
         $sel->persistentFreeze(true);
-        $this->assertRegExp('/Text/', $sel->__toString());
-        $this->assertRegExp('!<input[^>]+type="hidden"[^>]*/>!', $sel->__toString());
+        $this->assertMatchesRegularExpression('/Text/', $sel->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]+type="hidden"[^>]*/>!', $sel->__toString());
 
         preg_match('!<input([^>]+)/>!', $sel->__toString(), $matches);
         $this->assertEquals(
@@ -237,8 +237,8 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         );
 
         $sel->setValue('Nonexistent');
-        $this->assertNotRegExp('/Text/', $sel->__toString());
-        $this->assertNotRegExp('/[<>]/', $sel->__toString());
+        $this->assertDoesNotMatchRegularExpression('/Text/', $sel->__toString());
+        $this->assertDoesNotMatchRegularExpression('/[<>]/', $sel->__toString());
     }
 
     public function testSelectMultipleFrozenHtmlGeneration()
@@ -249,8 +249,8 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel->setValue(['FirstValue', 'SecondValue']);
         $sel->toggleFrozen(true);
 
-        $this->assertRegExp('/FirstText.*SecondText/s', $sel->__toString());
-        $this->assertRegExp('!<input[^>]+type="hidden"[^>]*/>!', $sel->__toString());
+        $this->assertMatchesRegularExpression('/FirstText.*SecondText/s', $sel->__toString());
+        $this->assertMatchesRegularExpression('!<input[^>]+type="hidden"[^>]*/>!', $sel->__toString());
 
         preg_match_all('!<input([^>]+)/>!', $sel->__toString(), $matches, PREG_SET_ORDER);
         $this->assertEquals(
@@ -303,19 +303,19 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         $sel->setValue('02');
 
         $selHtml = $sel->__toString();
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '!selected="selected"[^>]*>TwoWithZero!', $selHtml
         );
-        $this->assertNotRegExp(
+        $this->assertDoesNotMatchRegularExpression(
             '!selected="selected"[^>]*>TwoWithoutZero!', $selHtml
         );
 
         $sel->toggleFrozen(true);
         $selFrozen = $sel->__toString();
-        $this->assertContains('TwoWithZero', $selFrozen);
-        $this->assertContains('value="02"', $selFrozen);
-        $this->assertNotContains('TwoWithoutZero', $selFrozen);
-        $this->assertNotContains('value="2"', $selFrozen);
+        $this->assertStringContainsString('TwoWithZero', $selFrozen);
+        $this->assertStringContainsString('value="02"', $selFrozen);
+        $this->assertStringNotContainsString('TwoWithoutZero', $selFrozen);
+        $this->assertStringNotContainsString('value="2"', $selFrozen);
     }
 
    /**

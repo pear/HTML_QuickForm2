@@ -34,17 +34,17 @@ class HTML_QuickForm2_Controller_Action_BackTest extends TestCase
         $formOne = new HTML_QuickForm2('formOne');
         $formOne->addElement('text', 'foo')->setValue('foo value');
         $pageOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(['populateForm'])
+            ->onlyMethods(['populateForm'])
             ->setConstructorArgs([$formOne])
             ->getMock();
         $formTwo = new HTML_QuickForm2('formTwo');
         $formTwo->addElement('text', 'bar')->setValue('bar value');
         $pageTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(['populateForm'])
+            ->onlyMethods(['populateForm'])
             ->setConstructorArgs([$formTwo])
             ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(['perform'])
+            ->onlyMethods(['perform'])
             ->getMock();
         $mockJump->expects($this->exactly(2))->method('perform')
                  ->will($this->returnValue('jump to foo'));
@@ -64,19 +64,19 @@ class HTML_QuickForm2_Controller_Action_BackTest extends TestCase
     public function testNoValidationForWizards()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(['validate'])
+            ->onlyMethods(['validate'])
             ->setConstructorArgs(['eternallyValid'])
             ->getMock();
         $mockForm->expects($this->once())->method('validate')
                  ->will($this->returnValue(true));
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(['populateForm'])
+            ->onlyMethods(['populateForm'])
             ->setConstructorArgs([$mockForm])
             ->getMock();
         $mockPage->addHandler(
             'jump',
             $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-                ->setMethods(['perform'])
+                ->onlyMethods(['perform'])
                 ->getMock()
         );
 
