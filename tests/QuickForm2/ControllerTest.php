@@ -29,6 +29,12 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_ControllerTest extends TestCase
 {
+    public function set_up()
+    {
+        $_REQUEST = [];
+        $_SESSION = [];
+    }
+
     public function testSetExplicitID()
     {
         $controller = new HTML_QuickForm2_Controller('foo', false, false);
@@ -63,8 +69,6 @@ class HTML_QuickForm2_ControllerTest extends TestCase
 
     public function testContainer()
     {
-        $_SESSION = [];
-
         $controller = new HTML_QuickForm2_Controller('foo');
         $container  = $controller->getSessionContainer();
         $this->assertNotEquals([], $_SESSION);

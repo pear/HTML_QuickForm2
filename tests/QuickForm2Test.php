@@ -40,6 +40,7 @@ class HTML_QuickForm2Test extends TestCase
             'key' => 'value'
         ];
         $_POST = [];
+        $_FILES = [];
     }
 
     public function testTrackSubmit()
