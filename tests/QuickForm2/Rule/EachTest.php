@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testDisallowMissingConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
@@ -43,7 +43,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testDisallowNonRuleConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
@@ -56,7 +56,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $this::expectExceptionMessage('Cannot use "required" Rule as a template');
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Each($mockEl, 'an error', $mockEl->createRule('required', 'an error'));
     }
@@ -66,7 +66,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $this::expectExceptionMessage('Each Rule can only validate Containers');
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Each($mockEl, '', $mockEl->createRule('empty'));
     }
@@ -74,7 +74,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidatesWithTemplateRule()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar')->setValue('I am not empty');
@@ -92,7 +92,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testSetsErrorOnContainer()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar')->setValue('I am not empty');
@@ -108,12 +108,12 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testChainedRulesAreIgnored()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $ruleIgnored = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$foo])
             ->getMock();
         $ruleIgnored->expects($this->never())->method('validateOwner');
@@ -128,10 +128,10 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidateNestedContainer()
     {
         $mockOuter = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockInner = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockOuter->addElement('text', 'foo')->setValue('');
         $bar = $mockInner->addElement('text', 'bar')->setValue('not empty');
@@ -149,12 +149,12 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testIgnoresStaticServerSide()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('static', 'noValidateServer');
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('validateOwner')
@@ -167,12 +167,12 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testIgnoresStaticClientSide()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('static', 'noValidateClient');
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('getJavascriptCallback')
@@ -185,13 +185,13 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidationTriggers()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('text', 'foo', ['id' => 'foo']);
         $mockContainer->addElement('text', 'bar', ['id' => 'bar']);
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('getJavascriptCallback')

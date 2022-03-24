@@ -49,7 +49,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends TestCase
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -64,7 +64,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends TestCase
     public function testMissingUploadsAreSkipped()
     {
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue([
@@ -81,7 +81,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends TestCase
     public function testOptionsHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue([
@@ -101,7 +101,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends TestCase
     public function testConfigHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
                  ->will($this->returnValue([
@@ -126,7 +126,7 @@ class HTML_QuickForm2_Rule_MaxFileSizeTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFile->expects($this->once())->method('getValue')
                  ->will($this->returnValue([

@@ -76,7 +76,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
     public function testAddPage()
     {
         $firstPage  = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([new HTML_QuickForm2('firstPage')])
             ->getMock();
         $controller = new HTML_QuickForm2_Controller('foo');
@@ -93,7 +93,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
         try {
             $controller->addPage(
                 $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                    ->onlyMethods(['populateForm'])
+                    ->setMethods(['populateForm'])
                     ->setConstructorArgs([new HTML_QuickForm2('firstPage')])
                     ->getMock()
             );
@@ -112,7 +112,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
 
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([new HTML_QuickForm2('aPage')])
                 ->getMock()
         );
@@ -129,7 +129,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
         $controller1 = new HTML_QuickForm2_Controller('first');
         $controller1->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([new HTML_QuickForm2('foo')])
                 ->getMock()
         );
@@ -138,7 +138,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
         $controller2 = new HTML_QuickForm2_Controller('second');
         $controller2->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([new HTML_QuickForm2('baz')])
                 ->getMock()
         );
@@ -153,12 +153,12 @@ class HTML_QuickForm2_ControllerTest extends TestCase
         $controller = new HTML_QuickForm2_Controller('simpleIsValid');
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([new HTML_QuickForm2('first')])
                 ->getMock()
         );
         $second = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([new HTML_QuickForm2('second')])
             ->getMock();
         $controller->addPage($second);
@@ -174,12 +174,12 @@ class HTML_QuickForm2_ControllerTest extends TestCase
         $controller = new HTML_QuickForm2_Controller('isValidUnseen', false);
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([new HTML_QuickForm2('seen')])
                 ->getMock()
         );
         $mockUnseen = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate', 'getValue'])
+            ->setMethods(['validate', 'getValue'])
             ->setConstructorArgs(['unseen'])
             ->getMock();
         $mockUnseen->expects($this->once())->method('validate')
@@ -188,7 +188,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
                    ->will($this->returnValue(['foo' => 'bar']));
         $controller->addPage(
             $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-                ->onlyMethods(['populateForm'])
+                ->setMethods(['populateForm'])
                 ->setConstructorArgs([$mockUnseen])
                 ->getMock()
         );
@@ -207,7 +207,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
     public function testBug8687()
     {
         $mockForm = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate'])
+            ->setMethods(['validate'])
             ->setConstructorArgs(['invalid'])
             ->getMock();
         $mockForm->expects($this->once())->method('validate')
@@ -216,7 +216,7 @@ class HTML_QuickForm2_ControllerTest extends TestCase
                            ->loadOptions(['one' => 'First label', 'two' => 'Second label']);
         $box    = $mockForm->addElement('checkbox', 'bar');
         $mockPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$mockForm])
             ->getMock();
         $controller = new HTML_QuickForm2_Controller('bug8687', false);

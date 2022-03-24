@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
     public function testValidateGenericElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockValid->expects($this->once())->method('getRawValue')
@@ -42,7 +42,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
@@ -55,7 +55,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
     public function testValidateInputFileElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
                   ->will($this->returnValue([
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
                     ->will($this->returnValue([
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
     public function testFailedUploadIsNotEmpty()
     {
         $mockFailed = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockFailed->expects($this->once())->method('getValue')
                    ->will($this->returnValue([
@@ -106,7 +106,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
     public function testValidateArray()
     {
         $mockElEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElEmpty->expects($this->once())->method('getRawValue')
@@ -115,7 +115,7 @@ class HTML_QuickForm2_Rule_EmptyTest extends TestCase
         $this->assertTrue($rule->validate());
 
         $mockElNonEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                          'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElNonEmpty->expects($this->once())->method('getRawValue')

@@ -37,7 +37,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends TestCase
     public function testValidCallbackRequired()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -58,7 +58,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends TestCase
     public function testOptionsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
@@ -79,7 +79,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
@@ -104,7 +104,7 @@ class HTML_QuickForm2_Rule_CallbackTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())

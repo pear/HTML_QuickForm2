@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testRegexIsRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -47,7 +47,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testOptionsHandling()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
@@ -63,7 +63,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
@@ -83,7 +83,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
@@ -99,7 +99,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testBug10799()
     {
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
@@ -112,7 +112,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testCheckUploadFilename()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
                   ->will($this->returnValue([
@@ -126,7 +126,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
         $this->assertTrue($rule->validate());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
                     ->will($this->returnValue([
@@ -143,7 +143,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
@@ -152,7 +152,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
         $this->assertTrue($ruleSimple->validate());
 
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue([
@@ -169,7 +169,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testRequest12736()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('no Cyrillic letters here'));

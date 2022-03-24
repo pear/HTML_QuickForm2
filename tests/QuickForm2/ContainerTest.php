@@ -403,19 +403,19 @@ class HTML_QuickForm2_ContainerTest extends TestCase
         $el2 = $cValidate->appendChild(new ElementImpl('bar'));
 
         $ruleTrue1 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$cValidate, 'irrelevant message'])
             ->getMock();
         $ruleTrue1->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(true));
         $ruleFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$el1, 'some error'])
             ->getMock();
         $ruleFalse->expects($this->once())->method('validateOwner')
                   ->will($this->returnValue(false));
         $ruleTrue2 = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$el2, 'irrelevant message'])
             ->getMock();
         $ruleTrue2->expects($this->once())->method('validateOwner')
@@ -439,7 +439,7 @@ class HTML_QuickForm2_ContainerTest extends TestCase
         $element   = $container->appendChild(new ElementImpl('foo'));
 
         $ruleChange = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$element, 'a message'])
             ->getMock();
         $ruleChange->expects($this->exactly(2))->method('validateOwner')
@@ -466,13 +466,13 @@ class HTML_QuickForm2_ContainerTest extends TestCase
         $element   = $container->appendChild(new ElementImpl('anElement'));
 
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$container])
             ->getMock();
         $ruleContainer->expects($this->once())->method('getJavascriptCallback')
                       ->will($this->returnValue('containerCallback'));
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
@@ -491,7 +491,7 @@ class HTML_QuickForm2_ContainerTest extends TestCase
     {
         $container = new ContainerImpl('aContainer');
         $ruleContainer = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$container])
             ->getMock();
         $ruleContainer->expects($this->never())->method('getJavascriptCallback');

@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_NotRegexTest extends TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
@@ -41,7 +41,7 @@ class HTML_QuickForm2_Rule_NotRegexTest extends TestCase
         $this->assertTrue($ruleSimple->validate());
 
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
                      ->will($this->returnValue([
@@ -58,7 +58,7 @@ class HTML_QuickForm2_Rule_NotRegexTest extends TestCase
     public function testNegatesResult()
     {
         $mockComment = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockComment->expects($this->once())->method('getRawValue')
@@ -67,7 +67,7 @@ class HTML_QuickForm2_Rule_NotRegexTest extends TestCase
         $this->assertFalse($ruleNoSpam->validate());
 
         $mockUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockUpload->expects($this->once())->method('getValue')
                    ->will($this->returnValue([

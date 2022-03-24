@@ -81,7 +81,7 @@ class HTML_QuickForm2_Element_StaticTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $static = new HTML_QuickForm2_Element_Static('novalidate');
         $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner'])
+            ->setMethods(['validateOwner'])
             ->setConstructorArgs([$static, 'a message'])
             ->getMock();
     }

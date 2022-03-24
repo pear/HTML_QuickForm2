@@ -49,7 +49,7 @@ class HTML_QuickForm2_Element_DateTest extends TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->onlyMethods(['get'])
+            ->setMethods(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
                      ->will($this->returnValue(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday']));

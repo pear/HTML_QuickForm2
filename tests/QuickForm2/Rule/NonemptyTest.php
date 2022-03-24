@@ -32,7 +32,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateGenericElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockValid->expects($this->once())->method('getRawValue')
@@ -42,7 +42,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
@@ -55,7 +55,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateInputFileElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
                   ->will($this->returnValue([
@@ -70,7 +70,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->onlyMethods(['getValue'])
+            ->setMethods(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
                     ->will($this->returnValue([
@@ -88,7 +88,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     public function testDefaultConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl);
@@ -99,7 +99,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     {
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Nonempty($mockEl, 'an error', -1);
     }
@@ -127,7 +127,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateContainer()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar[idx]')->setValue('I am not empty');
@@ -145,10 +145,10 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateNestedContainer()
     {
         $mockOuter = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockInner = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockOuter->addElement('text', 'foo[idx]')->setValue('');
         $bar = $mockInner->addElement('text', 'bar[idx]')->setValue('not empty');
@@ -164,7 +164,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     public function testContainerValidationTriggers()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('text', 'foo', ['id' => 'foo']);
         $mockContainer->addElement('text', 'bar', ['id' => 'bar']);

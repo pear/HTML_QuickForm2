@@ -54,7 +54,7 @@ class HTML_QuickForm2_FilterTest extends TestCase
     public function testFiltersShouldPreserveNulls()
     {
         $mockElement = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->onlyMethods(['getType',
+            ->setMethods(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElement->expects($this->atLeastOnce())
@@ -63,7 +63,7 @@ class HTML_QuickForm2_FilterTest extends TestCase
         $this->assertNull($mockElement->getValue());
 
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->onlyMethods(['getType', 'setValue', '__toString'])
+            ->setMethods(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->appendChild($mockElement);
         $mockContainer->addRecursiveFilter('intval');

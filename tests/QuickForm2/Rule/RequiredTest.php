@@ -38,7 +38,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMakesElementRequired()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->onlyMethods($this->nodeAbstractMethods)
+            ->setMethods($this->nodeAbstractMethods)
             ->getMock();
         $mockNode->addRule(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
         $this->assertTrue($mockNode->isRequired());
@@ -47,11 +47,11 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMustBeFirstInChain()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->onlyMethods($this->nodeAbstractMethods)
+            ->setMethods($this->nodeAbstractMethods)
             ->getMock();
         $rule = $mockNode->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->onlyMethods(['validateOwner'])
+                ->setMethods(['validateOwner'])
                 ->setConstructorArgs([$mockNode, 'some message'])
                 ->getMock()
         );
@@ -72,13 +72,13 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testCannotAppendWithOr_()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->onlyMethods($this->nodeAbstractMethods)
+            ->setMethods($this->nodeAbstractMethods)
             ->getMock();
         $required = new HTML_QuickForm2_Rule_Required($mockNode, 'element is required');
         try {
             $required->or_(
                 $this->getMockBuilder('HTML_QuickForm2_Rule')
-                    ->onlyMethods(['validateOwner'])
+                    ->setMethods(['validateOwner'])
                     ->setConstructorArgs([$mockNode, 'some message'])
                     ->getMock()
             );
@@ -97,7 +97,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
 
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->onlyMethods($this->nodeAbstractMethods)
+            ->setMethods($this->nodeAbstractMethods)
             ->getMock();
         new HTML_QuickForm2_Rule_Required($mockNode);
     }

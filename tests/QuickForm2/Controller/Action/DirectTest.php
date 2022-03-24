@@ -32,7 +32,7 @@ class HTML_QuickForm2_Controller_Action_DirectTest extends TestCase
     public function testPerform()
     {
         $source = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate', 'getValue'])
+            ->setMethods(['validate', 'getValue'])
             ->setConstructorArgs(['source'])
             ->getMock();
         $source->expects($this->once())->method('validate')
@@ -40,16 +40,16 @@ class HTML_QuickForm2_Controller_Action_DirectTest extends TestCase
         $source->expects($this->once())->method('getValue')
                ->will($this->returnValue(['foo' => 'bar']));
         $sourcePage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$source])
             ->getMock();
         $sourcePage->addHandler('destination', new HTML_QuickForm2_Controller_Action_Direct());
         $destPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([new HTML_QuickForm2('destination')])
             ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockJump->expects($this->once())->method('perform')
                  ->will($this->returnValue('jump to destination'));

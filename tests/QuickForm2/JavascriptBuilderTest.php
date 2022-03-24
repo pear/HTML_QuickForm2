@@ -112,14 +112,14 @@ class HTML_QuickForm2_JavascriptBuilderTest extends TestCase
         $element = new HTML_QuickForm2_Element_InputText();
 
         $mockRuleOne = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleOne->expects($this->once())->method('getJavascriptCallback')
             ->will($this->returnValue('jsRuleOne'));
 
         $mockRuleTwo = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->onlyMethods(['validateOwner', 'getJavascriptCallback'])
+            ->setMethods(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleTwo->expects($this->once())->method('getJavascriptCallback')

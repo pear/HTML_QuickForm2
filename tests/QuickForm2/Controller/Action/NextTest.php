@@ -32,47 +32,47 @@ class HTML_QuickForm2_Controller_Action_NextTest extends TestCase
     public function testWizardBehaviour()
     {
         $formOne = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate'])
+            ->setMethods(['validate'])
             ->setConstructorArgs(['one'])
             ->getMock();
         $formOne->expects($this->exactly(2))->method('validate')
                 ->will($this->onConsecutiveCalls(false, true));
         $formTwo = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate'])
+            ->setMethods(['validate'])
             ->setConstructorArgs(['two'])
             ->getMock();
         $formTwo->expects($this->exactly(2))->method('validate')
                 ->will($this->returnValue(true));
 
         $mockJumpOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockJumpOne->expects($this->any())->method('perform')
                     ->will($this->returnValue('jump to page one'));
         $mockJumpTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockJumpTwo->expects($this->any())->method('perform')
                     ->will($this->returnValue('jump to page two'));
         $mockProcess = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockProcess->expects($this->any())->method('perform')
                     ->will($this->returnValue('do processing'));
         $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockDisplay->expects($this->any())->method('perform')
                     ->will($this->returnValue('output form'));
 
         $pageOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$formOne])
             ->getMock();
         $pageOne->addHandler('display', $mockDisplay);
         $pageOne->addHandler('jump', $mockJumpOne);
         $pageTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$formTwo])
             ->getMock();
         $pageTwo->addHandler('jump', $mockJumpTwo);
@@ -93,34 +93,34 @@ class HTML_QuickForm2_Controller_Action_NextTest extends TestCase
     public function testNonWizardBehaviour()
     {
         $formOne = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate'])
+            ->setMethods(['validate'])
             ->setConstructorArgs(['one'])
             ->getMock();
         $formOne->expects($this->exactly(2))->method('validate')
                 ->will($this->onConsecutiveCalls(false, true));
         $formTwo = $this->getMockBuilder('HTML_QuickForm2')
-            ->onlyMethods(['validate'])
+            ->setMethods(['validate'])
             ->setConstructorArgs(['two'])
             ->getMock();
         $formTwo->expects($this->exactly(2))->method('validate')
                 ->will($this->onConsecutiveCalls(false, true));
         $mockJumpTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockJumpTwo->expects($this->any())->method('perform')
                     ->will($this->returnValue('jump to page two'));
         $mockDisplay = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->onlyMethods(['perform'])
+            ->setMethods(['perform'])
             ->getMock();
         $mockDisplay->expects($this->any())->method('perform')
                     ->will($this->returnValue('output form'));
 
         $pageOne = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$formOne])
             ->getMock();
         $pageTwo = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->onlyMethods(['populateForm'])
+            ->setMethods(['populateForm'])
             ->setConstructorArgs([$formTwo])
             ->getMock();
         $pageTwo->addHandler('jump', $mockJumpTwo);
