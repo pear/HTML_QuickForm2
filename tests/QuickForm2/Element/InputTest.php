@@ -22,20 +22,9 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+// pear-package-only require_once __DIR__ . '/../../stubs/InputImpl.php';
+
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-
-/**
- * We need to set the element's type
- */
-class HTML_QuickForm2_Element_InputImpl extends HTML_QuickForm2_Element_Input
-{
-    public function __construct($name = null, $attributes = null, array $data = [])
-    {
-        parent::__construct($name, $attributes, $data);
-        $this->attributes['type'] = 'concrete';
-    }
-}
-
 
 /**
  * Unit test for HTML_QuickForm2_Element_Input class
@@ -44,7 +33,7 @@ class HTML_QuickForm2_Element_InputTest extends TestCase
 {
     public function testTypeAttributeIsReadonly()
     {
-        $obj = new HTML_QuickForm2_Element_InputImpl();
+        $obj = new InputImpl();
         try {
             $obj->removeAttribute('type');
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
@@ -61,7 +50,7 @@ class HTML_QuickForm2_Element_InputTest extends TestCase
 
     public function testCanSetAndGetValue()
     {
-        $obj = new HTML_QuickForm2_Element_InputImpl();
+        $obj = new InputImpl();
 
         $this->assertSame($obj, $obj->setValue('foo'));
         $this->assertEquals($obj->getValue(), 'foo');
@@ -75,7 +64,7 @@ class HTML_QuickForm2_Element_InputTest extends TestCase
 
     public function testSetNullValue()
     {
-        $obj = new HTML_QuickForm2_Element_InputImpl();
+        $obj = new InputImpl();
         $obj->setValue(null);
 
         $this->assertEquals('', $obj->getValue());
@@ -83,13 +72,13 @@ class HTML_QuickForm2_Element_InputTest extends TestCase
 
     public function testHtmlGeneration()
     {
-        $obj = new HTML_QuickForm2_Element_InputImpl();
+        $obj = new InputImpl();
         $this->assertMatchesRegularExpression('!<input[^>]*type="concrete"[^>]*/>!', $obj->__toString());
     }
 
     public function testFrozenHtmlGeneration()
     {
-        $obj = new HTML_QuickForm2_Element_InputImpl('test');
+        $obj = new InputImpl('test');
         $obj->setValue('bar');
         $obj->toggleFrozen(true);
 

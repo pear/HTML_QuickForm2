@@ -22,18 +22,9 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+// pear-package-only require_once __DIR__ . '/../../stubs/AttributeParser.php';
 
-/**
- * Let's just make parseAttributes() public rather than copy and paste regex
- */
-abstract class HTML_QuickForm2_Element_SelectTest_AttributeParser extends HTML_Common2
-{
-    public static function parseAttributes($attrString)
-    {
-        return parent::parseAttributes($attrString);
-    }
-}
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Unit test for HTML_QuickForm2_Element_Select class
@@ -233,7 +224,7 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         preg_match('!<input([^>]+)/>!', $sel->__toString(), $matches);
         $this->assertEquals(
             ['id' => $sel->getId(), 'name' => 'foo', 'value' => 'Value', 'type' => 'hidden'],
-            HTML_QuickForm2_Element_SelectTest_AttributeParser::parseAttributes($matches[1])
+            AttributeParser::parseAttributes($matches[1])
         );
 
         $sel->setValue('Nonexistent');
@@ -255,11 +246,11 @@ class HTML_QuickForm2_Element_SelectTest extends TestCase
         preg_match_all('!<input([^>]+)/>!', $sel->__toString(), $matches, PREG_SET_ORDER);
         $this->assertEquals(
             ['name' => 'foo[]', 'value' => 'FirstValue', 'type' => 'hidden'],
-            HTML_QuickForm2_Element_SelectTest_AttributeParser::parseAttributes($matches[0][1])
+            AttributeParser::parseAttributes($matches[0][1])
         );
         $this->assertEquals(
             ['name' => 'foo[]', 'value' => 'SecondValue', 'type' => 'hidden'],
-            HTML_QuickForm2_Element_SelectTest_AttributeParser::parseAttributes($matches[1][1])
+            AttributeParser::parseAttributes($matches[1][1])
         );
     }
 

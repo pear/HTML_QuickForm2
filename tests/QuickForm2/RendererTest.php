@@ -22,61 +22,12 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+// pear-package-only require_once __DIR__ . '/../stubs/FakeRenderer.php';
+// pear-package-only require_once __DIR__ . '/../stubs/FakeRendererHelloPlugin.php';
+// pear-package-only require_once __DIR__ . '/../stubs/FakeRendererGoodbyePlugin.php';
+// pear-package-only require_once __DIR__ . '/../stubs/FakeRendererAnotherHelloPlugin.php';
+
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-
-/**
- * An "implementation" of renderer, to be able to create an instance
- */
-class HTML_QuickForm2_FakeRenderer extends HTML_QuickForm2_Renderer
-{
-    public $name = 'fake';
-
-    public function renderElement(HTML_QuickForm2_Node $element) {}
-    public function renderHidden(HTML_QuickForm2_Node $element) {}
-    public function startForm(HTML_QuickForm2_Node $form) {}
-    public function finishForm(HTML_QuickForm2_Node $form) {}
-    public function startContainer(HTML_QuickForm2_Node $container) {}
-    public function finishContainer(HTML_QuickForm2_Node $container) {}
-    public function startGroup(HTML_QuickForm2_Node $group) {}
-    public function finishGroup(HTML_QuickForm2_Node $group) {}
-    public function reset() {}
-}
-
-/**
- * Plugin for FakeRenderer
- */
-class HTML_QuickForm2_FakeRenderer_HelloPlugin
-    extends HTML_QuickForm2_Renderer_Plugin
-{
-    public function sayHello()
-    {
-        return sprintf('Hello, %s!', $this->renderer->name);
-    }
-}
-
-/**
- * Another plugin for FakeRenderer
- */
-class HTML_QuickForm2_FakeRenderer_GoodbyePlugin
-    extends HTML_QuickForm2_Renderer_Plugin
-{
-    public function sayGoodbye()
-    {
-        return sprintf('Goodbye, %s!', $this->renderer->name);
-    }
-}
-
-/**
- * Yet another plugin for FakeRenderer with duplicate method name
- */
-class HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin
-    extends HTML_QuickForm2_Renderer_Plugin
-{
-    public function sayHello()
-    {
-        return 'Hello, world!';
-    }
-}
 
 /**
  * Unit test for HTML_QuickForm2_Renderer class
@@ -86,7 +37,7 @@ class HTML_QuickForm2_RendererTest extends TestCase
     public function testRegisterRenderer()
     {
         $type = 'fake' . mt_rand();
-        HTML_Quickform2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
+        HTML_Quickform2_Renderer::register($type, FakeRenderer::class);
 
         $renderer = HTML_Quickform2_Renderer::factory($type);
         $this->assertInstanceOf('HTML_QuickForm2_Renderer', $renderer);
@@ -95,14 +46,14 @@ class HTML_QuickForm2_RendererTest extends TestCase
     public function testRegisterPlugin()
     {
         $type = 'fake' . mt_rand();
-        HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
-        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
+        HTML_QuickForm2_Renderer::register($type, FakeRenderer::class);
+        HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererHelloPlugin::class);
 
         $renderer = HTML_Quickform2_Renderer::factory($type);
         $this->assertTrue($renderer->methodExists('renderElement'));
         $this->assertTrue($renderer->methodExists('sayHello'));
         $this->assertFalse($renderer->methodExists('sayGoodbye'));
-        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_GoodbyePlugin');
+        HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererGoodbyePlugin::class);
         $this->assertTrue($renderer->methodExists('sayGoodbye'));
 
         $this->assertEquals('Hello, fake!', $renderer->sayHello());
@@ -112,11 +63,11 @@ class HTML_QuickForm2_RendererTest extends TestCase
     public function testRegisterPluginOnlyOnce()
     {
         $type = 'fake' . mt_rand();
-        HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
-        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
+        HTML_QuickForm2_Renderer::register($type, FakeRenderer::class);
+        HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererHelloPlugin::class);
 
         try {
-            HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
+            HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererHelloPlugin::class);
         } catch (HTML_QuickForm2_InvalidArgumentException $e) {
             $this->assertMatchesRegularExpression('/already registered/', $e->getMessage());
             return;
@@ -127,9 +78,9 @@ class HTML_QuickForm2_RendererTest extends TestCase
     public function testDuplicateMethodNamesDisallowed()
     {
         $type = 'fake' . mt_rand();
-        HTML_QuickForm2_Renderer::register($type, 'HTML_QuickForm2_FakeRenderer');
-        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_HelloPlugin');
-        HTML_QuickForm2_Renderer::registerPlugin($type, 'HTML_QuickForm2_FakeRenderer_AnotherHelloPlugin');
+        HTML_QuickForm2_Renderer::register($type, FakeRenderer::class);
+        HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererHelloPlugin::class);
+        HTML_QuickForm2_Renderer::registerPlugin($type, FakeRendererAnotherHelloPlugin::class);
 
         try {
             $renderer = HTML_Quickform2_Renderer::factory($type);

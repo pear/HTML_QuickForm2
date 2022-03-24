@@ -320,9 +320,6 @@
    <dir name="tests">
     <dir name="QuickForm2">
      <dir name="Container">
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="FieldsetTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -335,9 +332,6 @@
      </dir> <!-- /tests/QuickForm2/Container -->
      <dir name="Controller">
       <dir name="Action">
-       <file name="AllTests.php" role="test">
-        <tasks:replace from="@package_version@" to="version" type="package-info" />
-       </file>
        <file name="BackTest.php" role="test">
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
@@ -357,17 +351,11 @@
         <tasks:replace from="@package_version@" to="version" type="package-info" />
        </file>
       </dir>
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="PageTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
      </dir> <!-- /tests/QuickForm2/Controller -->
      <dir name="DataSource">
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="ArrayTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -376,9 +364,6 @@
       </file>
      </dir> <!-- /tests/QuickForm2/DataSource -->
      <dir name="Element">
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="ButtonTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -432,9 +417,6 @@
       </file>
      </dir> <!-- /tests/QuickForm2/Element -->
      <dir name="Renderer">
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="ArrayTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -449,9 +431,6 @@
       </file>
      </dir>
      <dir name="Rule">
-      <file name="AllTests.php" role="test">
-       <tasks:replace from="@package_version@" to="version" type="package-info" />
-      </file>
       <file name="CallbackTest.php" role="test">
        <tasks:replace from="@package_version@" to="version" type="package-info" />
       </file>
@@ -498,9 +477,6 @@
       <file name="FakeRule.php" role="test" />
       <file name="InvalidFile.php" role="test" />
      </dir> <!-- /tests/QuickForm2/_files -->
-     <file name="AllTests.php" role="test">
-      <tasks:replace from="@package_version@" to="version" type="package-info" />
-     </file>
      <file name="ContainerTest.php" role="test">
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
@@ -532,9 +508,44 @@
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
     </dir> <!-- /tests/QuickForm2 -->
-    <file name="AllTests.php" role="test">
-     <tasks:replace from="@package_version@" to="version" type="package-info" />
-    </file>
+    <dir name="stubs">
+     <file name="AttributeParser.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ConstRule.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ContainerImpl.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="ElementImpl.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="FakeRenderer.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="FakeRendererAnotherHelloPlugin.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="FakeRendererGoodbyePlugin.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="FakeRendererHelloPlugin.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="FormRule.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="InputImpl.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="NodeImpl.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="RuleRequest17576.php" role="test">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /tests/stubs -->
     <file name="QuickForm2Test.php" role="test">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
@@ -655,10 +666,8 @@
    <install as="examples/hierselect-ajax.php" name="docs/examples/hierselect-ajax.php" />
    <install as="examples/repeat.php" name="docs/examples/repeat.php" />
 
-   <install as="AllTests.php" name="tests/AllTests.php" />
    <install as="QuickForm2Test.php" name="tests/QuickForm2Test.php" />
    <install as="TestHelper.php" name="tests/TestHelper.php" />
-   <install as="QuickForm2/AllTests.php" name="tests/QuickForm2/AllTests.php" />
    <install as="QuickForm2/ContainerOverloadTest.php" name="tests/QuickForm2/ContainerOverloadTest.php" />
    <install as="QuickForm2/ContainerTest.php" name="tests/QuickForm2/ContainerTest.php" />
    <install as="QuickForm2/ControllerTest.php" name="tests/QuickForm2/ControllerTest.php" />
@@ -669,23 +678,18 @@
    <install as="QuickForm2/NodeTest.php" name="tests/QuickForm2/NodeTest.php" />
    <install as="QuickForm2/RendererTest.php" name="tests/QuickForm2/RendererTest.php" />
    <install as="QuickForm2/RuleTest.php" name="tests/QuickForm2/RuleTest.php" />
-   <install as="QuickForm2/Container/AllTests.php" name="tests/QuickForm2/Container/AllTests.php" />
    <install as="QuickForm2/Container/FieldsetTest.php" name="tests/QuickForm2/Container/FieldsetTest.php" />
    <install as="QuickForm2/Container/GroupTest.php" name="tests/QuickForm2/Container/GroupTest.php" />
    <install as="QuickForm2/Container/RepeatTest.php" name="tests/QuickForm2/Container/RepeatTest.php" />
-   <install as="QuickForm2/Controller/AllTests.php" name="tests/QuickForm2/Controller/AllTests.php" />
    <install as="QuickForm2/Controller/PageTest.php" name="tests/QuickForm2/Controller/PageTest.php" />
-   <install as="QuickForm2/Controller/Action/AllTests.php" name="tests/QuickForm2/Controller/Action/AllTests.php" />
    <install as="QuickForm2/Controller/Action/BackTest.php" name="tests/QuickForm2/Controller/Action/BackTest.php" />
    <install as="QuickForm2/Controller/Action/DirectTest.php" name="tests/QuickForm2/Controller/Action/DirectTest.php" />
    <install as="QuickForm2/Controller/Action/DisplayTest.php" name="tests/QuickForm2/Controller/Action/DisplayTest.php" />
    <install as="QuickForm2/Controller/Action/JumpTest.php" name="tests/QuickForm2/Controller/Action/JumpTest.php" />
    <install as="QuickForm2/Controller/Action/NextTest.php" name="tests/QuickForm2/Controller/Action/NextTest.php" />
    <install as="QuickForm2/Controller/Action/SubmitTest.php" name="tests/QuickForm2/Controller/Action/SubmitTest.php" />
-   <install as="QuickForm2/DataSource/AllTests.php" name="tests/QuickForm2/DataSource/AllTests.php" />
    <install as="QuickForm2/DataSource/ArrayTest.php" name="tests/QuickForm2/DataSource/ArrayTest.php" />
    <install as="QuickForm2/DataSource/SuperGlobalTest.php" name="tests/QuickForm2/DataSource/SuperGlobalTest.php" />
-   <install as="QuickForm2/Element/AllTests.php" name="tests/QuickForm2/Element/AllTests.php" />
    <install as="QuickForm2/Element/ButtonTest.php" name="tests/QuickForm2/Element/ButtonTest.php" />
    <install as="QuickForm2/Element/DateTest.php" name="tests/QuickForm2/Element/DateTest.php" />
    <install as="QuickForm2/Element/HierselectTest.php" name="tests/QuickForm2/Element/HierselectTest.php" />
@@ -703,12 +707,10 @@
    <install as="QuickForm2/Element/SelectTest.php" name="tests/QuickForm2/Element/SelectTest.php" />
    <install as="QuickForm2/Element/StaticTest.php" name="tests/QuickForm2/Element/StaticTest.php" />
    <install as="QuickForm2/Element/TextareaTest.php" name="tests/QuickForm2/Element/TextareaTest.php" />
-   <install as="QuickForm2/Renderer/AllTests.php" name="tests/QuickForm2/Renderer/AllTests.php" />
    <install as="QuickForm2/Renderer/ArrayTest.php" name="tests/QuickForm2/Renderer/ArrayTest.php" />
    <install as="QuickForm2/Renderer/CallbackTest.php" name="tests/QuickForm2/Renderer/CallbackTest.php" />
    <install as="QuickForm2/Renderer/DefaultTest.php" name="tests/QuickForm2/Renderer/DefaultTest.php" />
    <install as="QuickForm2/Renderer/StubTest.php" name="tests/QuickForm2/Renderer/StubTest.php" />
-   <install as="QuickForm2/Rule/AllTests.php" name="tests/QuickForm2/Rule/AllTests.php" />
    <install as="QuickForm2/Rule/CallbackTest.php" name="tests/QuickForm2/Rule/CallbackTest.php" />
    <install as="QuickForm2/Rule/CompareTest.php" name="tests/QuickForm2/Rule/CompareTest.php" />
    <install as="QuickForm2/Rule/EachTest.php" name="tests/QuickForm2/Rule/EachTest.php" />
@@ -726,6 +728,18 @@
    <install as="QuickForm2/_files/FakeElement.php" name="tests/QuickForm2/_files/FakeElement.php" />
    <install as="QuickForm2/_files/FakeRule.php" name="tests/QuickForm2/_files/FakeRule.php" />
    <install as="QuickForm2/_files/InvalidFile.php" name="tests/QuickForm2/_files/InvalidFile.php" />
+   <install as="stubs/AttributeParser.php" name="tests/stubs/AttributeParser.php" />
+   <install as="stubs/ConstRule.php" name="tests/stubs/ConstRule.php" />
+   <install as="stubs/ContainerImpl.php" name="tests/stubs/ContainerImpl.php" />
+   <install as="stubs/ElementImpl.php" name="tests/stubs/ElementImpl.php" />
+   <install as="stubs/FakeRenderer.php" name="tests/stubs/FakeRenderer.php" />
+   <install as="stubs/FakeRendererAnotherHelloPlugin.php" name="tests/stubs/FakeRendererAnotherHelloPlugin.php" />
+   <install as="stubs/FakeRendererGoodbyePlugin.php" name="tests/stubs/FakeRendererGoodbyePlugin.php" />
+   <install as="stubs/FakeRendererHelloPlugin.php" name="tests/stubs/FakeRendererHelloPlugin.php" />
+   <install as="stubs/FormRule.php" name="tests/stubs/FormRule.php" />
+   <install as="stubs/InputImpl.php" name="tests/stubs/InputImpl.php" />
+   <install as="stubs/NodeImpl.php" name="tests/stubs/NodeImpl.php" />
+   <install as="stubs/RuleRequest17576.php" name="tests/stubs/RuleRequest17576.php" />
   </filelist>
  </phprelease>
  <changelog>

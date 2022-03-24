@@ -22,15 +22,9 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+// pear-package-only require_once __DIR__ . '/../stubs/ContainerImpl.php';
 
-class HTML_QuickForm2_ContainerFilterImpl extends HTML_QuickForm2_Container
-{
-    public function getType() { return 'concrete'; }
-    public function setValue($value) { return ''; }
-    public function __toString() { return ''; }
-    public function validate() { return parent::validate(); }
-}
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * A filter that modifies the value on every iteration
@@ -162,7 +156,7 @@ class HTML_QuickForm2_FilterTest extends TestCase
 
     public function testContainer()
     {
-        $c1 = new HTML_QuickForm2_ContainerFilterImpl('filter');
+        $c1 = new ContainerImpl('filter');
         $this->assertNull($c1->getValue());
 
         $el1 = $c1->addText('foo');
@@ -235,7 +229,7 @@ class HTML_QuickForm2_FilterTest extends TestCase
 
     public function testContainerNonRecursive()
     {
-        $c = new HTML_QuickForm2_ContainerFilterImpl('nonrecursive');
+        $c = new ContainerImpl('nonrecursive');
         $el1 = $c->addElement('text', 'el1')->setValue(' foo');
         $el2 = $c->addElement('text', 'el2')->setValue('bar ');
 

@@ -24,19 +24,7 @@ require_once __DIR__ . '/TestHelper.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-class FormRule extends HTML_QuickForm2_Rule
-{
-    protected function validateOwner()
-    {
-        return false;
-    }
-
-    protected function setOwnerError()
-    {
-        $this->owner->getElementById('foo')->setError('an error message');
-    }
-}
-
+// pear-package-only require_once __DIR__ . '/stubs/FormRule.php';
 
 /**
  * Unit test for HTML_QuickForm2 class
