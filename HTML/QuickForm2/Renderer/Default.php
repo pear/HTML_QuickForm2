@@ -577,7 +577,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function outputLabel($elTpl, $label)
     {
         $mainLabel = is_array($label)? array_shift($label): $label;
-        $elTpl     = str_replace('{label}', $mainLabel, $elTpl);
+        $elTpl     = str_replace('{label}', (string)$mainLabel, $elTpl);
         if (false !== strpos($elTpl, '<qf:label>')) {
             if ($mainLabel) {
                 $elTpl = str_replace(['<qf:label>', '</qf:label>'], ['', ''], $elTpl);

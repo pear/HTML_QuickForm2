@@ -132,7 +132,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * Error message (usually set via Rule if validation fails)
     * @var  string
     */
-    protected $error = null;
+    protected $error = '';
 
    /**
     * Changing 'name' and 'id' attributes requires some special handling
@@ -207,7 +207,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected static function generateId($elementName)
     {
         $stop      =  !self::getOption(self::OPTION_ID_FORCE_APPEND_INDEX);
-        $tokens    =  strlen($elementName)
+        $tokens    =  '' !== (string)$elementName
                       ? explode('[', str_replace(']', '', $elementName))
                       : ($stop? ['qfauto', ''] : ['qfauto']);
         $container =& self::$ids;
@@ -636,14 +636,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected function validate()
     {
         foreach ($this->rules as $rule) {
-            if (strlen($this->error)) {
-                break;
+            if ('' !== $this->error) {
+                return false;
             }
             if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
                 $rule[0]->validate();
             }
         }
-        return !strlen($this->error);
+        return '' === $this->error;
     }
 
    /**

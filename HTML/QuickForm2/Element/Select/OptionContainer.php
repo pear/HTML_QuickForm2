@@ -160,6 +160,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
         return $html;
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns an iterator over contained elements
     *
@@ -170,6 +171,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
         return new HTML_QuickForm2_Element_Select_OptionIterator($this->options);
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns a recursive iterator over contained elements
     *
@@ -183,6 +185,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
         );
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns the number of options in the container
     *

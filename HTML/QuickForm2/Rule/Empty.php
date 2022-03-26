@@ -54,9 +54,11 @@ class HTML_QuickForm2_Rule_Empty extends HTML_QuickForm2_Rule
         if ($this->owner instanceof HTML_QuickForm2_Element_InputFile) {
             return isset($value['error']) && UPLOAD_ERR_NO_FILE == $value['error'];
         } elseif (is_array($value)) {
-            return 0 == count(array_filter($value, 'strlen'));
+            return 0 === count(array_filter($value, function ($v) {
+                return '' !== (string)$v;
+            }));
         } else {
-            return 0 == strlen($value);
+            return '' === (string)$value;
         }
     }
 

@@ -367,6 +367,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         );
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns a recursive iterator for the container elements
     *
@@ -391,6 +392,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         );
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns the number of elements in the container
     *
@@ -433,7 +435,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         // on contained elements, see HTML_QuickForm2Test::testFormRule()
         if ($valid) {
             foreach ($this->getRecursiveIterator() as $item) {
-                if (0 < strlen($item->getError())) {
+                if ('' !== (string)$item->getError()) {
                     return false;
                 }
             }

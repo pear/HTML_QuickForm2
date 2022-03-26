@@ -75,7 +75,7 @@ abstract class HTML_QuickForm2_Rule
     * An error message to display if validation fails
     * @var  string
     */
-    protected $message;
+    protected $message = '';
 
    /**
     * Configuration data for the rule
@@ -163,7 +163,7 @@ abstract class HTML_QuickForm2_Rule
     public function setMessage($message)
     {
         if ($this->owner instanceof HTML_QuickForm2_Element_InputHidden
-            && strlen($message)
+            && '' !== (string)$message
         ) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Hidden elements cannot have validation errors"
@@ -204,7 +204,7 @@ abstract class HTML_QuickForm2_Rule
             );
         }
         if ($owner instanceof HTML_QuickForm2_Element_InputHidden
-            && strlen($this->getMessage())
+            && '' !== $this->getMessage()
         ) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Hidden elements cannot have validation errors"
@@ -304,7 +304,7 @@ abstract class HTML_QuickForm2_Rule
     */
     protected function setOwnerError()
     {
-        if (strlen($this->getMessage()) && !$this->owner->getError()) {
+        if ('' !== $this->getMessage() && !$this->owner->getError()) {
             $this->owner->setError($this->getMessage());
         }
     }

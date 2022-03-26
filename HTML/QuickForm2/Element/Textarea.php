@@ -71,7 +71,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
                    . preg_replace(
                        "/(\r\n|\n|\r)/",
                        '&#010;',
-                       htmlspecialchars($this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET))
+                       htmlspecialchars((string)$this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET))
                    )
                    . '</textarea>';
         }

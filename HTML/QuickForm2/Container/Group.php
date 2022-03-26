@@ -43,7 +43,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     * element names, like groupname[elementname].
     * @var string
     */
-    protected $name;
+    protected $name = '';
 
    /**
     * Previous group name
@@ -51,7 +51,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     * Used to restore children names if necessary.
     * @var string
     */
-    protected $previousName;
+    protected $previousName = '';
 
     public function getType()
     {
@@ -60,7 +60,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
     protected function prependsName()
     {
-        return strlen($this->name) > 0;
+        return '' !== $this->name;
     }
 
     protected function getChildValues($filtered = false)
@@ -178,7 +178,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     public function setName($name)
     {
         $this->previousName = $this->name;
-        $this->name = $name;
+        $this->name = (string)$name;
         foreach ($this as $child) {
             $this->renameChild($child);
         }
@@ -198,16 +198,16 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         $tokens = explode('[', str_replace(']', '', $element->getName()));
         // Child has already been renamed by its group before
-        if ($this === $element->getContainer() && strlen($this->previousName)) {
+        if ($this === $element->getContainer() && '' !== $this->previousName) {
             $gtokens = explode('[', str_replace(']', '', $this->previousName));
             if ($gtokens === array_slice($tokens, 0, count($gtokens))) {
                 array_splice($tokens, 0, count($gtokens));
             }
         }
 
-        if (strlen($this->name)) {
+        if ('' !== $this->name) {
             $element->setName($this->name . '[' . implode('][', $tokens) . ']');
-        } elseif (strlen($this->previousName)) {
+        } elseif ('' !== $this->previousName) {
             $elname = array_shift($tokens);
             foreach ($tokens as $token) {
                 $elname .= '[' . $token . ']';

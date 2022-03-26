@@ -451,6 +451,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
         return $values;
     }
 
+    #[ReturnTypeWillChange]
    /**
     * Returns an Iterator for the form's pages
     *
