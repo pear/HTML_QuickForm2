@@ -628,7 +628,7 @@
  <dependencies>
   <required>
    <php>
-    <min>5.4.0</min>
+    <min>5.6.0</min>
    </php>
    <pearinstaller>
     <min>1.10.0</min>
@@ -636,7 +636,7 @@
    <package>
     <name>HTML_Common2</name>
     <channel>pear.php.net</channel>
-    <min>2.2.0</min>
+    <min>2.3.0</min>
    </package>
   </required>
  </dependencies>
