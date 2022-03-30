@@ -110,7 +110,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @param string|null $name
     *
-    * @return   HTML_QuickForm2_Element_Static
+    * @return   $this
     */
     public function setName($name)
     {

@@ -53,7 +53,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
    /**
     * Message provider for upload error messages
-    * @var  callback|HTML_QuickForm2_MessageProvider
+    * @var  callable|HTML_QuickForm2_MessageProvider
     */
     protected $messageProvider;
 

@@ -188,7 +188,7 @@ class HTML_QuickForm2_Rule_Compare extends HTML_QuickForm2_Rule
     *
     * @param mixed $config Configuration data
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException if a bogus comparison
     *           operator is used for configuration, if an operand is missing
     */

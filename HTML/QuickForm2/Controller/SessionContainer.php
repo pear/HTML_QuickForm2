@@ -104,7 +104,7 @@ class HTML_QuickForm2_Controller_SessionContainer
     *
     * @param string $pageId Page ID
     *
-    * @return   bool
+    * @return   bool|null
     */
     public function getValidationStatus($pageId)
     {

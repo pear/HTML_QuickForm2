@@ -73,7 +73,7 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
     *
     * @param string $message Error message to display if validation fails
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException
     */
     public function setMessage($message)

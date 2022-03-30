@@ -494,6 +494,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     {
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
+        /** @var HTML_QuickForm2_Renderer_Default $renderer */
         $renderer = $this->render(HTML_QuickForm2_Renderer::factory('default'));
         return $renderer->__toString()
                . $renderer->getJavascriptBuilder()->getSetupCode(null, true);

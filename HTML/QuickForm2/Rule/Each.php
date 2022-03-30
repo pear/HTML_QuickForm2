@@ -51,6 +51,12 @@
  */
 class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {
+    /**
+     * An element whose value will be validated by this rule
+     * @var  HTML_QuickForm2_Container
+     */
+    protected $owner;
+
    /**
     * Validates the owner's children using the template Rule
     *
@@ -94,9 +100,9 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
     * We do not allow using Required rules here, they are able to validate
     * containers themselves without the help of Each rule.
     *
-    * @param HTML_QuickForm2_Rule $config Template Rule
+    * @param mixed $config Template Rule (an instance of HTML_QuickForm2_Rule)
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException if $config is either not
     *               an instance of Rule or is an instance of Rule_Required
     */

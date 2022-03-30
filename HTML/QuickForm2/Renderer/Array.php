@@ -350,6 +350,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
     public function startGroup(HTML_QuickForm2_Node $group)
     {
+        /** @var HTML_QuickForm2_Container_Group $group */
         $ary = $this->buildCommonContainerFields($group) + [
             'required' => $group->isRequired(),
             'type'     => $group->getType(),

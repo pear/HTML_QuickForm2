@@ -66,9 +66,9 @@ class HTML_QuickForm2_Rule_MaxFileSize extends HTML_QuickForm2_Rule
    /**
     * Sets maximum allowed file size
     *
-    * @param int $config Maximum allowed size
+    * @param mixed $config Maximum allowed size (integer)
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus size limit was provided
     */
     public function setConfig($config)

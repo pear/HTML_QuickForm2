@@ -74,7 +74,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
    /**
     * Message provider for option texts
-    * @var  callback|HTML_QuickForm2_MessageProvider
+    * @var  callable|HTML_QuickForm2_MessageProvider
     */
     protected $messageProvider;
 
@@ -331,7 +331,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
             return $str;
         }
         $trimmed = ltrim($str, '0');
-        return strlen($trimmed)? $trimmed: '0';
+        return '' !== $trimmed ? $trimmed : '0';
     }
 
 
@@ -339,10 +339,11 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * Tries to convert the given value to a usable date before setting the
     * element value
     *
-    * @param int|string|array|DateTime $value A timestamp, a DateTime object,
-    *   a string compatible with strtotime() or an array that fits the element names
+    * @param mixed $value Actually accepts either a timestamp,
+    *   an instance of DateTimeInterface, a string compatible
+    *   with strtotime(), or an array that fits the element names
     *
-    * @return HTML_QuickForm2_Element_Date
+    * @return $this
     */
     public function setValue($value)
     {
@@ -352,11 +353,8 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         } elseif (is_array($value)) {
             $value = array_map([$this, 'trimLeadingZeros'], $value);
 
-        } elseif (is_scalar($value)
-                  || $value instanceof DateTime
-                  || interface_exists('DateTimeInterface') && $value instanceof DateTimeInterface
-        ) {
-            if (!is_scalar($value)) {
+        } elseif (is_scalar($value) || $value instanceof DateTimeInterface) {
+            if ($value instanceof DateTimeInterface) {
                 $arr = explode('-', $value->format('w-j-n-Y-g-G-i-s-a-A-W'));
             } else {
                 if (!is_numeric($value)) {

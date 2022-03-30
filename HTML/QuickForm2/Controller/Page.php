@@ -238,7 +238,7 @@ abstract class HTML_QuickForm2_Controller_Page
         if ($validate) {
             $container->storeValidationStatus($id, $this->form->validate());
         }
-        return $container->getValidationStatus($id);
+        return (bool)$container->getValidationStatus($id);
     }
 }
 ?>

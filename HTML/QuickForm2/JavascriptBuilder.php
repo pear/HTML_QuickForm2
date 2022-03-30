@@ -142,9 +142,21 @@ class HTML_QuickForm2_JavascriptBuilder
     */
     public function getLibraries($inline = false, $addScriptTags = true)
     {
-        $ret = $inline? '': [];
-        foreach ($this->libraries as $name => $library) {
-            if ($inline) {
+        if (!$inline) {
+            $ret = [];
+            foreach ($this->libraries as $name => $library) {
+                $path = !empty($library['webPath'])? $library['webPath']: $this->defaultWebPath;
+                if ('/' != substr($path, -1)) {
+                    $path .= '/';
+                }
+                $ret[$name] = $addScriptTags
+                              ? "<script type=\"text/javascript\" src=\"{$path}{$library['file']}\"></script>"
+                              : $path . $library['file'];
+            }
+            return $ret;
+        } else {
+            $ret = '';
+            foreach ($this->libraries as $name => $library) {
                 $path = !empty($library['absPath'])? $library['absPath']: $this->defaultAbsPath;
                 if (DIRECTORY_SEPARATOR != substr($path, -1)) {
                     $path .= DIRECTORY_SEPARATOR;
@@ -155,18 +167,9 @@ class HTML_QuickForm2_JavascriptBuilder
                     );
                 }
                 $ret .= ('' == $ret? '': "\n") . $file;
-
-            } else {
-                $path = !empty($library['webPath'])? $library['webPath']: $this->defaultWebPath;
-                if ('/' != substr($path, -1)) {
-                    $path .= '/';
-                }
-                $ret[$name] = $addScriptTags
-                              ? "<script type=\"text/javascript\" src=\"{$path}{$library['file']}\"></script>"
-                              : $path . $library['file'];
             }
+            return $addScriptTags ? $this->wrapScript($ret) : $ret;
         }
-        return ($inline && $addScriptTags) ? $this->wrapScript($ret) : $ret;
     }
 
 
@@ -319,7 +322,7 @@ class HTML_QuickForm2_JavascriptBuilder
             return $value? 'true': 'false';
 
         } elseif (is_int($value) || is_float($value)) {
-            return $value;
+            return (string)$value;
 
         } elseif (is_string($value)) {
             return '"' . strtr($value, [

@@ -85,9 +85,9 @@ class HTML_QuickForm2_Rule_Nonempty extends HTML_QuickForm2_Rule
     * considered not empty if at least one option is selected, Container will
     * be considered not empty if at least one contained element is not empty.
     *
-    * @param int $config Minimum number of nonempty values
+    * @param mixed $config Minimum number of nonempty values (integer)
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException    if a bogus limit was provided
     */
     public function setConfig($config)

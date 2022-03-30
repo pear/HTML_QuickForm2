@@ -57,7 +57,7 @@ class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
      *
      * @param string|null $error
      *
-     * @return HTML_QuickForm2_Element_InputHidden
+     * @return $this
      * @throws HTML_QuickForm2_InvalidArgumentException if $error is not empty
      */
     public function setError($error = null)

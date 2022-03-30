@@ -340,6 +340,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function finishGroup(HTML_QuickForm2_Node $group)
     {
+        /** @var HTML_QuickForm2_Container_Group $group */
         $gTpl = str_replace(
             ['{attributes}', '{id}', '{class}'],
             [$group->getAttributes(true), array_pop($this->groupId),

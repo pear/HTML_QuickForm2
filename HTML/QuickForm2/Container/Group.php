@@ -299,7 +299,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
    /**
     * Returns string(s) to separate grouped elements
     *
-    * @return   string|array    Separator, null if not set
+    * @return   string|array|null    Separator, null if not set
     */
     public function getSeparator()
     {
@@ -328,6 +328,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
+        /** @var HTML_QuickForm2_Renderer_Default $renderer */
         $renderer = $this->render(
             HTML_QuickForm2_Renderer::factory('default')
                 ->setTemplateForId($this->getId(), '{content}')

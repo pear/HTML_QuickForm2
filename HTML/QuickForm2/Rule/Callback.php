@@ -200,12 +200,12 @@ class HTML_QuickForm2_Rule_Callback extends HTML_QuickForm2_Rule
    /**
     * Sets the callback to use for validation and its additional arguments
     *
-    * @param callback|array $config Callback or array ('callback' => validation callback
-    *                                                  [, 'arguments' => additional arguments]
-    *                                                  [, 'js_callback' => javascript callback
-    *                                                               for client-side validation])
+    * @param mixed $config Callback or array ('callback' => validation callback
+    *                                         [, 'arguments' => additional arguments]
+    *                                         [, 'js_callback' => javascript callback
+    *                                                             for client-side validation])
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException if callback is missing or invalid
     *               or additional arguments is not an array
     */

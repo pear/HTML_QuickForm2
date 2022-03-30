@@ -65,15 +65,15 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
         } elseif (!strlen($value)) {
             return true;
         }
-        return preg_match($this->getConfig() . 'D', $value);
+        return (bool)preg_match($this->getConfig() . 'D', $value);
     }
 
    /**
     * Sets the regular expression to validate with
     *
-    * @param string $config Regular expression
+    * @param mixed $config Regular expression (string)
     *
-    * @return   HTML_QuickForm2_Rule
+    * @return   $this
     * @throws   HTML_QuickForm2_InvalidArgumentException    if $config is not a string
     */
     public function setConfig($config)

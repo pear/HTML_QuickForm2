@@ -67,7 +67,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * PHP callback function for getting additional options
     *
     * @see  loadOptions()
-    * @var  callback
+    * @var  callable
     */
     protected $callback = null;
 
@@ -159,7 +159,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      * </code>
      *
      * @param array    $options    Array of options defining each element
-     * @param callback $callback   Callback function to load additional options.
+     * @param callable $callback   Callback function to load additional options.
      *      It will receive an array of keys and should return associative
      *      array ('option value' => 'option text')
      * @param string   $jsCallback Javascript function to load additional options
@@ -242,7 +242,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * This also creates missing selects and loads their options, in addition
     * to {@link HTML_QuickForm2_Container_Group::setValue()} behaviour
     *
-    * @param array $value
+    * @param mixed $value Actually accepts an array of selected values
     *
     * @return $this
     */
@@ -391,8 +391,9 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         $jsBuilder = $renderer->getJavascriptBuilder();
         $jsBuilder->addLibrary('hierselect', 'quickform-hierselect.js');
         $jsBuilder->addElementJavascript($this->_generateInitScript());
-        $script = $this->appendChild(new HTML_QuickForm2_Element_Script('script'))
-                       ->setContent($this->_generateInlineScript());
+        $script = (new HTML_QuickForm2_Element_Script('script'))
+            ->setContent($this->_generateInlineScript());
+        $script = $this->appendChild($script);
 
         parent::render($renderer);
 
