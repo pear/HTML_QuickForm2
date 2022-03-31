@@ -96,7 +96,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     */
     protected function onAttributeChange($name, $value = null)
     {
-        if ('name' == $name && null === $value) {
+        if ('name' === $name && null === $value) {
             unset($this->attributes['name']);
         } else {
             parent::onAttributeChange($name, $value);
