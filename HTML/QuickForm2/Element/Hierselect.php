@@ -197,7 +197,10 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
             $data = $this->getData();
             unset($data['label']);
             $this->appendChild(new HTML_QuickForm2_Element_Select(
-                $i, ['id' => self::generateId($this->getName() . "[{$i}]")] + $this->getAttributes(), $data
+                (string)$i,
+                ['id' => self::generateId($this->getName() . "[{$i}]")]
+                + $this->getAttributes(),
+                $data
             ));
         }
     }

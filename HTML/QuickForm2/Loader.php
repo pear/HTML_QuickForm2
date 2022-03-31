@@ -63,6 +63,7 @@ class HTML_QuickForm2_Loader
         include $includeFile;
 
         // Still no class?
+        /** @psalm-suppress RedundantCondition */
         if (!class_exists($className, false) && !interface_exists($className, false)) {
             if (!self::fileExists($includeFile)) {
                 throw new HTML_QuickForm2_NotFoundException(

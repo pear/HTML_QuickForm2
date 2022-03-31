@@ -269,7 +269,9 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     {
         $elTpl = $this->prepareTemplate($this->findTemplate($element), $element);
         $this->html[count($this->html) - 1][] = str_replace(
-            ['{element}', '{id}'], [$element, $element->getId()], $elTpl
+            ['{element}', '{id}'],
+            [(string)$element, (string)$element->getId()],
+            $elTpl
         );
     }
 
@@ -284,7 +286,9 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             $this->hiddenHtml .= $element->__toString();
         } else {
             $this->html[count($this->html) - 1][] = str_replace(
-                '{element}', $element, $this->findTemplate($element)
+                '{element}',
+                (string)$element,
+                $this->findTemplate($element)
             );
         }
     }
@@ -311,7 +315,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
 
         $cTpl  = str_replace(
             ['{attributes}', '{id}'],
-            [$container->getAttributes(true), $container->getId()],
+            [$container->getAttributes(true), (string)$container->getId()],
             $this->prepareTemplate($this->findTemplate($container, '{content}'), $container)
         );
         $cHtml  = array_pop($this->html);

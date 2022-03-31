@@ -283,7 +283,8 @@ abstract class HTML_QuickForm2_Rule
                     break;
                 }
             }
-            if ($globalValid = $globalValid || $localValid) {
+            if ($localValid) {
+                $globalValid = true;
                 break;
             }
             $localValid = true;

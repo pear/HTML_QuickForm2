@@ -536,7 +536,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             $rule->setOwner($this);
             $runAt = '' == $messageOrRunAt? HTML_QuickForm2_Rule::SERVER: $messageOrRunAt;
         } elseif (is_string($rule)) {
-            $rule = HTML_QuickForm2_Factory::createRule($rule, $this, $messageOrRunAt, $options);
+            $rule = HTML_QuickForm2_Factory::createRule($rule, $this, (string)$messageOrRunAt, $options);
         } else {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'addRule() expects either a rule type or ' .

@@ -161,6 +161,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
         for ($i = 0, $length = strlen($this->data['format']); $i < $length; $i++) {
             $sign = $this->data['format'][$i];
+            /** @psalm-suppress TypeDoesNotContainType */
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;
@@ -202,15 +203,15 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     break;
                 case 'Y':
                     $options = $this->createOptionList(
-                        $this->data['minYear'],
-                        $this->data['maxYear'],
+                        (int)$this->data['minYear'],
+                        (int)$this->data['maxYear'],
                         $this->data['minYear'] > $this->data['maxYear']? -1: 1
                     );
                     break;
                 case 'y':
                     $options = $this->createOptionList(
-                        $this->data['minYear'],
-                        $this->data['maxYear'],
+                        (int)$this->data['minYear'],
+                        (int)$this->data['maxYear'],
                         $this->data['minYear'] > $this->data['maxYear']? -1: 1
                     );
                     array_walk($options, [$this, '_shortYearCallback']);
@@ -308,7 +309,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     * @param int $end   The end number
     * @param int $step  Increment by this value
     *
-    * @return   array   An array of numeric options.
+    * @return   array<int, string>   An array of numeric options.
     */
     protected function createOptionList($start, $end, $step = 1)
     {
@@ -358,7 +359,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 $arr = explode('-', $value->format('w-j-n-Y-g-G-i-s-a-A-W'));
             } else {
                 if (!is_numeric($value)) {
-                    $value = strtotime($value);
+                    $value = strtotime((string)$value);
                 }
                 // might be a unix epoch, then we fill all possible values
                 $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));

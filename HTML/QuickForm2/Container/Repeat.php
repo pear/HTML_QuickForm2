@@ -77,7 +77,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 
     /**
      * Available indexes
-     * @var array
+     * @var array<int|string>
      */
     protected $itemIndexes = [];
 
@@ -293,7 +293,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     /**
      * Returns the indexes for repeated items
      *
-     * @return array
+     * @return array<int|string>
      */
     public function getIndexes()
     {
@@ -465,8 +465,8 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
     /**
      * Replaces a template in elements' attributes by a numeric index
      *
-     * @param int   $index  numeric index
-     * @param array $backup backup array, contains attributes with templates
+     * @param string $index  numeric index
+     * @param array  $backup backup array, contains attributes with templates
      *
      * @see backupChildAttributes()
      */
@@ -510,7 +510,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $backup = $this->backupChildAttributes();
         $values = [];
         foreach ($this->getIndexes() as $index) {
-            $this->replaceIndexTemplates($index, $backup);
+            $this->replaceIndexTemplates((string)$index, $backup);
             if (null !== ($itemValues = parent::getChildValues($filtered))) {
                 $values = self::arrayMerge($values, $itemValues);
             }
@@ -533,7 +533,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
         $valid  = true;
         $this->childErrors = [];
         foreach ($this->getIndexes() as $index) {
-            $this->replaceIndexTemplates($index, $backup);
+            $this->replaceIndexTemplates((string)$index, $backup);
             $valid = $this->getPrototype()->validate() && $valid;
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
@@ -640,7 +640,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 
         // next, render all available rows
         foreach ($this->getIndexes() as $index) {
-            $this->replaceIndexTemplates($index, $backup);
+            $this->replaceIndexTemplates((string)$index, $backup);
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
                 if (isset($this->childErrors[$hash = spl_object_hash($child)])

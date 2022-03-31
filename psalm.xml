@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="5"
+    errorLevel="4"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -14,15 +14,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <InvalidArgument>
-            <!--
-            HTML_Common2::getAttributes() always returns string when given true as argument
-            -->
-            <errorLevel type="suppress">
-                <file name="HTML/QuickForm2/Renderer/Default.php" />
-                <referencedFunction name="str_replace" />
-            </errorLevel>
-        </InvalidArgument>
         <UndefinedInterfaceMethod>
             <!--
             On PHP 8.1 psalm assumes that \HTML_QuickForm2_Container::getIterator()
