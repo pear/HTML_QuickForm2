@@ -23,5 +23,14 @@
                 <referencedFunction name="str_replace" />
             </errorLevel>
         </InvalidArgument>
+        <UndefinedInterfaceMethod>
+            <!--
+            On PHP 8.1 psalm assumes that \HTML_QuickForm2_Container::getIterator()
+            returns Traversable rather than HTML_QuickForm2_ContainerIterator
+            -->
+            <errorLevel type="suppress">
+                <file name="HTML/QuickForm2/Controller/Page.php" />
+            </errorLevel>
+        </UndefinedInterfaceMethod>
     </issueHandlers>
 </psalm>
