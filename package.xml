@@ -636,7 +636,7 @@
    <package>
     <name>HTML_Common2</name>
     <channel>pear.php.net</channel>
-    <min>2.3.0</min>
+    <min>2.3.1</min>
    </package>
   </required>
  </dependencies>
