@@ -67,7 +67,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * PHP callback function for getting additional options
     *
     * @see  loadOptions()
-    * @var  callable
+    * @var  callable|null
     */
     protected $callback = null;
 
@@ -75,7 +75,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * Javascript callback function for getting additional options
     *
     * @see  loadOptions()
-    * @var  string
+    * @var  string|null
     */
     protected $jsCallback = null;
 
@@ -266,7 +266,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
      *
      * Need to override group's implementation due to overridden updateValue()
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return $this
      */

@@ -41,7 +41,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
 
    /**
     * Coordinates of user click within the image, array contains keys 'x' and 'y'
-    * @var  array
+    * @var  array|null
     */
     protected $coordinates = null;
 
@@ -112,7 +112,7 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
     {
         foreach ($this->getDataSources() as $ds) {
             if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
-                $name = $this->getName();
+                $name = (string)$this->getName();
                 if (false === strpos($name, '[')
                     && null !== ($value = $ds->getValue($name . '_x'))
                 ) {

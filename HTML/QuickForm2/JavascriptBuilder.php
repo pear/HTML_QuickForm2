@@ -39,13 +39,13 @@ class HTML_QuickForm2_JavascriptBuilder
 {
    /**
     * Client-side rules
-    * @var array
+    * @var array<string, string[]>
     */
     protected $rules = [];
 
    /**
     * Elements' setup code
-    * @var array
+    * @var array<string, string[]>
     */
     protected $scripts = [];
 
@@ -54,16 +54,20 @@ class HTML_QuickForm2_JavascriptBuilder
     *
     * Needed when the form contains an empty repeat element
     *
-    * @var array
+    * @var array<string, bool>
     */
     protected $forceValidator = [];
 
     /**
     * Javascript libraries
-    * @var array
+    * @var array<string, array{file: string, webPath: ?string, absPath: ?string}>
     */
     protected $libraries = [
-        'base' => ['file' => 'quickform.js']
+        'base' => [
+            'file'    => 'quickform.js',
+            'webPath' => null,
+            'absPath' => null
+        ]
     ];
 
    /**
@@ -82,7 +86,7 @@ class HTML_QuickForm2_JavascriptBuilder
     * Current form ID
     * @var string
     */
-    protected $formId = null;
+    protected $formId;
 
 
    /**

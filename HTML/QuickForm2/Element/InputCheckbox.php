@@ -54,7 +54,7 @@ class HTML_QuickForm2_Element_InputCheckbox extends HTML_QuickForm2_Element_Inpu
 
     protected function updateValue()
     {
-        $name = $this->getName();
+        $name = (string)$this->getName();
         if ('[]' == substr($name, -2)) {
             $name = substr($name, 0, -2);
         }

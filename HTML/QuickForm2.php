@@ -44,13 +44,13 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
 {
    /**
     * Data sources providing values for form elements
-    * @var array
+    * @var HTML_QuickForm2_DataSource[]
     */
     protected $datasources = [];
 
    /**
     * We do not allow setting "method" and "id" other than through constructor
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = ['id', 'method'];
 
@@ -70,7 +70,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         $method      = ('GET' == strtoupper($method))? 'get': 'post';
         $trackSubmit = empty($id) ? false : $trackSubmit;
         $this->attributes = array_merge(
-            self::prepareAttributes($attributes),
+            null === $attributes ? [] : self::prepareAttributes($attributes),
             ['method' => $method]
         );
         parent::setId(empty($id) ? null : $id);
@@ -108,6 +108,18 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         throw new HTML_QuickForm2_InvalidArgumentException(
             "Attribute 'id' is read-only"
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Form ID is always set
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->attributes['id'];
     }
 
 

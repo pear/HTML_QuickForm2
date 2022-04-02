@@ -134,7 +134,7 @@ class HTML_QuickForm2_Renderer_Stub extends HTML_QuickForm2_Renderer
             $this->required = true;
         }
         if ($this->options['group_errors'] && ($error = $element->getError())) {
-            $this->errors[$element->getId()] = $error;
+            $this->errors[(string)$element->getId()] = $error;
         }
     }
 

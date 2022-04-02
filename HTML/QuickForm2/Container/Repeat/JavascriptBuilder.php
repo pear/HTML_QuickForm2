@@ -51,7 +51,7 @@ class HTML_QuickForm2_Container_Repeat_JavascriptBuilder
 
     /**
      * Empty list of javascript libraries, base one(s) are in original builder
-     * @var array
+     * @var array<string, array{file: string, webPath: ?string, absPath: ?string}>
      */
     protected $libraries = [];
 

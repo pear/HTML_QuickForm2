@@ -71,7 +71,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
 
     /**
      * Field used to search for available indexes
-     * @var string
+     * @var string|null
      */
     protected $indexField = null;
 
@@ -163,7 +163,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      */
     protected function getPrototype()
     {
-        if (empty($this->elements[0])) {
+        if (empty($this->elements[0]) || !$this->elements[0] instanceof HTML_QuickForm2_Container) {
             throw new HTML_QuickForm2_NotFoundException(
                 "Repeat element needs a prototype, use setPrototype()"
             );
@@ -386,7 +386,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             if ('' !== (string)$name && false === strpos($name, self::INDEX_KEY)
                 && (!$child instanceof HTML_QuickForm2_Container || !$child->prependsName())
                 && (!$child instanceof HTML_QuickForm2_Element_InputCheckable
-                    || false === strpos($child->getAttribute('value'), self::INDEX_KEY))
+                    || false === strpos((string)$child->getAttribute('value'), self::INDEX_KEY))
             ) {
                 $child->setName($name . '[' . self::INDEX_KEY . ']');
             }
@@ -537,7 +537,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             $valid = $this->getPrototype()->validate() && $valid;
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
-                if (strlen($error = $child->getError())) {
+                if ('' !== ($error = $child->getError())) {
                     $this->childErrors[spl_object_hash($child)][$index] = $error;
                 }
             }
@@ -547,7 +547,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             if ('' !== $this->error) {
                 break;
             }
-            if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
+            if (0 !== ($rule[1] & HTML_QuickForm2_Rule::SERVER)) {
                 $rule[0]->validate();
             }
         }

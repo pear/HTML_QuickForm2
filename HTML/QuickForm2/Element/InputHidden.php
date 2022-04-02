@@ -62,7 +62,7 @@ class HTML_QuickForm2_Element_InputHidden extends HTML_QuickForm2_Element_Input
      */
     public function setError($error = null)
     {
-        if (strlen($error)) {
+        if ('' !== (string)$error) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 "Hidden elements cannot have validation errors"
             );

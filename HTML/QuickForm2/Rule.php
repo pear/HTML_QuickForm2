@@ -90,7 +90,7 @@ abstract class HTML_QuickForm2_Rule
     * array represents a disjunction of conjunctive clauses represented by inner
     * arrays.
     *
-    * @var  array
+    * @var  array<int, array<int, HTML_QuickForm2_Rule>>
     */
     protected $chainedRules = [[]];
 

@@ -65,7 +65,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
 {
    /**
     * Array of elements contained in this container
-    * @var array
+    * @var HTML_QuickForm2_Node[]
     */
     protected $elements = [];
 
@@ -208,7 +208,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
    /**
     * Returns an array of this container's elements
     *
-    * @return   array   Container elements
+    * @return HTML_QuickForm2_Node[] Container elements
     */
     public function getElements()
     {
@@ -322,7 +322,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * @param string $name Element name to search for
     *
-    * @return   array
+    * @return HTML_QuickForm2_Node[]
     */
     public function getElementsByName($name)
     {

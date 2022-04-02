@@ -39,7 +39,7 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
 {
    /**
     * 'type' attribute should not be changeable
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = ['id', 'name', 'type'];
 
@@ -84,8 +84,8 @@ class HTML_QuickForm2_Element_Input extends HTML_QuickForm2_Element
     */
     protected function getFrozenHtml()
     {
-        $value = $this->getAttribute('value');
-        return ('' != $value
+        $value = (string)$this->getAttribute('value');
+        return ('' !== $value
                 ? htmlspecialchars($value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET))
                 : '&nbsp;'
             ) . $this->getPersistentContent();

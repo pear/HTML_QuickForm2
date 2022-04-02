@@ -56,6 +56,7 @@ class HTML_QuickForm2_Controller_Action_Display
             if ($page->getController()->isWizard()
                 && !$page->getController()->isValid($page)
             ) {
+                /** @psalm-suppress PossiblyNullReference */
                 return $page->getController()->getFirstInvalidPage()->handle('jump');
             }
             // If we have values in container then we should inject the Session

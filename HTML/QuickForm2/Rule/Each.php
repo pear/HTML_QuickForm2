@@ -53,7 +53,8 @@ class HTML_QuickForm2_Rule_Each extends HTML_QuickForm2_Rule
 {
     /**
      * An element whose value will be validated by this rule
-     * @var  HTML_QuickForm2_Container
+     * @psalm-suppress NonInvariantDocblockPropertyType
+     * @var            HTML_QuickForm2_Container
      */
     protected $owner;
 

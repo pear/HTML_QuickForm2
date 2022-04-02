@@ -68,7 +68,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
 
    /**
     * Language code
-    * @var  string
+    * @var  string|null
     */
     protected $language = null;
 
@@ -159,7 +159,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
         $separators = [];
         $separator =  '';
 
-        for ($i = 0, $length = strlen($this->data['format']); $i < $length; $i++) {
+        for ($i = 0, $length = strlen((string)$this->data['format']); $i < $length; $i++) {
             $sign = $this->data['format'][$i];
             /** @psalm-suppress TypeDoesNotContainType */
             if ($backslash) {
@@ -171,11 +171,13 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 switch ($sign) {
                 case 'D':
                     // Sunday is 0 like with 'w' in date()
+                    /** @var array<int, string> $options */
                     $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
                                ? $this->messageProvider->get(['date', 'weekdays_short'], $this->language)
                                : call_user_func($this->messageProvider, ['date', 'weekdays_short'], $this->language);
                     break;
                 case 'l':
+                    /** @var array<int, string> $options */
                     $options = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
                                ? $this->messageProvider->get(['date', 'weekdays_long'], $this->language)
                                : call_user_func($this->messageProvider, ['date', 'weekdays_long'], $this->language);
@@ -193,6 +195,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     );
                     if ('M' == $sign || 'F' == $sign) {
                         $key   = 'M' == $sign ? 'months_short' : 'months_long';
+                        /** @var array<int, string> $names */
                         $names = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
                                  ? $this->messageProvider->get(['date', $key], $this->language)
                                  : call_user_func($this->messageProvider, ['date', $key], $this->language);
@@ -395,7 +398,6 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     protected function updateValue()
     {
         $name = $this->getName();
-        /* @var $ds HTML_QuickForm2_DataSource_NullAware */
         foreach ($this->getDataSources() as $ds) {
             if (null !== ($value = $ds->getValue($name))
                 || $ds instanceof HTML_QuickForm2_DataSource_NullAware && $ds->hasValue($name)

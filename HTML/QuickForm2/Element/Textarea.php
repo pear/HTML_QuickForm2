@@ -41,7 +41,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
 
    /**
     * Value for textarea field
-    * @var  string
+    * @var  string|null
     */
     protected $value = null;
 
@@ -79,7 +79,7 @@ class HTML_QuickForm2_Element_Textarea extends HTML_QuickForm2_Element
 
     public function getFrozenHtml()
     {
-        $value = htmlspecialchars($this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET));
+        $value = htmlspecialchars((string)$this->value, ENT_QUOTES, self::getOption(self::OPTION_CHARSET));
         if ('off' == $this->getAttribute('wrap')) {
             $html = $this->getIndent() . '<pre>' . $value .
                     '</pre>' . self::getOption(self::OPTION_LINEBREAK);

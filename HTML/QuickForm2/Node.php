@@ -96,7 +96,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
    /**
     * Element containing current
-    * @var HTML_QuickForm2_Container
+    * @var HTML_QuickForm2_Container|null
     */
     protected $container = null;
 
@@ -108,13 +108,13 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
    /**
     * Validation rules for element
-    * @var  array
+    * @var  array<int, array{HTML_QuickForm2_Rule, int}>
     */
     protected $rules = [];
 
    /**
     * An array of callback filters for element
-    * @var  array
+    * @var  array<int, array{callable, array}>
     */
     protected $filters = [];
 
@@ -124,7 +124,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     * These are recursively applied for array values of element or propagated
     * to contained elements if the element is a Container
     *
-    * @var  array
+    * @var  array<int, array{callable, array}>
     */
     protected $recursiveFilters = [];
 
@@ -136,7 +136,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
 
    /**
     * Changing 'name' and 'id' attributes requires some special handling
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = ['id', 'name'];
 
@@ -207,7 +207,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     protected static function generateId($elementName)
     {
         $stop      =  !self::getOption(self::OPTION_ID_FORCE_APPEND_INDEX);
-        $tokens    =  '' !== (string)$elementName
+        $tokens    =  '' !== $elementName
                       ? explode('[', str_replace(']', '', $elementName))
                       : ($stop? ['qfauto', ''] : ['qfauto']);
         $container =& self::$ids;
@@ -303,7 +303,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Sets the element's name
     *
-    * @param string $name
+    * @param string|null $name
     *
     * @return $this
     */
@@ -337,7 +337,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     public function setId($id = null)
     {
         if (is_null($id)) {
-            $id = self::generateId($this->getName());
+            $id = self::generateId((string)$this->getName());
         // HTML5 specification only disallows having space characters in id,
         // so we don't do stricter checks here
         } elseif (strpbrk($id, " \r\n\t\x0C")) {
@@ -383,7 +383,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Returns the element's label(s)
     *
-    * @return   string|array|null
+    * @return   string|string[]|null
     */
     public function getLabel()
     {
@@ -397,7 +397,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Sets the element's label(s)
     *
-    * @param string|array $label Label for the element (may be an array of labels)
+    * @param string|string[]|null $label Label for the element (may be an array of labels)
     *
     * @return $this
     */
@@ -534,7 +534,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     ) {
         if ($rule instanceof HTML_QuickForm2_Rule) {
             $rule->setOwner($this);
-            $runAt = '' == $messageOrRunAt? HTML_QuickForm2_Rule::SERVER: $messageOrRunAt;
+            $runAt = is_int($messageOrRunAt) ? $messageOrRunAt : HTML_QuickForm2_Rule::SERVER;
         } elseif (is_string($rule)) {
             $rule = HTML_QuickForm2_Factory::createRule($rule, $this, (string)$messageOrRunAt, $options);
         } else {
@@ -622,8 +622,8 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
         }
         $onblur = HTML_QuickForm2_Rule::ONBLUR_CLIENT ^ HTML_QuickForm2_Rule::CLIENT;
         foreach ($this->rules as $rule) {
-            if ($rule[1] & HTML_QuickForm2_Rule::CLIENT) {
-                $builder->addRule($rule[0], $rule[1] & $onblur);
+            if (0 !== ($rule[1] & HTML_QuickForm2_Rule::CLIENT)) {
+                $builder->addRule($rule[0], 0 !== ($rule[1] & $onblur));
             }
         }
     }
@@ -639,7 +639,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             if ('' !== $this->error) {
                 return false;
             }
-            if ($rule[1] & HTML_QuickForm2_Rule::SERVER) {
+            if (0 !== ($rule[1] & HTML_QuickForm2_Rule::SERVER)) {
                 $rule[0]->validate();
             }
         }

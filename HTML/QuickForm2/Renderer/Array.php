@@ -129,7 +129,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
 
    /**
     * Additional style information for elements
-    * @var array
+    * @var array<string, string>
     */
     public $styles = [];
 
@@ -186,9 +186,12 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
     public function buildCommonFields(HTML_QuickForm2_Node $element)
     {
         $ary = [
-            'id'     => $element->getId(),
+            'id'     => (string)$element->getId(),
             'frozen' => $element->toggleFrozen()
         ];
+        if (isset($this->styles[$ary['id']])) {
+            $ary['style'] = $this->styles[$ary['id']];
+        }
         if ($labels = $element->getLabel()) {
             if (!is_array($labels) || !$this->options['static_labels']) {
                 $ary['label'] = $labels;
@@ -207,9 +210,6 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
             $this->array['errors'][$ary['id']] = $error;
         } elseif ($error) {
             $ary['error'] = $error;
-        }
-        if (isset($this->styles[$ary['id']])) {
-            $ary['style'] = $this->styles[$ary['id']];
         }
         return $ary;
     }

@@ -78,7 +78,7 @@ class HTML_QuickForm2_Rule_Required extends HTML_QuickForm2_Rule_Nonempty
     */
     public function setMessage($message)
     {
-        if (!strlen($message)) {
+        if ('' === (string)$message) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 '"required" rule cannot have an empty error message'
             );

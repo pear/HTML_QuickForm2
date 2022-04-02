@@ -161,7 +161,7 @@ class HTML_QuickForm2_Controller_Action_Jump
                 if ('' == $actPath) {
                     return $host . $basePath . $actQuery;
                 } else {
-                    $path = substr($basePath, 0, strrpos($basePath, '/') + 1) . $actPath;
+                    $path = substr($basePath, 0, (int)strrpos($basePath, '/') + 1) . $actPath;
                     return $host . self::normalizePath($path) . $actQuery;
                 }
             }
@@ -176,11 +176,12 @@ class HTML_QuickForm2_Controller_Action_Jump
         if ($page->getController()->isWizard()
             && !$page->getController()->isValid($page)
         ) {
+            /** @var HTML_QuickForm2_Controller_Page $page */
             $page = $page->getController()->getFirstInvalidPage();
         }
 
         // generate the URL for the page 'display' event and redirect to it
-        $action = $page->getForm()->getAttribute('action');
+        $action = (string)$page->getForm()->getAttribute('action');
         // Bug #13087: RFC 2616 requires an absolute URI in Location header
         if (!preg_match('@^([a-z][a-z0-9.+-]*):@i', $action)) {
             $action = $this->resolveRelativeURL($action);

@@ -311,7 +311,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
         if (!$this->getAttribute('multiple')) {
             parent::updateValue();
         } else {
-            $name = $this->getName();
+            $name = (string)$this->getName();
             /* @var $ds HTML_QuickForm2_DataSource_NullAware */
             foreach ($this->getDataSources() as $ds) {
                 if (null !== ($value = $ds->getValue($name))

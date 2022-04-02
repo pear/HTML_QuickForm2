@@ -128,13 +128,13 @@ class HTML_QuickForm2_Element_InputCheckable extends HTML_QuickForm2_Element_Inp
 
     public function __toString()
     {
-        if (0 == strlen($this->data['content'])) {
+        if ('' === (string)$this->data['content']) {
             $label = '';
         } elseif ($this->frozen) {
             $label = $this->data['content'];
         } else {
             $label = '<label for="' . htmlspecialchars(
-                $this->getId(), ENT_QUOTES, self::getOption(self::OPTION_CHARSET)
+                    (string)$this->getId(), ENT_QUOTES, self::getOption(self::OPTION_CHARSET)
             ) . '">' . $this->data['content'] . '</label>';
         }
         return parent::__toString() . $label;

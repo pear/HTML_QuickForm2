@@ -42,74 +42,74 @@ class HTML_QuickForm2_Factory
 {
    /**
     * List of element types known to Factory
-    * @var array
+    * @var array<string, array{class-string<HTML_QuickForm2_Node>, string|null}>
     */
     protected static $elementTypes = [
-        'button'        => ['HTML_QuickForm2_Element_Button', null],
-        'checkbox'      => ['HTML_QuickForm2_Element_InputCheckbox', null],
-        'date'          => ['HTML_QuickForm2_Element_Date', null],
-        'fieldset'      => ['HTML_QuickForm2_Container_Fieldset', null],
-        'group'         => ['HTML_QuickForm2_Container_Group', null],
-        'file'          => ['HTML_QuickForm2_Element_InputFile', null],
-        'hidden'        => ['HTML_QuickForm2_Element_InputHidden', null],
-        'hierselect'    => ['HTML_QuickForm2_Element_Hierselect', null],
-        'image'         => ['HTML_QuickForm2_Element_InputImage', null],
-        'inputbutton'   => ['HTML_QuickForm2_Element_InputButton', null],
-        'password'      => ['HTML_QuickForm2_Element_InputPassword', null],
-        'radio'         => ['HTML_QuickForm2_Element_InputRadio', null],
-        'repeat'        => ['HTML_QuickForm2_Container_Repeat', null],
-        'reset'         => ['HTML_QuickForm2_Element_InputReset', null],
-        'script'        => ['HTML_QuickForm2_Element_Script', null],
-        'select'        => ['HTML_QuickForm2_Element_Select', null],
-        'static'        => ['HTML_QuickForm2_Element_Static', null],
-        'submit'        => ['HTML_QuickForm2_Element_InputSubmit', null],
-        'text'          => ['HTML_QuickForm2_Element_InputText', null],
-        'textarea'      => ['HTML_QuickForm2_Element_Textarea', null]
+        'button'        => [HTML_QuickForm2_Element_Button::class, null],
+        'checkbox'      => [HTML_QuickForm2_Element_InputCheckbox::class, null],
+        'date'          => [HTML_QuickForm2_Element_Date::class, null],
+        'fieldset'      => [HTML_QuickForm2_Container_Fieldset::class, null],
+        'group'         => [HTML_QuickForm2_Container_Group::class, null],
+        'file'          => [HTML_QuickForm2_Element_InputFile::class, null],
+        'hidden'        => [HTML_QuickForm2_Element_InputHidden::class, null],
+        'hierselect'    => [HTML_QuickForm2_Element_Hierselect::class, null],
+        'image'         => [HTML_QuickForm2_Element_InputImage::class, null],
+        'inputbutton'   => [HTML_QuickForm2_Element_InputButton::class, null],
+        'password'      => [HTML_QuickForm2_Element_InputPassword::class, null],
+        'radio'         => [HTML_QuickForm2_Element_InputRadio::class, null],
+        'repeat'        => [HTML_QuickForm2_Container_Repeat::class, null],
+        'reset'         => [HTML_QuickForm2_Element_InputReset::class, null],
+        'script'        => [HTML_QuickForm2_Element_Script::class, null],
+        'select'        => [HTML_QuickForm2_Element_Select::class, null],
+        'static'        => [HTML_QuickForm2_Element_Static::class, null],
+        'submit'        => [HTML_QuickForm2_Element_InputSubmit::class, null],
+        'text'          => [HTML_QuickForm2_Element_InputText::class, null],
+        'textarea'      => [HTML_QuickForm2_Element_Textarea::class, null]
     ];
 
    /**
     * List of registered rules
-    * @var array
+    * @var array<string, array{class-string<HTML_QuickForm2_Rule>, string|null, mixed}>
     */
     protected static $registeredRules = [
-        'nonempty'      => ['HTML_QuickForm2_Rule_Nonempty', null],
-        'empty'         => ['HTML_QuickForm2_Rule_Empty', null],
-        'required'      => ['HTML_QuickForm2_Rule_Required', null],
-        'compare'       => ['HTML_QuickForm2_Rule_Compare', null],
-        'eq'            => ['HTML_QuickForm2_Rule_Compare', null,
+        'nonempty'      => [HTML_QuickForm2_Rule_Nonempty::class, null, null],
+        'empty'         => [HTML_QuickForm2_Rule_Empty::class, null, null],
+        'required'      => [HTML_QuickForm2_Rule_Required::class, null, null],
+        'compare'       => [HTML_QuickForm2_Rule_Compare::class, null, null],
+        'eq'            => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '===']],
-        'neq'           => ['HTML_QuickForm2_Rule_Compare', null,
+        'neq'           => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '!==']],
-        'lt'            => ['HTML_QuickForm2_Rule_Compare', null,
+        'lt'            => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '<']],
-        'lte'           => ['HTML_QuickForm2_Rule_Compare', null,
+        'lte'           => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '<=']],
-        'gt'            => ['HTML_QuickForm2_Rule_Compare', null,
+        'gt'            => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '>']],
-        'gte'           => ['HTML_QuickForm2_Rule_Compare', null,
+        'gte'           => [HTML_QuickForm2_Rule_Compare::class, null,
                                  ['operator' => '>=']],
-        'regex'         => ['HTML_QuickForm2_Rule_Regex', null],
-        'callback'      => ['HTML_QuickForm2_Rule_Callback', null],
-        'length'        => ['HTML_QuickForm2_Rule_Length', null],
-        'minlength'     => ['HTML_QuickForm2_Rule_Length', null,
+        'regex'         => [HTML_QuickForm2_Rule_Regex::class, null, null],
+        'callback'      => [HTML_QuickForm2_Rule_Callback::class, null, null],
+        'length'        => [HTML_QuickForm2_Rule_Length::class, null, null],
+        'minlength'     => [HTML_QuickForm2_Rule_Length::class, null,
                                  ['max' => 0]],
-        'maxlength'     => ['HTML_QuickForm2_Rule_Length', null,
+        'maxlength'     => [HTML_QuickForm2_Rule_Length::class, null,
                                  ['min' => 0]],
-        'maxfilesize'   => ['HTML_QuickForm2_Rule_MaxFileSize', null],
-        'mimetype'      => ['HTML_QuickForm2_Rule_MimeType', null],
-        'each'          => ['HTML_QuickForm2_Rule_Each', null],
-        'notcallback'   => ['HTML_QuickForm2_Rule_NotCallback', null],
-        'notregex'      => ['HTML_QuickForm2_Rule_NotRegex', null],
-        'email'         => ['HTML_QuickForm2_Rule_Email', null]
+        'maxfilesize'   => [HTML_QuickForm2_Rule_MaxFileSize::class, null, null],
+        'mimetype'      => [HTML_QuickForm2_Rule_MimeType::class, null, null],
+        'each'          => [HTML_QuickForm2_Rule_Each::class, null, null],
+        'notcallback'   => [HTML_QuickForm2_Rule_NotCallback::class, null, null],
+        'notregex'      => [HTML_QuickForm2_Rule_NotRegex::class, null, null],
+        'email'         => [HTML_QuickForm2_Rule_Email::class, null, null]
     ];
 
 
    /**
     * Registers a new element type
     *
-    * @param string $type        Type name (treated case-insensitively)
-    * @param string $className   Class name
-    * @param string $includeFile File containing the class, leave empty if class already loaded
+    * @param string                             $type        Type name (treated case-insensitively)
+    * @param class-string<HTML_QuickForm2_Node> $className   Class name
+    * @param string                             $includeFile File containing the class, leave empty if class already loaded
     */
     public static function registerElement($type, $className, $includeFile = null)
     {
@@ -150,6 +150,7 @@ class HTML_QuickForm2_Factory
         if (!isset(self::$elementTypes[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Element type '$type' is not known");
         }
+        /** @var class-string<HTML_QuickForm2_Node> $className */
         list($className, $includeFile) = self::$elementTypes[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         return new $className($name, $attributes, $data);
@@ -159,11 +160,11 @@ class HTML_QuickForm2_Factory
    /**
     * Registers a new rule type
     *
-    * @param string $type        Rule type name (treated case-insensitively)
-    * @param string $className   Class name
-    * @param string $includeFile File containing the class,
-    *                            leave empty if class already loaded
-    * @param mixed  $config      Configuration data for rules of the given type
+    * @param string                             $type        Rule type name (treated case-insensitively)
+    * @param class-string<HTML_QuickForm2_Rule> $className   Class name
+    * @param string|null                        $includeFile File containing the class,
+    *                                                        leave empty if class already loaded
+    * @param mixed                              $config      Configuration data for rules of the given type
     */
     public static function registerRule(
         $type, $className, $includeFile = null, $config = null
@@ -205,12 +206,13 @@ class HTML_QuickForm2_Factory
         if (!isset(self::$registeredRules[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
         }
-        list($className, $includeFile) = self::$registeredRules[$type];
+        list($className, $includeFile, $globalConfig) = self::$registeredRules[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
-        if (isset(self::$registeredRules[$type][2])) {
+        if (null !== $globalConfig) {
             $config = call_user_func(
                 [$className, 'mergeConfig'],
-                $config, self::$registeredRules[$type][2]
+                $config,
+                $globalConfig
             );
         }
         return new $className($owner, $message, $config);

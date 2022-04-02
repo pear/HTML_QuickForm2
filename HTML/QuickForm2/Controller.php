@@ -71,29 +71,29 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     * Controller ID
     * @var string
     */
-    protected $id = null;
+    protected $id;
 
    /**
     * Contains the pages (instances of HTML_QuickForm2_Controller_Page) of the multipage form
-    * @var array
+    * @var array<string, HTML_QuickForm2_Controller_Page>
     */
     protected $pages = [];
 
    /**
     * Contains the mapping of action names to handlers (objects implementing HTML_QuickForm2_Controller_Action)
-    * @var array
+    * @var array<string, HTML_QuickForm2_Controller_Action>
     */
     protected $handlers = [];
 
    /**
     * The action extracted from HTTP request: array('page', 'action')
-    * @var array
+    * @var array|null
     */
     protected $actionName = null;
 
    /**
     * A wrapper around session variable used to store form data
-    * @var HTML_QuickForm2_Controller_SessionContainer
+    * @var HTML_QuickForm2_Controller_SessionContainer|null
     */
     protected $sessionContainer = null;
 
@@ -277,6 +277,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
         if (!isset($this->handlers[$actionName])
             && in_array($actionName, ['next', 'back', 'submit', 'display', 'jump'])
         ) {
+            /** @var class-string<HTML_QuickForm2_Controller_Action> $className */
             $className = 'HTML_QuickForm2_Controller_Action_' . ucfirst($actionName);
             // pear-package-only HTML_QuickForm2_Loader::loadClass($className);
             $this->addHandler($actionName, new $className());

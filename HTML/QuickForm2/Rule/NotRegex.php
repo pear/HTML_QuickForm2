@@ -53,7 +53,7 @@ class HTML_QuickForm2_Rule_NotRegex extends HTML_QuickForm2_Rule_Regex
                 return true;
             }
             $value = $value['name'];
-        } elseif (!strlen($value)) {
+        } elseif ('' === (string)$value) {
             return true;
         }
         return !preg_match($this->getConfig() . 'D', $value);
@@ -62,20 +62,14 @@ class HTML_QuickForm2_Rule_NotRegex extends HTML_QuickForm2_Rule_Regex
    /**
     * Returns the client-side validation callback
     *
-    * For this to work properly, slashes have to be used as regex delimiters.
-    * The method takes care of transforming PHP unicode escapes in regexps to
-    * JS unicode escapes if using 'u' modifier (see bug #12736)
+    * For this to work, slashes have to be used as regex delimiters.
     *
-    * @return   string
+    * @return string
+    * @throws HTML_QuickForm2_InvalidArgumentException
     */
     protected function getJavascriptCallback()
     {
-        $regex = $this->getConfig();
-
-        if ($pos = strpos($regex, 'u', strrpos($regex, '/'))) {
-            $regex = substr($regex, 0, $pos) . substr($regex, $pos + 1);
-            $regex = preg_replace('/(?<!\\\\)(?>\\\\\\\\)*\\\\x{([a-fA-F0-9]+)}/', '\\u$1', $regex);
-        }
+        $regex = $this->prepareJavascriptRegexp();
 
         return "function() { var value = " . $this->owner->getJavascriptValue() .
                "; return qf.rules.empty(value) || !{$regex}.test(value); }";

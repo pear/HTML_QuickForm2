@@ -50,6 +50,7 @@ class HTML_QuickForm2_Controller_Action_Submit
 
         // Some other page is invalid, redirect to it
         } else {
+            /** @psalm-suppress PossiblyNullReference */
             return $page->getController()->getFirstInvalidPage()->handle('jump');
         }
     }

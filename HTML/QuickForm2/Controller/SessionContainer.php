@@ -116,7 +116,7 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Stores the controller data sources
     *
-    * @param array $datasources A new data source list
+    * @param HTML_QuickForm2_DataSource[] $datasources A new data source list
     *
     * @throws   HTML_QuickForm2_InvalidArgumentException    if given array
     *               contains something that is not a valid data source
@@ -136,7 +136,7 @@ class HTML_QuickForm2_Controller_SessionContainer
    /**
     * Returns the controller data sources
     *
-    * @return array
+    * @return HTML_QuickForm2_DataSource[]
     */
     public function getDatasources()
     {
@@ -152,7 +152,7 @@ class HTML_QuickForm2_Controller_SessionContainer
     * {@link HTML_QuickForm2_Controller::destroySessionContainer()}
     *
     * @param string $name  Parameter name
-    * @param string $value Parameter value
+    * @param mixed  $value Parameter value
     */
     public function storeOpaque($name, $value)
     {

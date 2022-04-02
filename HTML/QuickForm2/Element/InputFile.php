@@ -39,13 +39,13 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 {
    /**
     * Language to display error messages in
-    * @var  string
+    * @var  string|null
     */
     protected $language = null;
 
    /**
     * Information on uploaded file, from submit data source
-    * @var array
+    * @var array|null
     */
     protected $value = null;
 
@@ -170,7 +170,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
 
         foreach ($this->getDataSources() as $ds) {
             if ($ds instanceof HTML_QuickForm2_DataSource_Submit) {
-                $value = $ds->getUpload($this->getName());
+                $value = $ds->getUpload((string)$this->getName());
                 if (null !== $value) {
                     $this->value = $value;
                     return;
@@ -198,6 +198,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
         if (isset($this->value['error'])
             && !in_array($this->value['error'], [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])
         ) {
+            /** @var string $errorMessage */
             $errorMessage = $this->messageProvider instanceof HTML_QuickForm2_MessageProvider
                             ? $this->messageProvider->get(['file', $this->value['error']], $this->language)
                             : call_user_func($this->messageProvider, ['file', $this->value['error']], $this->language);

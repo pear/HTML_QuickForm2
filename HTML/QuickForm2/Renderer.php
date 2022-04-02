@@ -49,18 +49,18 @@ abstract class HTML_QuickForm2_Renderer
 {
    /**
     * List of registered renderer types
-    * @var array
+    * @var array<string, array{class-string<HTML_QuickForm2_Renderer>, string|null}>
     */
     private static $_types = [
-        'callback' => ['HTML_QuickForm2_Renderer_Callback', null],
-        'default'  => ['HTML_QuickForm2_Renderer_Default', null],
-        'array'    => ['HTML_QuickForm2_Renderer_Array', null],
-        'stub'     => ['HTML_QuickForm2_Renderer_Stub', null]
+        'callback' => [HTML_QuickForm2_Renderer_Callback::class, null],
+        'default'  => [HTML_QuickForm2_Renderer_Default::class, null],
+        'array'    => [HTML_QuickForm2_Renderer_Array::class, null],
+        'stub'     => [HTML_QuickForm2_Renderer_Stub::class, null]
     ];
 
    /**
     * List of registered renderer plugins
-    * @var array
+    * @var array<string, array<int, array{class-string, string|null}>>
     */
     private static $_pluginClasses = [
         'callback' => [],
@@ -84,7 +84,7 @@ abstract class HTML_QuickForm2_Renderer
 
    /**
     * Javascript builder object
-    * @var  HTML_QuickForm2_JavascriptBuilder
+    * @var  HTML_QuickForm2_JavascriptBuilder|null
     */
     protected $jsBuilder;
 
@@ -119,6 +119,7 @@ abstract class HTML_QuickForm2_Renderer
             );
         }
 
+        /** @var class-string<HTML_QuickForm2_Renderer> $className */
         list ($className, $includeFile) = self::$_types[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer_Proxy');
@@ -128,12 +129,10 @@ abstract class HTML_QuickForm2_Renderer
    /**
     * Registers a new renderer type
     *
-    * @param string $type        Type name (treated case-insensitively)
-    * @param string $className   Class name
-    * @param string $includeFile File containing the class, leave empty
-    *                            if class already loaded
-    *
-    * @throws   HTML_QuickForm2_InvalidArgumentException if type already registered
+    * @param string                                 $type        Type name (treated case-insensitively)
+    * @param class-string<HTML_QuickForm2_Renderer> $className   Class name
+    * @param string|null                            $includeFile File containing the class, leave empty
+    *                                                            if class already loaded
     */
     final public static function register($type, $className, $includeFile = null)
     {
@@ -147,9 +146,9 @@ abstract class HTML_QuickForm2_Renderer
    /**
     * Registers a plugin for a renderer type
     *
-    * @param string $type        Renderer type name (treated case-insensitively)
-    * @param string $className   Plugin class name
-    * @param string $includeFile File containing the plugin class, leave empty if class already loaded
+    * @param string       $type        Renderer type name (treated case-insensitively)
+    * @param class-string $className   Plugin class name
+    * @param string|null  $includeFile File containing the plugin class, leave empty if class already loaded
     *
     * @throws   HTML_QuickForm2_InvalidArgumentException if plugin is already registered
     */

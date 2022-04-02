@@ -170,6 +170,13 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * Group's name is always a string
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -196,7 +203,10 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     protected function renameChild(HTML_QuickForm2_Node $element)
     {
-        $tokens = explode('[', str_replace(']', '', $element->getName()));
+        $tokens = explode(
+            '[',
+            str_replace(']', '', (string)$element->getName())
+        );
         // Child has already been renamed by its group before
         if ($this === $element->getContainer() && '' !== $this->previousName) {
             $gtokens = explode('[', str_replace(']', '', $this->previousName));
@@ -257,7 +267,8 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
         if ($this->prependsName()) {
             $name = preg_replace(
                 '/^' . preg_quote($this->getName(), '/') . '\[([^\]]*)\]/',
-                '\1', $element->getName()
+                '\1',
+                (string)$element->getName()
             );
             $element->setName($name);
         }

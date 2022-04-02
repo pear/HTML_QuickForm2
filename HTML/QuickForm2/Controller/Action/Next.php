@@ -55,6 +55,7 @@ class HTML_QuickForm2_Controller_Action_Next
                 return $page->handle('process');
             } else {
                 // redirect to the first invalid page
+                /** @psalm-suppress PossiblyNullReference */
                 return $page->getController()->getFirstInvalidPage()->handle('jump');
             }
 

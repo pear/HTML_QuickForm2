@@ -39,7 +39,7 @@ class HTML_QuickForm2_Container_Fieldset extends HTML_QuickForm2_Container
 {
    /**
     * Fieldsets don't have a 'name' attribute, so we only handle 'id'
-    * @var array
+    * @var string[]
     */
     protected $watchedAttributes = ['id'];
 

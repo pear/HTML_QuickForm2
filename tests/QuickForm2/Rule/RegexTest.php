@@ -32,8 +32,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testRegexIsRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                 'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
             $regex = new HTML_QuickForm2_Rule_Regex($mockEl, 'some error');
@@ -47,8 +46,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testOptionsHandling()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                 'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo123'));
@@ -63,8 +61,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                  'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->exactly(2))->method('getRawValue')
                ->will($this->returnValue('foo'));
@@ -83,8 +80,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                  'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->once())->method('getRawValue')
                ->will($this->returnValue('foo'));
@@ -99,8 +95,7 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
     public function testBug10799()
     {
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
-                                      'getRawValue', 'setValue', '__toString'])
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
                     ->will($this->returnValue("12345\n"));
@@ -177,6 +172,22 @@ class HTML_QuickForm2_Rule_RegexTest extends TestCase
 
         $this->assertFalse($ruleCyr->validate());
         $this->assertStringContainsString('/\\u0445\\u0443\\u0439/i.test(', $ruleCyr->getJavascript());
+    }
+
+    public function testSlashesAsDelimitersForJavascript()
+    {
+        $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
+            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->getMock();
+        $mockEl->expects($this->once())->method('getRawValue')
+               ->will($this->returnValue('doing foobar'));
+
+        $ruleExclamation = new HTML_QuickForm2_Rule_Regex($mockEl, 'an error', '!foo!');
+        $this::assertTrue($ruleExclamation->validate());
+
+        $this::expectException(HTML_QuickForm2_InvalidArgumentException::class);
+        $this::expectExceptionMessage('should have slashes as delimiters');
+        $ruleExclamation->getJavascript();
     }
 }
 ?>
