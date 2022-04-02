@@ -3,7 +3,7 @@
  * Package version @package_version@
  * https://pear.php.net/package/HTML_QuickForm2
  *
- * Copyright 2006-2021, Alexey Borzov, Bertrand Mansion
+ * Copyright 2006-2022, Alexey Borzov, Bertrand Mansion
  * Licensed under BSD 3-Clause License
  * https://opensource.org/licenses/BSD-3-Clause
  */
