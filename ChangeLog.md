@@ -1,5 +1,12 @@
 # Changes in HTML_QuickForm2
 
+## 2.3.0 - 2022-04-02
+* Upgraded tests, [PHPUnit Polyfills package] is used to run them on PHP 5.6 to PHP 8.1
+* Test suite now runs on Github Actions rather than on Travis
+* The package runs under PHP 8.1 without `E_DEPRECATED` messages (see [issue #6])
+* Use [psalm] for static analysis 
+* Minimum required PHP version is now 5.6
+
 ## 2.2.2 - 2021-06-25
 * Incorrect option name used in `HTML_QuickForm2_Element_Script::__toString()`.
   Thanks to Julian Striegl (striegljulian at gmail dot com) for reporting
@@ -83,3 +90,6 @@ Other features and changes
 [request #20103]: https://pear.php.net/bugs/bug.php?id=20103
 [bug #20295]: https://pear.php.net/bugs/bug.php?id=20295
 [on PEAR website]: https://pear.php.net/package/HTML_QuickForm2/download/All
+[PHPUnit Polyfills package]: https://github.com/Yoast/PHPUnit-Polyfills
+[issue #6]: https://github.com/pear/HTML_QuickForm2/issues/6
+[psalm]: https://psalm.dev/
