@@ -42,9 +42,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2022-04-02</date>
+ <date>2022-05-23</date>
  <version>
-  <release>2.3.0</release>
+  <release>2.3.1</release>
   <api>2.0.1</api>
  </version>
  <stability>
@@ -53,12 +53,8 @@
  </stability>
  <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
  <notes>
- * Upgraded tests, PHPUnit Polyfills package is used to run them on PHP 5.6 to PHP 8.1
- * Test suite now runs on Github Actions rather than on Travis
- * The package runs under PHP 8.1 without E_DEPRECATED messages
-   https://github.com/pear/HTML_QuickForm2/issues/6
- * Use psalm for static analysis
- * Minimum required PHP version is now 5.6
+* Re-release of version 2.3.0 with require_once statements correctly enabled
+  https://github.com/pear/HTML_QuickForm2/issues/9
  </notes>
  <contents>
   <dir name="/">
@@ -747,6 +743,26 @@
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2022-04-02</date>
+   <version>
+    <release>2.3.0</release>
+    <api>2.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
+   <notes>
+* Upgraded tests, PHPUnit Polyfills package is used to run them on PHP 5.6 to PHP 8.1
+* Test suite now runs on Github Actions rather than on Travis
+* The package runs under PHP 8.1 without E_DEPRECATED messages
+  https://github.com/pear/HTML_QuickForm2/issues/6
+* Use psalm for static analysis
+* Minimum required PHP version is now 5.6
+   </notes>
+  </release>
   <release>
    <date>2021-06-25</date>
    <version>

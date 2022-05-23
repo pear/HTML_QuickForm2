@@ -1,5 +1,8 @@
 # Changes in HTML_QuickForm2
 
+## 2.3.1 - 2022-05-23
+* PEAR package of version 2.3.0 was accidentally created with `require_once` statements disabled (see [issue #9])
+
 ## 2.3.0 - 2022-04-02
 * Upgraded tests, [PHPUnit Polyfills package] is used to run them on PHP 5.6 to PHP 8.1
 * Test suite now runs on Github Actions rather than on Travis
@@ -93,3 +96,4 @@ Other features and changes
 [PHPUnit Polyfills package]: https://github.com/Yoast/PHPUnit-Polyfills
 [issue #6]: https://github.com/pear/HTML_QuickForm2/issues/6
 [psalm]: https://psalm.dev/
+[issue #9]: https://github.com/pear/HTML_QuickForm2/issues/9

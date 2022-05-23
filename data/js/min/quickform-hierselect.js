@@ -1,6 +1,6 @@
 /*
  HTML_QuickForm2: support functions for hierselect elements
- Package version 2.3.0
+ Package version 2.3.1
  https://pear.php.net/package/HTML_QuickForm2
 
  Copyright 2006-2022, Alexey Borzov, Bertrand Mansion
