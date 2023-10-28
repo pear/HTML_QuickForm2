@@ -42,6 +42,8 @@
  * @license  https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
  * @version  Release: @package_version@
  * @link     https://pear.php.net/package/HTML_QuickForm2
+ *
+ * @implements IteratorAggregate<string, HTML_QuickForm2_Controller_Page>
  */
 class HTML_QuickForm2_Controller implements IteratorAggregate
 {
@@ -107,6 +109,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     public static function findControllerID()
     {
         if (empty($_REQUEST[self::KEY_ID])
+            || !is_string($_REQUEST[self::KEY_ID])
             || empty($_SESSION[sprintf(self::KEY_CONTAINER, $_REQUEST[self::KEY_ID])])
         ) {
             return null;
@@ -221,7 +224,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
         $names = array_map('preg_quote', array_keys($this->pages));
         $regex = '/^_qf_(' . implode('|', $names) . ')_(.+?)(_x)?$/';
         foreach (array_keys($_REQUEST) as $key) {
-            if (preg_match($regex, $key, $matches)) {
+            if (preg_match($regex, (string)$key, $matches)) {
                 $this->actionName = [$matches[1], $matches[2]];
                 break;
             }

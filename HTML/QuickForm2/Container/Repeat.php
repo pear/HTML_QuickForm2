@@ -487,7 +487,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                 );
             }
             if (array_key_exists('id', $backup[$key])) {
-                $child->setId(str_replace(self::INDEX_KEY, $index, $backup[$key]['id']));
+                $child->setId(str_replace(self::INDEX_KEY, $index, (string)$backup[$key]['id']));
             }
             if (array_key_exists('error', $backup[$key])) {
                 $child->setError();

@@ -59,6 +59,8 @@
  * @method HTML_QuickForm2_Element_InputSubmit   addSubmit(string $name, $attributes = null, array $data = [])
  * @method HTML_QuickForm2_Element_InputText     addText(string $name, $attributes = null, array $data = [])
  * @method HTML_QuickForm2_Element_Textarea      addTextarea(string $name, $attributes = null, array $data = [])
+ *
+ * @implements IteratorAggregate<int,HTML_QuickForm2_Node>
  */
 abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     implements IteratorAggregate, Countable
@@ -125,7 +127,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                 ) {
                     $values = self::arrayMerge($values, $value);
                 } else {
-                    $name = $child->getName();
+                    $name = (string)$child->getName();
                     if (!strpos($name, '[')) {
                         $values[$name] = $value;
                     } else {
@@ -138,8 +140,8 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                             }
                             $valueAry =& $valueAry[$token];
                         } while (count($tokens) > 1);
-                        if ('' != $tokens[0]) {
-                            $valueAry[$tokens[0]] = $value;
+                        if ('' !== ($token = array_shift($tokens))) {
+                            $valueAry[$token] = $value;
                         } else {
                             if (!isset($forceKeys[$name])) {
                                 $forceKeys[$name] = 0;

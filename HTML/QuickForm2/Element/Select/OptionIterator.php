@@ -29,9 +29,10 @@
  * @license  https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
  * @version  Release: @package_version@
  * @link     https://pear.php.net/package/HTML_QuickForm2
+ *
+ * @extends RecursiveArrayIterator<int, array|HTML_QuickForm2_Element_Select_Optgroup>
  */
 class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterator
-    implements RecursiveIterator
 {
     #[ReturnTypeWillChange]
     public function hasChildren()
@@ -42,9 +43,10 @@ class HTML_QuickForm2_Element_Select_OptionIterator extends RecursiveArrayIterat
     #[ReturnTypeWillChange]
     public function getChildren()
     {
-        return new HTML_QuickForm2_Element_Select_OptionIterator(
-            $this->current()->getOptions()
-        );
+        $current = $this->current();
+        return $current instanceof HTML_QuickForm2_Element_Select_OptionContainer
+            ? new self($current->getOptions())
+            : null;
     }
 }
 ?>

@@ -94,7 +94,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
 
         /* @var $child HTML_QuickForm2_Node */
         foreach ($this as $i => $child) {
-            $tokens = explode('[', str_replace(']', '', $child->getName()));
+            $tokens = explode('[', str_replace(']', '', (string)$child->getName()));
             if ($prefixLength) {
                 $tokens = array_slice($tokens, $prefixLength);
             }

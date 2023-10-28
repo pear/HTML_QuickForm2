@@ -29,8 +29,10 @@
  * @license  https://opensource.org/licenses/BSD-3-Clause BSD 3-Clause License
  * @version  Release: @package_version@
  * @link     https://pear.php.net/package/HTML_QuickForm2
+ *
+ * @extends RecursiveArrayIterator<int,HTML_QuickForm2_Node>
  */
-class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator implements RecursiveIterator
+class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator
 {
     public function __construct(HTML_QuickForm2_Container $container)
     {
@@ -46,7 +48,8 @@ class HTML_QuickForm2_ContainerIterator extends RecursiveArrayIterator implement
     #[ReturnTypeWillChange]
     public function getChildren()
     {
-        return new HTML_QuickForm2_ContainerIterator($this->current());
+        $current = $this->current();
+        return $current instanceof HTML_QuickForm2_Container ? new self($current) : null;
     }
 }
 

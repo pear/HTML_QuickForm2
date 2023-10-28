@@ -2,6 +2,9 @@
 <psalm
     errorLevel="3"
     resolveFromConfigFile="true"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+    findUnusedPsalmSuppress="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -14,6 +17,25 @@
     </projectFiles>
 
     <issueHandlers>
+        <ArgumentTypeCoercion>
+            <!--
+            Regex rule now actually checks that a non-empty string is given for config
+            -->
+            <errorLevel type="suppress">
+                <file name="HTML/QuickForm2/Rule/NotRegex.php" />
+                <file name="HTML/QuickForm2/Rule/Regex.php" />
+                <referencedFunction name="preg_match" />
+            </errorLevel>
+        </ArgumentTypeCoercion>
+        <InvalidNullableReturnType>
+            <!--
+            https://github.com/vimeo/psalm/issues/10327
+            -->
+            <errorLevel type="suppress">
+                <file name="HTML/QuickForm2/ContainerIterator.php" />
+                <file name="HTML/QuickForm2/Element/Select/OptionIterator.php" />
+            </errorLevel>
+        </InvalidNullableReturnType>
         <LessSpecificReturnStatement>
             <!--
             Looks like a bug in psalm with type inference
@@ -23,6 +45,15 @@
                 <file name="HTML/QuickForm2/Node.php" />
             </errorLevel>
         </LessSpecificReturnStatement>
+        <NullableReturnStatement>
+            <!--
+            https://github.com/vimeo/psalm/issues/10327
+            -->
+            <errorLevel type="suppress">
+                <file name="HTML/QuickForm2/ContainerIterator.php" />
+                <file name="HTML/QuickForm2/Element/Select/OptionIterator.php" />
+            </errorLevel>
+        </NullableReturnStatement>
         <PossiblyNullPropertyAssignmentValue>
             <!--
             Dunno how to properly fix this, ignore for now
@@ -40,5 +71,14 @@
                 <file name="HTML/QuickForm2/Controller/Page.php" />
             </errorLevel>
         </UndefinedInterfaceMethod>
+        <UnsupportedPropertyReferenceUsage>
+            <!--
+            Fixing this will require a major rewrite of set() and setId() methods of respective classes
+            -->
+            <errorLevel type="suppress">
+                <file name="HTML/QuickForm2/MessageProvider/Default.php" />
+                <file name="HTML/QuickForm2/Node.php" />
+            </errorLevel>
+        </UnsupportedPropertyReferenceUsage>
     </issueHandlers>
 </psalm>

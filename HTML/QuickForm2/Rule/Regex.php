@@ -78,7 +78,7 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
     */
     public function setConfig($config)
     {
-        if (!is_string($config)) {
+        if (!is_string($config) || 2 > strlen($config)) {
             throw new HTML_QuickForm2_InvalidArgumentException(
                 'Regex Rule requires a regular expression, ' .
                 preg_replace('/\s+/', ' ', var_export($config, true)) . ' given'

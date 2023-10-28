@@ -263,8 +263,10 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                     }
                     $separator = '';
                     // Should we add an empty option to the top of the select?
-                    if (!is_array($this->data['addEmptyOption']) && $this->data['addEmptyOption']
-                        || is_array($this->data['addEmptyOption']) && !empty($this->data['addEmptyOption'][$sign])
+                    if (!empty($this->data['addEmptyOption'])
+                        && isset($this->data['emptyOptionText'])
+                        && (!is_array($this->data['addEmptyOption'])
+                            || !empty($this->data['addEmptyOption'][$sign]))
                     ) {
                         // Using '+' array operator to preserve the keys
                         if (is_array($this->data['emptyOptionText']) && !empty($this->data['emptyOptionText'][$sign])) {
@@ -279,6 +281,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
                 }
             }
         }
+        /** @psalm-suppress TypeDoesNotContainType, RedundantCondition */
         $separators[] = $separator . ($backslash? '\\': '');
         $this->setSeparator($separators);
     }

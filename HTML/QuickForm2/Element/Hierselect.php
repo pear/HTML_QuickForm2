@@ -212,7 +212,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     {
         $idx           = 0;
         $this->_values = [];
-        /* @var $select HTML_QuickForm2_Element_Select */
+        /** @var HTML_QuickForm2_Element_Select $select */
         foreach ($this as $select) {
             if (empty($this->options[$idx])) {
                 $this->options[$idx] = [];

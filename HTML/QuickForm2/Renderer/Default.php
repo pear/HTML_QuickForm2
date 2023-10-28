@@ -424,32 +424,31 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         if (empty($this->errors)) {
             return '';
         }
+        /** @var array<string, string> $errorTpl */
+        $errorTpl = $this->templatesForClass['special:error'];
         if (!empty($this->options['errors_prefix'])) {
             $errorHtml = str_replace(
                 ['<qf:message>', '</qf:message>', '{message}'],
                 ['', '', $this->options['errors_prefix']],
-                $this->templatesForClass['special:error']['prefix']
+                $errorTpl['prefix']
             );
         } else {
             $errorHtml = preg_replace(
                 '!<qf:message>.*</qf:message>!isU', '',
-                $this->templatesForClass['special:error']['prefix']
+                $errorTpl['prefix']
             );
         }
-        $errorHtml .= implode(
-            $this->templatesForClass['special:error']['separator'],
-            $this->errors
-        );
+        $errorHtml .= implode($errorTpl['separator'], $this->errors);
         if (!empty($this->options['errors_suffix'])) {
             $errorHtml .= str_replace(
                 ['<qf:message>', '</qf:message>', '{message}'],
                 ['', '', $this->options['errors_suffix']],
-                $this->templatesForClass['special:error']['suffix']
+                $errorTpl['suffix']
             );
         } else {
             $errorHtml .= preg_replace(
                 '!<qf:message>.*</qf:message>!isU', '',
-                $this->templatesForClass['special:error']['suffix']
+                $errorTpl['suffix']
             );
         }
         return $errorHtml;
@@ -558,16 +557,18 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function outputError($elTpl, $error)
     {
-        if ($error && !$this->options['group_errors']) {
-            $elTpl = str_replace(
-                ['<qf:error>', '</qf:error>', '{error}'],
-                ['', '', $error], $elTpl
-            );
-        } else {
-            if ($error && $this->options['group_errors']) {
-                $this->errors[] = $error;
-            }
+        if ('' === $error || $this->options['group_errors']) {
             $elTpl = preg_replace('!<qf:error>.*</qf:error>!isU', '', $elTpl);
+        }
+        if ('' !== $error) {
+            if ($this->options['group_errors']) {
+                $this->errors[] = $error;
+            } else {
+                $elTpl = str_replace(
+                    ['<qf:error>', '</qf:error>', '{error}'],
+                    ['', '', $error], $elTpl
+                );
+            }
         }
         return $elTpl;
     }

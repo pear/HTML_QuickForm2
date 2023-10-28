@@ -38,6 +38,8 @@
  * @version  Release: @package_version@
  * @link     https://pear.php.net/package/HTML_QuickForm2
  * @internal
+ *
+ * @implements IteratorAggregate<int, array|HTML_QuickForm2_Element_Select_Optgroup>
  */
 class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
     implements IteratorAggregate, Countable

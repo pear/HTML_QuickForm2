@@ -360,7 +360,7 @@ class HTML_QuickForm2_Renderer_Array extends HTML_QuickForm2_Renderer
             $ary['separator'] = [];
             for ($i = 0, $count = count($group); $i < $count - 1; $i++) {
                 if (!is_array($separator)) {
-                    $ary['separator'][] = (string)$separator;
+                    $ary['separator'][] = $separator;
                 } else {
                     $ary['separator'][] = $separator[$i % count($separator)];
                 }

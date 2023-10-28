@@ -138,25 +138,27 @@ class HTML_QuickForm2_Controller_Action_Jump
             } else {
                 $host  = '';
                 foreach (['HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR'] as $key) {
-                    if (!empty($_SERVER[$key])) {
+                    if (!empty($_SERVER[$key]) && is_string($_SERVER[$key])) {
                         $host = $_SERVER[$key];
                         break;
                     }
                 }
             }
-            $host = $scheme . '//' . preg_replace('/:\d+$/', '', $host)
-                    . (($https && 443 == $_SERVER['SERVER_PORT']
-                        || !$https && 80 == $_SERVER['SERVER_PORT'])
-                       ? '' : ':' . $_SERVER['SERVER_PORT']);
+            $host = $scheme . '//' . preg_replace('/:\d+$/', '', $host);
+            $port = isset($_SERVER['SERVER_PORT']) ? (int)$_SERVER['SERVER_PORT'] : null;
+            $base = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            if (null !== $port && $port !== ($https ? 443 : 80)) {
+                $host .= ':' . $port;
+            }
             if ('' == $url) {
-                return $host . $_SERVER['REQUEST_URI'];
+                return $host . $base;
 
             } elseif ('/' == $url[0]) {
                 list($actPath, $actQuery) = self::splitUri($url);
                 return $host . self::normalizePath($actPath) . $actQuery;
 
             } else {
-                list($basePath, $baseQuery) = self::splitUri($_SERVER['REQUEST_URI']);
+                list($basePath, $baseQuery) = self::splitUri($base);
                 list($actPath, $actQuery)   = self::splitUri($url);
                 if ('' == $actPath) {
                     return $host . $basePath . $actQuery;

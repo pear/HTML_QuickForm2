@@ -168,7 +168,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
             $reflection = new ReflectionObject($plugin);
             foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
                 $lower = strtolower($method->getName());
-                if ('HTML_QuickForm2_Renderer_Plugin' == $method->getDeclaringClass()->getName()) {
+                if (HTML_QuickForm2_Renderer_Plugin::class == $method->getDeclaringClass()->getName()) {
                     continue;
                 } elseif (!isset($this->_rendererMethods[$lower])
                           && !isset($this->_pluginMethods[$lower])
