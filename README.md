@@ -2,6 +2,8 @@
 
 [![Build Status](https://github.com/pear/HTML_QuickForm2/workflows/Continuous%20Integration/badge.svg?branch=trunk)](https://github.com/pear/HTML_QuickForm2/actions?query=branch%3Atrunk+workflow%3A%22Continuous+Integration%22)
 
+[![Static Analysis](https://github.com/pear/HTML_QuickForm2/workflows/Static%20Analysis/badge.svg?branch=trunk)](https://github.com/pear/HTML_QuickForm2/actions?query=branch%3Atrunk+workflow%3A%22Static+Analysis%22)
+
 This is a repository for [PEAR HTML_QuickForm2] package that has been migrated from [PEAR SVN].
 
 HTML_QuickForm2 provides methods to create, validate and render HTML forms. It is a PHP5 rewrite of [PEAR HTML_QuickForm]
