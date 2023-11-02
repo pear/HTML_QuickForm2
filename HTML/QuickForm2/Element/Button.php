@@ -79,10 +79,20 @@ class HTML_QuickForm2_Element_Button extends HTML_QuickForm2_Element
     *
     * @return $this
     */
-    function setContent($content)
+    public function setContent($content)
     {
         $this->data['content'] = $content;
         return $this;
+    }
+
+    /**
+     * Returns the contents of the button element
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->data['content'];
     }
 
    /**

@@ -146,7 +146,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @return $this
     */
-    function setContent($content)
+    public function setContent($content)
     {
         $this->data['content'] = $content;
         return $this;
@@ -157,7 +157,7 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
     *
     * @return   string|null
     */
-    function getContent()
+    public function getContent()
     {
         return $this->data['content'];
     }
@@ -257,6 +257,16 @@ class HTML_QuickForm2_Element_Static extends HTML_QuickForm2_Element
         $this->forceClosingTag = (bool)$forceClosing;
 
         return $this;
+    }
+
+    /**
+     * Returns the name of an HTML tag to wrap around the element's content
+     *
+     * @return string|null
+     */
+    public function getTagName()
+    {
+        return $this->tagName;
     }
 }
 ?>
