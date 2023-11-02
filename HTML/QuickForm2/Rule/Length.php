@@ -79,19 +79,19 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
     {
         $allowedLength = $this->getConfig();
         if (is_scalar($allowedLength)) {
-            $check = "length == {$allowedLength}";
+            $check = "v.length == {$allowedLength}";
         } else {
             $checks = [];
             if (!empty($allowedLength['min'])) {
-                $checks[] = "length >= {$allowedLength['min']}";
+                $checks[] = "v.length >= {$allowedLength['min']}";
             }
             if (!empty($allowedLength['max'])) {
-                $checks[] = "length <= {$allowedLength['max']}";
+                $checks[] = "v.length <= {$allowedLength['max']}";
             }
             $check = implode(' && ', $checks);
         }
-        return "function() { var length = " . $this->owner->getJavascriptValue() .
-               ".length; return qf.rules.empty(length) || ({$check}); }";
+        return "function() { var v = " . $this->owner->getJavascriptValue() .
+               "; return qf.rules.empty(v) || ({$check}); }";
     }
 
    /**
