@@ -256,8 +256,9 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
             if (!$elem->getError()) {
                 continue;
             }
-            $label = $elem->getData()['label'];
-            $label = is_array($label) ? $label[0] : $label;
+            $elementData = $elem->getData();
+            $label       = is_array($elementData) && array_key_exists('label', $elementData) ? $elementData['label'] : '';
+            $label       = is_array($label) ? $label[0] : $label;
             if ($label) {
                 $error_messages[] = sprintf('%s: %s', $label, $elem->getError());
             } else {
