@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ 'ubuntu-latest' ]
-        php-version: [ '7.4', '8.2' ]
+        php-version: [ '8.2' ]
 
     steps:
       - name: Checkout code
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install psalm
         run: |
-          composer require --dev "vimeo/psalm:^5.15"
+          composer require --dev "vimeo/psalm:^6"
 
       - name: Run a static analysis with vimeo/psalm
         run: |
