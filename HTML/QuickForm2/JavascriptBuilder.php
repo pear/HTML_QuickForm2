@@ -105,12 +105,14 @@ class HTML_QuickForm2_JavascriptBuilder
         if (null === $defaultAbsPath) {
             $defaultAbsPath = '@data_dir@' . DIRECTORY_SEPARATOR . 'HTML_QuickForm2'
                               . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR;
-            // package was probably not installed, use relative path
+            // Not a PEAR installation, use relative path
             if (0 === strpos($defaultAbsPath, '@' . 'data_dir@')) {
-                $defaultAbsPath = realpath(
-                    dirname(dirname(__DIR__))
-                    . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'js'
-                ) . DIRECTORY_SEPARATOR;
+                if (false === $defaultAbsPath = realpath(__DIR__ . '/../../data/js')) {
+                    throw new HTML_QuickForm2_Exception(
+                        'Unable to locate directory containing JavaScript files, please provide one explicitly'
+                    );
+                }
+                $defaultAbsPath .= DIRECTORY_SEPARATOR;
             }
         }
         $this->defaultAbsPath = $defaultAbsPath;

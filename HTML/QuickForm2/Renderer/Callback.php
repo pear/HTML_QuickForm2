@@ -185,7 +185,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
             '<form'.$form->getAttributes(true).'><div>' .
             call_user_func($renderer->hiddenGroupCallback, $renderer, $form)
         ];
-        $html[] = implode($break, array_pop($renderer->html));
+        $html[] = implode($break, (array)array_pop($renderer->html));
         $html[] = '</div></form>';
         $html[] = call_user_func($renderer->requiredNoteCallback, $renderer, $form);
         $script = $renderer->getJavascriptBuilder()->getFormJavascript($form->getId());
@@ -232,9 +232,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         $html = [];
         if (!empty($renderer->errors)) {
             $html[] = '<div class="errors">';
-            if (($prefix = $renderer->getOption('errors_prefix'))
-                && !empty($prefix)
-            ) {
+            if ($prefix = $renderer->getOption('errors_prefix')) {
                 $html[] = '<p>' . $prefix . '</p>';
             }
             $html[] = '<ul>';
@@ -242,9 +240,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
                 $html[] = '<li>' . $error . '</li>';
             }
             $html[] = '</ul>';
-            if (($suffix = $renderer->getOption('errors_suffix'))
-                && !empty($suffix)
-            ) {
+            if ($suffix = $renderer->getOption('errors_suffix')) {
                 $html[] = '<p>' . $suffix . '</p>';
             }
             $html[] = '</div>';
@@ -278,7 +274,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     ) {
         /** @var HTML_QuickForm2_Renderer_Callback $renderer */
         if ($renderer->hasRequired && !$form->toggleFrozen(null)) {
-            if (($note = $renderer->getOption('required_note')) && !empty($note)) {
+            if ($note = $renderer->getOption('required_note')) {
                 return '<div class="reqnote">'.$note.'</div>';
             }
         }
@@ -290,7 +286,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
     ) {
         /** @var HTML_QuickForm2_Renderer_Callback $renderer */
         $break  = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
-        return implode($break, array_pop($renderer->html));
+        return implode($break, (array)array_pop($renderer->html));
     }
 
     public static function _renderGroup(
@@ -314,7 +310,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         }
 
         $separator = $group->getSeparator();
-        $elements  = array_pop($renderer->html);
+        $elements  = (array)array_pop($renderer->html);
         if (!is_array($separator)) {
             $content = implode((string)$separator, $elements);
         } else {
@@ -345,8 +341,8 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         if (!empty($label[0])) {
             $html[] = '<p>'.array_shift($label).'</p>';
         }
-        $elements  = array_pop($renderer->html);
-        $content = implode($break, $elements);
+        $elements = (array)array_pop($renderer->html);
+        $content  = implode($break, $elements);
         $html[] = $content;
         $html[] = '</div>';
         return implode($break, $html) . $break;
@@ -360,7 +356,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         $break     = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $html      = ['<fieldset'.$fieldset->getAttributes(true).'>'];
         $label     = $fieldset->getLabel();
-        $mainLabel = is_array($label) ? array_shift($label) : (string)$label;
+        $mainLabel = (string)(is_array($label) ? array_shift($label) : $label);
         if ('' !== $mainLabel) {
             $html[] = sprintf(
                 '<legend id="%s-legend">%s</legend>',
@@ -368,7 +364,7 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
                 $mainLabel
             );
         }
-        $elements = array_pop($renderer->html);
+        $elements = (array)array_pop($renderer->html);
         $html[] = implode($break, $elements);
         $html[] = '</fieldset>';
         return implode($break, $html) . $break;
@@ -728,15 +724,16 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
         if (!empty($this->callbacksForId[$elementId])) {
             return $this->callbacksForId[$elementId];
         }
-        $class          = strtolower(get_class($element));
+        $class          = get_class($element);
         $groupId        = end($this->groupId);
         $elementClasses = [];
         do {
-            if (empty($groupId) && !empty($this->callbacksForClass[$class])) {
-                return $this->callbacksForClass[$class];
+            $lower = strtolower($class);
+            if (empty($groupId) && !empty($this->callbacksForClass[$lower])) {
+                return $this->callbacksForClass[$lower];
             }
-            $elementClasses[$class] = true;
-        } while ($class = strtolower(get_parent_class($class)));
+            $elementClasses[$lower] = true;
+        } while (false !== $class = get_parent_class($class));
 
         if (!empty($groupId)) {
             if (!empty($this->elementCallbacksForGroupId[$groupId])) {
@@ -748,16 +745,17 @@ class HTML_QuickForm2_Renderer_Callback extends HTML_QuickForm2_Renderer
             }
 
             if (null !== ($group = $element->getContainer())) {
-                $grClass = strtolower(get_class($group));
+                $grClass = get_class($group);
                 do {
-                    if (!empty($this->elementCallbacksForGroupClass[$grClass])) {
+                    $lower = strtolower($grClass);
+                    if (!empty($this->elementCallbacksForGroupClass[$lower])) {
                         foreach (array_keys($elementClasses) as $elClass) {
-                            if (!empty($this->elementCallbacksForGroupClass[$grClass][$elClass])) {
-                                return $this->elementCallbacksForGroupClass[$grClass][$elClass];
+                            if (!empty($this->elementCallbacksForGroupClass[$lower][$elClass])) {
+                                return $this->elementCallbacksForGroupClass[$lower][$elClass];
                             }
                         }
                     }
-                } while ($grClass = strtolower(get_parent_class($grClass)));
+                } while (false !== $grClass = get_parent_class($grClass));
             }
         }
         // default may be null, so we try to return a callback in any case

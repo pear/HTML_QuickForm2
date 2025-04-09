@@ -203,9 +203,9 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
                             ? $this->messageProvider->get(['file', $this->value['error']], $this->language)
                             : call_user_func($this->messageProvider, ['file', $this->value['error']], $this->language);
             if (UPLOAD_ERR_INI_SIZE == $this->value['error']) {
-                $iniSize = ini_get('upload_max_filesize');
+                $iniSize = ini_get('upload_max_filesize') ?: '0';
                 $size    = intval($iniSize);
-                switch (strtoupper(substr($iniSize, -1))) {
+                switch (strtoupper((string)substr($iniSize, -1))) {
                 case 'G': $size *= 1024;
                 case 'M': $size *= 1024;
                 case 'K': $size *= 1024;
@@ -219,7 +219,7 @@ class HTML_QuickForm2_Element_InputFile extends HTML_QuickForm2_Element_Input
                     }
                 }
             }
-            $this->error = isset($size)? sprintf($errorMessage, $size): $errorMessage;
+            $this->error = (string)(isset($size)? sprintf($errorMessage, $size): $errorMessage);
             return false;
         }
         return parent::validate();

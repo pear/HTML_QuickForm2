@@ -124,11 +124,11 @@ class HTML_QuickForm2_Rule_Regex extends HTML_QuickForm2_Rule
         }
 
         if ($pos = strpos($regex, 'u', $rightDelim)) {
-            $regex = substr($regex, 0, $pos) . substr($regex, $pos + 1);
+            $regex = (string)substr($regex, 0, $pos) . (string)substr($regex, $pos + 1);
             $regex = preg_replace('/(?<!\\\\)(?>\\\\\\\\)*\\\\x{([a-fA-F0-9]+)}/', '\\u$1', $regex);
         }
 
-        return $regex;
+        return (string)$regex;
     }
 }
 ?>

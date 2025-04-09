@@ -298,7 +298,7 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
     */
     public function set(array $messageId, $langId, $message)
     {
-        $key = array_shift($messageId);
+        $key = array_shift($messageId) ?: 0;
         if (empty($this->messages[$key])) {
             $this->messages[$key] = [];
         }
@@ -307,7 +307,7 @@ class HTML_QuickForm2_MessageProvider_Default implements HTML_QuickForm2_Message
         }
         $messageHolder =& $this->messages[$key][$langId];
         while (!empty($messageId)) {
-            $key = array_shift($messageId);
+            $key = array_shift($messageId) ?: 0;
             if (empty($messageHolder[$key])) {
                 $messageHolder[$key] = [];
             }

@@ -110,7 +110,7 @@ class HTML_QuickForm2_DataSource_SuperGlobal
             }
 
             do {
-                $token = array_shift($tokens);
+                $token = (string)array_shift($tokens);
                 if (!isset($value['name'][$token])) {
                     return null;
                 }

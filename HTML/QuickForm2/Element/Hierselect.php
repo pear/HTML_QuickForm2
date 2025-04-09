@@ -220,7 +220,9 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
             $keys  =  $this->_values;
             $array =& $this->options[$idx++];
             while (!empty($keys)) {
-                $key = array_shift($keys);
+                if (null === $key = array_shift($keys)) {
+                    continue;
+                }
                 if (!isset($array[$key])) {
                     if (!empty($keys)) {
                         $array[$key] = [];
@@ -312,19 +314,13 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     * @link     http://pear.php.net/bugs/bug.php?id=16603
     * @return   array   Array with separate options and texts
     */
-    private function _prepareOptions($ary, $depth)
+    private function _prepareOptions(array $ary, $depth)
     {
-        if (!is_array($ary)) {
-            $ret = $ary;
-        } elseif (0 == $depth) {
-            $ret = ['values' => array_keys($ary), 'texts' => array_values($ary)];
-        } else {
-            $ret = [];
-            foreach ($ary as $k => $v) {
-                $ret[$k] = $this->_prepareOptions($v, $depth - 1);
-            }
-        }
-        return $ret;
+        return 0 === $depth
+            ? ['values' => array_keys($ary), 'texts' => array_values($ary)]
+            : array_map(function ($v) use ($depth) {
+                  return $this->_prepareOptions($v, $depth - 1);
+              }, $ary);
     }
 
    /**
@@ -336,7 +332,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
     {
         // we store values and options with id of first select rather than with
         // the element's name since the former has more chances to be unique
-        $selectId = reset($this->elements)->getId();
+        $selectId = (reset($this->elements) ?: $this)->getId();
         $cr       = self::getOption(self::OPTION_LINEBREAK);
         $js       = "qf.elements.hierselect.defaults['{$selectId}'] = " .
                     HTML_QuickForm2_JavascriptBuilder::encode($this->_values) . ";{$cr}";

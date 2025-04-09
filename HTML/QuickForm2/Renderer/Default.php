@@ -318,7 +318,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             [$container->getAttributes(true), (string)$container->getId()],
             $this->prepareTemplate($this->findTemplate($container, '{content}'), $container)
         );
-        $cHtml  = array_pop($this->html);
+        $cHtml  = (array)array_pop($this->html);
         $break  = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $indent = str_repeat(HTML_Common2::getOption(HTML_Common2::OPTION_INDENT), count($this->html));
         $this->html[count($this->html) - 1][] = str_replace(
@@ -347,13 +347,16 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         /** @var HTML_QuickForm2_Container_Group $group */
         $gTpl = str_replace(
             ['{attributes}', '{id}', '{class}'],
-            [$group->getAttributes(true), array_pop($this->groupId),
-                  $group->getAttribute('class')],
+            [
+                $group->getAttributes(true),
+                (string)array_pop($this->groupId),
+                (string)$group->getAttribute('class')
+            ],
             $this->prepareTemplate($this->findTemplate($group, '{content}'), $group)
         );
 
         $separator = $group->getSeparator();
-        $elements  = array_pop($this->html);
+        $elements  = (array)array_pop($this->html);
         if (!is_array($separator)) {
             $content = implode((string)$separator, $elements);
         } else {
@@ -409,7 +412,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         $break         = HTML_Common2::getOption(HTML_Common2::OPTION_LINEBREAK);
         $script        = $this->getJavascriptBuilder()->getFormJavascript($form->getId());
         $this->html[0] = [
-            str_replace('{content}', $break . implode($break, $this->html[0]), $formTpl) .
+            str_replace('{content}', $break . implode($break, $this->html[0]), (string)$formTpl) .
             (empty($script)? '': $break . $script)
         ];
     }
@@ -475,15 +478,16 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         if (!empty($this->templatesForId[(string)$element->getId()])) {
             return $this->templatesForId[(string)$element->getId()];
         }
-        $class          = strtolower(get_class($element));
+        $class          = get_class($element);
         $groupId        = end($this->groupId);
         $elementClasses = [];
         do {
-            if (empty($groupId) && !empty($this->templatesForClass[$class])) {
-                return $this->templatesForClass[$class];
+            $lower = strtolower($class);
+            if (empty($groupId) && !empty($this->templatesForClass[$lower])) {
+                return $this->templatesForClass[$lower];
             }
-            $elementClasses[$class] = true;
-        } while ($class = strtolower(get_parent_class($class)));
+            $elementClasses[$lower] = true;
+        } while (false !== $class = get_parent_class($class));
 
         if (!empty($groupId)) {
             if (!empty($this->elementTemplatesForGroupId[$groupId])) {
@@ -495,16 +499,17 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
 
             if (null !== ($group = $element->getContainer())) {
-                $grClass = strtolower(get_class($group));
+                $grClass = get_class($group);
                 do {
-                    if (!empty($this->elementTemplatesForGroupClass[$grClass])) {
+                    $lower = strtolower($grClass);
+                    if (!empty($this->elementTemplatesForGroupClass[$lower])) {
                         foreach (array_keys($elementClasses) as $elClass) {
-                            if (!empty($this->elementTemplatesForGroupClass[$grClass][$elClass])) {
-                                return $this->elementTemplatesForGroupClass[$grClass][$elClass];
+                            if (!empty($this->elementTemplatesForGroupClass[$lower][$elClass])) {
+                                return $this->elementTemplatesForGroupClass[$lower][$elClass];
                             }
                         }
                     }
-                } while ($grClass = strtolower(get_parent_class($grClass)));
+                } while (false !== $grClass = get_parent_class($grClass));
             }
         }
         return $default;
@@ -544,7 +549,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
         } else {
             $elTpl = preg_replace('!<qf:required>.*</qf:required>!isU', '', $elTpl);
         }
-        return $elTpl;
+        return (string)$elTpl;
     }
 
    /**
@@ -558,7 +563,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     public function outputError($elTpl, $error)
     {
         if ('' === $error || $this->options['group_errors']) {
-            $elTpl = preg_replace('!<qf:error>.*</qf:error>!isU', '', $elTpl);
+            $elTpl = (string)preg_replace('!<qf:error>.*</qf:error>!isU', '', $elTpl);
         }
         if ('' !== $error) {
             if ($this->options['group_errors']) {
@@ -583,13 +588,13 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function outputLabel($elTpl, $label)
     {
-        $mainLabel = is_array($label)? array_shift($label): (string)$label;
+        $mainLabel = (string)(is_array($label)? array_shift($label): $label);
         $elTpl     = str_replace('{label}', $mainLabel, $elTpl);
         if (false !== strpos($elTpl, '<qf:label>')) {
             if ('' !== $mainLabel) {
                 $elTpl = str_replace(['<qf:label>', '</qf:label>'], ['', ''], $elTpl);
             } else {
-                $elTpl = preg_replace('!<qf:label>.*</qf:label>!isU', '', $elTpl);
+                $elTpl = (string)preg_replace('!<qf:label>.*</qf:label>!isU', '', $elTpl);
             }
         }
         if (is_array($label)) {
@@ -602,7 +607,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
             }
         }
         if (strpos($elTpl, '{label_')) {
-            $elTpl = preg_replace('!<qf:label_([^>]+)>.*</qf:label_\1>!isU', '', $elTpl);
+            $elTpl = (string)preg_replace('!<qf:label_([^>]+)>.*</qf:label_\1>!isU', '', $elTpl);
         }
         return $elTpl;
     }

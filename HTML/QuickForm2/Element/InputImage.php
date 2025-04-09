@@ -123,8 +123,8 @@ class HTML_QuickForm2_Element_InputImage extends HTML_QuickForm2_Element_Input
                     return;
 
                 } elseif (false !== strpos($name, '[')) {
-                    if ('[]' == substr($name, -2)) {
-                        $name = substr($name, 0, -2);
+                    if ('[]' === substr($name, -2)) {
+                        $name = (string)substr($name, 0, -2);
                     }
                     if (null !== ($value = $ds->getValue($name))) {
                         $this->coordinates = [

@@ -140,7 +140,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
                             }
                             $valueAry =& $valueAry[$token];
                         } while (count($tokens) > 1);
-                        if ('' !== ($token = array_shift($tokens))) {
+                        if ('' !== ($token = (string)array_shift($tokens))) {
                             $valueAry[$token] = $value;
                         } else {
                             if (!isset($forceKeys[$name])) {

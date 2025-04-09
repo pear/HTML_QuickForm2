@@ -5,6 +5,7 @@
     findUnusedBaselineEntry="true"
     findUnusedCode="false"
     findUnusedPsalmSuppress="true"
+    ensureOverrideAttribute="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -27,33 +28,19 @@
                 <referencedFunction name="preg_match" />
             </errorLevel>
         </ArgumentTypeCoercion>
-        <InvalidNullableReturnType>
+        <InvalidArgument>
             <!--
-            https://github.com/vimeo/psalm/issues/10327
+            https://github.com/vimeo/psalm/issues/10936 and related issues
             -->
             <errorLevel type="suppress">
-                <file name="HTML/QuickForm2/ContainerIterator.php" />
-                <file name="HTML/QuickForm2/Element/Select/OptionIterator.php" />
+                <file name="HTML/QuickForm2/JavascriptBuilder.php" />
+                <referencedFunction name="array_map" />
             </errorLevel>
-        </InvalidNullableReturnType>
-        <LessSpecificReturnStatement>
-            <!--
-            Looks like a bug in psalm with type inference
-            -->
             <errorLevel type="suppress">
-                <file name="HTML/QuickForm2/Container/Group.php" />
-                <file name="HTML/QuickForm2/Node.php" />
+                <file name="HTML/QuickForm2/Element.php" />
+                <referencedFunction name="array_walk_recursive" />
             </errorLevel>
-        </LessSpecificReturnStatement>
-        <NullableReturnStatement>
-            <!--
-            https://github.com/vimeo/psalm/issues/10327
-            -->
-            <errorLevel type="suppress">
-                <file name="HTML/QuickForm2/ContainerIterator.php" />
-                <file name="HTML/QuickForm2/Element/Select/OptionIterator.php" />
-            </errorLevel>
-        </NullableReturnStatement>
+        </InvalidArgument>
         <PossiblyNullPropertyAssignmentValue>
             <!--
             Dunno how to properly fix this, ignore for now

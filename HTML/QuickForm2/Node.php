@@ -246,7 +246,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
             $container =& $container[$token];
         } while (!empty($tokens));
 
-        return substr($id, 1);
+        return (string)substr($id, 1);
     }
 
 

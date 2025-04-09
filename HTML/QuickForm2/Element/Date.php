@@ -320,7 +320,7 @@ class HTML_QuickForm2_Element_Date extends HTML_QuickForm2_Container_Group
     protected function createOptionList($start, $end, $step = 1)
     {
         for ($i = $start, $options = []; $start > $end? $i >= $end: $i <= $end; $i += $step) {
-            $options[$i] = sprintf('%02d', $i);
+            $options[$i] = (string)sprintf('%02d', $i);
         }
         return $options;
     }

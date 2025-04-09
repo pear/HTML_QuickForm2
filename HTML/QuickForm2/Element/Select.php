@@ -112,7 +112,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
             } else {
                 $this->attributes['name'] .= '[]';
                 $attrString = $this->getAttributes(true);
-                $this->attributes['name']  = substr($this->attributes['name'], 0, -2);
+                $this->attributes['name']  = (string)substr($this->attributes['name'], 0, -2);
             }
             $indent = $this->getIndent();
             return $indent . '<select' . $attrString . '>' .

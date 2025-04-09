@@ -339,11 +339,9 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     {
         // pear-package-only HTML_QuickForm2_Loader::loadClass('HTML_QuickForm2_Renderer');
 
-        /** @var HTML_QuickForm2_Renderer_Default $renderer */
-        $renderer = $this->render(
-            HTML_QuickForm2_Renderer::factory('default')
-                ->setTemplateForId($this->getId(), '{content}')
-        );
+        /** @var HTML_QuickForm2_Renderer_Default&HTML_QuickForm2_Renderer_Proxy $renderer */
+        $renderer = HTML_QuickForm2_Renderer::factory('default');
+        $this->render($renderer->setTemplateForId((string)$this->getId(), '{content}'));
         return $renderer->__toString()
                . $renderer->getJavascriptBuilder()->getSetupCode(null, true);
     }

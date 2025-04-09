@@ -283,7 +283,7 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
                     && !$child->getAttribute('multiple'))
                 || $child instanceof HTML_QuickForm2_Element_Textarea
             ) {
-                $this->indexField = substr($name, 0, $pos);
+                $this->indexField = (string)substr($name, 0, $pos);
                 return true;
             }
         }
