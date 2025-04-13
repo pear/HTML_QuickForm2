@@ -1,5 +1,10 @@
 # Changes in HTML_QuickForm2
 
+## [2.4.0] - 2025-04-13
+* Tested on PHP 8.4, runs without `E_DEPRECATED` messages (see [issue #13])
+* Minimum required PHP version is 7.1 (needed for nullable types)
+* Psalm version 6 is used for static analysis, fixed new-found issues
+
 ## 2.3.2 - 2023-11-02
 * Tested on PHP 8.2 and 8.3
 * [psalm] version 5 is used for static analysis, fixed new-found issues
@@ -108,3 +113,5 @@ Other features and changes
 [issue #6]: https://github.com/pear/HTML_QuickForm2/issues/6
 [psalm]: https://psalm.dev/
 [issue #9]: https://github.com/pear/HTML_QuickForm2/issues/9
+[issue #13]: https://github.com/pear/HTML_QuickForm2/issues/13
+[2.4.0]: https://github.com/pear/HTML_QuickForm2/compare/v2.3.2...v2.4.0
