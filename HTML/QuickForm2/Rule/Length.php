@@ -207,7 +207,7 @@ class HTML_QuickForm2_Rule_Length extends HTML_QuickForm2_Rule
 
         if (!empty($config['min']) && !empty($config['max'])) {
             if ($config['min'] > $config['max']) {
-                list($config['min'], $config['max']) = [$config['max'], $config['min']];
+                [$config['min'], $config['max']] = [$config['max'], $config['min']];
             } elseif ($config['min'] == $config['max']) {
                 $config = $config['min'];
             }

@@ -151,7 +151,7 @@ class HTML_QuickForm2_Factory
             throw new HTML_QuickForm2_InvalidArgumentException("Element type '$type' is not known");
         }
         /** @var class-string<HTML_QuickForm2_Node> $className */
-        list($className, $includeFile) = self::$elementTypes[$type];
+        [$className, $includeFile] = self::$elementTypes[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         return new $className($name, $attributes, $data);
     }
@@ -206,7 +206,7 @@ class HTML_QuickForm2_Factory
         if (!isset(self::$registeredRules[$type])) {
             throw new HTML_QuickForm2_InvalidArgumentException("Rule '$type' is not known");
         }
-        list($className, $includeFile, $globalConfig) = self::$registeredRules[$type];
+        [$className, $includeFile, $globalConfig] = self::$registeredRules[$type];
         HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
         if (null !== $globalConfig) {
             $config = call_user_func(

@@ -75,7 +75,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         );
         parent::setId(empty($id) ? null : $id);
         if (!isset($this->attributes['action'])) {
-            $this->attributes['action'] = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '';
+            $this->attributes['action'] = $_SERVER['PHP_SELF'] ?? '';
         }
         if ($trackSubmit && isset($_REQUEST['_qf__' . $id]) ||
             !$trackSubmit && ('get' == $method && !empty($_GET) ||
@@ -98,7 +98,7 @@ class HTML_QuickForm2 extends HTML_QuickForm2_Container
         );
     }
 
-    protected function setContainer(HTML_QuickForm2_Container $container = null)
+    protected function setContainer(?HTML_QuickForm2_Container $container = null)
     {
         throw new HTML_QuickForm2_Exception('Form cannot be added to container');
     }

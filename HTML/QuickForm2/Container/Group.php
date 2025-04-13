@@ -70,7 +70,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
             return $value;
 
         } elseif (!strpos($this->getName(), '[')) {
-            return isset($value[$this->getName()])? $value[$this->getName()]: null;
+            return $value[$this->getName()] ?? null;
 
         } else {
             $tokens   =  explode('[', str_replace(']', '', $this->getName()));
@@ -163,7 +163,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
             }
         }
         foreach (array_keys($nameParts) as $i) {
-            $this->elements[$i]->setValue(isset($groupValues[$i]) ? $groupValues[$i] : null);
+            $this->elements[$i]->setValue($groupValues[$i] ?? null);
         }
 
         return $this;
@@ -281,11 +281,11 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     * If the reference object is not given, the element will be appended.
     *
     * @param HTML_QuickForm2_Node $element   Element to insert
-    * @param HTML_QuickForm2_Node $reference Reference to insert before
+    * @param ?HTML_QuickForm2_Node $reference Reference to insert before
     *
     * @return   HTML_QuickForm2_Node     Inserted element
     */
-    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
+    public function insertBefore(HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
             return $this->appendChild($element);
@@ -314,7 +314,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
     */
     public function getSeparator()
     {
-        return isset($this->data['separator'])? $this->data['separator']: null;
+        return $this->data['separator'] ?? null;
     }
 
    /**

@@ -201,7 +201,7 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
             if (!is_array($v) || isset($a[$k]) && !is_array($a[$k])) {
                 $a[$k] = $v;
             } else {
-                $a[$k] = self::arrayMerge(isset($a[$k])? $a[$k]: [], $v);
+                $a[$k] = self::arrayMerge($a[$k] ?? [], $v);
             }
         }
         return $a;
@@ -342,12 +342,12 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
     *
     * If the reference object is not given, the element will be appended.
     *
-    * @param HTML_QuickForm2_Node $element   Element to insert
-    * @param HTML_QuickForm2_Node $reference Reference to insert before
+    * @param HTML_QuickForm2_Node  $element   Element to insert
+    * @param ?HTML_QuickForm2_Node $reference Reference to insert before
     *
     * @return   HTML_QuickForm2_Node     Inserted element
     */
-    public function insertBefore(HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null)
+    public function insertBefore(HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null)
     {
         if (null === $reference) {
             return $this->appendChild($element);
@@ -465,9 +465,9 @@ abstract class HTML_QuickForm2_Container extends HTML_QuickForm2_Node
         if (preg_match('/^(add)([a-zA-Z0-9_]+)$/', $m, $match)) {
             if ($match[1] == 'add') {
                 $type = strtolower($match[2]);
-                $name = isset($a[0]) ? $a[0] : null;
-                $attr = isset($a[1]) ? $a[1] : null;
-                $data = isset($a[2]) ? $a[2] : [];
+                $name = $a[0] ?? null;
+                $attr = $a[1] ?? null;
+                $data = $a[2] ?? [];
                 return $this->addElement($type, $name, $attr, $data);
             }
         }

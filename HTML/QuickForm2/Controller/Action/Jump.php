@@ -146,7 +146,7 @@ class HTML_QuickForm2_Controller_Action_Jump
             }
             $host = $scheme . '//' . preg_replace('/:\d+$/', '', $host);
             $port = isset($_SERVER['SERVER_PORT']) ? (int)$_SERVER['SERVER_PORT'] : null;
-            $base = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            $base = $_SERVER['REQUEST_URI'] ?? '';
             if (null !== $port && $port !== ($https ? 443 : 80)) {
                 $host .= ':' . $port;
             }
@@ -154,12 +154,12 @@ class HTML_QuickForm2_Controller_Action_Jump
                 return $host . $base;
 
             } elseif ('/' == $url[0]) {
-                list($actPath, $actQuery) = self::splitUri($url);
+                [$actPath, $actQuery] = self::splitUri($url);
                 return $host . self::normalizePath($actPath) . $actQuery;
 
             } else {
-                list($basePath, $baseQuery) = self::splitUri($base);
-                list($actPath, $actQuery)   = self::splitUri($url);
+                [$basePath,]          = self::splitUri($base);
+                [$actPath, $actQuery] = self::splitUri($url);
                 if ('' == $actPath) {
                     return $host . $basePath . $actQuery;
                 } else {

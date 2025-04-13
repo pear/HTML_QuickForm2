@@ -247,7 +247,7 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
     */
     public function run()
     {
-        list($page, $action) = $this->getActionName();
+        [$page, $action] = $this->getActionName();
         return $this->pages[$page]->handle($action);
     }
 
@@ -372,12 +372,12 @@ class HTML_QuickForm2_Controller implements IteratorAggregate
    /**
     * Checks whether the pages of the controller are valid
     *
-    * @param HTML_QuickForm2_Controller_Page $reference If given, check only
+    * @param ?HTML_QuickForm2_Controller_Page $reference If given, check only
     *                               the pages before (not including) that page
     *
     * @return bool
     */
-    public function isValid(HTML_QuickForm2_Controller_Page $reference = null)
+    public function isValid(?HTML_QuickForm2_Controller_Page $reference = null)
     {
         $container = $this->getSessionContainer();
         foreach ($this->pages as $id => $page) {

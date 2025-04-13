@@ -256,7 +256,7 @@ class HTML_QuickForm2_Renderer_Default extends HTML_QuickForm2_Renderer
     */
     public function __toString()
     {
-        return (isset($this->html[0][0])? $this->html[0][0]: '') .
+        return ($this->html[0][0] ?? '') .
                $this->hiddenHtml;
     }
 

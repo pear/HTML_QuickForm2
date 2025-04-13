@@ -44,10 +44,10 @@ class HTML_QuickForm2_Controller_Action_Display
 {
     public function perform(HTML_QuickForm2_Controller_Page $page, $name)
     {
-        $validate        = false;
-        $datasources     = $page->getForm()->getDataSources();
-        $container       = $page->getController()->getSessionContainer();
-        list(, $oldName) = $page->getController()->getActionName();
+        $validate    = false;
+        $datasources = $page->getForm()->getDataSources();
+        $container   = $page->getController()->getSessionContainer();
+        [, $oldName] = $page->getController()->getActionName();
         // Check the original action name, we need to do additional processing
         // if it was 'display'
         if ('display' == $oldName) {

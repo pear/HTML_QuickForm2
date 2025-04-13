@@ -208,12 +208,12 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
      * Elements are kept in the prototype rather than directly in repeat
      *
      * @param HTML_QuickForm2_Node $element   Element to insert
-     * @param HTML_QuickForm2_Node $reference Reference to insert before
+     * @param ?HTML_QuickForm2_Node $reference Reference to insert before
      *
      * @return   HTML_QuickForm2_Node     Inserted element
      */
     public function insertBefore(
-        HTML_QuickForm2_Node $element, HTML_QuickForm2_Node $reference = null
+        HTML_QuickForm2_Node $element, ?HTML_QuickForm2_Node $reference = null
     ) {
         return $this->getPrototype()->insertBefore($element, $reference);
     }

@@ -296,7 +296,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     public function getName()
     {
-        return isset($this->attributes['name'])? $this->attributes['name']: null;
+        return $this->attributes['name'] ?? null;
     }
 
 
@@ -317,7 +317,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     public function getId()
     {
-        return isset($this->attributes['id'])? $this->attributes['id']: null;
+        return $this->attributes['id'] ?? null;
     }
 
 
@@ -452,14 +452,14 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
    /**
     * Adds the link to the element containing current
     *
-    * @param HTML_QuickForm2_Container $container Element containing
+    * @param ?HTML_QuickForm2_Container $container Element containing
     *                           the current one, null if the link should
     *                           really be removed (if removing from container)
     *
     * @throws   HTML_QuickForm2_InvalidArgumentException   If trying to set a
     *                               child of an element as its container
     */
-    protected function setContainer(HTML_QuickForm2_Container $container = null)
+    protected function setContainer(?HTML_QuickForm2_Container $container = null)
     {
         if (null !== $container) {
             $check = $container;
@@ -756,7 +756,7 @@ abstract class HTML_QuickForm2_Node extends HTML_Common2
     */
     protected static function applyFilter(&$value, $key, $filter)
     {
-        list($callback, $options) = $filter;
+        [$callback, $options] = $filter;
         array_unshift($options, $value);
         $value = call_user_func_array($callback, $options);
     }

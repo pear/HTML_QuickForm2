@@ -117,7 +117,7 @@ class HTML_QuickForm2_Element_Hierselect extends HTML_QuickForm2_Container_Group
         if (!empty($data['size'])) {
             $this->size = $data['size'];
         }
-        $options = isset($data['options'])? $data['options']: [];
+        $options = $data['options'] ?? [];
         unset($data['options'], $data['size']);
         parent::__construct($name, $attributes, $data);
         $this->loadOptions($options);

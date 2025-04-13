@@ -91,7 +91,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function __construct($name = null, $attributes = null, array $data = [])
     {
-        $options = isset($data['options'])? $data['options']: [];
+        $options = $data['options'] ?? [];
         unset($data['options']);
         parent::__construct($name, $attributes, $data);
         $this->loadOptions($options);

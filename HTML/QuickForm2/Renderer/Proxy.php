@@ -160,7 +160,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
     protected function updatePlugins()
     {
         for ($i = count($this->_plugins); $i < count($this->_pluginClasses); $i++) {
-            list($className, $includeFile) = $this->_pluginClasses[$i];
+            [$className, $includeFile] = $this->_pluginClasses[$i];
             HTML_QuickForm2_Loader::loadClass($className, $includeFile, true);
 
             $methods    = [];
@@ -210,7 +210,7 @@ class HTML_QuickForm2_Renderer_Proxy extends HTML_QuickForm2_Renderer
         return $this->_renderer->getJavascriptBuilder();
     }
 
-    public function setJavascriptBuilder(HTML_QuickForm2_JavascriptBuilder $builder = null)
+    public function setJavascriptBuilder(?HTML_QuickForm2_JavascriptBuilder $builder = null)
     {
         $this->_renderer->setJavascriptBuilder($builder);
         return $this;
