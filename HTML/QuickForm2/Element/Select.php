@@ -180,7 +180,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
 
         $values = [];
         foreach ($this->values as $value) {
-            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value])) {
+            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[(string) $value])) {
                 $values[] = $value;
             }
         }
