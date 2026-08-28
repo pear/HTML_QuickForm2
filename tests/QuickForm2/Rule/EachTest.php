@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,10 +30,12 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_EachTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testDisallowMissingConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
@@ -43,7 +46,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testDisallowNonRuleConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
@@ -56,7 +59,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $this::expectExceptionMessage('Cannot use "required" Rule as a template');
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Each($mockEl, 'an error', $mockEl->createRule('required', 'an error'));
     }
@@ -66,7 +69,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $this::expectExceptionMessage('Each Rule can only validate Containers');
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Each($mockEl, '', $mockEl->createRule('empty'));
     }
@@ -74,7 +77,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidatesWithTemplateRule()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar')->setValue('I am not empty');
@@ -92,7 +95,7 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testSetsErrorOnContainer()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar')->setValue('I am not empty');
@@ -108,12 +111,12 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testChainedRulesAreIgnored()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
 
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $ruleIgnored = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$foo])
             ->getMock();
         $ruleIgnored->expects($this->never())->method('validateOwner');
@@ -128,10 +131,10 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidateNestedContainer()
     {
         $mockOuter = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockInner = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockOuter->addElement('text', 'foo')->setValue('');
         $bar = $mockInner->addElement('text', 'bar')->setValue('not empty');
@@ -149,16 +152,16 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testIgnoresStaticServerSide()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('static', 'noValidateServer');
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('validateOwner')
-             ->will($this->returnValue(false));
+             ->willReturn(false);
 
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
         $this->assertTrue($each->validate());
@@ -167,16 +170,16 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testIgnoresStaticClientSide()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('static', 'noValidateClient');
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('getJavascriptCallback')
-             ->will($this->returnValue('staticCallback'));
+             ->willReturn('staticCallback');
 
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
         $this->assertStringNotContainsString('staticCallback', $each->getJavascript());
@@ -185,17 +188,17 @@ class HTML_QuickForm2_Rule_EachTest extends TestCase
     public function testValidationTriggers()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('text', 'foo', ['id' => 'foo']);
         $mockContainer->addElement('text', 'bar', ['id' => 'bar']);
 
         $rule = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$mockContainer, 'a message'])
             ->getMock();
         $rule->expects($this->any())->method('getJavascriptCallback')
-             ->will($this->returnValue('a callback'));
+             ->willReturn('a callback');
         $each = new HTML_QuickForm2_Rule_Each($mockContainer, 'an error', $rule);
         $this->assertStringContainsString('["foo","bar"]', $each->getJavascript());
     }

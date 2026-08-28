@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testMimeTypeIsRequired()
     {
         $file = new HTML_QuickForm2_Element_InputFile('foo');
@@ -43,7 +46,7 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testCanOnlyValidateFileUploads()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -57,16 +60,16 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testMissingUploadsAreSkipped()
     {
         $mockNoUpload = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockNoUpload->expects($this->once())->method('getValue')
-                     ->will($this->returnValue([
+                     ->willReturn([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                     ]));
+                     ]);
         $mimeType = new HTML_QuickForm2_Rule_MimeType($mockNoUpload, 'an error', 'text/plain');
         $this->assertTrue($mimeType->validate());
     }
@@ -74,16 +77,16 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testOptionsHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue([
+                 ->willReturn([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 ]));
+                 ]);
         $typeText = new HTML_QuickForm2_Rule_MimeType($mockFile, 'need text', 'text/plain');
         $this->assertFalse($typeText->validate());
 
@@ -95,16 +98,16 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testConfigHandling()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockFile->expects($this->exactly(2))->method('getValue')
-                 ->will($this->returnValue([
+                 ->willReturn([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 ]));
+                 ]);
 
         HTML_QuickForm2_Factory::registerRule('type-text', 'HTML_QuickForm2_Rule_MimeType',
                                               null, 'text/plain');
@@ -120,16 +123,16 @@ class HTML_QuickForm2_Rule_MimeTypeTest extends TestCase
     public function testConfigOverridesOptions()
     {
         $mockFile = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockFile->expects($this->once())->method('getValue')
-                 ->will($this->returnValue([
+                 ->willReturn([
                     'name'     => 'pr0n.jpg',
                     'type'     => 'image/jpeg',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 123456
-                 ]));
+                 ]);
         HTML_QuickForm2_Factory::registerRule('type-override-text', 'HTML_QuickForm2_Rule_MimeType',
                                               null, 'text/plain');
         $mimeType = $mockFile->addRule('type-override-text', 'need image',

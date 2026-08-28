@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_JavascriptBuilderTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     protected function set_up()
     {
         HTML_Common2::setOption(HTML_QuickForm2_Node::OPTION_NONCE, null);
@@ -112,18 +115,18 @@ class HTML_QuickForm2_JavascriptBuilderTest extends TestCase
         $element = new HTML_QuickForm2_Element_InputText();
 
         $mockRuleOne = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleOne->expects($this->once())->method('getJavascriptCallback')
-            ->will($this->returnValue('jsRuleOne'));
+            ->willReturn('jsRuleOne');
 
         $mockRuleTwo = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $mockRuleTwo->expects($this->once())->method('getJavascriptCallback')
-            ->will($this->returnValue('jsRuleTwo'));
+            ->willReturn('jsRuleTwo');
 
         $this->assertEquals('', $builder->getFormJavascript());
 

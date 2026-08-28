@@ -22,6 +22,7 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -34,6 +35,7 @@ class HTML_QuickForm2_Rule_EmailTest extends TestCase
     * @param string $address  "email address" being tested
     * @param bool   $expected whether given address should be valid
     */
+    #[DataProvider('emailProvider')]
     public function testValidate($address, $expected)
     {
         $element = new HTML_QuickForm2_Element_InputText('email');

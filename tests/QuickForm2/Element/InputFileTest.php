@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Element_InputFileTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     protected function set_up()
     {
         $_FILES = [
@@ -117,10 +120,10 @@ class HTML_QuickForm2_Element_InputFileTest extends TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->setMethods(['get'])
+            ->{self::$mockMethod}(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
-                     ->will($this->returnValue('A nasty error happened!'));
+                     ->willReturn('A nasty error happened!');
 
         $form   = new HTML_QuickForm2('upload', 'post', null, false);
         $upload = $form->addFile('local', [], [

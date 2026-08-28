@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(dirname(__DIR__))) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,30 +30,32 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Controller_Action_DirectTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testPerform()
     {
         $source = $this->getMockBuilder('HTML_QuickForm2')
-            ->setMethods(['validate', 'getValue'])
+            ->{self::$mockMethod}(['validate', 'getValue'])
             ->setConstructorArgs(['source'])
             ->getMock();
         $source->expects($this->once())->method('validate')
-               ->will($this->returnValue(true));
+               ->willReturn(true);
         $source->expects($this->once())->method('getValue')
-               ->will($this->returnValue(['foo' => 'bar']));
+               ->willReturn(['foo' => 'bar']);
         $sourcePage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(['populateForm'])
+            ->{self::$mockMethod}(['populateForm'])
             ->setConstructorArgs([$source])
             ->getMock();
         $sourcePage->addHandler('destination', new HTML_QuickForm2_Controller_Action_Direct());
         $destPage = $this->getMockBuilder('HTML_QuickForm2_Controller_Page')
-            ->setMethods(['populateForm'])
+            ->{self::$mockMethod}(['populateForm'])
             ->setConstructorArgs([new HTML_QuickForm2('destination')])
             ->getMock();
         $mockJump = $this->getMockBuilder('HTML_QuickForm2_Controller_Action')
-            ->setMethods(['perform'])
+            ->{self::$mockMethod}(['perform'])
             ->getMock();
         $mockJump->expects($this->once())->method('perform')
-                 ->will($this->returnValue('jump to destination'));
+                 ->willReturn('jump to destination');
         $destPage->addHandler('jump', $mockJump);
 
         $controller = new HTML_QuickForm2_Controller('testDirectAction');

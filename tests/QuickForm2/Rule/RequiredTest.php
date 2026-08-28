@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_RequiredTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     protected $nodeAbstractMethods = [
         'updateValue', 'getId', 'getName', 'getType', 'getRawValue', 'setId',
         'setName', 'setValue', '__toString', 'getJavascriptValue',
@@ -38,7 +41,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMakesElementRequired()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         $mockNode->addRule(new HTML_QuickForm2_Rule_Required($mockNode, 'element is required'));
         $this->assertTrue($mockNode->isRequired());
@@ -47,11 +50,11 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testMustBeFirstInChain()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         $rule = $mockNode->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
+                ->{self::$mockMethod}(['validateOwner'])
                 ->setConstructorArgs([$mockNode, 'some message'])
                 ->getMock()
         );
@@ -72,13 +75,13 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
     public function testCannotAppendWithOr_()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         $required = new HTML_QuickForm2_Rule_Required($mockNode, 'element is required');
         try {
             $required->or_(
                 $this->getMockBuilder('HTML_QuickForm2_Rule')
-                    ->setMethods(['validateOwner'])
+                    ->{self::$mockMethod}(['validateOwner'])
                     ->setConstructorArgs([$mockNode, 'some message'])
                     ->getMock()
             );
@@ -97,7 +100,7 @@ class HTML_QuickForm2_Rule_RequiredTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
 
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         new HTML_QuickForm2_Rule_Required($mockNode);
     }

@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,24 +30,26 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     function testValidateGenericElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockValid->expects($this->once())->method('getRawValue')
-                  ->will($this->returnValue('a string'));
+                  ->willReturn('a string');
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockValid, 'an error');
         $this->assertTrue($rule->validate());
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getRawValue')
-                    ->will($this->returnValue(''));
+                    ->willReturn('');
         $rule2 = new HTML_QuickForm2_Rule_Nonempty($mockInvalid, 'an error');
         $this->assertFalse($rule2->validate());
         $this->assertEquals('an error', $mockInvalid->getError());
@@ -55,31 +58,31 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateInputFileElement()
     {
         $mockValid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockValid->expects($this->once())->method('getValue')
-                  ->will($this->returnValue([
+                  ->willReturn([
                     'name'     => 'goodfile.php',
                     'type'     => 'application/octet-stream',
                     'tmp_name' => '/tmp/foobar',
                     'error'    => UPLOAD_ERR_OK,
                     'size'     => 1234
-                  ]));
+                  ]);
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockValid, 'an error');
         $this->assertTrue($rule->validate());
         $this->assertEquals('', $mockValid->getError());
 
         $mockInvalid = $this->getMockBuilder('HTML_QuickForm2_Element_InputFile')
-            ->setMethods(['getValue'])
+            ->{self::$mockMethod}(['getValue'])
             ->getMock();
         $mockInvalid->expects($this->once())->method('getValue')
-                    ->will($this->returnValue([
+                    ->willReturn([
                         'name'     => '',
                         'type'     => '',
                         'tmp_name' => '',
                         'error'    => UPLOAD_ERR_NO_FILE,
                         'size'     => 0
-                    ]));
+                    ]);
         $rule2 = new HTML_QuickForm2_Rule_Nonempty($mockInvalid, 'an error');
         $this->assertFalse($rule2->validate());
         $this->assertEquals('an error', $mockInvalid->getError());
@@ -88,7 +91,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     public function testDefaultConfig()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $rule = new HTML_QuickForm2_Rule_Nonempty($mockEl);
@@ -99,7 +102,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     {
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType', 'getRawValue', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'getRawValue', 'setValue', '__toString'])
             ->getMock();
         new HTML_QuickForm2_Rule_Nonempty($mockEl, 'an error', -1);
     }
@@ -127,7 +130,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateContainer()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockContainer->addElement('text', 'foo')->setValue('');
         $bar = $mockContainer->addElement('text', 'bar[idx]')->setValue('I am not empty');
@@ -145,10 +148,10 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     function testValidateNestedContainer()
     {
         $mockOuter = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockInner = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $foo = $mockOuter->addElement('text', 'foo[idx]')->setValue('');
         $bar = $mockInner->addElement('text', 'bar[idx]')->setValue('not empty');
@@ -164,7 +167,7 @@ class HTML_QuickForm2_Rule_NonemptyTest extends TestCase
     public function testContainerValidationTriggers()
     {
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->addElement('text', 'foo', ['id' => 'foo']);
         $mockContainer->addElement('text', 'bar', ['id' => 'bar']);

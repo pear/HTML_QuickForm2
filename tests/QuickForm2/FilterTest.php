@@ -22,6 +22,7 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+// pear-package-only require_once __DIR__ . '/MockBuilderMethod.php';
 // pear-package-only require_once __DIR__ . '/../stubs/ContainerImpl.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
@@ -40,6 +41,8 @@ function repeatFilter($value)
  */
 class HTML_QuickForm2_FilterTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     protected function set_up()
     {
         $_REQUEST['_qf__filters'] = '';
@@ -54,16 +57,16 @@ class HTML_QuickForm2_FilterTest extends TestCase
     public function testFiltersShouldPreserveNulls()
     {
         $mockElement = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                       'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockElement->expects($this->atLeastOnce())
-                    ->method('getRawValue')->will($this->returnValue(null));
+                    ->method('getRawValue')->willReturn(null);
         $mockElement->addFilter('trim');
         $this->assertNull($mockElement->getValue());
 
         $mockContainer = $this->getMockBuilder('HTML_QuickForm2_Container')
-            ->setMethods(['getType', 'setValue', '__toString'])
+            ->{self::$mockMethod}(['getType', 'setValue', '__toString'])
             ->getMock();
         $mockContainer->appendChild($mockElement);
         $mockContainer->addRecursiveFilter('intval');

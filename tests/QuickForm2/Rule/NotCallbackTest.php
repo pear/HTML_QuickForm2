@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,14 +30,16 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_NotCallbackTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testNegatesResult()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->willReturn('foo');
 
         $inArrayOne = new HTML_QuickForm2_Rule_NotCallback($mockEl, 'an error',
                         ['callback' => 'in_array',

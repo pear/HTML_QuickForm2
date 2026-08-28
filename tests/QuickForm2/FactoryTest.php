@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_FactoryTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     protected $phpError;
     protected $errorHandler;
 
@@ -152,7 +155,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
     public function testCreateNotRegisteredRule()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         try {
             $rule = HTML_QuickForm2_Factory::createRule('foo2', $mockNode);
@@ -166,7 +169,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
     public function testCreateRuleNonExistingClass()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo3', 'NonexistentClass');
         try {
@@ -183,7 +186,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
     public function testCreateRuleNonExistingFile()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo4', 'NonexistentClass', 'NonexistentFile.php');
         try {
@@ -200,7 +203,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
     public function testCreateRuleInvalidFile()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         HTML_QuickForm2_Factory::registerRule('foo5', 'NonexistentClass', __DIR__ . '/_files/InvalidFile.php');
         try {
@@ -215,7 +218,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
     public function testCreateRuleValid()
     {
         $mockNode = $this->getMockBuilder('HTML_QuickForm2_Node')
-            ->setMethods($this->nodeAbstractMethods)
+            ->{self::$mockMethod}($this->nodeAbstractMethods)
             ->getMock();
         HTML_QuickForm2_Factory::registerRule(
             'fakerule', 'FakeRule', __DIR__ . '/_files/FakeRule.php'

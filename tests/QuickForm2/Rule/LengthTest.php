@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,10 +30,12 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Rule_LengthTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testLimitsAreRequired()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -52,7 +55,7 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testScalarLengthIsPositive()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -73,7 +76,7 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testMinMaxLengthIsNonnegative()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         try {
@@ -94,11 +97,11 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testLimitsHandling()
     {
         $mockEl  = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                   'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEl->expects($this->atLeastOnce())
-               ->method('getRawValue')->will($this->returnValue('foo'));
+               ->method('getRawValue')->willReturn('foo');
 
         $length3 = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', 3);
         $this->assertTrue($length3->validate());
@@ -125,7 +128,7 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testConfigCanonicalForm()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $length = new HTML_QuickForm2_Rule_Length($mockEl, 'an error', ['min' => 4, 'max' => 2]);
@@ -144,7 +147,7 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testGlobalConfigOverrides()
     {
         $mockEl = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                  'getRawValue', 'setValue', '__toString'])
             ->getMock();
 
@@ -196,11 +199,11 @@ class HTML_QuickForm2_Rule_LengthTest extends TestCase
     public function testEmptyFieldsAreSkipped()
     {
         $mockEmpty = $this->getMockBuilder('HTML_QuickForm2_Element')
-            ->setMethods(['getType',
+            ->{self::$mockMethod}(['getType',
                                     'getRawValue', 'setValue', '__toString'])
             ->getMock();
         $mockEmpty->expects($this->once())->method('getRawValue')
-                  ->will($this->returnValue(''));
+                  ->willReturn('');
         $length = new HTML_QuickForm2_Rule_Length($mockEmpty, 'an error', ['min' => 5]);
         $this->assertTrue($length->validate());
     }

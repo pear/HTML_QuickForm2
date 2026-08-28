@@ -21,11 +21,14 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 class HTML_QuickForm2_Element_DateTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testInvalidMessageProvider()
     {
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
@@ -49,10 +52,10 @@ class HTML_QuickForm2_Element_DateTest extends TestCase
     public function testObjectMessageProvider()
     {
         $mockProvider = $this->getMockBuilder('HTML_QuickForm2_MessageProvider')
-            ->setMethods(['get'])
+            ->{self::$mockMethod}(['get'])
             ->getMock();
         $mockProvider->expects($this->once())->method('get')
-                     ->will($this->returnValue(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday']));
+                     ->willReturn(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Caturday']);
         $date = new HTML_QuickForm2_Element_Date('object', null, [
             'format'          => 'l',
             'messageProvider' => $mockProvider

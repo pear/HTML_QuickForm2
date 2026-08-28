@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Element_GroupTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testNoRenameOnEmptyGroupName()
     {
         $g1 = new HTML_QuickForm2_Container_Group();
@@ -308,17 +311,17 @@ class HTML_QuickForm2_Element_GroupTest extends TestCase
         $element = $group->addElement('text', 'anElement');
 
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->once())->method('getJavascriptCallback')
-                  ->will($this->returnValue('groupCallback'));
+                  ->willReturn('groupCallback');
         $ruleElement = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$element])
             ->getMock();
         $ruleElement->expects($this->once())->method('getJavascriptCallback')
-                    ->will($this->returnValue('elementCallback'));
+                    ->willReturn('elementCallback');
 
         $group->addRule($ruleGroup, HTML_QuickForm2_Rule::CLIENT);
         $element->addRule($ruleElement, HTML_QuickForm2_Rule::CLIENT);
@@ -333,7 +336,7 @@ class HTML_QuickForm2_Element_GroupTest extends TestCase
     {
         $group = new HTML_QuickForm2_Container_Group('aGroup');
         $ruleGroup = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner', 'getJavascriptCallback'])
+            ->{self::$mockMethod}(['validateOwner', 'getJavascriptCallback'])
             ->setConstructorArgs([$group])
             ->getMock();
         $ruleGroup->expects($this->never())->method('getJavascriptCallback');

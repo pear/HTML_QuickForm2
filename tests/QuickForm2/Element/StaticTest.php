@@ -21,6 +21,7 @@
 
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
+// pear-package-only require_once __DIR__ . '/../MockBuilderMethod.php';
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
@@ -29,6 +30,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_Element_StaticTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testSetContent()
     {
         $obj = new HTML_QuickForm2_Element_Static();
@@ -81,7 +84,7 @@ class HTML_QuickForm2_Element_StaticTest extends TestCase
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
         $static = new HTML_QuickForm2_Element_Static('novalidate');
         $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$static, 'a message'])
             ->getMock();
     }

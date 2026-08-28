@@ -22,8 +22,10 @@
 /** Sets up includes */
 require_once dirname(__DIR__) . '/TestHelper.php';
 
+// pear-package-only require_once __DIR__ . '/MockBuilderMethod.php';
 // pear-package-only require_once __DIR__ . '/../stubs/NodeImpl.php';
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -31,6 +33,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 class HTML_QuickForm2_NodeTest extends TestCase
 {
+    use HTML_QuickForm2_MockBuilderMethod;
+
     public function testCanSetLabel()
     {
         $obj = new NodeImpl();
@@ -82,22 +86,22 @@ class HTML_QuickForm2_NodeTest extends TestCase
     {
         $valid = new NodeImpl();
         $ruleTrue = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$valid, 'A message'])
             ->getMock();
         $ruleTrue->expects($this->once())->method('validateOwner')
-                 ->will($this->returnValue(true));
+                 ->willReturn(true);
         $valid->addRule($ruleTrue);
         $this->assertTrue($valid->validate());
         $this->assertEquals('', $valid->getError());
 
         $invalid = new NodeImpl();
         $ruleFalse = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$invalid, 'An error message'])
             ->getMock();
         $ruleFalse->expects($this->once())->method('validateOwner')
-                  ->will($this->returnValue(false));
+                  ->willReturn(false);
         $invalid->addRule($ruleFalse);
         $this->assertFalse($invalid->validate());
         $this->assertEquals('An error message', $invalid->getError());
@@ -108,7 +112,7 @@ class HTML_QuickForm2_NodeTest extends TestCase
         $preError = new NodeImpl();
         $preError->setError('some message');
         $ruleIrrelevant = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$preError])
             ->getMock();
         $ruleIrrelevant->expects($this->never())->method('validateOwner');
@@ -117,25 +121,25 @@ class HTML_QuickForm2_NodeTest extends TestCase
 
         $manyRules = new NodeImpl();
         $ruleTrue = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$manyRules, 'irrelevant message'])
             ->getMock();
         $ruleTrue->expects($this->once())->method('validateOwner')
-                 ->will($this->returnValue(true));
+                 ->willReturn(true);
         $ruleFalseNoMessage = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$manyRules, ''])
             ->getMock();
         $ruleFalseNoMessage->expects($this->once())->method('validateOwner')
-                           ->will($this->returnValue(false));
+                           ->willReturn(false);
         $ruleFalseWithMessage = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$manyRules, 'some error'])
             ->getMock();
         $ruleFalseWithMessage->expects($this->once())->method('validateOwner')
-                           ->will($this->returnValue(false));
+                           ->willReturn(false);
         $ruleStillIrrelevant = $this->getMockBuilder('HTML_QuickForm2_Rule')
-            ->setMethods(['validateOwner'])
+            ->{self::$mockMethod}(['validateOwner'])
             ->setConstructorArgs([$manyRules, '...'])
             ->getMock();
         $ruleStillIrrelevant->expects($this->never())->method('validateOwner');
@@ -152,7 +156,7 @@ class HTML_QuickForm2_NodeTest extends TestCase
         $node    = new NodeImpl();
         $removed = $node->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
+                ->{self::$mockMethod}(['validateOwner'])
                 ->setConstructorArgs([$node, '...'])
                 ->getMock()
         );
@@ -166,12 +170,12 @@ class HTML_QuickForm2_NodeTest extends TestCase
         $node = new NodeImpl();
         $mock = $node->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
+                ->{self::$mockMethod}(['validateOwner'])
                 ->setConstructorArgs([$node, '...'])
                 ->getMock()
         );
         $mock->expects($this->once())->method('validateOwner')
-             ->will($this->returnValue(false));
+             ->willReturn(false);
 
         $node->addRule($mock);
         $this->assertFalse($node->validate());
@@ -183,12 +187,12 @@ class HTML_QuickForm2_NodeTest extends TestCase
         $nodeTwo  = new NodeImpl();
         $mockRule = $nodeOne->addRule(
             $this->getMockBuilder('HTML_QuickForm2_Rule')
-                ->setMethods(['validateOwner'])
+                ->{self::$mockMethod}(['validateOwner'])
                 ->setConstructorArgs([$nodeOne, '...'])
                 ->getMock()
         );
         $mockRule->expects($this->once())->method('validateOwner')
-                 ->will($this->returnValue(false));
+                 ->willReturn(false);
 
         $nodeTwo->addRule($mockRule);
         $this->assertTrue($nodeOne->validate());
@@ -207,6 +211,7 @@ class HTML_QuickForm2_NodeTest extends TestCase
     * @dataProvider invalidIdProvider
     * @link http://pear.php.net/bugs/17576
     */
+   #[DataProvider('invalidIdProvider')]
     public function testRequest18683($id)
     {
         $this::expectException(\HTML_QuickForm2_InvalidArgumentException::class);
