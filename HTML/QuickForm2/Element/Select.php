@@ -55,7 +55,7 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     *
     * A value is considered possible if it is present as a value attribute of
     * some option and that option is not disabled.
-    * @var array
+    * @var array<string, true>
     */
     protected $possibleValues = [];
 
@@ -171,20 +171,21 @@ class HTML_QuickForm2_Element_Select extends HTML_QuickForm2_Element
     */
     public function getRawValue()
     {
-        if (!empty($this->attributes['disabled']) || 0 == count($this->values)
+        if (!empty($this->attributes['disabled'])
+            || [] === $this->values
             || ($this->data['intrinsic_validation']
-                && (0 == count($this->optionContainer) || 0 == count($this->possibleValues)))
+                && (0 === count($this->optionContainer) || [] === $this->possibleValues))
         ) {
             return null;
         }
 
         $values = [];
         foreach ($this->values as $value) {
-            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[$value])) {
+            if (!$this->data['intrinsic_validation'] || !empty($this->possibleValues[(string)$value])) {
                 $values[] = $value;
             }
         }
-        if (0 == count($values)) {
+        if ([] === $values) {
             return null;
         } elseif (!empty($this->attributes['multiple'])) {
             return $values;

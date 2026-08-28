@@ -62,7 +62,7 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
 
    /**
     * Reference to parent <select>'s possible values
-    * @var array
+    * @var array<string, true>
     */
     protected $possibleValues;
 
@@ -70,8 +70,8 @@ class HTML_QuickForm2_Element_Select_OptionContainer extends HTML_Common2
    /**
     * Class constructor
     *
-    * @param array &$values         Reference to values of parent <select> element
-    * @param array &$possibleValues Reference to possible values of parent <select> element
+    * @param array               &$values         Reference to values of parent <select> element
+    * @param array<string, true> &$possibleValues Reference to possible values of parent <select> element
     */
     public function __construct(&$values, &$possibleValues)
     {

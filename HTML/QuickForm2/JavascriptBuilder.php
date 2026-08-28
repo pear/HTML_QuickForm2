@@ -41,13 +41,13 @@ class HTML_QuickForm2_JavascriptBuilder
     * Client-side rules
     * @var array<string, string[]>
     */
-    protected $rules = [];
+    protected $rules = ['' => []];
 
    /**
     * Elements' setup code
     * @var array<string, string[]>
     */
-    protected $scripts = [];
+    protected $scripts = ['' => []];
 
    /**
     * Whether to generate a validator object for the form if no rules are present
@@ -56,7 +56,7 @@ class HTML_QuickForm2_JavascriptBuilder
     *
     * @var array<string, bool>
     */
-    protected $forceValidator = [];
+    protected $forceValidator = ['' => false];
 
     /**
     * Javascript libraries
@@ -86,7 +86,7 @@ class HTML_QuickForm2_JavascriptBuilder
     * Current form ID
     * @var string
     */
-    protected $formId;
+    protected $formId = '';
 
 
    /**
@@ -257,7 +257,7 @@ class HTML_QuickForm2_JavascriptBuilder
     {
         $js = '';
         foreach ($this->scripts as $id => $scripts) {
-            if ((null === $formId || $id == $formId) && !empty($scripts)) {
+            if ((null === $formId || $id === $formId) && [] !== $scripts) {
                 $js .= ('' == $js? '': "\n") . implode("\n", $scripts);
             }
         }
@@ -277,8 +277,8 @@ class HTML_QuickForm2_JavascriptBuilder
     {
         $js = '';
         foreach ($this->rules as $id => $rules) {
-            if ((null === $formId || $id == $formId)
-                && (!empty($rules) || !empty($this->forceValidator[$id]))
+            if ((null === $formId || $id === $formId)
+                && ([] !== $rules || $this->forceValidator[$id])
             ) {
                 $js .= ('' == $js ? '' : "\n")
                        . "new qf.Validator(document.getElementById('{$id}'), [\n"

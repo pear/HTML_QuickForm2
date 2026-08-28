@@ -22,6 +22,7 @@
 /** Sets up includes */
 require_once dirname(dirname(__DIR__)) . '/TestHelper.php';
 
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -90,6 +91,7 @@ class HTML_QuickForm2_Element_InputCheckboxTest extends TestCase
     * @see http://pear.php.net/bugs/bug.php?id=16816
     * @doesNotPerformAssertions
     */
+    #[DoesNotPerformAssertions]
     public function testBug16816()
     {
         $box = new HTML_QuickForm2_Element_InputCheckbox(

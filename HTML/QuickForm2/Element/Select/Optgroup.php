@@ -45,11 +45,11 @@ class HTML_QuickForm2_Element_Select_Optgroup
    /**
     * Class constructor
     *
-    * @param array        &$values         Reference to values of parent <select> element
-    * @param array        &$possibleValues Reference to possible values of parent <select> element
-    * @param string       $label           'label' attribute for optgroup tag
-    * @param string|array $attributes      Additional attributes for <optgroup> tag
-    *                                      (either as a string or as an associative array)
+    * @param array               &$values         Reference to values of parent <select> element
+    * @param array<string, true> &$possibleValues Reference to possible values of parent <select> element
+    * @param string              $label           'label' attribute for optgroup tag
+    * @param string|array        $attributes      Additional attributes for <optgroup> tag
+    *                                             (either as a string or as an associative array)
     */
     public function __construct(&$values, &$possibleValues, $label, $attributes = null)
     {

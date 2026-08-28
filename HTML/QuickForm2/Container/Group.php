@@ -112,7 +112,7 @@ class HTML_QuickForm2_Container_Group extends HTML_QuickForm2_Container
             foreach ($nameParts as $i => $tokens) {
                 $val = [$k => $v];
                 do {
-                    $token = array_shift($tokens);
+                    $token = array_shift($tokens) ?? '';
                     $numeric = false;
                     if ($token == "") {
                         // special case for a group of checkboxes
