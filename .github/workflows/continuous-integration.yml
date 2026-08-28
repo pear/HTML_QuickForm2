@@ -15,6 +15,10 @@ jobs:
       matrix:
         operating-system: ['ubuntu-latest']
         php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+        include:
+          - php-version: '8.5'
+            phpunit-flags: '--display-deprecations --fail-on-deprecation'
+
 
     name: CI on ${{ matrix.operating-system }} with PHP ${{ matrix.php-version }}
 
@@ -38,9 +42,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-composer-${{ matrix.php-version }}
 
       - name: Install dependencies with Composer
         run: |
@@ -48,7 +52,7 @@ jobs:
 
       - name: Run PHPUnit for Composer install
         run: |
-          vendor/bin/phpunit tests
+          vendor/bin/phpunit ${{ matrix.phpunit-flags }} tests
 
       - name: Install PEAR
         run: |
@@ -63,4 +67,4 @@ jobs:
       - name: Run PHPUnit for PEAR install
         run: |
           cd `pear config-get test_dir`
-          ${GITHUB_WORKSPACE}/vendor/bin/phpunit ./HTML_QuickForm2
+          ${GITHUB_WORKSPACE}/vendor/bin/phpunit ${{ matrix.phpunit-flags }} ./HTML_QuickForm2
