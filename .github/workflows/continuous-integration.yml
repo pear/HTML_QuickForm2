@@ -9,6 +9,7 @@ on:
 jobs:
   tests:
     runs-on: ${{ matrix.operating-system }}
+
     continue-on-error: ${{ matrix.pre-release }}
 
     strategy:
@@ -20,6 +21,7 @@ jobs:
         include:
           - php-version: '8.5'
             phpunit-flags: '--display-deprecations --fail-on-deprecation'
+
           - php-version: '8.6'
             phpunit-flags: '--display-deprecations --fail-on-deprecation'
             pre-release: true
