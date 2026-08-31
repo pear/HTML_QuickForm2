@@ -1,5 +1,13 @@
 # Changes in HTML_QuickForm2
 
+## [2.5.0] - 2026-08-31
+
+* Tested on PHP 8.5 and 8.6, runs without `E_DEPRECATED` messages:
+  * Using `null` as array offset deprecated in PHP 8.5
+  * `spl_object_hash()` deprecated in PHP 8.6
+* PHPUnit-Polyfills upgraded to the current version. Deprecation checks from
+  newer PHPUnit are now enabled in GitHub CI for highest PHP versions 
+
 ## [2.4.0] - 2025-04-13
 * Tested on PHP 8.4, runs without `E_DEPRECATED` messages (see [issue #13])
 * Minimum required PHP version is 7.1 (needed for nullable types)
@@ -115,3 +123,4 @@ Other features and changes
 [issue #9]: https://github.com/pear/HTML_QuickForm2/issues/9
 [issue #13]: https://github.com/pear/HTML_QuickForm2/issues/13
 [2.4.0]: https://github.com/pear/HTML_QuickForm2/compare/v2.3.2...v2.4.0
+[2.5.0]: https://github.com/pear/HTML_QuickForm2/compare/v2.4.0...v2.5.0

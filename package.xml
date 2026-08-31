@@ -42,9 +42,9 @@
   <email>golgote@mamasam.com</email>
   <active>yes</active>
  </lead>
- <date>2025-04-13</date>
+ <date>2026-08-31</date>
  <version>
-  <release>2.4.0</release>
+  <release>2.5.0</release>
   <api>2.0.1</api>
  </version>
  <stability>
@@ -53,10 +53,11 @@
  </stability>
  <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
  <notes>
- * Tested on PHP 8.4, runs without E_DEPRECATED messages
-   (see https://github.com/pear/HTML_QuickForm2/issues/13)
- * Minimum required PHP version is 7.1 (needed for nullable types)
- * Psalm version 6 is used for static analysis, fixed new-found issues
+ * Tested on PHP 8.5 and 8.6, runs without E_DEPRECATED messages
+   * Using `null` as array offset deprecated in PHP 8.5
+   * `spl_object_hash()` deprecated in PHP 8.6
+ * PHPUnit-Polyfills upgraded to the current version. Deprecation checks from
+   newer PHPUnit are now enabled in GitHub CI for highest PHP versions
  </notes>
  <contents>
   <dir name="/">
@@ -749,6 +750,24 @@
   </filelist>
  </phprelease>
  <changelog>
+  <release>
+   <date>2025-04-13</date>
+   <version>
+    <release>2.4.0</release>
+    <api>2.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause License</license>
+   <notes>
+ * Tested on PHP 8.4, runs without E_DEPRECATED messages
+   (see https://github.com/pear/HTML_QuickForm2/issues/13)
+ * Minimum required PHP version is 7.1 (needed for nullable types)
+ * Psalm version 6 is used for static analysis, fixed new-found issues
+   </notes>
+  </release>
   <release>
    <date>2023-11-02</date>
    <version>
