@@ -20,9 +20,11 @@ jobs:
         pre-release: [false]
         include:
           - php-version: '8.5'
+            operating-system: 'ubuntu-latest'
             phpunit-flags: '--display-deprecations --fail-on-deprecation'
 
           - php-version: '8.6'
+            operating-system: 'ubuntu-latest'
             phpunit-flags: '--display-deprecations --fail-on-deprecation'
             pre-release: true
 
