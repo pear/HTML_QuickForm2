@@ -43,7 +43,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
 
     protected function set_up()
     {
-        $this->phpError     = null;
+        $this->phpError     = '';
         $this->errorHandler = false;
     }
 
@@ -62,7 +62,7 @@ class HTML_QuickForm2_FactoryTest extends TestCase
 
     public function handleError($errno, $errstr)
     {
-        $this->phpError = $errstr;
+        $this->phpError .= ('' === $this->phpError ? '' : PHP_EOL) . $errstr;
     }
 
     public function testNotRegisteredElement()

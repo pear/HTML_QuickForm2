@@ -538,7 +538,8 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
                 if ('' !== ($error = $child->getError())) {
-                    $this->childErrors[spl_object_hash($child)][$index] = $error;
+                    $objectId = PHP_VERSION_ID > 70200 ? spl_object_id($child) : spl_object_hash($child);
+                    $this->childErrors[$objectId][$index] = $error;
                 }
             }
         }
@@ -643,10 +644,9 @@ class HTML_QuickForm2_Container_Repeat extends HTML_QuickForm2_Container
             $this->replaceIndexTemplates((string)$index, $backup);
             /* @var HTML_QuickForm2_Node $child */
             foreach ($this->getRecursiveIterator() as $child) {
-                if (isset($this->childErrors[$hash = spl_object_hash($child)])
-                    && isset($this->childErrors[$hash][$index])
-                ) {
-                    $child->setError($this->childErrors[$hash][$index]);
+                $objectId = PHP_VERSION_ID >= 70200 ? spl_object_id($child) : spl_object_hash($child);
+                if (isset($this->childErrors[$objectId][$index])) {
+                    $child->setError($this->childErrors[$objectId][$index]);
                 }
             }
             $this->getPrototype()->render($renderer);
