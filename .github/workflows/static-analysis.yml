@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ 'ubuntu-latest' ]
-        php-version: [ '8.2' ]
+        php-version: [ '8.5' ]
 
     steps:
       - name: Checkout code
@@ -36,9 +36,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-psalm-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-composer-psalm-
 
       - name: Install dependencies with Composer
         run: |

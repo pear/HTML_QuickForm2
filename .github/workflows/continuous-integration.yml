@@ -9,15 +9,20 @@ on:
 jobs:
   tests:
     runs-on: ${{ matrix.operating-system }}
+    continue-on-error: ${{ matrix.pre-release }}
 
     strategy:
       fail-fast: false
       matrix:
         operating-system: ['ubuntu-latest']
-        php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+        php-version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6']
+        pre-release: [false]
         include:
           - php-version: '8.5'
             phpunit-flags: '--display-deprecations --fail-on-deprecation'
+          - php-version: '8.6'
+            phpunit-flags: '--display-deprecations --fail-on-deprecation'
+            pre-release: true
 
 
     name: CI on ${{ matrix.operating-system }} with PHP ${{ matrix.php-version }}
@@ -44,7 +49,7 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-${{ matrix.php-version }}
+            ${{ runner.os }}-composer-${{ matrix.php-version }}-
 
       - name: Install dependencies with Composer
         run: |
