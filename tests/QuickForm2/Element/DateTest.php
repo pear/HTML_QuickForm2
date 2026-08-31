@@ -104,9 +104,6 @@ class HTML_QuickForm2_Element_DateTest extends TestCase
 
     public function testSetValueAcceptsDateTimeImmutable()
     {
-        if (version_compare(phpversion(), '5.5.0', '<')) {
-            $this->markTestSkipped("DateTimeImmutable is available since PHP 5.5");
-        }
         $date = new HTML_QuickForm2_Element_Date('DateTimeImmutableTest', null, ['format' => 'Ymd']);
         $date->setValue(new DateTimeImmutable('2020-09-14'));
         $this->assertEquals(['Y' => 2020, 'm' => 9, 'd' => 14], $date->getValue());
